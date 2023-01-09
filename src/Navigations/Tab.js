@@ -5,6 +5,8 @@ const Tab = () => {
     return (
         <View>
             <Text>Tab</Text>
+            <Text>quy</Text>
+
         </View>
     )
 }
