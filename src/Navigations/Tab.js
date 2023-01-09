@@ -6,6 +6,7 @@ const Tab = () => {
         <View>
             <Text>Tab</Text>
             <Text>quy</Text>
+            <Text>hello</Text>
 
         </View>
     )
