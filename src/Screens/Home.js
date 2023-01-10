@@ -1,18 +1,45 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, ScrollView, Animated } from 'react-native';
 import React, { useEffect, useState, useLayoutEffect } from 'react';
 
 // import Ionicons from 'react-native-vector-icons/Ionicons';
 import { MaterialIcons } from '@expo/vector-icons';
-
-
+import SelectDropdown from 'react-native-select-dropdown'
+import { AntDesign } from '@expo/vector-icons';
+import { SimpleLineIcons } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
+import DropDownItem from "react-native-drop-down-item";
+import { Accordion } from '@dooboo-ui/native';
 // import Buttons from './Button'
 export default function HomeScrenn({ navigation }) {
 
     const [isLoad, setIsLoad] = useState(false)
     const [token, setToken] = useState([])
     const [apis, setApi] = useState([])
+    const countries = ["Egypt", "Canada", "Australia", "Ireland"]
+    const animation = new Animated.Value(0);
 
+    Animated.timing(animation, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+    }).start();
+
+    const contents = [
+        {
+            title: "Thụ Tục Hành Chính",
+            body: "Hi. I love this component. What do you think?"
+        },
+        {
+            title: "Đơn Hàng",
+            body: "Yes. You can have more items."
+        },
+        {
+            title: "Kho Hàng",
+            body: "hello"
+        }
+    ]
 
 
     const buttons = [
@@ -37,91 +64,14 @@ export default function HomeScrenn({ navigation }) {
         }
     ]
     return (
-        <ScrollView style={{
+        <View style={{
             flex: 1,
-            backgroundColor: '#fff'
+            backgroundColor: '#fff',
+            position: 'relative'
         }} >
 
 
-            {isLoad &&
-                <View>
-                    <TouchableOpacity
-                        style={{
-                            width: '100%',
-                            height: Dimensions.get('window').height,
-                            backgroundColor: 'rgba(0,0,0,0.3)',
-                            // position: 'absolute',
-                            zIndex: 1,
-                            // top: 0
-                        }}
-                        onPress={() => setIsLoad(false)}
-                    >
 
-                    </TouchableOpacity>
-                </View>
-            }
-            {isLoad &&
-                <View style={{
-                    position: 'absolute',
-                    height: Dimensions.get('window').height,
-                    backgroundColor: 'gray',
-                    width: '70%',
-                    zIndex: 1
-                }}>
-
-                    <View style={{
-                        borderRadius: 10,
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                    }}>
-                        <View>
-                            <Image
-                                style={{
-                                    width: 100,
-                                    height: 120,
-                                    borderRadius: 10,
-                                    marginTop: 100,
-
-                                }}
-                                source={{
-                                    uri: 'https://scontent.xx.fbcdn.net/v/t1.15752-9/286462354_1371956499953772_2394174266156682221_n.jpg?stp=dst-jpg_s206x206&_nc_cat=107&ccb=1-7&_nc_sid=aee45a&_nc_ohc=hM_kYA5ViR4AX8JclL1&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdQ8O9uqJyyy7Zd0ApEC94wyQKoaSNxmoiIVpRGi2gO_PQ&oe=63C9DF3E'
-                                }}
-                            />
-                        </View>
-                        <View style={{
-                            paddingHorizontal: 10,
-                            marginTop: 7
-                        }}>
-                            <Text style={{
-                                lineHeight: 30,
-                                color: 'white',
-                                fontSize: 30
-                            }}>
-                                Ngô Xuân Quy
-                            </Text>
-                            <Text style={{
-                                lineHeight: 30,
-                                color: 'white',
-                                fontSize: 20
-
-
-                            }}>
-                                Nhân Viên KT
-                            </Text>
-                            <Text style={{
-                                lineHeight: 30,
-                                color: 'white',
-                                fontSize: 20
-
-
-                            }}>
-                                Bâc 100
-                            </Text>
-                        </View>
-                    </View>
-
-                </View>
-            }
 
             {/* menu */}
 
@@ -133,9 +83,11 @@ export default function HomeScrenn({ navigation }) {
                 height: 240,
                 borderBottomRightRadius: 70,
                 borderBottomLeftRadius: 70,
-                position: 'relative'
+                // position: 'relative',
+                zIndex: -1
 
             }}>
+
 
                 {/* hinhf tronf */}
                 <View>
@@ -519,7 +471,7 @@ export default function HomeScrenn({ navigation }) {
                         flexWrap: 'wrap',
                         justifyContent: 'space-around',
                         marginTop: 40,
-                        marginBottom: 150
+                        // marginBottom: 150
 
                     }} >
                         {buttons.map(button => (
@@ -570,8 +522,375 @@ export default function HomeScrenn({ navigation }) {
             </View>
 
 
+            {isLoad &&
 
-        </ScrollView >
+                <View style={{
+                    width: '100%',
+                    height: Dimensions.get('window').height,
+                    backgroundColor: 'rgba(0,0,0,0.3)',
+                    position: 'absolute',
+                    zIndex: 10,
+                    top: 0
+                }}
+                >
+                    <TouchableOpacity
+                        style={{
+                            width: '100%',
+                            height: Dimensions.get('window').height,
+                            backgroundColor: 'rgba(0,0,0,0.3)',
+                            position: 'absolute',
+                            zIndex: 10,
+                            top: 0
+                        }}
+                        onPress={() => setIsLoad(false)}
+                    >
+
+                    </TouchableOpacity>
+                </View>
+            }
+
+            {
+                isLoad &&
+
+                <View style={{
+                    position: 'absolute',
+                    height: Dimensions.get('window').height,
+                    backgroundColor: 'white',
+                    width: '80%',
+                    zIndex: 110,
+
+                }}>
+
+                    <View style={{
+                        zIndex: 100,
+                        backgroundColor: '#0097d9',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        borderRadius: 2,
+                        shadowColor: "#000",
+                        shadowOffset: {
+                            width: 0,
+                            height: 3,
+                        },
+                        shadowOpacity: 0.58,
+                        shadowRadius: 2.00,
+
+                        elevation: 2,
+                    }}>
+                        <View style={{
+                            flexDirection: 'row',
+                            marginTop: 25,
+                            marginBottom: 10,
+                            justifyContent: 'space-between',
+                        }}>
+                            <Image
+                                style={{
+                                    width: 100,
+                                    height: 120,
+                                    borderRadius: 10,
+                                    marginLeft: -15
+                                }}
+                                source={{
+                                    uri: 'https://scontent.xx.fbcdn.net/v/t1.15752-9/286462354_1371956499953772_2394174266156682221_n.jpg?stp=dst-jpg_s206x206&_nc_cat=107&ccb=1-7&_nc_sid=aee45a&_nc_ohc=hM_kYA5ViR4AX8JclL1&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdQ8O9uqJyyy7Zd0ApEC94wyQKoaSNxmoiIVpRGi2gO_PQ&oe=63C9DF3E'
+                                }}
+                            />
+                            <View style={{
+                                paddingHorizontal: 10,
+                                marginTop: 7
+                            }}>
+                                <Text style={{
+                                    lineHeight: 30,
+                                    color: 'white',
+                                    fontSize: 18,
+                                    fontWeight: 'bold'
+                                }}>
+                                    Ngô Xuân Quy
+                                </Text>
+                                <Text style={{
+                                    lineHeight: 30,
+                                    color: '#c9c9c9',
+                                    fontSize: 16
+                                }}>
+                                    Nhân Viên KT
+                                </Text>
+                                <Text style={{
+                                    lineHeight: 30,
+                                    color: '#c9c9c9',
+                                    fontSize: 16
+                                }}>
+                                    Bâc 100
+                                </Text>
+                            </View>
+                        </View>
+
+                    </View>
+
+
+                    <View style={{
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        textAlign: 'center'
+                    }}>
+                        <TouchableOpacity style={{
+                            width: '90%',
+                            height: 2,
+                            backgroundColor: '#0097d9',
+                            marginTop: 5
+                        }}>
+
+                        </TouchableOpacity>
+                    </View>
+
+                    <ScrollView>
+                        <View style={{
+                            marginBottom: 100
+                        }}>
+                            <View style={{
+                                flexDirection: 'row',
+                                // height: 40,
+                                padding: 10,
+                                paddingBottom: -10,
+                                borderBottomColor: 'gray',
+                                borderBottomWidth: 0.3,
+                                marginLeft: 10,
+                                marginRight: 10,
+                                height: 60,
+                                textAlign: 'center',
+                                justifyContent: 'flex-start',
+                                alignItems: 'center'
+                            }}>
+                                <MaterialIcons
+                                    name="home"
+                                    size={26}
+                                    color="black"
+                                    style={{
+                                        // lineHeight: 30,
+                                        // height: 40
+
+                                    }}
+                                />
+                                <Text style={{
+                                    fontSize: 20,
+                                    lineHeight: 30,
+                                    marginLeft: 10
+
+                                }}>
+                                    Trang Chủ
+                                </Text>
+                            </View>
+
+                            <View style={{
+                                flexDirection: 'row',
+                                // height: 60,
+                                padding: 10,
+                                paddingBottom: -10,
+                                borderBottomColor: 'gray',
+                                borderBottomWidth: 0.3,
+                                marginLeft: 10,
+                                marginRight: 10,
+                                height: 60,
+                                textAlign: 'center',
+                                justifyContent: 'flex-start',
+                                alignItems: 'center'
+                            }}>
+                                <MaterialIcons
+                                    name="notifications"
+                                    size={26}
+                                    color="black"
+                                    style={{
+                                        // lineHeight: 30,
+                                        // height: 40
+
+                                    }}
+                                />
+                                <Text style={{
+                                    fontSize: 20,
+                                    lineHeight: 30,
+                                    marginLeft: 10
+
+                                }}>
+                                    Thông Báo Công Ty
+                                </Text>
+                            </View>
+
+                            <View style={{
+                                // marginBottom: -100,
+                                // height: 380
+                            }}>
+                                <ScrollView style={{ alignSelf: 'stretch, ' }}
+                                    useNativeDriver={false}
+                                >
+                                    {
+                                        contents
+                                            ? contents.map((param, i) => {
+                                                return (
+                                                    <Accordion
+                                                        key={i}
+                                                        useNativeDriver={true}
+                                                        // style={styles.dropDownItem}
+                                                        contentVisible={false}
+                                                        // invisibleImage={IC_ARR_DOWN}
+                                                        // visibleImage={IC_ARR_UP}
+                                                        header={
+                                                            <View style={{
+                                                                marginLeft: 10,
+                                                                marginRight: 10
+                                                            }} >
+                                                                <View style={{
+                                                                    width: '100%',
+                                                                    flexDirection: 'row',
+                                                                    padding: 10,
+                                                                    // height: 60,
+                                                                    borderBottomColor: 'gray',
+                                                                    borderBottomWidth: 0.3,
+
+                                                                    // justifyContent: 'space-around'
+                                                                }}>
+                                                                    <SimpleLineIcons name="handbag" size={24} color="black" style={{
+                                                                        marginTop: -7,
+                                                                        // marginLeft: 10
+
+                                                                    }} />
+                                                                    <Text style={{
+                                                                        fontSize: 20,
+                                                                        color: 'black',
+                                                                        // height: 0,
+                                                                        marginLeft: 10
+
+                                                                    }}>{param.title}</Text>
+                                                                    <AntDesign name="down" size={16} color="black" style={{
+                                                                        position: 'absolute',
+                                                                        right: 10,
+                                                                        top: 15
+                                                                    }} />
+
+                                                                </View>
+                                                            </View>
+                                                        }
+                                                    >
+                                                        <View style={{
+
+                                                        }}>
+                                                            <Text style={[
+                                                                styles.txt,
+                                                                {
+                                                                    fontSize: 20,
+                                                                }
+                                                            ]}>
+                                                                {param.body}
+                                                            </Text>
+                                                        </View>
+                                                    </Accordion>
+                                                );
+                                            })
+                                            : null
+                                    }
+                                    {/* <View style={{ height: 96 }} /> */}
+                                </ScrollView>
+                            </View>
+
+
+
+                            <View style={{
+                                flexDirection: 'row',
+                                // height: 60,
+                                padding: 10,
+                                paddingBottom: -10,
+                                borderBottomColor: 'gray',
+                                borderBottomWidth: 0.3,
+                                marginLeft: 10,
+                                marginRight: 10,
+                                height: 60,
+                                textAlign: 'center',
+                                justifyContent: 'flex-start',
+                                alignItems: 'center'
+
+
+                            }}>
+                                <Feather name="book" size={24} color="black" style={{
+                                    marginTop: -7
+                                }} />
+                                <Text style={{
+                                    fontSize: 20,
+                                    lineHeight: 30,
+                                    marginLeft: 10
+
+                                }}>
+                                    Xác Nhận Bảng Lương
+                                </Text>
+                            </View>
+
+                            <View style={{
+                                flexDirection: 'row',
+                                // height: 60,
+                                padding: 10,
+                                paddingBottom: -10,
+                                borderBottomColor: 'gray',
+                                borderBottomWidth: 0.3,
+                                marginLeft: 10,
+                                marginRight: 10,
+                                height: 60,
+                                textAlign: 'center',
+                                justifyContent: 'flex-start',
+                                alignItems: 'center'
+
+
+                            }}>
+                                <AntDesign name="linechart" size={24} color="black" style={{
+                                    marginTop: -7
+                                }} />
+                                <Text style={{
+                                    fontSize: 20,
+                                    lineHeight: 30,
+                                    marginLeft: 10
+
+                                }}>
+                                    Chỉ Số Cá Nhân
+                                </Text>
+                            </View>
+
+                            <View style={{
+                                flexDirection: 'row',
+                                // height: 60,
+                                padding: 10,
+                                paddingBottom: -10,
+                                borderBottomColor: 'gray',
+                                borderBottomWidth: 0.3,
+                                marginLeft: 10,
+                                marginRight: 10,
+                                height: 60,
+                                textAlign: 'center',
+                                justifyContent: 'flex-start',
+                                alignItems: 'center'
+
+
+                            }}>
+                                <FontAwesome name="money" size={24} color="black" style={{
+                                    marginTop: -7
+                                }} />
+                                <Text style={{
+                                    fontSize: 20,
+                                    lineHeight: 30,
+                                    marginLeft: 10
+
+                                }}>
+                                    Duyệt Chi
+                                </Text>
+                            </View>
+                        </View>
+
+
+
+
+                    </ScrollView>
+
+                </View >
+
+            }
+
+
+
+        </View >
     );
 }
 
@@ -582,4 +901,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+
 });
