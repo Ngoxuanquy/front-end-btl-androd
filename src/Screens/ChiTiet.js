@@ -2,18 +2,20 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView, KeyboardAvoidingView, Image, Dimensions } from 'react-native';
 import React, { useState, useEffect } from 'react';
 
-import Ionicons from 'react-native-vector-icons/Ionicons';
-
-
+// import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Ionicons } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
 export default function ChiTiet({ navigation }) {
 
     const [isLoad, setIsLoad] = useState(false)
 
     return (
         <KeyboardAvoidingView style={{
-            backgroundColor: '#fff'
+            backgroundColor: '#fff',
+
 
         }}>
+            {/* <View> */}
             {/* ẩn hiên img */}
             {isLoad == true ?
                 <View style={{
@@ -55,89 +57,16 @@ export default function ChiTiet({ navigation }) {
                 : null}
             <ScrollView >
                 <View style={{
-                    marginLeft: 10,
-                    marginRight: 10,
-                    borderColor: 'black',
-                    borderWidth: 0.3,
-                    marginTop: 20,
-                    borderRadius: 10,
-                    backgroundColor: '#fff',
-                    shadowOffset: {
-                        width: 0,
-                        height: 5,
-                    },
-                    shadowOpacity: 0.34,
-                    shadowRadius: 7.27,
-
-                    elevation: 10,
-
+                    backgroundColor: '#CCFFFF',
                 }}>
                     <View style={{
-                        borderColor: 'black',
-                        borderWidth: 0.4,
-                        padding: 10,
-                        borderRadius: 10,
-                        backgroundColor: '#FF9966',
-                    }}>
-                        <Text style={{
-                            fontSize: 20,
-                            color: 'white'
-                        }}>
-                            Thông Tin Khách Hàng
-                        </Text>
-                    </View>
-                    <View style={{
-                        padding: 10,
-
-                    }}>
-                        <Text style={{
-                            fontSize: 18,
-                            lineHeight: 33
-
-                        }}>
-                            Tên Khách Hàng: Ngô Xuân Quy
-                        </Text>
-                        <Text style={{
-                            fontSize: 18
-
-                        }}>
-                            Địa CHỉ: Hà Nội
-                        </Text>
-                    </View>
-                    <View style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        padding: 10
-                    }}>
-                        <TouchableOpacity style={{
-                            borderColor: 'black',
-                            borderWidth: 0.4,
-                            width: 160,
-                            padding: 10,
-                            borderRadius: 10,
-                            backgroundColor: '#F5F5F5'
-
-                        }}
-                            onPress={() => navigation.replace('Map')}
-                        >
-                            <Text style={{
-                                fontSize: 18,
-                                textAlign: 'center'
-                            }}>
-                                Google Map
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-
-                <View>
-                    <View style={{
-                        marginLeft: 10,
-                        marginRight: 10,
+                        marginRight: 25,
                         borderColor: 'black',
                         borderWidth: 0.3,
                         marginTop: 20,
-                        borderRadius: 10,
+                        borderBottomRightRadius: 20,
+                        borderTopRightRadius: 20,
+                        backgroundColor: '#fff',
                         shadowOffset: {
                             width: 0,
                             height: 5,
@@ -146,70 +75,164 @@ export default function ChiTiet({ navigation }) {
                         shadowRadius: 7.27,
 
                         elevation: 10,
-                        backgroundColor: '#fff'
-
                     }}>
                         <View style={{
-                            borderColor: 'black',
-                            borderWidth: 0.3,
+                            // borderColor: 'black',
+                            // borderWidth: 0.4,
                             padding: 10,
-                            borderRadius: 10,
-                            backgroundColor: '#FF9999'
-
+                            borderTopRightRadius: 20,
+                            // borderRadius: 10,
+                            // backgroundColor: '#FF9966',
                         }}>
                             <Text style={{
-                                fontSize: 20,
-                                color: 'white'
+                                fontSize: 25,
+                                color: 'black',
+                                textAlign: 'center',
+                                marginLeft: -20
                             }}>
-                                Thông Tin Đơn
+                                Thông Tin Khách Hàng
                             </Text>
                         </View>
                         <View style={{
                             padding: 10,
+                        }}>
+                            <View style={{
+                                flexDirection: 'row'
+                            }}>
+                                <Ionicons name="ios-people-sharp" size={24} color="black" />
+                                <Text style={{
+                                    fontSize: 18,
+                                    lineHeight: 33,
+                                    marginLeft: 10
+                                }}>
+                                    Tên Khách Hàng: Ngô Xuân Quy
+                                </Text>
+                            </View>
+                            <View style={{
+                                flexDirection: 'row'
+                            }}>
+                                <Entypo name="address" size={24} color="black" />
+                                <Text style={{
+                                    fontSize: 18,
+                                    marginLeft: 10
+                                }}>
+                                    Địa CHỉ: Hà Nội
+                                </Text>
+                            </View>
+                        </View>
+                        <View style={{
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            padding: 10
+                        }}>
+                            <TouchableOpacity style={{
+                                borderColor: 'black',
+                                borderWidth: 0.4,
+                                width: 160,
+                                padding: 10,
+                                borderRadius: 10,
+                                backgroundColor: '#F5F5F5'
+
+                            }}
+                                onPress={() => navigation.replace('Map')}
+                            >
+                                <Text style={{
+                                    fontSize: 18,
+                                    textAlign: 'center'
+                                }}>
+                                    Google Map
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+
+                    <View>
+                        <View style={{
+                            marginLeft: 25,
+                            // marginRight: 10,
+                            borderColor: 'black',
+                            borderWidth: 0.3,
+                            marginTop: 20,
+                            borderBottomLeftRadius: 20,
+                            borderTopLeftRadius: 20,
+                            shadowOffset: {
+                                width: 0,
+                                height: 5,
+                            },
+                            shadowOpacity: 0.34,
+                            shadowRadius: 7.27,
+
+                            elevation: 10,
+                            backgroundColor: '#fff',
+                            marginBottom: 30
+
 
                         }}>
-                            <Text style={{
-                                fontSize: 18,
-                                lineHeight: 30
+                            <View style={{
+                                // borderColor: 'black',
+                                // borderWidth: 0.3,
+                                padding: 10,
+                                // borderBottomLeftRadius: 10,
+                                borderTopLeftRadius: 10,
+                                // backgroundColor: '#FF9999'
 
                             }}>
-                                Giờ Hẹn Khách: 12h15 - 13/6/2022
-                            </Text>
-                            <Text style={{
-                                fontSize: 18,
-                                lineHeight: 30
-
-
-                            }}>
-                                Giờ Bắt Đầu: 13h - 18/12/2002
-                            </Text>
-                            <Text style={{
-                                fontSize: 18,
-                                lineHeight: 30
+                                <Text style={{
+                                    fontSize: 25,
+                                    color: 'black',
+                                    textAlign: 'center'
+                                }}>
+                                    Thông Tin Đơn
+                                </Text>
+                            </View>
+                            <View style={{
+                                padding: 10,
 
                             }}>
-                                Giờ Kết Thúc: 15h - 18/12/2002
-                            </Text>
-                            <Text style={{
-                                fontSize: 18,
-                                lineHeight: 30
-                            }}>
-                                Khoảng Cách: 12km
-                            </Text>
-                            <Text style={{
-                                fontSize: 18,
-                                lineHeight: 30
+                                <Text style={{
+                                    fontSize: 18,
+                                    lineHeight: 30
 
-                            }}>
-                                Thời Gian Di Chuyển: 30p
-                            </Text>
-                            <Text style={{
-                                fontSize: 18,
-                                lineHeight: 30
+                                }}>
+                                    Giờ Hẹn Khách: 12h15 - 13/6/2022
+                                </Text>
+                                <Text style={{
+                                    fontSize: 18,
+                                    lineHeight: 30
 
-                            }}>
-                                Loại Máy: RO
-                            </Text>
+
+                                }}>
+                                    Giờ Bắt Đầu: 13h - 18/12/2002
+                                </Text>
+                                <Text style={{
+                                    fontSize: 18,
+                                    lineHeight: 30
+
+                                }}>
+                                    Giờ Kết Thúc: 15h - 18/12/2002
+                                </Text>
+                                <Text style={{
+                                    fontSize: 18,
+                                    lineHeight: 30
+                                }}>
+                                    Khoảng Cách: 12km
+                                </Text>
+                                <Text style={{
+                                    fontSize: 18,
+                                    lineHeight: 30
+
+                                }}>
+                                    Thời Gian Di Chuyển: 30p
+                                </Text>
+                                <Text style={{
+                                    fontSize: 18,
+                                    lineHeight: 30
+
+                                }}>
+                                    Loại Máy: RO
+                                </Text>
+
+                            </View>
 
                         </View>
 
@@ -232,17 +255,24 @@ export default function ChiTiet({ navigation }) {
                         flexDirection: 'row',
                         justifyContent: 'space-around'
                     }}>
-                        <View>
+                        <View style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-around'
+                        }}>
+                            <Ionicons name="ios-people-circle-outline" size={34} color="black" />
                             <TextInput
                                 style={{
                                     width: '100%',
                                     height: 30,
-                                    borderColor: 'black',
-                                    borderWidth: 1,
+                                    borderBottomColor: 'black',
+                                    borderBottomWidth: 1,
                                     width: 250,
-                                    borderRadius: 6
+                                    borderRadius: 6,
+                                    paddingLeft: 10,
+                                    paddingRight: 10
 
                                 }}
+                                placeholder="Viết Bình Luận..."
                             />
                         </View>
                         <View>
@@ -256,11 +286,12 @@ export default function ChiTiet({ navigation }) {
                                 borderRadius: 6,
                                 backgroundColor: 'gray'
                             }}>
+
                                 <Text style={{
                                     textAlign: 'center',
                                     color: 'white'
                                 }}>
-                                    Bình Luận
+                                    Gửi
                                 </Text>
                             </TouchableOpacity>
                         </View>
@@ -269,10 +300,14 @@ export default function ChiTiet({ navigation }) {
                     <View>
                         <View style={{
                             flexDirection: 'row',
-                            justifyContent: 'space-between',
+                            // justifyContent: 'space-between',
                             padding: 10
                         }}>
-                            <View>
+                            <Ionicons name="ios-people-circle-outline" size={34} color="black" />
+
+                            <View style={{
+                                marginLeft: 20
+                            }}>
                                 <Text>
                                     Ngô Xuân Quy
 
@@ -282,17 +317,24 @@ export default function ChiTiet({ navigation }) {
                                 </Text>
                             </View>
                             <View>
-                                <Text>
+                                <Text style={{
+                                    fontSize: 12,
+                                    opacity: 0.5
+                                }}>
                                     15h20
                                 </Text>
                             </View>
                         </View>
                         <View style={{
                             flexDirection: 'row',
-                            justifyContent: 'space-between',
+                            // justifyContent: 'space-between',
                             padding: 10
                         }}>
-                            <View>
+                            <Ionicons name="ios-people-circle-outline" size={34} color="black" />
+
+                            <View style={{
+                                marginLeft: 20
+                            }}>
                                 <Text>
                                     Ngô Xuân Quy
 
@@ -302,7 +344,10 @@ export default function ChiTiet({ navigation }) {
                                 </Text>
                             </View>
                             <View>
-                                <Text>
+                                <Text style={{
+                                    fontSize: 12,
+                                    opacity: 0.5
+                                }}>
                                     15h20
                                 </Text>
                             </View>

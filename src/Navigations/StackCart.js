@@ -23,7 +23,15 @@ function StackCart() {
                     headerShown: false
                 }} />
                 <Stack.Screen name="ChiTiet" component={ChiTiet} options={{
-                    headerShown: true
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: '#789BF6',
+                        height: 150,
+                        // title: 'My home',
+                        borderBottomLeftRadius: 40,
+                        borderBottomRightRadius: 40
+                    },
+                    headerTintColor: '#fff',
                 }} />
                 <Stack.Screen name="Map" component={Map} options={{
                     headerShown: true
