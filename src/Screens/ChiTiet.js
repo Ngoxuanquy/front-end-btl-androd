@@ -57,7 +57,7 @@ export default function ChiTiet({ navigation }) {
                 : null}
             <ScrollView >
                 <View style={{
-                    backgroundColor: '#CCFFFF',
+                    backgroundColor: '#a8e3e3',
                 }}>
                     <View style={{
                         marginRight: 25,
@@ -86,7 +86,7 @@ export default function ChiTiet({ navigation }) {
                         }}>
                             <Text style={{
                                 fontSize: 25,
-                                color: 'black',
+                                color: '#00337a',
                                 textAlign: 'center',
                                 marginLeft: -20
                             }}>
@@ -129,7 +129,7 @@ export default function ChiTiet({ navigation }) {
                                 borderColor: 'black',
                                 borderWidth: 0.4,
                                 width: 160,
-                                padding: 10,
+                                padding: 8,
                                 borderRadius: 10,
                                 backgroundColor: '#F5F5F5'
 
@@ -175,12 +175,12 @@ export default function ChiTiet({ navigation }) {
                                 // borderBottomLeftRadius: 10,
                                 borderTopLeftRadius: 10,
                                 // backgroundColor: '#FF9999'
-
+                                // marginLeft: 10
                             }}>
                                 <Text style={{
                                     fontSize: 25,
-                                    color: 'black',
-                                    textAlign: 'center'
+                                    color: '#00337a',
+                                    textAlign: 'center',
                                 }}>
                                     Thông Tin Đơn
                                 </Text>
@@ -191,42 +191,48 @@ export default function ChiTiet({ navigation }) {
                             }}>
                                 <Text style={{
                                     fontSize: 18,
-                                    lineHeight: 30
+                                    lineHeight: 35,
+                                    marginLeft: 20
 
                                 }}>
                                     Giờ Hẹn Khách: 12h15 - 13/6/2022
                                 </Text>
                                 <Text style={{
                                     fontSize: 18,
-                                    lineHeight: 30
-
-
+                                    lineHeight: 35,
+                                    marginLeft: 20
                                 }}>
                                     Giờ Bắt Đầu: 13h - 18/12/2002
                                 </Text>
                                 <Text style={{
                                     fontSize: 18,
-                                    lineHeight: 30
+                                    lineHeight: 35,
+                                    marginLeft: 20
+
 
                                 }}>
                                     Giờ Kết Thúc: 15h - 18/12/2002
                                 </Text>
                                 <Text style={{
                                     fontSize: 18,
-                                    lineHeight: 30
+                                    lineHeight: 35,
+                                    marginLeft: 20
+
                                 }}>
                                     Khoảng Cách: 12km
                                 </Text>
                                 <Text style={{
                                     fontSize: 18,
-                                    lineHeight: 30
+                                    lineHeight: 35,
+                                    marginLeft: 20
 
                                 }}>
                                     Thời Gian Di Chuyển: 30p
                                 </Text>
                                 <Text style={{
                                     fontSize: 18,
-                                    lineHeight: 30
+                                    lineHeight: 35,
+                                    marginLeft: 20
 
                                 }}>
                                     Loại Máy: RO
@@ -279,17 +285,19 @@ export default function ChiTiet({ navigation }) {
                             <TouchableOpacity style={{
                                 width: 80,
                                 height: 30,
-                                borderColor: 'black',
-                                borderWidth: 1,
+                                // borderColor: 'black',
+                                // borderWidth: 1,
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 borderRadius: 6,
-                                backgroundColor: 'gray'
+                                backgroundColor: '#589c0b',
+
                             }}>
 
                                 <Text style={{
                                     textAlign: 'center',
-                                    color: 'white'
+                                    color: 'white',
+                                    fontWeight: 'bold'
                                 }}>
                                     Gửi
                                 </Text>

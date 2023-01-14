@@ -1,14 +1,15 @@
-import { StatusBar } from 'expo-status-bar'
-import { StyleSheet, Text, View } from 'react-native'
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+// import ThuTucHanhChinh from './ThuTucHanhChinh';
 
 export default function ThuTucHanhChinh() {
     return (
         <View style={styles.container}>
-            <Text>Button2</Text>
-            <Text>abc</Text>
+            <Text>ThongTinTaiKhoan</Text>
+
             <StatusBar style="auto" />
         </View>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
@@ -18,4 +19,4 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-})
+});

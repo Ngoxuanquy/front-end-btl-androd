@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, ScrollView, Animated } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, ScrollView, Animated, Button } from 'react-native';
 import React, { useEffect, useState, useLayoutEffect } from 'react';
 
 // import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -10,7 +10,8 @@ import { SimpleLineIcons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import DropDownItem from "react-native-drop-down-item";
-import { Accordion } from '@dooboo-ui/native';
+import { Accordion, animate, Value } from '@dooboo-ui/native';
+// import { Value } from 'react-native-reanimated';
 // import Buttons from './Button'
 export default function HomeScrenn({ navigation }) {
 
@@ -18,13 +19,16 @@ export default function HomeScrenn({ navigation }) {
     const [token, setToken] = useState([])
     const [apis, setApi] = useState([])
     const countries = ["Egypt", "Canada", "Australia", "Ireland"]
-    const animation = new Animated.Value(0);
 
-    Animated.timing(animation, {
-        toValue: 1,
-        duration: 1000,
-        useNativeDriver: true,
-    }).start();
+    const [animatedValue] = useState(new Animated.Value(0));
+    const animate = () => {
+        animate({
+            animatedValue,
+            toValue: 1,
+            duration: 500,
+            useNativeDriver: true,
+        }).start();
+    }
 
     const contents = [
         {
@@ -65,16 +69,13 @@ export default function HomeScrenn({ navigation }) {
     ]
     return (
         <View style={{
+
             flex: 1,
             backgroundColor: '#fff',
             position: 'relative'
         }} >
 
-
-
-
             {/* menu */}
-
             <View style={{
                 marginTop: 0,
                 backgroundColor: '#2851db',
@@ -85,10 +86,7 @@ export default function HomeScrenn({ navigation }) {
                 borderBottomLeftRadius: 70,
                 // position: 'relative',
                 zIndex: -1
-
             }}>
-
-
                 {/* hinhf tronf */}
                 <View>
                     <TouchableOpacity style={{
@@ -253,7 +251,7 @@ export default function HomeScrenn({ navigation }) {
                             <View style={{
                                 paddingHorizontal: 10,
                                 marginTop: 7,
-
+                                fontWeight: 'IBM'
                             }}>
 
                                 <View style={{
@@ -716,8 +714,11 @@ export default function HomeScrenn({ navigation }) {
                             <View style={{
                                 // marginBottom: -100,
                                 // height: 380
+                                // transform: [{
+                                //     scale: animatedValue
+                                // }]
                             }}>
-                                <ScrollView style={{ alignSelf: 'stretch, ' }}
+                                <ScrollView style={{ alignSelf: 'stretch', }}
                                     useNativeDriver={false}
                                 >
                                     {
@@ -725,6 +726,8 @@ export default function HomeScrenn({ navigation }) {
                                             ? contents.map((param, i) => {
                                                 return (
                                                     <Accordion
+                                                        style={{
+                                                        }}
                                                         key={i}
                                                         useNativeDriver={true}
                                                         // style={styles.dropDownItem}
@@ -736,38 +739,48 @@ export default function HomeScrenn({ navigation }) {
                                                                 marginLeft: 10,
                                                                 marginRight: 10
                                                             }} >
-                                                                <View style={{
+                                                                <Animated.View style={{
                                                                     width: '100%',
                                                                     flexDirection: 'row',
                                                                     padding: 10,
                                                                     // height: 60,
                                                                     borderBottomColor: 'gray',
                                                                     borderBottomWidth: 0.3,
-
                                                                     // justifyContent: 'space-around'
-                                                                }}>
+                                                                }}
+                                                                >
                                                                     <SimpleLineIcons name="handbag" size={24} color="black" style={{
                                                                         marginTop: -7,
                                                                         // marginLeft: 10
 
                                                                     }} />
+                                                                    {/* <Animated.View> */}
+
                                                                     <Text style={{
                                                                         fontSize: 20,
                                                                         color: 'black',
                                                                         // height: 0,
                                                                         marginLeft: 10
 
-                                                                    }}>{param.title}</Text>
+                                                                    }}
+                                                                    // onPress={animateIn}
+                                                                    >{param.title}</Text>
+
+                                                                    {/* </Animated.View> */}
+
                                                                     <AntDesign name="down" size={16} color="black" style={{
                                                                         position: 'absolute',
                                                                         right: 10,
                                                                         top: 15
-                                                                    }} />
+                                                                    }}
+                                                                        onPress={animate}
+                                                                    />
 
-                                                                </View>
+                                                                </Animated.View>
                                                             </View>
                                                         }
                                                     >
+
                                                         <View style={{
 
                                                         }}>

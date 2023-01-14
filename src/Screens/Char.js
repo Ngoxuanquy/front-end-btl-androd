@@ -443,8 +443,6 @@ export default function Chart() {
                         }
 
                         }
-
-
                         bezier
                         style={{
                             marginVertical: 8,
@@ -460,17 +458,38 @@ export default function Chart() {
                     />
                 </View>
 
-                <BarChart
-                    // style={graphStyle}
-                    data={data1}
-                    width={300}
-                    height={220}
-                    yAxisLabel="$"
-                    chartConfig={chartConfig}
-                    verticalLabelRotation={30}
-                />
+                <View style={{
+                    marginVertical: 8,
+                    borderRadius: 16,
+                    width: '90%',
+                    marginVertical: 8,
+                    borderRadius: 16,
 
+                }}>
+                    <BarChart
+                        // style={graphStyle}
+                        data={data1}
+                        width={300}
+                        height={220}
+                        yAxisLabel="$"
+                        chartConfig={chartConfig}
+                        verticalLabelRotation={30}
+                        bezier
+                        style={{
+                            marginVertical: 8,
+                            borderRadius: 16,
+                            shadowOffset: {
+                                width: 0,
+                                height: 5,
+                            },
+                            shadowOpacity: 0.34,
+                            shadowRadius: 2.27,
+                            elevation: 10,
+                        }}
 
+                    />
+
+                </View>
 
 
                 <PieChart
@@ -495,6 +514,18 @@ export default function Chart() {
                     center={[10, 50]}
                     absolute
                     hasLegend={true}
+
+                    style={{
+                        marginVertical: 8,
+                        borderRadius: 16,
+                        shadowOffset: {
+                            width: 0,
+                            height: 5,
+                        },
+                        shadowOpacity: 0.34,
+                        shadowRadius: 2.27,
+                        elevation: 10,
+                    }}
                 />
                 <StackedBarChart
                     height={280}

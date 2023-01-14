@@ -236,33 +236,35 @@ export default function ThanhToan() {
 
 
             <ScrollView >
-                <View style={{
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
-                    justifyContent: 'space-around',
-                    alignItems: 'center'
+                <ScrollView horizontal>
+                    <View style={{
+                        flexDirection: 'row',
+                        flexWrap: 'wrap',
+                        justifyContent: 'space-around',
+                        alignItems: 'center',
 
-                }}>
-                    {Arrays.map((Array, index) => (
-                        <View key={Array.id}>
-                            <TouchableOpacity
-                                onPress={() => handerProperties(Array.name, Array.id)}
-                                style={{
-                                    borderRadius: 10
-                                }}
-                            >
-                                <Text style={
-                                    [
-                                        index + 1 === cliedId ? styles.buttonAction : styles.butonUn,
-                                        // styles.butonUn
-                                    ]}>
-                                    {Array.name}
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
-                    ))}
-                </View>
 
+                    }}>
+                        {Arrays.map((Array, index) => (
+                            <View key={Array.id}>
+                                <TouchableOpacity
+                                    onPress={() => handerProperties(Array.name, Array.id)}
+                                    style={{
+                                        borderRadius: 10
+                                    }}
+                                >
+                                    <Text style={
+                                        [
+                                            index + 1 === cliedId ? styles.buttonAction : styles.butonUn,
+                                            // styles.butonUn
+                                        ]}>
+                                        {Array.name}
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                        ))}
+                    </View>
+                </ScrollView>
                 <View>
                     <View style={{
 
@@ -597,6 +599,9 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.34,
         shadowRadius: 2.27,
         elevation: 10,
+        borderRadius: 100,
+        marginLeft: 10
+
     },
     buttonAction: {
         backgroundColor: '#CC3333',
@@ -619,6 +624,9 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.34,
         shadowRadius: 3.27,
         elevation: 10,
+        borderRadius: 100,
+        marginLeft: 10
+
     }
 });
 
