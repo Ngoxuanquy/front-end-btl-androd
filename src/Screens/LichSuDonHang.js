@@ -55,7 +55,7 @@ export default function LichSuDonHang() {
                             height: 8,
                         },
                         shadowOpacity: 0.44,
-                        shadowRadius: 2.32,
+                        shadowRadius: 6.32,
 
                         elevation: 1,
                     }}>

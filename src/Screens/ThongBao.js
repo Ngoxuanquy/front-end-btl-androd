@@ -5,166 +5,433 @@ import { xorBy } from 'lodash'
 
 // Options data must contain 'item' & 'id' keys
 import { ScrollView } from 'react-native-virtualized-view'
-
-const K_OPTIONS = [
-    {
-        item: 'Đơn Xin Nghỉ',
-        id: 'JUVE',
-    },
-    {
-        item: 'Giấy Đề Nghị',
-        id: 'RM',
-    },
-    {
-        item: 'Đăng Kí Lịch Partime',
-        id: 'BR',
-    },
-
-]
-
-const K_OPTIONS2 = [
-    {
-        item: 'Đơn Xin Nghỉ',
-        id: 'JUVE',
-    },
-    {
-        item: 'Giấy Đề Nghị',
-        id: 'RM',
-    },
-    {
-        item: 'Đăng Kí Lịch Partime',
-        id: 'BR',
-    },
-
-]
-
-
-const K_OPTIONS3 = [
-    {
-        item: 'Đơn Xin Nghỉ',
-        id: 'JUVE',
-    },
-    {
-        item: 'Giấy Đề Nghị',
-        id: 'RM',
-    },
-    {
-        item: 'Đăng Kí Lịch Partime',
-        id: 'BR',
-    },
-
-]
+import { Feather } from '@expo/vector-icons';
 
 function App() {
-    const [selectedTeam, setSelectedTeam] = useState({})
-    const [selectedTeam2, setSelectedTeam2] = useState({})
-    const [selectedTeam3, setSelectedTeam3] = useState({})
 
-
-    const [selectedTeams, setSelectedTeams] = useState([])
     return (
-        <View style={{ margin: 30 }}>
-            <ScrollView>
-                <SelectBox
-                    label="Thủ Tục Hành Chính"
-                    options={K_OPTIONS}
-                    value={selectedTeam}
-                    onChange={onChange()}
-                    hideInputFilter={false}
-                    style={{
+        <ScrollView>
+            <View style={{
+                // padding: 10,
+                backgroundColor: '#fff',
+                flex: 1
+            }}>
 
-                    }}
-                />
-                <View style={{ height: 20 }} />
+                {/* thông báo */}
+                <View style={{
+                    backgroundColor: '#fff',
+                    width: '100%',
+                    marginTop: 5
 
-                <SelectBox
-                    label="Đơn Hàng"
-                    options={K_OPTIONS2}
-                    value={selectedTeam2}
-                    onChange={onChange2()}
-                    hideInputFilter={false}
-                />
-                <View style={{ height: 20 }} />
-
-                <SelectBox
-                    label="Kho Hàng"
-                    options={K_OPTIONS3}
-                    value={selectedTeam3}
-                    onChange={onChange3()}
-                    hideInputFilter={false}
-                />
-                <View style={{ height: 20 }} />
-
-                <View>
-                    <TouchableOpacity style={{
-                        height: 40
-                    }} >
-                        <Text style={{
-                            fontSize: 18
-                        }}>
-                            Xác Nhận Bảng Lương
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-                <View>
-                    <TouchableOpacity style={{
-                        height: 40
+                }}>
+                    <View style={{
+                        flexDirection: 'row',
+                        marginRight: 20,
+                        alignItems: 'center'
                     }}>
-                        <Text style={{
-                            fontSize: 18
+                        <View style={{
+                            width: 70,
+                            height: 70,
+                            backgroundColor: 'green',
+                            borderRadius: 200,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+
                         }}>
-                            Chỉ Số Cá Nhân
-                        </Text>
-                    </TouchableOpacity>
+                            <Feather name="phone" size={37} color="white" style={{
+
+                            }} />
+
+                        </View>
+                        <View style={{
+                            // flexDirection: 'row',
+                            marginRight: 56,
+                            marginLeft: 5,
+                            marginTop: 10,
+                            marginBottom: 10
+                        }}>
+                            <Text style={{
+                                fontSize: 15,
+                                fontWeight: 'bold',
+
+                            }}>
+                                Phòng Điều Hành:
+                                <Text style={{
+                                    fontWeight: '400'
+                                }}>
+                                    Lorem ipsum dolor sit amet,
+                                    consectetur adipiscing elit Lorem ipsum dolor
+                                    sit amet, consectetur adipiscing elit.
+                                </Text>
+                            </Text>
+
+                            <Text style={{
+                                fontSize: 13,
+                                marginTop: 5,
+                                opacity: 0.5
+                            }}>
+                                14/01/2022 lúc 10h00
+                            </Text>
+                        </View>
+                    </View>
                 </View>
-                <View>
-                    <TouchableOpacity style={{
-                        height: 40
+
+                {/* thông báo */}
+                <View style={{
+                    backgroundColor: '#eeeeee',
+                    width: '100%',
+                    marginTop: 5
+
+                }}>
+                    <View style={{
+                        flexDirection: 'row',
+                        marginRight: 20,
+                        alignItems: 'center'
                     }}>
-                        <Text style={{
-                            fontSize: 18
+                        <View style={{
+                            width: 70,
+                            height: 70,
+                            backgroundColor: 'green',
+                            borderRadius: 200,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+
                         }}>
-                            Duyệt Chi
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-                <View>
-                    <TouchableOpacity >
-                        <Text style={{
-                            fontSize: 18
+                            <Feather name="phone" size={37} color="white" style={{
+
+                            }} />
+
+                        </View>
+                        <View style={{
+                            // flexDirection: 'row',
+                            marginRight: 56,
+                            marginLeft: 5,
+                            marginTop: 10,
+                            marginBottom: 10
                         }}>
-                            Thông Tin Cá Nhân
-                        </Text>
-                    </TouchableOpacity>
+                            <Text style={{
+                                fontSize: 15,
+                                fontWeight: 'bold',
+
+                            }}>
+                                Phòng Điều Hành:
+                                <Text style={{
+                                    fontWeight: '400'
+                                }}>
+                                    Lorem ipsum dolor sit amet,
+                                    consectetur adipiscing elit Lorem ipsum dolor
+                                    sit amet, consectetur adipiscing elit.
+                                </Text>
+                            </Text>
+
+                            <Text style={{
+                                fontSize: 13,
+                                marginTop: 5,
+                                opacity: 0.5
+                            }}>
+                                14/01/2022 lúc 10h00
+                            </Text>
+                        </View>
+                    </View>
                 </View>
-                <View style={{ height: 40 }} />
-                <Text style={{ fontSize: 20, paddingBottom: 10 }}>MultiSelect Demo</Text>
-                <SelectBox
-                    label="Select multiple"
-                    options={K_OPTIONS}
-                    selectedValues={selectedTeams}
-                    onMultiSelect={onMultiChange()}
-                    onTapClose={onMultiChange()}
-                    isMulti
-                />
-            </ScrollView>
-        </View>
+
+                {/* thông báo */}
+                <View style={{
+                    backgroundColor: '#fff',
+                    width: '100%',
+                    marginTop: 5
+
+                }}>
+                    <View style={{
+                        flexDirection: 'row',
+                        marginRight: 20,
+                        alignItems: 'center'
+                    }}>
+                        <View style={{
+                            width: 70,
+                            height: 70,
+                            backgroundColor: 'green',
+                            borderRadius: 200,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+
+                        }}>
+                            <Feather name="phone" size={37} color="white" style={{
+
+                            }} />
+
+                        </View>
+                        <View style={{
+                            // flexDirection: 'row',
+                            marginRight: 56,
+                            marginLeft: 5,
+                            marginTop: 10,
+                            marginBottom: 10
+                        }}>
+                            <Text style={{
+                                fontSize: 15,
+                                fontWeight: 'bold',
+
+                            }}>
+                                Phòng Điều Hành:
+                                <Text style={{
+                                    fontWeight: '400'
+                                }}>
+                                    Lorem ipsum dolor sit amet,
+                                    consectetur adipiscing elit Lorem ipsum dolor
+                                    sit amet, consectetur adipiscing elit.
+                                </Text>
+                            </Text>
+
+                            <Text style={{
+                                fontSize: 13,
+                                marginTop: 5,
+                                opacity: 0.5
+                            }}>
+                                14/01/2022 lúc 10h00
+                            </Text>
+                        </View>
+                    </View>
+                </View>
+
+                {/* thông báo */}
+                <View style={{
+                    backgroundColor: '#eeeeee',
+                    width: '100%',
+                    marginTop: 5
+
+                }}>
+                    <View style={{
+                        flexDirection: 'row',
+                        marginRight: 20,
+                        alignItems: 'center'
+                    }}>
+                        <View style={{
+                            width: 70,
+                            height: 70,
+                            backgroundColor: 'green',
+                            borderRadius: 200,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+
+                        }}>
+                            <Feather name="phone" size={37} color="white" style={{
+
+                            }} />
+
+                        </View>
+                        <View style={{
+                            // flexDirection: 'row',
+                            marginRight: 56,
+                            marginLeft: 5,
+                            marginTop: 10,
+                            marginBottom: 10
+                        }}>
+                            <Text style={{
+                                fontSize: 15,
+                                fontWeight: 'bold',
+
+                            }}>
+                                Phòng Điều Hành:
+                                <Text style={{
+                                    fontWeight: '400'
+                                }}>
+                                    Lorem ipsum dolor sit amet,
+                                    consectetur adipiscing elit Lorem ipsum dolor
+                                    sit amet, consectetur adipiscing elit.
+                                </Text>
+                            </Text>
+
+                            <Text style={{
+                                fontSize: 13,
+                                marginTop: 5,
+                                opacity: 0.5
+                            }}>
+                                14/01/2022 lúc 10h00
+                            </Text>
+                        </View>
+                    </View>
+                </View>
+
+                {/* thông báo */}
+                <View style={{
+                    backgroundColor: '#fff',
+                    width: '100%',
+                    marginTop: 5
+
+                }}>
+                    <View style={{
+                        flexDirection: 'row',
+                        marginRight: 20,
+                        alignItems: 'center'
+                    }}>
+                        <View style={{
+                            width: 70,
+                            height: 70,
+                            backgroundColor: 'green',
+                            borderRadius: 200,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+
+                        }}>
+                            <Feather name="phone" size={37} color="white" style={{
+
+                            }} />
+
+                        </View>
+                        <View style={{
+                            // flexDirection: 'row',
+                            marginRight: 56,
+                            marginLeft: 5,
+                            marginTop: 10,
+                            marginBottom: 10
+                        }}>
+                            <Text style={{
+                                fontSize: 15,
+                                fontWeight: 'bold',
+
+                            }}>
+                                Phòng Điều Hành:
+                                <Text style={{
+                                    fontWeight: '400'
+                                }}>
+                                    Lorem ipsum dolor sit amet,
+                                    consectetur adipiscing elit Lorem ipsum dolor
+                                    sit amet, consectetur adipiscing elit.
+                                </Text>
+                            </Text>
+
+                            <Text style={{
+                                fontSize: 13,
+                                marginTop: 5,
+                                opacity: 0.5
+                            }}>
+                                14/01/2022 lúc 10h00
+                            </Text>
+                        </View>
+                    </View>
+                </View>
+
+                {/* thông báo */}
+                <View style={{
+                    backgroundColor: '#eeeeee',
+                    width: '100%',
+                    marginTop: 5
+
+                }}>
+                    <View style={{
+                        flexDirection: 'row',
+                        marginRight: 20,
+                        alignItems: 'center'
+                    }}>
+                        <View style={{
+                            width: 70,
+                            height: 70,
+                            backgroundColor: 'green',
+                            borderRadius: 200,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+
+                        }}>
+                            <Feather name="phone" size={37} color="white" style={{
+
+                            }} />
+
+                        </View>
+                        <View style={{
+                            // flexDirection: 'row',
+                            marginRight: 56,
+                            marginLeft: 5,
+                            marginTop: 10,
+                            marginBottom: 10
+                        }}>
+                            <Text style={{
+                                fontSize: 15,
+                                fontWeight: 'bold',
+
+                            }}>
+                                Phòng Điều Hành:
+                                <Text style={{
+                                    fontWeight: '400'
+                                }}>
+                                    Lorem ipsum dolor sit amet,
+                                    consectetur adipiscing elit Lorem ipsum dolor
+                                    sit amet, consectetur adipiscing elit.
+                                </Text>
+                            </Text>
+
+                            <Text style={{
+                                fontSize: 13,
+                                marginTop: 5,
+                                opacity: 0.5
+                            }}>
+                                14/01/2022 lúc 10h00
+                            </Text>
+                        </View>
+                    </View>
+                </View>
+
+                {/* thông báo */}
+                <View style={{
+                    backgroundColor: '#eeeeee',
+                    width: '100%',
+                    marginTop: 5
+
+                }}>
+                    <View style={{
+                        flexDirection: 'row',
+                        marginRight: 20,
+                        alignItems: 'center'
+                    }}>
+                        <View style={{
+                            width: 70,
+                            height: 70,
+                            backgroundColor: 'green',
+                            borderRadius: 200,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+
+                        }}>
+                            <Feather name="phone" size={37} color="white" style={{
+
+                            }} />
+
+                        </View>
+                        <View style={{
+                            // flexDirection: 'row',
+                            marginRight: 56,
+                            marginLeft: 5,
+                            marginTop: 10,
+                            marginBottom: 10
+                        }}>
+                            <Text style={{
+                                fontSize: 15,
+                                fontWeight: 'bold',
+
+                            }}>
+                                Phòng Điều Hành:
+                                <Text style={{
+                                    fontWeight: '400'
+                                }}>
+                                    Lorem ipsum dolor sit amet,
+                                    consectetur adipiscing elit Lorem ipsum dolor
+                                    sit amet, consectetur adipiscing elit.
+                                </Text>
+                            </Text>
+
+                            <Text style={{
+                                fontSize: 13,
+                                marginTop: 5,
+                                opacity: 0.5
+                            }}>
+                                14/01/2022 lúc 10h00
+                            </Text>
+                        </View>
+                    </View>
+                </View>
+            </View>
+        </ScrollView>
     )
-
-    function onMultiChange() {
-        return (item) => setSelectedTeams(xorBy(selectedTeams, [item], 'id'))
-    }
-
-    function onChange() {
-        return (val) => setSelectedTeam(val)
-    }
-
-    function onChange2() {
-        return (val) => setSelectedTeam2(val)
-    }
-    function onChange3() {
-        return (val) => setSelectedTeam3(val)
-    }
 }
 
 export default App
