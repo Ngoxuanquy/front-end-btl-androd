@@ -60,12 +60,12 @@ export default function ChiTiet({ navigation }) {
                     backgroundColor: '#a8e3e3',
                 }}>
                     <View style={{
-                        marginRight: 25,
+                        marginRight: 10,
+                        marginLeft: 10,
                         borderColor: 'black',
                         borderWidth: 0.3,
                         marginTop: 20,
-                        borderBottomRightRadius: 20,
-                        borderTopRightRadius: 20,
+                        borderRadius: 10,
                         backgroundColor: '#fff',
                         shadowOffset: {
                             width: 0,
@@ -116,7 +116,7 @@ export default function ChiTiet({ navigation }) {
                                     fontSize: 18,
                                     marginLeft: 10
                                 }}>
-                                    Địa CHỉ: Hà Nội
+                                    Địa Chỉ: Hà Nội
                                 </Text>
                             </View>
                         </View>
@@ -148,13 +148,12 @@ export default function ChiTiet({ navigation }) {
 
                     <View>
                         <View style={{
-                            marginLeft: 25,
-                            // marginRight: 10,
+                            marginLeft: 10,
+                            marginRight: 10,
                             borderColor: 'black',
                             borderWidth: 0.3,
                             marginTop: 20,
-                            borderBottomLeftRadius: 20,
-                            borderTopLeftRadius: 20,
+                            borderRadius: 10,
                             shadowOffset: {
                                 width: 0,
                                 height: 5,
@@ -189,6 +188,31 @@ export default function ChiTiet({ navigation }) {
                                 padding: 10,
 
                             }}>
+                                <Text style={{
+                                    fontSize: 18,
+                                    lineHeight: 35,
+                                    marginLeft: 20
+
+                                }}>
+                                    Tên Khách Hàng: Ngô Xuân Quy
+                                </Text>
+                                <Text style={{
+                                    fontSize: 18,
+                                    lineHeight: 35,
+                                    marginLeft: 20
+
+                                }}>
+                                    Số Điện Thoại: 0589401978
+                                </Text>
+                                <Text style={{
+                                    fontSize: 18,
+                                    lineHeight: 35,
+                                    marginLeft: 20,
+                                    marginRight: 20
+
+                                }}>
+                                    Địa Chỉ: Số 1, Ngõ 1, Lê Văn Lương, Hà Nội
+                                </Text>
                                 <Text style={{
                                     fontSize: 18,
                                     lineHeight: 35,

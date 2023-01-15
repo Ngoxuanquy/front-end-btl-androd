@@ -19,29 +19,9 @@ import { Ionicons } from '@expo/vector-icons';
 import call from 'react-native-phone-call';
 
 const Phone = ({ navigation }) => {
-    const [inputValue, setInputValue] = useState('');
+    const [inputValue, setInputValue] = useState('0589401978');
 
-    const Numbers = [
-        { id: 1, So: 1 },
-        { id: 2, So: 2 },
-        { id: 3, So: 3 },
-        { id: 4, So: 4 },
-        { id: 5, So: 5 },
-        { id: 6, So: 6 },
-        { id: 7, So: 7 },
-        { id: 8, So: 8 },
-        { id: 9, So: 9 },
-        { id: 10, So: '*' },
-        { id: 11, So: 0 },
-        { id: 12, So: "#" },
 
-    ]
-
-    function handerValue(So) {
-        console.log(So)
-        setInputValue([...inputValue, So])
-        // console.log(inputValue)
-    }
 
     const triggerCall = () => {
         // Check for perfect 10 digit length
@@ -83,86 +63,158 @@ const Phone = ({ navigation }) => {
                 >
                     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                         <View style={{
-                            flex: 1
+                            flex: 1,
+
                         }}>
-                            {/* <Text>
-                                {inputValue}
-                            </Text> */}
-                            <TextInput
-                                value={inputValue}
-                                onChangeText={
-                                    (inputValue) => setInputValue(inputValue)
-                                }
-                                placeholder={'Enter Conatct Number to Call'}
-                                keyboardType="numeric"
-                                style={styles.textInput}
-                            />
-                            <View style={{
-                                textAlign: 'center',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                marginTop: 50
-                            }}>
+                            <View>
+                                <View>
+                                    <Text style={{
+                                        fontSize: 25,
+                                        padding: 20,
+                                        color: 'blue',
+                                        fontWeight: 'bold'
+                                    }}>
+                                        Thông Tin Khách Hàng
+                                    </Text>
 
-                                <View style={{
-                                    flexDirection: 'row',
-                                    flexWrap: 'wrap',
-                                    justifyContent: 'space-around'
-                                }}>
-                                    {
-                                        Numbers.map(Number => (
-                                            <TouchableOpacity
-                                                key={Number.id}
-                                                style={{
-                                                    width: 100,
-                                                    height: 80
-                                                }}
-                                                onPress={() => handerValue(Number.So)}
-                                            >
+                                    <View style={{
+                                        marginLeft: 10,
+                                        marginRight: 10,
+                                        borderColor: 'gray',
+                                        borderWidth: 1,
+                                        marginBottom: 10,
+                                        padding: 15,
+                                        backgroundColor: '#eeeeee',
+                                        shadowColor: "#000",
+                                        shadowOffset: {
+                                            width: 0,
+                                            height: 7,
+                                        },
+                                        shadowOpacity: 0.43,
+                                        shadowRadius: 9.51,
+
+                                        elevation: 15,
+                                    }}>
+                                        <View>
+                                            <View style={{
+                                                flexDirection: 'row',
+                                                marginTop: 10,
+                                                marginBottom: 15,
+                                            }}>
                                                 <Text style={{
-                                                    textAlign: 'center',
-                                                    fontSize: 40
+                                                    // marginTop: 20,
+                                                    fontSize: 20,
+                                                    fontWeight: 'bold'
                                                 }}>
-                                                    {Number.So}
+                                                    Đơn Hàng:
                                                 </Text>
-                                            </TouchableOpacity>
-                                        ))
-                                    }
+                                                <Text style={{
+                                                    fontSize: 20,
+                                                    marginLeft: 10
+                                                }}>
+                                                    BD12
+                                                </Text>
+                                            </View>
+
+                                            <View style={{
+                                                flexDirection: 'row',
+                                                marginBottom: 15
+                                            }}>
+                                                <Text style={{
+                                                    fontSize: 20,
+                                                    fontWeight: 'bold'
+                                                }}>
+                                                    Tên Khách Hàng:
+                                                </Text>
+                                                <Text style={{
+                                                    fontSize: 20,
+                                                    marginLeft: 10
+
+                                                }}>
+                                                    Ngô Xuân Quy
+                                                </Text>
+                                            </View>
+
+                                            <View style={{
+                                                flexDirection: 'row',
+                                                marginBottom: 15
+                                            }}>
+
+                                                <Text style={{
+                                                    fontSize: 20,
+                                                    fontWeight: 'bold'
+                                                }}>
+                                                    Số Điện Thoại:
+                                                </Text>
+                                                <Text style={{
+                                                    fontSize: 20,
+                                                    marginLeft: 10
+
+                                                }}>
+                                                    0589401978
+                                                </Text>
+                                            </View>
+
+                                            <View style={{
+                                                flexDirection: 'row'
+                                            }}>
+                                                <Text style={{
+                                                    fontWeight: 'bold',
+                                                    fontSize: 20
+                                                }}>
+                                                    Địa Chỉ:
+                                                </Text>
+                                                <Text style={{
+                                                    fontSize: 20,
+                                                    marginLeft: 10
+
+                                                }}>
+                                                    Cửa Lò, Nghệ An
+                                                </Text>
+                                            </View>
+                                            <View style={{
+                                                flexDirection: 'row',
+                                                marginTop: 15,
+                                                marginBottom: 20
+                                            }}>
+                                                <Text style={{
+                                                    fontSize: 20,
+                                                    fontWeight: 'bold'
+                                                }}>
+                                                    Giờ Hẹn Khách:
+                                                </Text>
+                                                <Text style={{
+                                                    fontSize: 20,
+                                                    marginLeft: 10
+
+                                                }}>
+                                                    09:15 - 14/02/2023
+                                                </Text>
+                                            </View>
+
+                                            <View style={{
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                            }}>
+                                                <TouchableOpacity
+                                                    activeOpacity={0.7}
+                                                    style={styles.buttonStyle}
+                                                    onPress={triggerCall}>
+                                                    <Ionicons name="ios-call-outline" size={24} color="white" style={{
+                                                        textAlign: 'center'
+                                                    }} />
+                                                </TouchableOpacity>
+                                            </View>
+
+                                        </View>
+                                    </View>
                                 </View>
-
                             </View>
 
-                            <View style={{
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                            }}>
-                                <TouchableOpacity
-                                    activeOpacity={0.7}
-                                    style={styles.buttonStyle}
-                                    onPress={triggerCall}>
-                                    <Ionicons name="ios-call-outline" size={24} color="white" style={{
-                                        textAlign: 'center'
-                                    }} />
-                                </TouchableOpacity>
-
-                                {/* <TouchableOpacity
-                                onPress={() => navigation.navigate('Home')}
-                            >
-                                <Text>
-                                    Home
-                                </Text>
-                            </TouchableOpacity> */}
-                            </View>
                         </View>
 
                     </TouchableWithoutFeedback>
-                    <View style={{
-                        height: 1,
-                        backgroundColor: 'black',
-                        marginBottom: 20
-                    }}>
 
-                    </View>
                 </KeyboardAvoidingView>
             </View>
 
@@ -193,8 +245,8 @@ const styles = StyleSheet.create({
         marginTop: -15,
         padding: 10,
         backgroundColor: '#8ad24e',
-        width: 80,
-        height: 80,
+        width: 60,
+        height: 60,
         borderRadius: 100
     },
     buttonTextStyle: {
