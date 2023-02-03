@@ -1,14 +1,20 @@
-import { StatusBar } from 'expo-status-bar'
-import { StyleSheet, Text, View } from 'react-native'
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
-export default function ChiSoCaNhan() {
+export default function Cart_Them({ navigation }) {
     return (
         <View style={styles.container}>
-            <Text>Button2</Text>
-            <Text>abc</Text>
+            <Text>Open up App.js to start working on your app!</Text>
+            <TouchableOpacity
+                onPress={() => navigation.navigate("ThuNhap")}
+            >
+                <Text>
+                    test
+                </Text>
+            </TouchableOpacity>
             <StatusBar style="auto" />
         </View>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
@@ -18,4 +24,4 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-})
+});

@@ -15,6 +15,7 @@ import LuongThuong from './../Screens/LuongThuong';
 import Cart_Them from '../Screens/Cart_Them';
 import ChiSoCaNhan from '../Screens/ChiSoCaNhan';
 import ThuTucHanhChinh from '../Screens/ThuTucHanhChinh';
+import DonHang from '../Screens/DonHang';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +25,9 @@ function StackHomes() {
             <Stack.Navigator>
                 <Stack.Screen name="Home" component={Home} options={{
                     headerShown: false
+                }} />
+                <Stack.Screen name="Đơn Hàng" component={DonHang} options={{
+                    headerShown: true
                 }} />
                 <Stack.Screen name="QRCode" component={QRCode} options={{
                     headerShown: false

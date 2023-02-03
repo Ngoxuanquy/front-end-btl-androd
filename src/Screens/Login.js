@@ -5,9 +5,69 @@ import React, { useEffect, useState, useCallback, useMemo, useLayoutEffect } fro
 import Checkbox from 'expo-checkbox';
 
 import { MaterialIcons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function Login({ navigation }) {
+
+    const URL_ON = 'http://192.168.0.105:4000'
+    const URL1_ON = 'http://192.168.0.105:5000'
+
+    const URL_CT = 'http://192.168.1.112:4000'
+    const URL1_CT = 'http://192.168.1.112:5000'
+
+
+    const [toggleCheckBox, setToggleCheckBox] = useState(false)
+    const [isChecked, setChecked] = useState(false);
+
+    const [token, setToKen] = useState("");
+    const [logins, setLogin] = useState([]);
+    const [taikhoan, setTaiKhoan] = useState([]);
+    const [matkhau, setMatKhau] = useState([]);
+
+    const options = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            email: taikhoan
+        })
+    };
+
+    useLayoutEffect(() => {
+        fetch(URL_CT + '/api/users')
+            .then(res => res.json())
+            .then(res => setLogin(res))
+    }, [])
+
+    function handerSubmit() {
+        const user = logins.find(user => user.email === taikhoan)
+
+        if (!user) return alert('sai tk hoặc mk');
+
+        fetch(URL1_CT + '/login', options)
+            .then(res => res.json())
+            .then(res => {
+                // console.log(res.accessToken)
+                AsyncStorage.setItem('token', res.accessToken);
+                AsyncStorage.setItem('taikhoan', taikhoan);
+                fetch(URL_CT + '/api/users/update/' + taikhoan, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        Token: res.accessToken,
+                        refreshToken: res.refreshToken
+                    })
+                })
+            })
+            .finally(() => {
+                navigation.replace('Home_Tag');
+                return;
+            }
+            )
+        // .catch(err => console.log(err))
+    }
+
+
 
     return (
         <View style={styles.container}>
@@ -18,7 +78,7 @@ export default function Login({ navigation }) {
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <View style={{
                         // position: 'absolute',
-                        zIndex: 1,
+                        zIndex: 100,
                         textAlign: 'center',
                         alignItems: 'center'
                     }}>
@@ -167,7 +227,9 @@ export default function Login({ navigation }) {
                                                 borderBottomWidth: 1,
                                                 paddingLeft: 20,
                                                 fontSize: 20
-                                            }} />
+                                            }}
+                                                onChangeText={e => setTaiKhoan(e)}
+                                            />
 
                                             <MaterialIcons
                                                 name="check"
@@ -183,10 +245,10 @@ export default function Login({ navigation }) {
                                         </View>
 
                                         <View style={{
-                                            marginTop: 60
+                                            marginTop: 60,
                                         }}>
                                             <View style={{
-
+                                                zIndex: 100
                                             }}>
                                                 <MaterialIcons
                                                     name="lock"
@@ -196,8 +258,7 @@ export default function Login({ navigation }) {
                                                         position: 'absolute',
                                                         left: -20,
                                                         top: -5,
-                                                        opacity: 0.3
-
+                                                        opacity: 0.3,
                                                     }}
                                                 />
 
@@ -206,7 +267,9 @@ export default function Login({ navigation }) {
                                                     borderBottomWidth: 1,
                                                     paddingLeft: 20,
                                                     fontSize: 20
-                                                }} />
+                                                }}
+                                                    onChangeText={e => setMatKhau(e)}
+                                                />
                                                 <MaterialIcons
                                                     name="menu"
                                                     size={28}
@@ -223,7 +286,8 @@ export default function Login({ navigation }) {
                                         <View style={{
                                             flexDirection: 'row',
                                             justifyContent: 'space-between',
-                                            marginTop: 20
+                                            marginTop: 20,
+
                                         }}>
                                             <View style={{
                                                 flexDirection: 'row'
@@ -260,7 +324,7 @@ export default function Login({ navigation }) {
                                                 justifyContent: 'center',
                                                 borderRadius: 20
                                             }}
-                                                onPress={() => navigation.replace('Home')}
+                                                onPress={() => handerSubmit()}
 
                                             >
                                                 <Text style={{
@@ -301,7 +365,8 @@ export default function Login({ navigation }) {
                         borderRadius: 85,
                         alignItems: 'center',
                         justifyContent: 'center',
-                        textAlign: 'center'
+                        textAlign: 'center',
+                        zIndex: -1,
                     }}
                     source={
                         require('../../assets/logo.jpg')
@@ -313,7 +378,8 @@ export default function Login({ navigation }) {
                     color: '#fff',
                     fontWeight: 'bold',
                     marginTop: 10,
-                    letterSpacing: 4
+                    letterSpacing: 4,
+                    zIndex: -1
                 }}>
                     LỌC NƯỚC 365
                 </Text>

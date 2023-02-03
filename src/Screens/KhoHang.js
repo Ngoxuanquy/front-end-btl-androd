@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-
+import { FontAwesome } from '@expo/vector-icons';
 export default function KhoHang() {
     return (
         <View style={{
@@ -26,17 +26,31 @@ export default function KhoHang() {
                     elevation: 10,
 
                 }}>
-                    <Text style={{
-                        fontSize: 18,
-                        lineHeight: 35
+                    <View style={{
+                        flexDirection: 'row'
                     }}>
-                        Tổng SL tồn: 100
-                    </Text>
-                    <Text style={{
-                        fontSize: 18
+                        <FontAwesome name="book" size={24} color="black" style={{
+                            marginRight: 5,
+                            marginTop: 5
+                        }} />
+                        <Text style={{
+                            fontSize: 18,
+                            lineHeight: 35
+                        }}>
+                            Tổng SL tồn: 100
+                        </Text>
+                    </View>
+                    <View style={{
+                        flexDirection: 'row'
                     }}>
-                        Tổng Tiền tồn kho: 100.000đ
-                    </Text>
+                        <FontAwesome name="money" size={24} color="black" />
+                        <Text style={{
+                            fontSize: 18,
+                            marginLeft: 5
+                        }}>
+                            Tổng Tiền tồn kho: 100.000đ
+                        </Text>
+                    </View>
                 </TouchableOpacity>
             </View>
 

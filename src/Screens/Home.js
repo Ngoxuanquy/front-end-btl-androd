@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, ScrollView, Animated, Button } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, ScrollView, Animated, Button, BackHandler } from 'react-native';
 import React, { useEffect, useState, useLayoutEffect } from 'react';
 
 // import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -11,12 +11,24 @@ import { Feather } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import DropDownItem from "react-native-drop-down-item";
 import { Accordion, animate, Value } from '@dooboo-ui/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 // import { Value } from 'react-native-reanimated';
 // import Buttons from './Button'
 export default function HomeScrenn({ navigation }) {
 
+    const URL_ON = 'http://192.168.0.105:4000'
+    const URL1_ON = 'http://192.168.0.105:5000'
+
+    const URL_CT = 'http://192.168.1.112:4000'
+    const URL1_CT = 'http://192.168.1.112:5000'
+
     const [isLoad, setIsLoad] = useState(false)
+    const [taikhoan, setTaiKhoan] = useState([])
     const [token, setToken] = useState([])
+    const [thongtin, setThongTin] = useState([])
+    const [reset, setReset] = useState(false);
+
     const [apis, setApi] = useState([])
     const countries = ["Egypt", "Canada", "Australia", "Ireland"]
 
@@ -28,6 +40,70 @@ export default function HomeScrenn({ navigation }) {
             duration: 500,
             useNativeDriver: true,
         }).start();
+    }
+
+    AsyncStorage.getItem('taikhoan')
+        .then(res =>
+            setTaiKhoan(res)
+        )
+
+    AsyncStorage.getItem('token')
+        .then(res =>
+            setToken(res)
+        )
+
+    // console.log(taikhoan)
+
+    useEffect(() => {
+        fetch(URL_CT + '/api/users/' + taikhoan)
+            .then(res => res.json())
+            .then(res => setThongTin(res))
+    }, [taikhoan])
+
+    // console.log(thongtin)
+
+
+    const options = {
+        method: 'get',
+        headers: {
+            'Authorization': 'Bearer ' + token,
+        },
+    }
+
+    useEffect(() => {
+        fetch(URL_CT + '/posts', options)
+            .then(res => res.json())
+            .then(res => setApi(res))
+            .catch((err) => console.log(err))
+    }, [token])
+
+    function handerLogout() {
+
+        fetch(URL_CT + '/api/users/update/token/' + taikhoan, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+        })
+            .then(() => {
+                // navigation.replace('Login');
+                setReset(true);
+                setTimeout(() => {
+                    setReset(false);
+                }, 100);
+
+                AsyncStorage.clear().then(() => {
+                    setToken('')
+                    setTaiKhoan('a')
+                    console.log("taikhoan : " + taikhoan)
+
+                }).catch((error) => {
+                    console.log('AsyncStorage clear error: ', error);
+                });
+
+            })
+    }
+
+    if (reset) {
+        return null;
     }
 
     const contents = [
@@ -51,11 +127,9 @@ export default function HomeScrenn({ navigation }) {
             id: 1, button: 'Thủ Tục Hành Chính', icon: 'receipt', color: 'coral'
         },
         {
-
             id: 2, button: 'Chỉ Số Cá Nhân', icon: 'receipt',
         },
         {
-
             id: 3, button: 'Thông Báo Công Ty', icon: 'notifications',
         },
         {
@@ -63,13 +137,13 @@ export default function HomeScrenn({ navigation }) {
         },
         {
             id: 5, button: 'Lịch Sử Đơn Hàng', icon: 'history',
-        }, {
+        },
+        {
             id: 6, button: 'Duyệt Chi', icon: 'trending-up',
         }
     ]
     return (
         <View style={{
-
             flex: 1,
             backgroundColor: '#fff',
             position: 'relative'
@@ -84,7 +158,7 @@ export default function HomeScrenn({ navigation }) {
                 height: 240,
                 borderBottomRightRadius: 70,
                 borderBottomLeftRadius: 70,
-                // position: 'relative',
+                // position: 'relative',  
                 zIndex: -1
             }}>
                 {/* hinhf tronf */}
@@ -170,7 +244,6 @@ export default function HomeScrenn({ navigation }) {
                             <MaterialIcons name='menu' style={{
                                 fontSize: 30,
                                 color: 'white'
-
                             }} />
                         </Text>
                     </TouchableOpacity>
@@ -190,7 +263,6 @@ export default function HomeScrenn({ navigation }) {
                     </TouchableOpacity>
                     <TouchableOpacity style={{
                         marginTop: 20
-
                     }}>
 
                         <MaterialIcons name='notifications' style={{
@@ -237,16 +309,19 @@ export default function HomeScrenn({ navigation }) {
 
                         }}>
                             <View>
-                                <Image
-                                    style={{
-                                        width: 100,
-                                        height: 120,
-                                        borderRadius: 10,
-                                    }}
-                                    source={{
-                                        uri: 'https://scontent.xx.fbcdn.net/v/t1.15752-9/286462354_1371956499953772_2394174266156682221_n.jpg?stp=dst-jpg_s206x206&_nc_cat=107&ccb=1-7&_nc_sid=aee45a&_nc_ohc=hM_kYA5ViR4AX8JclL1&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdQ8O9uqJyyy7Zd0ApEC94wyQKoaSNxmoiIVpRGi2gO_PQ&oe=63C9DF3E'
-                                    }}
-                                />
+                                {thongtin.map(thong => (
+                                    <Image
+                                        key={thong.id}
+                                        style={{
+                                            width: 100,
+                                            height: 120,
+                                            borderRadius: 10,
+                                        }}
+                                        source={{
+                                            uri: thong.img
+                                        }}
+                                    />
+                                ))}
                             </View>
                             <View style={{
                                 paddingHorizontal: 10,
@@ -262,7 +337,7 @@ export default function HomeScrenn({ navigation }) {
                                         lineHeight: 30,
                                         // fontSize: 14
                                     }}>
-                                        Ngô Xuân Quy
+                                        {taikhoan}
                                     </Text>
                                     <Text style={{
                                         lineHeight: 30,
@@ -275,16 +350,16 @@ export default function HomeScrenn({ navigation }) {
                                     lineHeight: 30
                                 }}>
                                     Nhân Viên KT
-                                    <View>
+                                    {/* <View>
                                         {
                                             apis.map((api, index) => (
                                                 <Text key={index} >
-                                                    {api.userName}
+                                                    {api.email}
 
                                                 </Text>
                                             ))
                                         }
-                                    </View>
+                                    </View> */}
 
                                 </Text>
                                 <Text style={{
@@ -419,7 +494,7 @@ export default function HomeScrenn({ navigation }) {
                                 elevation: 13,
 
                             }}
-                                onPress={() => navigation.navigate('DonDangThucHien')}
+                                onPress={() => navigation.navigate('Đơn Hàng')}
 
                             >
                                 <Text style={{
@@ -510,13 +585,9 @@ export default function HomeScrenn({ navigation }) {
                             </TouchableOpacity>
                         ))}
                     </View>
-
-
                 </View>
                 <View>
-
                 </View>
-
             </View>
 
 
@@ -589,7 +660,7 @@ export default function HomeScrenn({ navigation }) {
                                     marginLeft: -15
                                 }}
                                 source={{
-                                    uri: 'https://scontent.xx.fbcdn.net/v/t1.15752-9/286462354_1371956499953772_2394174266156682221_n.jpg?stp=dst-jpg_s206x206&_nc_cat=107&ccb=1-7&_nc_sid=aee45a&_nc_ohc=hM_kYA5ViR4AX8JclL1&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdQ8O9uqJyyy7Zd0ApEC94wyQKoaSNxmoiIVpRGi2gO_PQ&oe=63C9DF3E'
+                                    uri: 'https://thuthuatphanmem.vn/uploads/2018/09/11/hinh-anh-dep-6_044127357.jpg'
                                 }}
                             />
                             <View style={{
@@ -890,7 +961,37 @@ export default function HomeScrenn({ navigation }) {
                                     Duyệt Chi
                                 </Text>
                             </View>
+                            <TouchableOpacity style={{
+                                flexDirection: 'row',
+                                // height: 60,
+                                padding: 10,
+                                paddingBottom: -10,
+                                borderBottomColor: 'gray',
+                                borderBottomWidth: 0.3,
+                                marginLeft: 10,
+                                marginRight: 10,
+                                height: 60,
+                                textAlign: 'center',
+                                justifyContent: 'flex-start',
+                                alignItems: 'center'
+                            }}
+                                onPress={() => handerLogout()}
+                            >
+                                <FontAwesome name="money" size={24} color="black" style={{
+                                    marginTop: -7
+                                }} />
+                                <Text style={{
+                                    fontSize: 20,
+                                    lineHeight: 30,
+                                    marginLeft: 10
+
+                                }}>
+                                    Đăng Xuất
+                                </Text>
+                            </TouchableOpacity>
                         </View>
+
+
 
 
 

@@ -20,6 +20,7 @@ import StackCart from './StackCart';
 const Tab = createBottomTabNavigator();
 
 export default function Tag() {
+
     return (
         <NavigationContainer independent={true}>
             <Tab.Navigator screenOptions={({ route }) => ({
@@ -58,6 +59,7 @@ export default function Tag() {
                 <Tab.Screen name="ThongTinTaiKhoan" component={ThongTinTaiKhoan} options={{
                     headerShown: false
                 }} />
+
             </Tab.Navigator>
         </NavigationContainer>
     );

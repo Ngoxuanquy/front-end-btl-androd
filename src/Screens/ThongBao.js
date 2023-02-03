@@ -32,7 +32,7 @@ function App() {
                         <View style={{
                             width: 70,
                             height: 70,
-                            backgroundColor: 'green',
+                            backgroundColor: '#66CC33',
                             borderRadius: 200,
                             justifyContent: 'center',
                             alignItems: 'center',
@@ -91,7 +91,7 @@ function App() {
                         <View style={{
                             width: 70,
                             height: 70,
-                            backgroundColor: 'green',
+                            backgroundColor: '#66CC33',
                             borderRadius: 200,
                             justifyContent: 'center',
                             alignItems: 'center',
@@ -150,7 +150,7 @@ function App() {
                         <View style={{
                             width: 70,
                             height: 70,
-                            backgroundColor: 'green',
+                            backgroundColor: '#66CC33',
                             borderRadius: 200,
                             justifyContent: 'center',
                             alignItems: 'center',
@@ -209,7 +209,7 @@ function App() {
                         <View style={{
                             width: 70,
                             height: 70,
-                            backgroundColor: 'green',
+                            backgroundColor: '#66CC33',
                             borderRadius: 200,
                             justifyContent: 'center',
                             alignItems: 'center',
@@ -268,7 +268,7 @@ function App() {
                         <View style={{
                             width: 70,
                             height: 70,
-                            backgroundColor: 'green',
+                            backgroundColor: '#66CC33',
                             borderRadius: 200,
                             justifyContent: 'center',
                             alignItems: 'center',
@@ -327,7 +327,7 @@ function App() {
                         <View style={{
                             width: 70,
                             height: 70,
-                            backgroundColor: 'green',
+                            backgroundColor: '#66CC33',
                             borderRadius: 200,
                             justifyContent: 'center',
                             alignItems: 'center',
@@ -386,7 +386,7 @@ function App() {
                         <View style={{
                             width: 70,
                             height: 70,
-                            backgroundColor: 'green',
+                            backgroundColor: '#66CC33',
                             borderRadius: 200,
                             justifyContent: 'center',
                             alignItems: 'center',
@@ -411,7 +411,8 @@ function App() {
                             }}>
                                 Phòng Điều Hành:
                                 <Text style={{
-                                    fontWeight: '400'
+                                    fontWeight: '400',
+                                    marginLeft: 6
                                 }}>
                                     Lorem ipsum dolor sit amet,
                                     consectetur adipiscing elit Lorem ipsum dolor
@@ -430,7 +431,7 @@ function App() {
                     </View>
                 </View>
             </View>
-        </ScrollView>
+        </ScrollView >
     )
 }
 
