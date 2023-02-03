@@ -1,22 +1,24 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, TouchableOpacity, View, Image, ScrollView, TextInput } from 'react-native';
 import React, { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ThanhToan() {
 
     const [cliedId, setCliedID] = useState(0);
     const [Apis, setApi] = useState([])
     const [sanphams, setSanPham] = useState([])
+    const [taikhoan, setTaiKhoan] = useState([])
 
 
     const Arrays = [
         {
             id: 1,
-            name: 'Rau'
+            name: 'Lọc Nước'
         },
         {
             id: 2,
-            name: 'Thịt'
+            name: 'Kangaroo'
         },
         {
             id: 3,
@@ -36,121 +38,166 @@ export default function ThanhToan() {
         },
     ]
 
-    const Products = [
-        {
-            id: 1,
-            name: 'Rau Dền',
-            price: 100,
-            properties: 'Rau',
-            img: 'https://media-cdn-v2.laodong.vn/storage/newsportal/2022/1/20/996975/Rau-Den.jpg?w=800&crop=auto&scale=both'
+    // const Products = [
+    //     {
+    //         id: 1,
+    //         name: 'Rau Dền',
+    //         price: 100,
+    //         properties: 'Rau',
+    //         img: 'https://media-cdn-v2.laodong.vn/storage/newsportal/2022/1/20/996975/Rau-Den.jpg?w=800&crop=auto&scale=both'
 
-        },
-        {
-            id: 2,
-            name: 'Rau Cải',
-            price: 100,
-            properties: 'Rau',
-            img: 'http://media.cooky.vn/images/blog-2016/6-loai-rau-khong-bao-gio-nen-luoc-0.jpg'
+    //     },
+    //     {
+    //         id: 2,
+    //         name: 'Rau Cải',
+    //         price: 100,
+    //         properties: 'Rau',
+    //         img: 'http://media.cooky.vn/images/blog-2016/6-loai-rau-khong-bao-gio-nen-luoc-0.jpg'
 
-        },
-        {
-            id: 3,
-            name: 'Rau muống',
-            price: 100,
-            properties: 'Rau',
-            img: 'https://hongngochospital.vn/wp-content/uploads/2013/11/rau-muong.jpg'
+    //     },
+    //     {
+    //         id: 3,
+    //         name: 'Rau muống',
+    //         price: 100,
+    //         properties: 'Rau',
+    //         img: 'https://hongngochospital.vn/wp-content/uploads/2013/11/rau-muong.jpg'
 
-        },
-        {
-            id: 4,
-            name: 'Thịt Lợn',
-            price: 100,
-            properties: 'Thịt',
-            img: 'https://icdn.dantri.com.vn/FaA3gEccccccccccccos/Image/2011/06/tht6811_a9082.jpg'
+    //     },
+    //     {
+    //         id: 4,
+    //         name: 'Thịt Lợn',
+    //         price: 100,
+    //         properties: 'Thịt',
+    //         img: 'https://icdn.dantri.com.vn/FaA3gEccccccccccccos/Image/2011/06/tht6811_a9082.jpg'
 
-        },
-        {
-            id: 5,
-            name: 'Thịt Gà',
-            price: 100,
-            properties: 'Thịt',
-            img: 'https://suckhoehangngay.mediacdn.vn/zoom/700_438/154880486097817600/2021/8/29/an-thit-ga-nhieu-co-tot-khong-2-16302301251131276160424-0-97-512-916-crop-16302301919781076935074.jpg'
+    //     },
+    //     {
+    //         id: 5,
+    //         name: 'Thịt Gà',
+    //         price: 100,
+    //         properties: 'Thịt',
+    //         img: 'https://suckhoehangngay.mediacdn.vn/zoom/700_438/154880486097817600/2021/8/29/an-thit-ga-nhieu-co-tot-khong-2-16302301251131276160424-0-97-512-916-crop-16302301919781076935074.jpg'
 
-        },
-        {
-            id: 6,
-            name: 'Cá Mập',
-            price: 100,
-            properties: 'Cá',
-            img: 'https://cdnmedia.baotintuc.vn/Upload/ESSoZh9IeVhxwO8Bh87Q/files/2021/10/27/camap271021.jpg'
+    //     },
+    //     {
+    //         id: 6,
+    //         name: 'Cá Mập',
+    //         price: 100,
+    //         properties: 'Cá',
+    //         img: 'https://cdnmedia.baotintuc.vn/Upload/ESSoZh9IeVhxwO8Bh87Q/files/2021/10/27/camap271021.jpg'
 
-        },
-        {
-            id: 7,
-            name: 'Khủng Long',
-            price: 100,
-            properties: 'Khủng Long',
-            img: 'http://icdn.dantri.com.vn/zoom/1200_630/2021/05/10/khung-long-crop-1620601045917.jpeg'
+    //     },
+    //     {
+    //         id: 7,
+    //         name: 'Khủng Long',
+    //         price: 100,
+    //         properties: 'Khủng Long',
+    //         img: 'http://icdn.dantri.com.vn/zoom/1200_630/2021/05/10/khung-long-crop-1620601045917.jpeg'
 
-        },
-        {
-            id: 8,
-            name: 'Voi',
-            price: 100,
-            properties: 'Voi',
-            img: 'https://hinhmoc.com/wp-content/uploads/2020/07/con-voi.jpg'
+    //     },
+    //     {
+    //         id: 8,
+    //         name: 'Voi',
+    //         price: 100,
+    //         properties: 'Voi',
+    //         img: 'https://hinhmoc.com/wp-content/uploads/2020/07/con-voi.jpg'
 
-        },
-        {
-            id: 9,
-            name: 'Thịt Bò',
-            price: 100,
-            properties: 'Thịt',
-            img: 'https://vinmec-prod.s3.amazonaws.com/images/20191112_133540_928947_thit-bo.max-1800x1800.png'
+    //     },
+    //     {
+    //         id: 9,
+    //         name: 'Thịt Bò',
+    //         price: 100,
+    //         properties: 'Thịt',
+    //         img: 'https://vinmec-prod.s3.amazonaws.com/images/20191112_133540_928947_thit-bo.max-1800x1800.png'
 
-        },
-        {
-            id: 10,
-            name: 'Thịt Hổ',
-            price: 100,
-            properties: 'Thịt',
-            img: 'https://image.thanhnien.vn/w1024/Uploaded/2022/jvunzvu/2022_07_08/ho-8347.jpg'
+    //     },
+    //     {
+    //         id: 10,
+    //         name: 'Thịt Hổ',
+    //         price: 100,
+    //         properties: 'Thịt',
+    //         img: 'https://image.thanhnien.vn/w1024/Uploaded/2022/jvunzvu/2022_07_08/ho-8347.jpg'
 
-        }
-    ]
+    //     }
+    // ]
 
-    const [product, setProduct] = useState(Products);
+
+
     const [xoa, setXoa] = useState();
+    const [products, setProducts] = useState([]);
+    const URL_ON = 'http://192.168.0.105:4000'
+    const URL1_ON = 'http://192.168.0.105:5000'
+
+    const URL_CT = 'http://192.168.1.112:4000'
+    const URL1_CT = 'http://192.168.1.112:5000'
 
 
+    useEffect(() => {
+        fetch('http://192.168.1.112:4000/api/products/')
+            .then(res => res.json())
+            .then(res => setProducts(res))
+            .catch(err => console.log(err))
+            .finally(() => {
+            })
+    }, [])
+
+    const [product, setProduct] = useState(products);
+
+    useEffect(() => {
+        console.log(products)
+
+        setProduct(products)
+    }, [products])
 
     function handerProperties(name, id) {
         setCliedID(id);
         let data;
         if (name === 'All') {
-            data = Products;
+            data = products;
             setProduct(data);
             return;
         }
-        data = Products.filter((item) => {
+        data = products.filter((item) => {
             return item.properties == name;
         });
         setProduct(data);
-
     }
-    // console.log(product)
+
+
+    AsyncStorage.getItem('taikhoan')
+        .then(res =>
+            setTaiKhoan(res)
+        )
 
 
     useEffect(() => {
-        setApi(Products)
+        setApi(products)
     }, [])
 
     function handerCong(id) {
-        Products.map(Product => {
+        // products.map(Product => {
+        //     if (Product.id == id) {
+        //         setSanPham([...sanphams, Product])
+        //     }
+        // })
+        products.map(Product => {
             if (Product.id == id) {
-                setSanPham([...sanphams, Product])
+                fetch(URL_CT + '/api/orders/create/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id: id,
+                        name: Product.name,
+                        taikhoan: taikhoan,
+                        date: new Date(),
+
+                    })
+                })
+                    .catch(err => console.log(err))
             }
         })
+
+
     }
     // console.log(sanphams)
 

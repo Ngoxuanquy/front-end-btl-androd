@@ -60,7 +60,7 @@ export default function Login({ navigation }) {
                 })
             })
             .finally(() => {
-                navigation.replace('Home_Tag');
+                navigation.replace('Home');
                 return;
             }
             )

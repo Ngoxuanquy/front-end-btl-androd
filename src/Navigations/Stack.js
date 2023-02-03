@@ -56,20 +56,20 @@ function Stacks() {
         <NavigationContainer independent={true}>
 
             <Stack.Navigator>
-                {token != "" ?
-                    <>
-                        <Stack.Screen name="Login" component={Login} options={{
-                            headerShown: false
-                        }} />
-                        <Stack.Screen name="Home_Tag" component={Tag} options={{
-                            headerShown: false
-                        }} />
-                    </>
+                {/* {token != "" ?
+                    <> */}
+                <Stack.Screen name="Login" component={Login} options={{
+                    headerShown: false
+                }} />
+                <Stack.Screen name="Home" component={Tag} options={{
+                    headerShown: false
+                }} />
+                {/* </>
                     :
                     <Stack.Screen name="Login" component={Login} options={{
                         headerShown: false
                     }} />
-                }
+                } */}
             </Stack.Navigator>
 
         </NavigationContainer>
