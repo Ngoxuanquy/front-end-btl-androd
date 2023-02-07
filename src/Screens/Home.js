@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, ScrollView, Animated, Button, BackHandler } from 'react-native';
 import React, { useEffect, useState, useLayoutEffect } from 'react';
+import * as ImagePicker from 'expo-image-picker'
 
 // import Ionicons from 'react-native-vector-icons/Ionicons';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -12,24 +13,31 @@ import { FontAwesome } from '@expo/vector-icons';
 import DropDownItem from "react-native-drop-down-item";
 import { Accordion, animate, Value } from '@dooboo-ui/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import UpAnh from '../Components/UpAnh';
 // import { Value } from 'react-native-reanimated';
 // import Buttons from './Button'
 export default function HomeScrenn({ navigation }) {
 
-    const URL_ON = 'http://192.168.0.105:4000'
-    const URL1_ON = 'http://192.168.0.105:5000'
+    const URL_ON = 'http://192.168.0.112:4000'
+    const URL1_ON = 'http://192.168.0.112:5000'
 
-    const URL_CT = 'http://192.168.1.112:4000'
-    const URL1_CT = 'http://192.168.1.112:5000'
+    const URL_CT = 'http://192.168.1.121:4000'
+    const URL1_CT = 'http://192.168.1.121:5000'
+
+    const URL_FPT = 'http://192.168.0.145:4000'
+    const URL1_FPT = 'http://192.168.0.145:5000'
 
     const [isLoad, setIsLoad] = useState(false)
+    const [isUpAnh, setUpAnh] = useState(false)
     const [taikhoan, setTaiKhoan] = useState([])
     const [token, setToken] = useState([])
     const [thongtin, setThongTin] = useState([])
     const [reset, setReset] = useState(false);
 
     const [apis, setApi] = useState([])
+    const [image, setImage] = useState(null)
+    const [logins, setLogin] = useState([])
+
     const countries = ["Egypt", "Canada", "Australia", "Ireland"]
 
     const [animatedValue] = useState(new Animated.Value(0));
@@ -55,13 +63,10 @@ export default function HomeScrenn({ navigation }) {
     // console.log(taikhoan)
 
     useEffect(() => {
-        fetch(URL_CT + '/api/users/' + taikhoan)
+        fetch(URL_FPT + '/api/users/' + taikhoan)
             .then(res => res.json())
             .then(res => setThongTin(res))
     }, [taikhoan])
-
-    // console.log(thongtin)
-
 
     const options = {
         method: 'get',
@@ -71,7 +76,7 @@ export default function HomeScrenn({ navigation }) {
     }
 
     useEffect(() => {
-        fetch(URL_CT + '/posts', options)
+        fetch(URL_FPT + '/posts', options)
             .then(res => res.json())
             .then(res => setApi(res))
             .catch((err) => console.log(err))
@@ -79,7 +84,7 @@ export default function HomeScrenn({ navigation }) {
 
     function handerLogout() {
 
-        fetch(URL_CT + '/api/users/update/token/' + taikhoan, {
+        fetch(URL_FPT + '/api/users/update/token/' + taikhoan, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
         })
@@ -92,8 +97,8 @@ export default function HomeScrenn({ navigation }) {
 
                 AsyncStorage.clear().then(() => {
                     setToken('')
-                    setTaiKhoan('a')
-                    console.log("taikhoan : " + taikhoan)
+                    setTaiKhoan('')
+                    // console.log("taikhoan : " + taikhoan)
 
                 }).catch((error) => {
                     console.log('AsyncStorage clear error: ', error);
@@ -104,6 +109,46 @@ export default function HomeScrenn({ navigation }) {
 
     if (reset) {
         return null;
+    }
+
+    const pickImage = async () => {
+        // setIsLoad(true)
+
+        // No permissions request is necessary for launching the image library
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        })
+
+        // console.log("image :" + image)
+
+        if (!result.canceled) {
+            setImage(result.assets[0].uri)
+        }
+
+
+
+
+    }
+
+    function handerXacNhan() {
+        fetch(URL_FPT + '/api/users/update/img/' + taikhoan, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                img: image
+            })
+        })
+            .then(() => {
+                fetch(URL_FPT + '/api/users/' + taikhoan)
+                    .then(res => res.json())
+                    .then(res => setThongTin(res))
+            })
+
+        setUpAnh(false)
+
     }
 
     const contents = [
@@ -140,10 +185,31 @@ export default function HomeScrenn({ navigation }) {
         },
         {
             id: 6, button: 'Duyệt Chi', icon: 'trending-up',
-        }
+        },
+        {
+            id: 7, button: 'Nhập-Xuất Kho', icon: 'compare-arrows',
+        },
+        {
+            id: 8, button: 'Kho Hàng Cá Nhân', icon: 'account-balance',
+        },
+        {
+            id: 9, button: 'Phiếu Mượn', icon: 'library-books',
+        },
     ]
+
+    function handerUpAnh() {
+        setUpAnh(true)
+    }
+
+    function handerCance() {
+        setUpAnh(false)
+
+    }
+
+    // console.log(image)
+
     return (
-        <View style={{
+        <ScrollView style={{
             flex: 1,
             backgroundColor: '#fff',
             position: 'relative'
@@ -310,17 +376,22 @@ export default function HomeScrenn({ navigation }) {
                         }}>
                             <View>
                                 {thongtin.map(thong => (
-                                    <Image
+                                    <TouchableOpacity
                                         key={thong.id}
-                                        style={{
-                                            width: 100,
-                                            height: 120,
-                                            borderRadius: 10,
-                                        }}
-                                        source={{
-                                            uri: thong.img
-                                        }}
-                                    />
+                                        onPress={() => handerUpAnh()}
+                                    >
+                                        <Image
+                                            style={{
+                                                width: 100,
+                                                height: 120,
+                                                borderRadius: 10,
+                                            }}
+                                            source={{
+                                                uri: thong.img
+                                            }}
+                                        />
+
+                                    </TouchableOpacity>
                                 ))}
                             </View>
                             <View style={{
@@ -549,6 +620,7 @@ export default function HomeScrenn({ navigation }) {
                     }} >
                         {buttons.map(button => (
                             <TouchableOpacity onPress={() => navigation.navigate(button.button)
+
                             }
                                 key={button.id}
                                 style={{
@@ -590,8 +662,59 @@ export default function HomeScrenn({ navigation }) {
                 </View>
             </View>
 
+            {
+                isUpAnh &&
+                <View style={{
+                    backgroundColor: 'white',
+                    position: 'absolute',
+                    width: '100%',
+                    bottom: 0,
+                }}>
+                    <View style={{
+                        alignItems: 'center', justifyContent: 'center',
+                        backgroundColor: 'white',
+                        paddingVertical: 2,
+                        marginTop: 3
+                    }}>
+                        <Button title="Thay Ảnh" onPress={pickImage} style={{
+                        }} />
+                    </View>
+                    <View style={{
+                        alignItems: 'center', justifyContent: 'center',
+                        backgroundColor: 'white',
+                        paddingVertical: 2,
+                        marginTop: 3,
+                        borderTopWidth: 0.5
+                    }}>
+                        {image && <Image source={{ uri: image }} style={{ width: 100, height: 100 }} />}
+                        <Button title="Xác Nhận" onPress={() => handerXacNhan()} style={{
 
-            {isLoad &&
+                        }} />
+                    </View>
+                    <View style={{
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        borderTopColor: 'gray',
+                        borderTopWidth: 0.5
+                    }}>
+                        <TouchableOpacity>
+                            <Text style={{
+                                fontSize: 20,
+                                marginBottom: 7,
+                                paddingVertical: 5
+                            }}
+                                onPress={() => handerCance()}
+                            >
+                                Cance
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            }
+
+
+            {
+                isLoad &&
 
                 <View style={{
                     width: '100%',
@@ -620,7 +743,6 @@ export default function HomeScrenn({ navigation }) {
 
             {
                 isLoad &&
-
                 <View style={{
                     position: 'absolute',
                     height: Dimensions.get('window').height,
@@ -1004,7 +1126,7 @@ export default function HomeScrenn({ navigation }) {
 
 
 
-        </View >
+        </ScrollView >
     );
 }
 

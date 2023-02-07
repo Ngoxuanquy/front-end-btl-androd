@@ -23,7 +23,7 @@ export default function DonHang() {
                                 width: 0,
                                 height: 7,
                             },
-                            shadowOpacity: 0.41,
+                            shadowOpacity: 0.11,
                             shadowRadius: 1.11,
 
                             elevation: 14,
@@ -57,7 +57,7 @@ export default function DonHang() {
                                 width: 0,
                                 height: 7,
                             },
-                            shadowOpacity: 0.41,
+                            shadowOpacity: 0.11,
                             shadowRadius: 1.11,
 
                             elevation: 14,
@@ -91,7 +91,7 @@ export default function DonHang() {
                                 width: 0,
                                 height: 7,
                             },
-                            shadowOpacity: 0.41,
+                            shadowOpacity: 0.11,
                             shadowRadius: 1.11,
 
                             elevation: 14,
@@ -125,7 +125,7 @@ export default function DonHang() {
                                 width: 0,
                                 height: 7,
                             },
-                            shadowOpacity: 0.41,
+                            shadowOpacity: 0.11,
                             shadowRadius: 1.11,
 
                             elevation: 14,
@@ -159,7 +159,7 @@ export default function DonHang() {
                                 width: 0,
                                 height: 7,
                             },
-                            shadowOpacity: 0.41,
+                            shadowOpacity: 0.11,
                             shadowRadius: 1.11,
 
                             elevation: 14,
@@ -193,7 +193,7 @@ export default function DonHang() {
                                 width: 0,
                                 height: 7,
                             },
-                            shadowOpacity: 0.41,
+                            shadowOpacity: 0.11,
                             shadowRadius: 1.11,
 
                             elevation: 14,
@@ -227,7 +227,7 @@ export default function DonHang() {
                                 width: 0,
                                 height: 7,
                             },
-                            shadowOpacity: 0.41,
+                            shadowOpacity: 0.11,
                             shadowRadius: 1.11,
 
                             elevation: 14,

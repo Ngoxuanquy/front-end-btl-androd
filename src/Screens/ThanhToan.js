@@ -1,14 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, TouchableOpacity, View, Image, ScrollView, TextInput } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Image, ScrollView, TextInput, ActivityIndicator } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function ThanhToan() {
+export default function ThanhToan({ route }) {
+
+    const { name, id } = route.params;
+
 
     const [cliedId, setCliedID] = useState(0);
     const [Apis, setApi] = useState([])
     const [sanphams, setSanPham] = useState([])
     const [taikhoan, setTaiKhoan] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
 
 
     const Arrays = [
@@ -125,27 +129,51 @@ export default function ThanhToan() {
 
     const [xoa, setXoa] = useState();
     const [products, setProducts] = useState([]);
-    const URL_ON = 'http://192.168.0.105:4000'
-    const URL1_ON = 'http://192.168.0.105:5000'
+    const [orders, setOrder] = useState([]);
+    const [customer_name, setCustomer_name] = useState([]);
 
-    const URL_CT = 'http://192.168.1.112:4000'
-    const URL1_CT = 'http://192.168.1.112:5000'
+
+
+    const URL_ON = 'http://192.168.0.112:4000'
+    const URL1_ON = 'http://192.168.0.112:5000'
+
+    const URL_CT = 'http://192.168.1.121:4000'
+    const URL1_CT = 'http://192.168.1.121:5000'
+
+    const URL_FPT = 'http://192.168.0.145:4000'
+    const URL1_FPT = 'http://192.168.0.145:5000'
+
+    AsyncStorage.getItem('taikhoan')
+        .then(res =>
+            setTaiKhoan(res)
+        )
+
+    const getConten = () => {
+        if (isLoading) {
+            return <ActivityIndicator />
+        }
+
+    }
 
 
     useEffect(() => {
-        fetch('http://192.168.1.112:4000/api/products/')
+        fetch(URL_FPT + '/api/products/')
             .then(res => res.json())
             .then(res => setProducts(res))
             .catch(err => console.log(err))
             .finally(() => {
+                setIsLoading(false)
+
             })
     }, [])
 
+
+
     const [product, setProduct] = useState(products);
+    const [customer, setCustomer] = useState([])
+
 
     useEffect(() => {
-        console.log(products)
-
         setProduct(products)
     }, [products])
 
@@ -164,70 +192,117 @@ export default function ThanhToan() {
     }
 
 
-    AsyncStorage.getItem('taikhoan')
-        .then(res =>
-            setTaiKhoan(res)
-        )
+    useEffect(() => {
+        fetch(URL_FPT + '/api/customer_re/')
+            .then(res => res.json())
+            .then(res => setCustomer(res))
+            .catch(err => console.log(err))
+            .finally(() => {
+                // setReset(true);
+                // setTimeout(() => {
+                //     setReset(false);
+                // }, 1000);
+            })
+    }, [])
+
+    useEffect(() => {
+        fetch(URL_FPT + '/api/orders/' + name)
+            .then(res => res.json())
+            .then(res => setOrder(res))
+            .catch(err => console.log(err))
+            .finally(() => {
+            })
+    }, [])
+
 
 
     useEffect(() => {
         setApi(products)
     }, [])
 
-    function handerCong(id) {
+    function handerCong(id1) {
         // products.map(Product => {
         //     if (Product.id == id) {
         //         setSanPham([...sanphams, Product])
         //     }
         // })
-        products.map(Product => {
-            if (Product.id == id) {
-                fetch(URL_CT + '/api/orders/create/', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        id: id,
-                        name: Product.name,
-                        taikhoan: taikhoan,
-                        date: new Date(),
 
-                    })
+        products.map(Product => {
+            if (Product.id == id1) {
+                customer.map(custome => {
+                    if (custome.id == id) {
+
+                        fetch(URL_FPT + '/api/orders/create/', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                id: id,
+                                name: custome.name,
+                                taikhoan: taikhoan,
+                                date: new Date(),
+                                number: custome.Number,
+                                address: custome.Address,
+                                img: Product.img,
+                                price: Product.price
+                            })
+                        })
+                            .then(() => {
+                                fetch(URL_FPT + '/api/orders/' + name)
+                                    .then(res => res.json())
+                                    .then(res => setOrder(res))
+                                    .catch(err => console.log(err))
+                                    .finally(() => {
+                                        orders.map(sanpham => {
+                                            TT += sanpham.price
+                                        })
+                                        setTongTien(TT)
+                                    })
+                                // console.log(orders)
+                            })
+                    }
                 })
-                    .catch(err => console.log(err))
             }
         })
-
-
-    }
-    // console.log(sanphams)
-
-    function arrayRemove(arr, value) {
-        return arr.filter(function (ele) {
-            return ele != value;
-        });
-    }
-    function handerTru(id) {
-        var filtered;
-
-        filtered = sanphams.filter(item => item.id !== id);
-
-        // sanphams.splice(sanphams.indexOf(xoa), 1);
-
-        setSanPham(filtered)
     }
 
-    // console.log(handerTru(id))
+
     var TT = 0;
     const [tongtien, setTongTien] = useState()
+
+
+    function handerDetele(id) {
+        fetch(URL_FPT + '/api/orders/delete/' + id,
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+            }
+        )
+            .then(() => {
+                fetch(URL_FPT + '/api/orders/' + name)
+                    .then(res => res.json())
+                    .then(res => setOrder(res))
+                    .catch(err => console.log(err))
+
+            })
+            .then(() => {
+                orders.map(sanpham => {
+                    TT += sanpham.price
+                })
+                setTongTien(TT)
+            })
+    }
+
+
     useEffect(() => {
-        sanphams.map(sanpham => {
+        orders.map(sanpham => {
             TT += sanpham.price
         })
-        // console.log(TT)
         setTongTien(TT)
-    }, [sanphams])
+    })
 
+    function handerSoLuong() {
 
+    }
 
 
     return (
@@ -324,6 +399,8 @@ export default function ThanhToan() {
                         }}>
                             Danh Sách Sản Phẩm
                         </Text>
+                        {getConten()}
+
                         {
                             product.map((Api, index) => (
                                 <View
@@ -399,6 +476,8 @@ export default function ThanhToan() {
                                                     <Text>+</Text>
                                                 </TouchableOpacity>
                                             </View>
+
+
                                         </View>
                                     </TouchableOpacity>
                                 </View>
@@ -422,7 +501,7 @@ export default function ThanhToan() {
                                     Sản Phẩm Đã Chọn
                                 </Text>
                                 {
-                                    sanphams.map((Api, index) => (
+                                    orders.map((Api, index) => (
 
                                         <View
                                             key={Api.id}
@@ -465,7 +544,7 @@ export default function ThanhToan() {
 
                                                     <View style={{
                                                         flexDirection: 'row',
-                                                        // marginLeft: 40
+                                                        marginLeft: -10
                                                     }}>
                                                         <TouchableOpacity style={{
                                                             width: 35, height: 35,
@@ -495,11 +574,31 @@ export default function ThanhToan() {
                                                             alignItems: 'center',
                                                             justifyContent: 'center'
                                                         }}
-                                                            onPress={() => handerCong(Api.id)}
+                                                            onPress={() => handerSoLuong(Api.id)}
                                                         >
                                                             <Text>+</Text>
                                                         </TouchableOpacity>
                                                     </View>
+
+                                                    <TouchableOpacity style={{
+                                                        width: 40,
+                                                        height: 40,
+                                                        backgroundColor: '#BB0000',
+                                                        justifyContent: 'center',
+                                                        alignItems: 'center',
+                                                        marginLeft: 10,
+                                                        borderRadius: 5
+                                                    }}
+                                                        onPress={() => handerDetele(Api.id)}
+                                                    >
+                                                        <Text style={{
+                                                            textAlign: 'center',
+                                                            color: 'white'
+                                                        }}>
+                                                            Xóa
+                                                        </Text>
+                                                    </TouchableOpacity>
+
                                                 </View>
                                             </TouchableOpacity>
                                         </View>

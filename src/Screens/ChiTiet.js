@@ -12,8 +12,6 @@ export default function ChiTiet({ navigation }) {
     return (
         <KeyboardAvoidingView style={{
             backgroundColor: '#fff',
-
-
         }}>
             {/* <View> */}
             {/* ẩn hiên img */}

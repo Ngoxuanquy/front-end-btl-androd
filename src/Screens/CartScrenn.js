@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, TouchableOpacity, View, ScrollView, Image, Dimensions } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, ScrollView, Image, Dimensions, ActivityIndicator } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import React, {
     useEffect, useState
@@ -13,11 +14,142 @@ import { Entypo } from '@expo/vector-icons';
 export default function Cart({ navigation }) {
 
     const [isload, setIsLoad] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
+    const [customer, setCustomer] = useState([])
+    const [taikhoan, setTaiKhoan] = useState([])
+    const [orders, setOrders] = useState([])
+    const [reset, setReset] = useState(false);
 
-    function handerNhanDon() {
-        alert('Nhán Đơn Thành Công');
-        setIsLoad(true)
+    const URL_ON = 'http://192.168.0.112:4000'
+    const URL1_ON = 'http://192.168.0.112:5000'
+
+    const URL_CT = 'http://192.168.1.121:4000'
+    const URL1_CT = 'http://192.168.1.121:5000'
+
+    const URL_FPT = 'http://192.168.0.145:4000'
+    const URL1_FPT = 'http://192.168.0.145:5000'
+
+    const getConten = () => {
+        if (isLoading) {
+            return <ActivityIndicator />
+        }
+
     }
+
+    AsyncStorage.getItem('taikhoan')
+        .then(res =>
+            setTaiKhoan(res)
+        )
+
+
+    useEffect(() => {
+        fetch(URL_FPT + '/api/customer/')
+            .then(res => res.json())
+            .then(res => setCustomer(res))
+            .catch(err => console.log(err))
+            .finally(() => {
+                // setReset(true);
+                // setTimeout(() => {
+                //     setReset(false);
+                // }, 1000);
+            })
+    }, [])
+
+
+
+    useEffect(() => {
+        fetch(URL_FPT + '/api/customer_re/' + taikhoan)
+            .then(res => res.json())
+            .then(res => setOrders(res))
+            .catch(err => console.log(err))
+            .finally(() => {
+                setIsLoading(false)
+                // setReset(true);
+                // setTimeout(() => {
+                //     setReset(false);
+                // }, 10);
+            })
+    }, [taikhoan])
+
+    // console.log(orders)
+
+    function handerNhanDon(id) {
+        customer.map(custome => {
+            if (custome.id == id) {
+                fetch(URL_FPT + '/api/customer_re/create/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id: id,
+                        name: custome.customer_name,
+                        taikhoan: taikhoan,
+                        number: custome.Phone_Number,
+                        address: custome.Address,
+                        note: custome.Note,
+                    })
+                })
+                    .then(() => {
+                        fetch(URL_FPT + '/api/customer_re/' + taikhoan)
+                            .then(res => res.json())
+                            .then(res => setOrders(res))
+                            .catch(err => console.log(err))
+
+                    })
+                    .then(() => {
+                        fetch(URL_FPT + '/api/customer/delete/' + id,
+                            {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                            }
+                        )
+
+                    })
+                    .then(() => {
+                        fetch(URL_FPT + '/api/customer/')
+                            .then(res => res.json())
+                            .then(res => setCustomer(res))
+                            .catch(err => console.log(err))
+                    })
+                    .catch(err => console.log(err))
+                    .finally(() => {
+                        setReset(true);
+                        setTimeout(() => {
+                            setReset(false);
+                        }, 10);
+                    })
+            }
+        })
+    }
+
+    if (reset) {
+        return null;
+    }
+
+    function handerLamMoi() {
+        setIsLoading(true)
+        fetch(URL_FPT + '/api/customer/')
+            .then(res => res.json())
+            .then(res => {
+                setCustomer(res)
+            })
+            .then(() => {
+                setIsLoading(false)
+            })
+            .catch(err => console.log(err))
+            .finally(() => {
+                setIsLoading(false)
+            })
+    }
+
+    // setTimeout(() => {
+    //     console.log('a')
+    //     fetch(URL_ON + '/api/customer/')
+    //         .then(res => res.json())
+    //         .then(res => setCustomer(res))
+    //         .catch(err => console.log(err))
+    // }, 1000
+    // )
+
 
     return (
         <View>
@@ -41,8 +173,6 @@ export default function Cart({ navigation }) {
                         justifyContent: 'center',
                         position: 'relative',
                         // height: 300
-
-
                     }}>
                         <View style={{
                             // position: 'relative'
@@ -191,80 +321,121 @@ export default function Cart({ navigation }) {
                         </TouchableOpacity>
                     </View>
                 </View>
+                <View style={{
+                    marginBottom: 60
+                }}>
+                    <View style={{
+                        position: 'absolute',
+                        right: 10,
+                        top: 10
+                    }}>
+                        <TouchableOpacity style={{
+                            backgroundColor: '#dddddd',
+                            padding: 7,
+                        }}
+                            onPress={() => handerLamMoi()}
+                        >
+                            <Text style={{
+                                fontSize: 17
+                            }}>
+                                Làm Mới
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                {getConten()}
 
                 {/* Đơn Chưa Xác Thực */}
-                <View style={{
-
-                }}>
-                    <TouchableOpacity style={{
-                        borderColor: 'black',
-                        borderWidth: 1,
-                        marginTop: 10,
-                        marginLeft: 10,
-                        marginRight: 10,
-                        position: 'relative',
-                        borderRadius: 10,
-
-                    }}>
-                        <Text style={{
-                            fontSize: 23,
-                            padding: 10,
-                            color: 'coral',
-                            textAlign: 'center'
+                {customer && customer.map(custome => (
+                    <View
+                        key={custome.id}
+                        style={{
+                            marginBottom: 30
                         }}>
-                            Đơn Chưa Xác Thực
-                        </Text>
-                        <View style={{
-                            justifyContent: 'center',
-                            // alignItems: 'center',
-                            paddingHorizontal: 20,
-                            marginBottom: 20,
+
+                        <TouchableOpacity style={{
+                            borderColor: 'black',
+                            borderWidth: 1,
+                            marginTop: 10,
+                            marginLeft: 10,
+                            marginRight: 10,
+                            position: 'relative',
+                            borderRadius: 10,
 
                         }}>
-                            <TouchableOpacity style={{
-
+                            <Text style={{
+                                fontSize: 23,
+                                padding: 10,
+                                color: 'coral',
+                                textAlign: 'center'
                             }}>
-                                <View style={{
-                                    flexDirection: 'row'
-                                }}>
-                                    <AntDesign name="key" size={24} color="black" />
-                                    <Text style={{
-                                        lineHeight: 30,
-                                        fontSize: 18,
-                                        marginLeft: 10
-                                    }}>
-                                        Mã Đơn: abc
-                                    </Text>
-                                </View>
-                                <View style={{
-                                    flexDirection: 'row'
-                                }}>
-                                    <Ionicons name="people" size={24} color="black" />
-                                    <Text style={{
-                                        lineHeight: 30,
-                                        fontSize: 18,
-                                        marginLeft: 10
+                                Đơn Chưa Xác Thực
+                            </Text>
+                            <View
+                                style={{
+                                    justifyContent: 'center',
+                                    // alignItems: 'center',
+                                    paddingHorizontal: 20,
+                                    marginBottom: 20,
 
-                                    }}>
-                                        Tên Khóa: Ngô Xuân Quy
-                                    </Text>
-                                </View>
-                                <View style={{
-                                    flexDirection: 'row'
                                 }}>
-                                    <Entypo name="address" size={24} color="black" />
-                                    <Text style={{
-                                        lineHeight: 30,
-                                        fontSize: 18,
-                                        marginBottom: 20,
-                                        marginLeft: 10
-                                    }}>
-                                        Địa Chỉ: Hà Nội
-                                    </Text>
-                                </View>
+                                <TouchableOpacity style={{
 
-                            </TouchableOpacity>
-                            {isload == false ?
+                                }}>
+                                    <View style={{
+                                        flexDirection: 'row'
+                                    }}>
+                                        <AntDesign name="key" size={24} color="black" />
+                                        <Text style={{
+                                            lineHeight: 30,
+                                            fontSize: 18,
+                                            marginLeft: 10
+                                        }}>
+                                            Mã Đơn: abc
+                                        </Text>
+                                    </View>
+                                    <View style={{
+                                        flexDirection: 'row'
+                                    }}>
+                                        <Ionicons name="people" size={24} color="black" />
+                                        <Text style={{
+                                            lineHeight: 30,
+                                            fontSize: 18,
+                                            marginLeft: 10
+
+                                        }}>
+                                            Tên Khóa: {custome.customer_name}
+                                        </Text>
+                                    </View>
+                                    <View style={{
+                                        flexDirection: 'row'
+                                    }}>
+                                        <Entypo name="address" size={24} color="black" />
+                                        <Text style={{
+                                            lineHeight: 30,
+                                            fontSize: 18,
+                                            // marginBottom: 20,
+                                            marginLeft: 10
+                                        }}>
+                                            Địa Chỉ: {custome.Address}
+                                        </Text>
+                                    </View>
+
+                                    <View style={{
+                                        flexDirection: 'row'
+                                    }}>
+                                        <Entypo name="address" size={24} color="black" />
+                                        <Text style={{
+                                            lineHeight: 30,
+                                            fontSize: 18,
+                                            marginBottom: 20,
+                                            marginLeft: 10
+                                        }}>
+                                            Số Điện Thoại: {custome.Phone_Number}
+                                        </Text>
+                                    </View>
+                                </TouchableOpacity>
+
                                 <View style={{
                                     position: 'absolute',
                                     bottom: -50,
@@ -285,7 +456,7 @@ export default function Cart({ navigation }) {
                                             marginLeft: 50
 
                                         }}
-                                            onPress={() => handerNhanDon()}
+                                            onPress={() => handerNhanDon(custome.id)}
                                         >
                                             <Text style={{
                                                 color: 'white'
@@ -312,8 +483,80 @@ export default function Cart({ navigation }) {
 
                                     </View>
                                 </View>
-                                : null}
-                            {isload == true ? <View>
+
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                ))}
+
+                {/* don hang */}
+                <View style={{
+                    marginBottom: 10,
+                    marginTop: 10,
+                    padding: 10
+                }}>
+                    <Text style={{
+                        fontSize: 22,
+                        fontWeight: 'bold'
+                    }}>
+                        Đơn Đang Thực Hiện
+                    </Text>
+                </View>
+
+                {orders.map(order => (
+                    <View key={order.id
+                    }>
+                        <View style={{
+                            borderColor: 'black',
+                            borderWidth: 0.4,
+                            marginLeft: 10,
+                            marginRight: 10,
+                            borderRadius: 10,
+                            // shadowOffset: {
+                            //     width: 0,
+                            //     height: 5,
+                            // },
+                            // shadowOpacity: 0.34,
+                            // shadowRadius: 6.27,
+                            // elevation: 10,
+
+
+                        }}>
+                            <Text style={{
+                                fontSize: 18,
+                                color: 'gray',
+                                padding: 10
+                            }}>
+                                Đơn Đang Thực Hiện
+                            </Text>
+
+                            <View style={{
+                                justifyContent: 'center',
+                                // alignItems: 'center',
+                                paddingHorizontal: 20,
+                                marginBottom: 20,
+                            }}>
+                                <TouchableOpacity style={{
+
+                                }}>
+                                    <Text style={{
+                                        lineHeight: 30
+                                    }}>
+                                        Mã Đơn: abc
+                                    </Text>
+                                    <Text style={{
+                                        lineHeight: 30
+                                    }}>
+                                        Tên Khóa: {order.name}
+                                    </Text>
+                                    <Text style={{
+                                        lineHeight: 30
+                                    }}>
+                                        Địa Chỉ: {order.Address}
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                            <View>
                                 <View style={{
                                     flexDirection: 'row',
                                     justifyContent: 'space-around',
@@ -323,11 +566,18 @@ export default function Cart({ navigation }) {
                                         borderColor: 'black',
                                         borderWidth: 1,
                                         padding: 10,
-                                        backgroundColor: 'gray'
+                                        backgroundColor: '#DCDCDC',
+                                        borderRadius: 6
 
-                                    }}>
+                                    }}
+                                        onPress={() => navigation.navigate('ThanhToan', {
+                                            name: order.name,
+                                            id: order.id
+                                        })}
+
+                                    >
                                         <Text style={{
-                                            color: 'white'
+                                            color: 'black'
                                         }}>
                                             Thanh Toán
                                         </Text>
@@ -336,11 +586,14 @@ export default function Cart({ navigation }) {
                                         borderColor: 'black',
                                         borderWidth: 1,
                                         padding: 10,
-                                        backgroundColor: 'gray'
+                                        backgroundColor: '#DCDCDC',
+                                        borderRadius: 6
 
-                                    }}>
+                                    }}
+                                        onPress={() => navigation.navigate('Chup')}
+                                    >
                                         <Text style={{
-                                            color: 'white'
+                                            color: 'black'
                                         }}>
                                             Chụp Ảnh
                                         </Text>
@@ -349,140 +602,24 @@ export default function Cart({ navigation }) {
                                         borderColor: 'black',
                                         borderWidth: 1,
                                         padding: 10,
-                                        backgroundColor: 'gray'
+                                        backgroundColor: '#DCDCDC',
+                                        borderRadius: 6
 
-                                    }}>
+
+                                    }}
+                                        onPress={() => navigation.navigate("ChiTiet")}
+                                    >
                                         <Text style={{
-                                            color: 'white'
+                                            color: 'black'
                                         }}>
                                             Chi Tiết
                                         </Text>
                                     </TouchableOpacity>
                                 </View>
-                            </View> : null}
-                        </View>
-                    </TouchableOpacity>
-                </View>
-
-                {/* don hang */}
-
-
-                <View style={{
-                    borderColor: 'black',
-                    borderWidth: 0.4,
-                    marginTop: 10,
-                    marginLeft: 10,
-                    marginRight: 10,
-                    borderRadius: 10,
-                    shadowOffset: {
-                        width: 0,
-                        height: 5,
-                    },
-                    shadowOpacity: 0.34,
-                    shadowRadius: 6.27,
-                    elevation: 10,
-                    marginTop: 50
-
-                }}>
-                    <Text style={{
-                        fontSize: 18,
-                        color: 'gray',
-                        padding: 10
-                    }}>
-                        Đơn Đang Thực Hiện
-                    </Text>
-
-                    <View style={{
-                        justifyContent: 'center',
-                        // alignItems: 'center',
-                        paddingHorizontal: 20,
-                        marginBottom: 20,
-
-
-                    }}>
-                        <TouchableOpacity style={{
-
-                        }}>
-                            <Text style={{
-                                lineHeight: 30
-                            }}>
-                                Mã Đơn: abc
-                            </Text>
-                            <Text style={{
-                                lineHeight: 30
-                            }}>
-                                Tên Khóa: Ngô Xuân Quy
-                            </Text>
-                            <Text style={{
-                                lineHeight: 30
-                            }}>
-                                Địa Chỉ: Hà Nội
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-                    <View>
-                        <View style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-around',
-                            marginBottom: 10
-                        }}>
-                            <TouchableOpacity style={{
-                                borderColor: 'black',
-                                borderWidth: 1,
-                                padding: 10,
-                                backgroundColor: '#DCDCDC',
-                                borderRadius: 6
-
-                            }}
-                                onPress={() => navigation.navigate('ThanhToan')}
-
-                            >
-                                <Text style={{
-                                    color: 'black'
-                                }}>
-                                    Thanh Toán
-                                </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={{
-                                borderColor: 'black',
-                                borderWidth: 1,
-                                padding: 10,
-                                backgroundColor: '#DCDCDC',
-                                borderRadius: 6
-
-                            }}
-                                onPress={() => navigation.navigate('Chup')}
-                            >
-                                <Text style={{
-                                    color: 'black'
-                                }}>
-                                    Chụp Ảnh
-                                </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={{
-                                borderColor: 'black',
-                                borderWidth: 1,
-                                padding: 10,
-                                backgroundColor: '#DCDCDC',
-                                borderRadius: 6
-
-
-                            }}
-                                onPress={() => navigation.navigate("ChiTiet")}
-                            >
-                                <Text style={{
-                                    color: 'black'
-                                }}>
-                                    Chi Tiết
-                                </Text>
-                            </TouchableOpacity>
+                            </View>
                         </View>
                     </View>
-                </View>
-
-
-
-
+                ))}
 
 
             </ScrollView>

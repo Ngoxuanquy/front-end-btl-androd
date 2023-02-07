@@ -1,108 +1,63 @@
 import React, { useState } from "react";
+import { Button, View, TextInput, TouchableOpacity, Text } from "react-native";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { MaterialIcons } from '@expo/vector-icons';
+const DateTime = () => {
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+    const [day, setDay] = useState('11')
 
-import { Button, SafeAreaView, StyleSheet, Text, View } from 'react-native';
-
-import DateTimePicker from '@react-native-community/datetimepicker';
-
-export default function DateTime() {
-
-    const [datePicker, setDatePicker] = useState(false);
-
-    const [date, setDate] = useState(new Date());
-
-    const [timePicker, setTimePicker] = useState(false);
-
-    const [time, setTime] = useState(new Date(Date.now()));
-
-    function showDatePicker() {
-        setDatePicker(true);
+    const showDatePicker = () => {
+        setDatePickerVisibility(true);
     };
 
-    function showTimePicker() {
-        setTimePicker(true);
+    const hideDatePicker = () => {
+        setDatePickerVisibility(false);
     };
 
-    function onDateSelected(event, value) {
-        setDate(value);
-        setDatePicker(false);
+    const handleConfirm = (date) => {
+        setDay(date.toString())
+        hideDatePicker();
     };
 
-    function onTimeSelected(event, value) {
-        setTime(value);
-        setTimePicker(false);
-    };
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
-            <View style={styleSheet.MainContainer}>
+        <View>
+            <View style={{
+                flexDirection: 'row',
+                width: '90%',
+            }}>
 
-                <Text style={styleSheet.text}>Date = {date.toDateString()}</Text>
-
-                <Text style={styleSheet.text}>Time = {time.toLocaleTimeString('en-US')}</Text>
-
-                {datePicker && (
-                    <DateTimePicker
-                        value={date}
-                        mode={'date'}
-                        display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                        is24Hour={true}
-                        onChange={onDateSelected}
-                        style={styleSheet.datePicker}
-                    />
-                )}
-
-                {timePicker && (
-                    <DateTimePicker
-                        value={time}
-                        mode={'time'}
-                        display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                        is24Hour={false}
-                        onChange={onTimeSelected}
-                        style={styleSheet.datePicker}
-                    />
-                )}
-
-                {!datePicker && (
-                    <View style={{ margin: 10 }}>
-                        <Button title="Show Date Picker" color="green" onPress={showDatePicker} />
-                    </View>
-                )}
-
-                {!timePicker && (
-                    <View style={{ margin: 10 }}>
-                        <Button title="Show Time Picker" color="green" onPress={showTimePicker} />
-                    </View>
-                )}
-
+                <TextInput style={{
+                    width: '100%',
+                    height: 40,
+                    borderColor: 'gray',
+                    borderWidth: 1,
+                    backgroundColor: 'white',
+                    borderRadius: 6
+                }}
+                    value={day}
+                />
+                {/* <Button title="Show Date Picker"  /> */}
+                <View style={{
+                    position: 'absolute',
+                    right: 10,
+                    top: 7
+                }}>
+                    <TouchableOpacity
+                        onPress={showDatePicker}
+                    >
+                        <MaterialIcons name="date-range" size={24} color="black" />
+                    </TouchableOpacity>
+                </View>
             </View>
-        </SafeAreaView>
+            <DateTimePickerModal
+                isVisible={isDatePickerVisible}
+                mode="date"
+                onConfirm={handleConfirm}
+                onCancel={hideDatePicker}
+            />
+        </View>
     );
-}
+};
 
-const styleSheet = StyleSheet.create({
-
-    MainContainer: {
-        flex: 1,
-        padding: 6,
-        alignItems: 'center',
-        backgroundColor: 'white'
-    },
-
-    text: {
-        fontSize: 25,
-        color: 'red',
-        padding: 3,
-        marginBottom: 10,
-        textAlign: 'center'
-    },
-
-    // Style for iOS ONLY...
-    datePicker: {
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        width: 320,
-        height: 260,
-        display: 'flex',
-    },
-
-});
+export default DateTime;

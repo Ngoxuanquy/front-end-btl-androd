@@ -33,20 +33,20 @@ function Stacks() {
             setTaiKhoan(res)
         )
 
-    useEffect(() => {
-        fetch(URL_CT + '/api/users/' + taikhoan)
-            .then(res => res.json())
-            .then(res => res.map(re => {
-                setToken(re.token)
-            }))
-            .finally(() => {
-                console.log('a')
-                // setReset(true);
-                // setTimeout(() => {
-                //     setReset(false);
-                // }, 10);
-            })
-    }, [])
+    // useEffect(() => {
+    //     fetch(URL_CT + '/api/users/' + taikhoan)
+    //         .then(res => res.json())
+    //         .then(res => res.map(re => {
+    //             setToken(re.token)
+    //         }))
+    //         .finally(() => {
+    //             // console.log('a')
+    //             // setReset(true);
+    //             // setTimeout(() => {
+    //             //     setReset(false);
+    //             // }, 10);
+    //         })
+    // }, [])
 
     // if (reset) {
     //     return null;

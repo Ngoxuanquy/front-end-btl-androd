@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -16,6 +16,7 @@ import Cart_Them from '../Screens/Cart_Them';
 const Stack = createNativeStackNavigator();
 
 function StackCart() {
+
     return (
         <NavigationContainer independent={true}>
             <Stack.Navigator>

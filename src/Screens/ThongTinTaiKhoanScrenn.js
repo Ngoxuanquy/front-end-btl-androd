@@ -1,9 +1,42 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, Button } from 'react-native';
 import { Zocial } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
+import UpAnh from '../Components/UpAnh';
+import React, { useEffect, useState } from 'react';
+import * as ImagePicker from 'expo-image-picker'
+
+
 export default function ThongTinTaiKhoan() {
+
+    const [isload, setIsLoad] = useState(false)
+    const [image, setImage] = useState(null)
+    const [isUpAnh, setUpAnh] = useState(false)
+
+    const pickImage = async () => {
+        // setIsLoad(true)
+
+        // No permissions request is necessary for launching the image library
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        })
+
+        // console.log("image :" + image)
+
+        if (!result.canceled) {
+            setImage(result.assets[0].uri)
+        }
+    }
+
+
+    function handerCance() {
+        setIsLoad(false)
+    }
+
     return (
         <View >
             <View>
@@ -81,10 +114,63 @@ export default function ThongTinTaiKhoan() {
                         </Text>
                     </View>
 
-                    <View style={{
+                    {isload &&
+                        <View style={{
+                            backgroundColor: 'white',
+                            position: 'absolute',
+                            width: '100%',
+                            bottom: 0,
+                            zIndex: 1
+                        }}>
+                            <View style={{
+                                alignItems: 'center', justifyContent: 'center',
+                                backgroundColor: 'white',
+                                paddingVertical: 2,
+                                marginTop: 3
+                            }}>
+                                <Button title="Thay Ảnh" onPress={pickImage} style={{
+                                }} />
+                            </View>
+                            <View style={{
+                                alignItems: 'center', justifyContent: 'center',
+                                backgroundColor: 'white',
+                                paddingVertical: 2,
+                                marginTop: 3,
+                                borderTopWidth: 0.5
+                            }}>
+                                {image && <Image source={{ uri: image }} style={{ width: 100, height: 100 }} />}
+                                <Button title="Xác Nhận" onPress={() => handerXacNhan()} style={{
+
+                                }} />
+                            </View>
+                            <View style={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderTopColor: 'gray',
+                                borderTopWidth: 0.5
+                            }}>
+                                <TouchableOpacity>
+                                    <Text style={{
+                                        fontSize: 20,
+                                        marginBottom: 7,
+                                        paddingVertical: 5
+                                    }}
+                                        onPress={() => handerCance()}
+                                    >
+                                        Cance
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    }
+
+                    <TouchableOpacity style={{
                         justifyContent: 'center',
                         alignItems: 'center'
-                    }}>
+                    }}
+                        onPress={() => { setIsLoad(true) }}
+                    >
+
                         <AntDesign name="mail" size={124} color="black" />
                         <Text style={{
                             fontSize: 18,
@@ -92,7 +178,8 @@ export default function ThongTinTaiKhoan() {
                         }}>
                             (Tệp Đính Kèm)
                         </Text>
-                    </View>
+                    </TouchableOpacity>
+
                 </View>
             </View>
         </View>

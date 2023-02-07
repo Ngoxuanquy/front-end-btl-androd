@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Text, View, TouchableOpacity, BackHandler } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -19,7 +19,30 @@ import StackCart from './StackCart';
 
 const Tab = createBottomTabNavigator();
 
-export default function Tag() {
+export default function Tag({ navigation }) {
+
+    const [customer, setCustomer] = useState([]);
+    const URL_ON = 'http://192.168.0.112:4000'
+    const URL1_ON = 'http://192.168.0.112:5000'
+
+    const URL_CT = 'http://192.168.1.121:4000'
+    const URL1_CT = 'http://192.168.1.121:5000'
+
+    const URL_FPT = 'http://192.168.0.145:4000'
+    const URL1_FPT = 'http://192.168.0.145:5000'
+
+    useEffect(() => {
+        fetch(URL_FPT + '/api/customer/')
+            .then(res => res.json())
+            .then(res => setCustomer(res))
+            .catch(err => console.log(err))
+            .finally(() => {
+            })
+    })
+
+    const handleBackButton = () => {
+        console.log('a')
+    }
 
     return (
         <NavigationContainer independent={true}>
@@ -53,9 +76,17 @@ export default function Tag() {
                 <Tab.Screen name="Phone" component={Phone} options={{
                     headerShown: false
                 }} />
+
                 <Tab.Screen name="Cart" component={StackCart} options={{
-                    headerShown: false
-                }} />
+                    headerShown: false,
+                    tabBarBadge: customer.length
+                }}
+                    listeners={{
+                        focus: () => BackHandler.addEventListener('hardwareBackPress', handleBackButton)
+                        , blur: () => BackHandler.removeEventListener('hardwareBackPress', handleBackButton)
+                    }}
+                />
+
                 <Tab.Screen name="ThongTinTaiKhoan" component={ThongTinTaiKhoan} options={{
                     headerShown: false
                 }} />
