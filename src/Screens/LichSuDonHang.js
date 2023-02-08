@@ -1,12 +1,80 @@
-import { View, Text, TextInput, ScrollView } from 'react-native'
+import { View, Text, TextInput, ScrollView, RefreshControl } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 
 export default function LichSuDonHang() {
+    const [lichSuCTT, setLichSuCTT] = useState([]);
+    const [lichSuDTT, setLichSuDTT] = useState([]);
+
+
+    const URL_ON = 'http://192.168.0.114:4000'
+    const URL1_ON = 'http://192.168.0.114:5000'
+
+    const URL_CT = 'http://192.168.1.121:4000'
+    const URL1_CT = 'http://192.168.1.121:5000'
+
+    const URL_FPT = 'http://192.168.0.145:4000'
+    const URL1_FPT = 'http://192.168.0.145:5000'
+
+    useEffect(() => {
+        fetch(URL_ON + '/api/thanhtoan/Chưa Thanh Toán!!!')
+            .then(res => res.json())
+            .then(res => setLichSuCTT(res))
+            .catch(err => console.log(err))
+            .finally(() => {
+                // setReset(true);
+                // setTimeout(() => {
+                //     setReset(false);
+                // }, 1000);
+            })
+    }, [])
+
+    useEffect(() => {
+        fetch(URL_ON + '/api/thanhtoan/Đã Thanh Toán Bằng Tiền Mặt')
+            .then(res => res.json())
+            .then(res => setLichSuDTT(res))
+            .catch(err => console.log(err))
+            .finally(() => {
+                // setReset(true);
+                // setTimeout(() => {
+                //     setReset(false);
+                // }, 1000);
+            })
+    }, [])
+
+
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => {
+            fetch(URL_ON + '/api/thanhtoan/Đã Thanh Toán Bằng Tiền Mặt')
+                .then(res => res.json())
+                .then(res => setLichSuDTT(res))
+                .catch(err => console.log(err))
+
+            fetch(URL_ON + '/api/thanhtoan/Chưa Thanh Toán!!!')
+                .then(res => res.json())
+                .then(res => setLichSuCTT(res))
+                .catch(err => console.log(err))
+
+
+            setRefreshing(false);
+        }, 1000);
+    }, []);
 
     return (
-        <ScrollView>
+        <ScrollView
+            refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} style={{
+                    tintColor: 'black',
+                    backgroundColor: '#eeeeee',
+                    size: 10,
+                    marginBottom: 0,
+                }} />
+            }
+        >
             <View>
                 <View>
                     <View>
@@ -41,397 +109,226 @@ export default function LichSuDonHang() {
                             </Text>
                         </View>
                     </View>
+                    <View>
+                        <Text style={{
+                            fontSize: 20,
+                            padding: 10,
+                            color: 'red'
+                        }}>
+                            Chưa Thanh Toán
+                        </Text>
+                    </View>
                     {/* Thông tin */}
-                    <View style={{
-                        backgroundColor: '#eeeeee',
-                        borderColor: 'gray',
-                        borderWidth: 0.4,
-                        marginLeft: 10,
-                        marginRight: 10,
-                        borderRadius: 10,
-                        shadowColor: "#000",
-                        shadowOffset: {
-                            width: 0,
-                            height: 8,
-                        },
-                        shadowOpacity: 0.44,
-                        shadowRadius: 6.32,
+                    {lichSuCTT.map(lichSu => (
 
-                        elevation: 1,
-                    }}>
-                        <View style={{
-                            marginTop: 10,
-                            paddingHorizontal: 10,
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            marginTop: 15
-                        }}>
+                        <View
+                            key={lichSu.id}
+                            style={{
+                                backgroundColor: '#eeeeee',
+                                borderColor: 'gray',
+                                borderWidth: 0.4,
+                                marginLeft: 10,
+                                marginRight: 10,
+                                borderRadius: 10,
+                                shadowColor: "#000",
+                                shadowOffset: {
+                                    width: 0,
+                                    height: 8,
+                                },
+                                shadowOpacity: 0.44,
+                                shadowRadius: 6.32,
+
+                                elevation: 1,
+                                marginBottom: 10
+                            }}>
                             <View style={{
-                                flexDirection: 'row',
-                            }}>
-                                <FontAwesome name="money" size={24} color="black" />
-                                <Text style={{
-                                    marginLeft: 10,
-                                    fontSize: 18
-                                }}>
-                                    90K
-                                </Text>
-                            </View>
-                            <View>
-                                <Text style={{
-                                    fontSize: 16,
-                                    marginTop: 5
-                                }}>
-                                    9h:30
-                                </Text>
-                            </View>
-                        </View>
-
-                        <View style={{
-                            paddingHorizontal: 10
-                        }}>
-                            <Text style={{
-                                fontSize: 18
-                            }}>
-                                Lõi Lọc Kang, Vòi nước, Bảo dưỡng
-                            </Text>
-                            <Text style={{
-                                fontSize: 18
-                            }}>
-                                Ngô Xuân Quy
-                            </Text>
-                            <Text style={{
-                                fontSize: 18
-                            }}>
-                                Mã Đơn Hàng: QQQQ
-                            </Text>
-                            <Text style={{
-                                fontSize: 18
-
-                            }}>
-                                Ngày Giờ: 10:15 - 14/01/2022
-                            </Text>
-                            <View style={{
+                                marginTop: 10,
+                                paddingHorizontal: 10,
                                 flexDirection: 'row',
                                 justifyContent: 'space-between',
-                                paddingHorizontal: 10,
-                                marginTop: 5,
-                                marginBottom: 15
+                                marginTop: 15
                             }}>
-                                <Text style={{
-                                    fontSize: 16,
-                                    fontWeight: 'bold'
-
+                                <View style={{
+                                    flexDirection: 'row',
                                 }}>
-                                    (Chưa Thanh Toán)
-                                </Text>
-                                <Text style={{
-                                    fontSize: 16,
-                                    textDecorationLine: 'underline'
-                                }}>
-                                    Xem Chi Tiết
-                                </Text>
+                                    <FontAwesome name="money" size={24} color="black" />
+                                    <Text style={{
+                                        marginLeft: 10,
+                                        fontSize: 18
+                                    }}>
+                                        {lichSu.product_id}
+                                    </Text>
+                                </View>
+                                <View>
+                                    <Text style={{
+                                        fontSize: 16,
+                                        marginTop: 5
+                                    }}>
+                                        9h:30
+                                    </Text>
+                                </View>
                             </View>
-                        </View>
-                    </View>
 
-                    {/* Thông tin */}
-                    <View style={{
-                        backgroundColor: '#eeeeee',
-                        borderColor: 'black',
-                        borderWidth: 0.4,
-                        marginLeft: 10,
-                        marginRight: 10,
-                        borderRadius: 10,
-                        shadowColor: "#000",
-                        shadowOffset: {
-                            width: 0,
-                            height: 8,
-                        },
-                        shadowOpacity: 0.44,
-                        shadowRadius: 2.32,
-
-                        elevation: 1,
-                        opacity: 0.6,
-                        marginTop: 20
-
-                    }}>
-                        <View style={{
-                            marginTop: 10,
-                            paddingHorizontal: 10,
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            marginTop: 15,
-
-                        }}>
                             <View style={{
-                                flexDirection: 'row',
+                                paddingHorizontal: 10
                             }}>
-                                <FontAwesome name="money" size={24} color="black" />
                                 <Text style={{
-                                    marginLeft: 10,
                                     fontSize: 18
                                 }}>
-                                    90K
-                                </Text>
-                            </View>
-                            <View>
-                                <Text style={{
-                                    fontSize: 16,
-                                    marginTop: 5
-                                }}>
-                                    9h:30
-                                </Text>
-                            </View>
-                        </View>
-
-                        <View style={{
-                            paddingHorizontal: 10
-                        }}>
-                            <Text style={{
-                                fontSize: 18
-                            }}>
-                                Lõi Lọc Kang, Vòi nước, Bảo dưỡng
-                            </Text>
-                            <Text style={{
-                                fontSize: 18
-                            }}>
-                                Ngô Xuân Quy
-                            </Text>
-                            <Text style={{
-                                fontSize: 18
-                            }}>
-                                Mã Đơn Hàng: QQQQ
-                            </Text>
-                            <Text style={{
-                                fontSize: 18
-
-                            }}>
-                                Ngày Giờ: 10:15 - 14/01/2022
-                            </Text>
-                            <View style={{
-                                flexDirection: 'row',
-                                justifyContent: 'space-between',
-                                paddingHorizontal: 10,
-                                marginTop: 5,
-                                marginBottom: 15
-                            }}>
-                                <Text style={{
-                                    fontSize: 16,
-                                    fontWeight: 'bold'
-
-                                }}>
-                                    (Đã Thanh Toán)
+                                    Lõi Lọc Kang, Vòi nước, Bảo dưỡng
                                 </Text>
                                 <Text style={{
-                                    fontSize: 16,
-                                    textDecorationLine: 'underline'
-
-                                }}>
-                                    Xem Chi Tiết
-                                </Text>
-                            </View>
-                        </View>
-                    </View>
-
-                    {/* Thông tin */}
-                    <View style={{
-                        backgroundColor: '#eeeeee',
-                        borderColor: 'black',
-                        borderWidth: 0.4,
-                        marginLeft: 10,
-                        marginRight: 10,
-                        borderRadius: 10,
-                        shadowColor: "#000",
-                        shadowOffset: {
-                            width: 0,
-                            height: 8,
-                        },
-                        shadowOpacity: 0.44,
-                        shadowRadius: 2.32,
-
-                        elevation: 1,
-                        opacity: 0.6,
-                        marginTop: 20
-
-                    }}>
-                        <View style={{
-                            marginTop: 10,
-                            paddingHorizontal: 10,
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            marginTop: 15,
-
-                        }}>
-                            <View style={{
-                                flexDirection: 'row',
-                            }}>
-                                <FontAwesome name="money" size={24} color="black" />
-                                <Text style={{
-                                    marginLeft: 10,
                                     fontSize: 18
                                 }}>
-                                    90K
-                                </Text>
-                            </View>
-                            <View>
-                                <Text style={{
-                                    fontSize: 16,
-                                    marginTop: 5
-                                }}>
-                                    9h:30
-                                </Text>
-                            </View>
-                        </View>
-
-                        <View style={{
-                            paddingHorizontal: 10
-                        }}>
-                            <Text style={{
-                                fontSize: 18
-                            }}>
-                                Lõi Lọc Kang, Vòi nước, Bảo dưỡng
-                            </Text>
-                            <Text style={{
-                                fontSize: 18
-                            }}>
-                                Ngô Xuân Quy
-                            </Text>
-                            <Text style={{
-                                fontSize: 18
-                            }}>
-                                Mã Đơn Hàng: QQQQ
-                            </Text>
-                            <Text style={{
-                                fontSize: 18
-
-                            }}>
-                                Ngày Giờ: 10:15 - 14/01/2022
-                            </Text>
-                            <View style={{
-                                flexDirection: 'row',
-                                justifyContent: 'space-between',
-                                paddingHorizontal: 10,
-                                marginTop: 5,
-                                marginBottom: 15
-                            }}>
-                                <Text style={{
-                                    fontSize: 16,
-                                    fontWeight: 'bold'
-
-                                }}>
-                                    (Đã Thanh Toán)
+                                    {lichSu.KhachHang}
                                 </Text>
                                 <Text style={{
-                                    fontSize: 16,
-                                    textDecorationLine: 'underline'
-
-                                }}>
-                                    Xem Chi Tiết
-                                </Text>
-                            </View>
-                        </View>
-                    </View>
-
-                    {/* Thông tin */}
-                    <View style={{
-                        backgroundColor: '#eeeeee',
-                        borderColor: 'black',
-                        borderWidth: 0.4,
-                        marginLeft: 10,
-                        marginRight: 10,
-                        borderRadius: 10,
-                        shadowColor: "#000",
-                        shadowOffset: {
-                            width: 0,
-                            height: 8,
-                        },
-                        shadowOpacity: 0.44,
-                        shadowRadius: 2.32,
-
-                        elevation: 1,
-                        opacity: 0.6,
-                        marginTop: 20
-
-                    }}>
-                        <View style={{
-                            marginTop: 10,
-                            paddingHorizontal: 10,
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            marginTop: 15,
-
-                        }}>
-                            <View style={{
-                                flexDirection: 'row',
-                            }}>
-                                <FontAwesome name="money" size={24} color="black" />
-                                <Text style={{
-                                    marginLeft: 10,
                                     fontSize: 18
                                 }}>
-                                    90K
+                                    Mã Đơn Hàng: QQQQ
                                 </Text>
-                            </View>
-                            <View>
                                 <Text style={{
-                                    fontSize: 16,
-                                    marginTop: 5
+                                    fontSize: 18
+
                                 }}>
-                                    9h:30
+                                    Ngày Giờ: 10:15 - 14/01/2022
                                 </Text>
+                                <View style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between',
+                                    paddingHorizontal: 10,
+                                    marginTop: 5,
+                                    marginBottom: 15
+                                }}>
+                                    <Text style={{
+                                        fontSize: 16,
+                                        fontWeight: 'bold'
+
+                                    }}>
+                                        (Chưa Thanh Toán)
+                                    </Text>
+                                    <Text style={{
+                                        fontSize: 16,
+                                        textDecorationLine: 'underline'
+                                    }}>
+                                        Xem Chi Tiết
+                                    </Text>
+                                </View>
                             </View>
                         </View>
-
-                        <View style={{
-                            paddingHorizontal: 10
+                    ))}
+                    <View>
+                        <Text style={{
+                            fontSize: 20,
+                            color: 'green',
+                            padding: 10,
+                            marginTop: 10
                         }}>
-                            <Text style={{
-                                fontSize: 18
-                            }}>
-                                Lõi Lọc Kang, Vòi nước, Bảo dưỡng
-                            </Text>
-                            <Text style={{
-                                fontSize: 18
-                            }}>
-                                Ngô Xuân Quy
-                            </Text>
-                            <Text style={{
-                                fontSize: 18
-                            }}>
-                                Mã Đơn Hàng: QQQQ
-                            </Text>
-                            <Text style={{
-                                fontSize: 18
+                            Đã Thanh Toán
+                        </Text>
+                    </View>
+                    {/* Thông tin */}
+                    {lichSuDTT.map(lichSu => (
+                        <View
+                            key={lichSu.id}
+                            style={{
+                                backgroundColor: '#eeeeee',
+                                borderColor: 'black',
+                                borderWidth: 0.4,
+                                marginLeft: 10,
+                                marginRight: 10,
+                                borderRadius: 10,
+                                shadowColor: "#000",
+                                shadowOffset: {
+                                    width: 0,
+                                    height: 8,
+                                },
+                                shadowOpacity: 0.44,
+                                shadowRadius: 2.32,
+
+                                elevation: 1,
+                                opacity: 0.6,
+                                marginTop: 10
 
                             }}>
-                                Ngày Giờ: 10:15 - 14/01/2022
-                            </Text>
                             <View style={{
+                                marginTop: 10,
+                                paddingHorizontal: 10,
                                 flexDirection: 'row',
                                 justifyContent: 'space-between',
-                                paddingHorizontal: 10,
-                                marginTop: 5,
-                                marginBottom: 15
+                                marginTop: 15,
+
+                            }}>
+                                <View style={{
+                                    flexDirection: 'row',
+                                }}>
+                                    <FontAwesome name="money" size={24} color="black" />
+                                    <Text style={{
+                                        marginLeft: 10,
+                                        fontSize: 18
+                                    }}>
+                                        {lichSu.TongTienSauGiamGia}
+                                    </Text>
+                                </View>
+                                <View>
+                                    <Text style={{
+                                        fontSize: 16,
+                                        marginTop: 5
+                                    }}>
+                                        9h:30
+                                    </Text>
+                                </View>
+                            </View>
+
+                            <View style={{
+                                paddingHorizontal: 10
                             }}>
                                 <Text style={{
-                                    fontSize: 16,
-                                    fontWeight: 'bold'
-
+                                    fontSize: 18
                                 }}>
-                                    (Đã Thanh Toán)
+                                    {lichSu.name}
                                 </Text>
                                 <Text style={{
-                                    fontSize: 16,
-                                    textDecorationLine: 'underline'
+                                    fontSize: 18
+                                }}>
+                                    {lichSu.KhachHang}
+                                </Text>
+                                <Text style={{
+                                    fontSize: 18
+                                }}>
+                                    Mã Đơn Hàng: QQQQ
+                                </Text>
+                                <Text style={{
+                                    fontSize: 18
 
                                 }}>
-                                    Xem Chi Tiết
+                                    Ngày Giờ: 10:15 - 14/01/2022
                                 </Text>
+                                <View style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between',
+                                    paddingHorizontal: 10,
+                                    marginTop: 5,
+                                    marginBottom: 15
+                                }}>
+                                    <Text style={{
+                                        fontSize: 16,
+                                        fontWeight: 'bold'
+
+                                    }}>
+                                        {lichSu.TrangThai}
+                                    </Text>
+                                    <Text style={{
+                                        fontSize: 16,
+                                        textDecorationLine: 'underline'
+
+                                    }}>
+                                        Xem Chi Tiết
+                                    </Text>
+                                </View>
                             </View>
                         </View>
-                    </View>
-
+                    ))}
 
 
 

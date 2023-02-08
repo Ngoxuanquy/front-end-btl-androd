@@ -18,12 +18,23 @@ import StackHome from './StackHome'
 import StackCart from './StackCart';
 
 const Tab = createBottomTabNavigator();
+const HanderCart = () => {
+    return (
+        <View>
+            <TouchableOpacity
+                onPress={() => console.log('cart')}
+            >
+                <Cart />
+            </TouchableOpacity>
+        </View>
+    )
+}
 
 export default function Tag({ navigation }) {
 
     const [customer, setCustomer] = useState([]);
-    const URL_ON = 'http://192.168.0.112:4000'
-    const URL1_ON = 'http://192.168.0.112:5000'
+    const URL_ON = 'http://192.168.0.114:4000'
+    const URL1_ON = 'http://192.168.0.114:5000'
 
     const URL_CT = 'http://192.168.1.121:4000'
     const URL1_CT = 'http://192.168.1.121:5000'
@@ -32,17 +43,27 @@ export default function Tag({ navigation }) {
     const URL1_FPT = 'http://192.168.0.145:5000'
 
     useEffect(() => {
-        fetch(URL_FPT + '/api/customer/')
+        fetch(URL_ON + '/api/customer/')
             .then(res => res.json())
             .then(res => setCustomer(res))
             .catch(err => console.log(err))
             .finally(() => {
             })
-    })
+    }, [])
 
-    const handleBackButton = () => {
-        console.log('a')
+    function handleBackButton() {
+        fetch(URL_ON + '/api/customer/')
+            .then(res => res.json())
+            .then(res => setCustomer(res))
+            .catch(err => console.log(err))
+
+        console.log(customer)
+        BackHandler.exitApp();
+        return true;
     }
+
+    console.log('aaaa')
+
 
     return (
         <NavigationContainer independent={true}>
@@ -82,9 +103,11 @@ export default function Tag({ navigation }) {
                     tabBarBadge: customer.length
                 }}
                     listeners={{
-                        focus: () => BackHandler.addEventListener('hardwareBackPress', handleBackButton)
-                        , blur: () => BackHandler.removeEventListener('hardwareBackPress', handleBackButton)
+                        clickButton: () => BackHandler.addEventListener('click', handleBackButton())
+                        , blur: () => BackHandler.removeEventListener('hardwareBackPress', handleBackButton),
+
                     }}
+
                 />
 
                 <Tab.Screen name="ThongTinTaiKhoan" component={ThongTinTaiKhoan} options={{

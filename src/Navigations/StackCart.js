@@ -41,13 +41,37 @@ function StackCart() {
                     headerShown: false
                 }} />
                 <Stack.Screen name="ThanhToan" component={ThanhToan} options={{
-                    headerShown: true
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: '#789BF6',
+                        height: 150,
+                        // title: 'My home',
+                        borderBottomLeftRadius: 40,
+                        borderBottomRightRadius: 40
+                    },
+                    headerTintColor: '#fff',
                 }} />
                 <Stack.Screen name="ThuNhap" component={ThuNhap} options={{
-                    headerShown: true
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: '#789BF6',
+                        height: 150,
+                        // title: 'My home',
+                        borderBottomLeftRadius: 40,
+                        borderBottomRightRadius: 40
+                    },
+                    headerTintColor: '#fff',
                 }} />
                 <Stack.Screen name="Cart_Them" component={Cart_Them} options={{
-                    headerShown: true
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: '#789BF6',
+                        height: 150,
+                        // title: 'My home',
+                        borderBottomLeftRadius: 40,
+                        borderBottomRightRadius: 40
+                    },
+                    headerTintColor: '#fff',
                 }} />
             </Stack.Navigator>
         </NavigationContainer>

@@ -19,6 +19,9 @@ function Stacks() {
     const URL_CT = 'http://192.168.1.112:4000'
     const URL1_CT = 'http://192.168.1.112:5000'
 
+    const URL_FPT = 'http://192.168.0.145:4000'
+    const URL1_FPT = 'http://192.168.0.145:5000'
+
     const [token, setToken] = useState([])
     const [taikhoan, setTaiKhoan] = useState([])
     const [thongtin, setThongTin] = useState([])

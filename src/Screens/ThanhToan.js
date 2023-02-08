@@ -1,9 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, TouchableOpacity, View, Image, ScrollView, TextInput, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Image, ScrollView, TextInput, ActivityIndicator, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function ThanhToan({ route }) {
+export default function ThanhToan({ route, navigation }) {
 
     const { name, id } = route.params;
 
@@ -132,10 +132,8 @@ export default function ThanhToan({ route }) {
     const [orders, setOrder] = useState([]);
     const [customer_name, setCustomer_name] = useState([]);
 
-
-
-    const URL_ON = 'http://192.168.0.112:4000'
-    const URL1_ON = 'http://192.168.0.112:5000'
+    const URL_ON = 'http://192.168.0.114:4000'
+    const URL1_ON = 'http://192.168.0.114:5000'
 
     const URL_CT = 'http://192.168.1.121:4000'
     const URL1_CT = 'http://192.168.1.121:5000'
@@ -155,23 +153,18 @@ export default function ThanhToan({ route }) {
 
     }
 
-
     useEffect(() => {
-        fetch(URL_FPT + '/api/products/')
+        fetch(URL_ON + '/api/products/')
             .then(res => res.json())
             .then(res => setProducts(res))
             .catch(err => console.log(err))
             .finally(() => {
                 setIsLoading(false)
-
             })
     }, [])
 
-
-
     const [product, setProduct] = useState(products);
     const [customer, setCustomer] = useState([])
-
 
     useEffect(() => {
         setProduct(products)
@@ -193,7 +186,7 @@ export default function ThanhToan({ route }) {
 
 
     useEffect(() => {
-        fetch(URL_FPT + '/api/customer_re/')
+        fetch(URL_ON + '/api/customer_re/')
             .then(res => res.json())
             .then(res => setCustomer(res))
             .catch(err => console.log(err))
@@ -206,7 +199,7 @@ export default function ThanhToan({ route }) {
     }, [])
 
     useEffect(() => {
-        fetch(URL_FPT + '/api/orders/' + name)
+        fetch(URL_ON + '/api/orders/' + name)
             .then(res => res.json())
             .then(res => setOrder(res))
             .catch(err => console.log(err))
@@ -226,13 +219,12 @@ export default function ThanhToan({ route }) {
         //         setSanPham([...sanphams, Product])
         //     }
         // })
-
         products.map(Product => {
             if (Product.id == id1) {
                 customer.map(custome => {
                     if (custome.id == id) {
 
-                        fetch(URL_FPT + '/api/orders/create/', {
+                        fetch(URL_ON + '/api/orders/create/', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
@@ -243,21 +235,21 @@ export default function ThanhToan({ route }) {
                                 number: custome.Number,
                                 address: custome.Address,
                                 img: Product.img,
-                                price: Product.price
+                                price: Product.price,
+                                tenhang: Product.name,
+                                idDonHang: id1
                             })
                         })
                             .then(() => {
-                                fetch(URL_FPT + '/api/orders/' + name)
+                                fetch(URL_ON + '/api/orders/' + name)
                                     .then(res => res.json())
                                     .then(res => setOrder(res))
                                     .catch(err => console.log(err))
                                     .finally(() => {
-                                        orders.map(sanpham => {
-                                            TT += sanpham.price
-                                        })
-                                        setTongTien(TT)
                                     })
-                                // console.log(orders)
+                            })
+                            .then(() => {
+
                             })
                     }
                 })
@@ -271,38 +263,136 @@ export default function ThanhToan({ route }) {
 
 
     function handerDetele(id) {
-        fetch(URL_FPT + '/api/orders/delete/' + id,
+        console.log(id)
+        fetch(URL_ON + '/api/orders/delete/' + id,
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
             }
         )
             .then(() => {
-                fetch(URL_FPT + '/api/orders/' + name)
+                fetch(URL_ON + '/api/orders/' + name)
                     .then(res => res.json())
                     .then(res => setOrder(res))
                     .catch(err => console.log(err))
 
-            })
-            .then(() => {
-                orders.map(sanpham => {
-                    TT += sanpham.price
-                })
-                setTongTien(TT)
             })
     }
 
 
     useEffect(() => {
         orders.map(sanpham => {
-            TT += sanpham.price
+            TT += sanpham.price * sanpham.SoLuong
         })
         setTongTien(TT)
     })
 
-    function handerSoLuong() {
+    function handerSoLuong(id, soluong) {
+        fetch(URL_ON + '/api/orders/update/soluong/' + id, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                soluong: soluong + 1
+            })
+        })
+            .then(() => {
+                fetch(URL_ON + '/api/orders/' + name)
+                    .then(res => res.json())
+                    .then(res => setOrder(res))
+                    .catch(err => console.log(err))
+            })
+    }
+
+    function handerTru(id, soluong) {
+        if (soluong <= 1) {
+            alert('Số Lượng Phải Lớn Hơn 1')
+            return;
+        }
+
+        fetch(URL_ON + '/api/orders/update/soluong/' + id, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                soluong: soluong - 1
+            })
+        })
+            .then(() => {
+                fetch(URL_ON + '/api/orders/' + name)
+                    .then(res => res.json())
+                    .then(res => setOrder(res))
+                    .catch(err => console.log(err))
+            })
 
     }
+
+    console.log(orders)
+
+    function handerTTTienMat() {
+        return Alert.alert(
+            "Are your sure?",
+            "Đơn Này Đã Thanh Toán Bằng Tiền Mặt?",
+            [
+
+                // The "No" button
+                // Does nothing but dismiss the dialog when tapped
+                {
+                    text: "No",
+                },
+
+                // The "Yes" button
+                {
+                    text: "Yes",
+                    onPress: () => {
+                        orders.map(order => {
+                            fetch(URL_ON + '/api/thanhtoan/update/' + id, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    trangthai: "Tiền Mặt",
+                                    tongtien: tongtien
+                                })
+                            })
+                                .then(() => {
+                                    return Alert.alert(
+                                        "Are your sure?",
+                                        "Bạn Đã Hoàn Thành Đơn?",
+                                        [
+
+                                            // The "No" button
+                                            // Does nothing but dismiss the dialog when tapped
+                                            {
+                                                text: "No",
+                                            },
+
+                                            // The "Yes" button
+                                            {
+                                                text: "Yes",
+                                                onPress: () => {
+                                                    fetch(URL_ON + '/api/customer_re/delete/' + id,
+                                                        {
+                                                            method: 'POST',
+                                                            headers: { 'Content-Type': 'application/json' },
+                                                        }
+                                                    )
+                                                        .then(() => {
+                                                            navigation.navigate('Cart');
+                                                        })
+                                                },
+                                            },
+                                        ]
+                                    );
+                                })
+                        })
+                    },
+                },
+            ]
+        );
+
+    }
+
+    const showConfirmDialog = () => {
+
+    };
 
 
     return (
@@ -326,7 +416,9 @@ export default function ThanhToan({ route }) {
                         borderColor: 'black',
                         borderWidth: 0.3,
                         paddingVertical: 15
-                    }}>
+                    }}
+                        onPress={() => handerTTTienMat()}
+                    >
                         <Text>
                             Tiền Mặt
                         </Text>
@@ -400,90 +492,80 @@ export default function ThanhToan({ route }) {
                             Danh Sách Sản Phẩm
                         </Text>
                         {getConten()}
-
-                        {
-                            product.map((Api, index) => (
-                                <View
-                                    key={Api.id}
-                                    style={{
-                                        marginTop: 20
-                                    }}>
-                                    <TouchableOpacity style={{
-                                        flexDirection: 'row',
-
-                                    }}>
-                                        <Image
-                                            style={{
-                                                width: 100,
-                                                height: 100,
-                                                marginLeft: 10
-                                            }}
-                                            source={{
-                                                uri: Api.img
-                                            }}
-                                        />
-                                        <View style={{
-                                            flexDirection: 'row',
-                                            justifyContent: 'space-around',
-                                            textAlign: 'center',
-                                            alignItems: 'center',
-                                            marginLeft: 20,
+                        <View style={{
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}>
+                            {
+                                product.map((Api, index) => (
+                                    <View
+                                        key={Api.id}
+                                        style={{
+                                            marginTop: 20,
+                                            justifyContent: 'center',
+                                            alignItems: 'center'
                                         }}>
-                                            <View style={{
-                                                width: 80
+                                        <TouchableOpacity style={{
+                                            flexDirection: 'row',
 
-                                            }}>
-                                                <Text>
-                                                    {Api.name}
-                                                </Text>
-                                                <Text>
-                                                    {Api.price} $
-                                                </Text>
-                                            </View>
-
+                                        }}>
+                                            <Image
+                                                style={{
+                                                    width: 100,
+                                                    height: 100,
+                                                    marginLeft: 10
+                                                }}
+                                                source={{
+                                                    uri: Api.img
+                                                }}
+                                            />
                                             <View style={{
                                                 flexDirection: 'row',
-                                                // marginLeft: 40
+                                                justifyContent: 'space-around',
+                                                textAlign: 'center',
+                                                alignItems: 'center',
+                                                marginLeft: 20,
                                             }}>
-                                                <TouchableOpacity style={{
-                                                    width: 35, height: 35,
-                                                    borderColor: 'black',
-                                                    borderWidth: 1,
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center'
+                                                <View style={{
+                                                    width: 80
+
                                                 }}>
-                                                    <Text>-</Text>
-                                                </TouchableOpacity>
-                                                <TextInput style={{
-                                                    width: 50,
-                                                    height: 35,
-                                                    borderColor: 'black',
-                                                    borderWidth: 1,
-                                                    alignItems: 'center',
-                                                    textAlign: 'center'
-                                                }}
+                                                    <Text>
+                                                        {Api.name}
+                                                    </Text>
+                                                    <Text>
+                                                        {Api.price} $
+                                                    </Text>
+                                                </View>
 
-                                                >1</TextInput>
-                                                <TouchableOpacity style={{
-                                                    width: 35, height: 35,
-                                                    borderColor: 'black',
-                                                    borderWidth: 1,
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center'
-                                                }}
-                                                    onPress={() => handerCong(Api.id)}
-                                                >
-                                                    <Text>+</Text>
-                                                </TouchableOpacity>
+                                                <View style={{
+                                                    flexDirection: 'row',
+                                                    marginLeft: 30
+                                                }}>
+                                                    <TouchableOpacity style={{
+                                                        width: 65, height: 35,
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        borderRadius: 6,
+                                                        backgroundColor: 'green',
+                                                        opacity: 0.7
+                                                    }}
+                                                        onPress={() => handerCong(Api.id)}
+                                                    >
+                                                        <Text style={{
+                                                            color: 'white'
+                                                        }}>Mua</Text>
+                                                    </TouchableOpacity>
+                                                </View>
+
+
                                             </View>
+                                        </TouchableOpacity>
+                                    </View>
+                                ))
 
-
-                                        </View>
-                                    </TouchableOpacity>
-                                </View>
-                            ))
-
-                        }
+                            }
+                        </View>
                     </View>
                 </View>
 
@@ -492,14 +574,25 @@ export default function ThanhToan({ route }) {
                     <View>
                         <View>
                             <TouchableOpacity>
-                                <Text style={{
-                                    fontSize: 20,
-                                    color: 'coral',
-                                    padding: 10,
-                                    marginTop: 10
+                                <View style={{
+                                    flexDirection: 'row'
                                 }}>
-                                    Sản Phẩm Đã Chọn
-                                </Text>
+                                    <Text style={{
+                                        fontSize: 20,
+                                        color: 'coral',
+                                        padding: 10,
+                                        marginTop: 10
+                                    }}>
+                                        Sản Phẩm Đã Chọn
+                                    </Text>
+                                    <Text style={{
+                                        padding: 10,
+                                        marginTop: 17,
+                                        fontSize: 13
+                                    }} >
+                                        (Chưa Thanh Toán)
+                                    </Text>
+                                </View>
                                 {
                                     orders.map((Api, index) => (
 
@@ -553,7 +646,7 @@ export default function ThanhToan({ route }) {
                                                             alignItems: 'center',
                                                             justifyContent: 'center'
                                                         }}
-                                                            onPress={() => handerTru(Api.id)}
+                                                            onPress={() => handerTru(Api.id, Api.SoLuong)}
                                                         >
                                                             <Text>-</Text>
                                                         </TouchableOpacity>
@@ -566,7 +659,10 @@ export default function ThanhToan({ route }) {
                                                             textAlign: 'center'
                                                         }}
 
-                                                        >1</TextInput>
+                                                        >
+                                                            {Api.SoLuong}
+
+                                                        </TextInput>
                                                         <TouchableOpacity style={{
                                                             width: 35, height: 35,
                                                             borderColor: 'black',
@@ -574,7 +670,7 @@ export default function ThanhToan({ route }) {
                                                             alignItems: 'center',
                                                             justifyContent: 'center'
                                                         }}
-                                                            onPress={() => handerSoLuong(Api.id)}
+                                                            onPress={() => handerSoLuong(Api.id, Api.SoLuong)}
                                                         >
                                                             <Text>+</Text>
                                                         </TouchableOpacity>
@@ -705,7 +801,7 @@ export default function ThanhToan({ route }) {
                                     fontSize: 20,
                                     fontWeight: "bold"
                                 }}>
-                                    {tongtien + ((tongtien * 10) / 100) - 10}
+                                    {tongtien == 0 ? 0 : tongtien + ((tongtien * 10) / 100) - 10}
                                 </Text>
                             </View>
                         </TouchableOpacity>

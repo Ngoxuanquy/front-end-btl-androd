@@ -10,8 +10,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Login({ navigation }) {
 
-    const URL_ON = 'http://192.168.0.112:4000'
-    const URL1_ON = 'http://192.168.0.112:5000'
+    const URL_ON = 'http://192.168.0.114:4000'
+    const URL1_ON = 'http://192.168.0.114:5000'
 
     const URL_CT = 'http://192.168.1.121:4000'
     const URL1_CT = 'http://192.168.1.121:5000'
@@ -36,7 +36,7 @@ export default function Login({ navigation }) {
     };
 
     useLayoutEffect(() => {
-        fetch(URL_FPT + '/api/users')
+        fetch(URL_ON + '/api/users')
             .then(res => res.json())
             .then(res => setLogin(res))
     }, [])
@@ -46,14 +46,14 @@ export default function Login({ navigation }) {
         const user = logins.find(user => user.email === taikhoan)
         if (!user) return alert('sai tk hoặc mk');
 
-        fetch(URL1_FPT + '/login', options)
+        fetch(URL1_ON + '/login', options)
             .then(res => res.json())
             .then(res => {
                 // console.log(res.accessToken)
                 AsyncStorage.setItem('token', res.accessToken);
                 AsyncStorage.setItem('taikhoan', taikhoan);
 
-                fetch(URL_FPT + '/api/users/update/' + taikhoan, {
+                fetch(URL_ON + '/api/users/update/' + taikhoan, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({

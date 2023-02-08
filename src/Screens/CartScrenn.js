@@ -1,5 +1,8 @@
+//thông tin thanh toán: tổng tiền chưa giảm giá, thuế, giảm giá, giảm giá combo, tổng tiền sau giảm giá, 
+// thêm bảng : danh sách sp mua => thông tin thanh toán 
+
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, TouchableOpacity, View, ScrollView, Image, Dimensions, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, ScrollView, Image, Dimensions, ActivityIndicator, Alert, RefreshControl, SafeAreaView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import React, {
@@ -20,8 +23,8 @@ export default function Cart({ navigation }) {
     const [orders, setOrders] = useState([])
     const [reset, setReset] = useState(false);
 
-    const URL_ON = 'http://192.168.0.112:4000'
-    const URL1_ON = 'http://192.168.0.112:5000'
+    const URL_ON = 'http://192.168.0.114:4000'
+    const URL1_ON = 'http://192.168.0.114:5000'
 
     const URL_CT = 'http://192.168.1.121:4000'
     const URL1_CT = 'http://192.168.1.121:5000'
@@ -33,7 +36,6 @@ export default function Cart({ navigation }) {
         if (isLoading) {
             return <ActivityIndicator />
         }
-
     }
 
     AsyncStorage.getItem('taikhoan')
@@ -43,7 +45,7 @@ export default function Cart({ navigation }) {
 
 
     useEffect(() => {
-        fetch(URL_FPT + '/api/customer/')
+        fetch(URL_ON + '/api/customer/')
             .then(res => res.json())
             .then(res => setCustomer(res))
             .catch(err => console.log(err))
@@ -53,12 +55,12 @@ export default function Cart({ navigation }) {
                 //     setReset(false);
                 // }, 1000);
             })
-    }, [])
+    }, [taikhoan])
 
-
+    console.log('a12')
 
     useEffect(() => {
-        fetch(URL_FPT + '/api/customer_re/' + taikhoan)
+        fetch(URL_ON + '/api/customer_re/' + taikhoan)
             .then(res => res.json())
             .then(res => setOrders(res))
             .catch(err => console.log(err))
@@ -76,7 +78,7 @@ export default function Cart({ navigation }) {
     function handerNhanDon(id) {
         customer.map(custome => {
             if (custome.id == id) {
-                fetch(URL_FPT + '/api/customer_re/create/', {
+                fetch(URL_ON + '/api/customer_re/create/', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -89,14 +91,47 @@ export default function Cart({ navigation }) {
                     })
                 })
                     .then(() => {
-                        fetch(URL_FPT + '/api/customer_re/' + taikhoan)
-                            .then(res => res.json())
-                            .then(res => setOrders(res))
-                            .catch(err => console.log(err))
+                        return Alert.alert(
+                            "Are your sure?",
+                            "Bạn Nhận Đơn Này?",
+                            [
 
+                                // The "No" button
+                                // Does nothing but dismiss the dialog when tapped
+                                {
+                                    text: "No",
+                                },
+
+                                // The "Yes" button
+                                {
+                                    text: "Yes",
+                                    onPress: () => {
+                                        fetch(URL_ON + '/api/customer/')
+                                            .then(res => res.json())
+                                            .then(res => setCustomer(res))
+                                            .finally(() => {
+                                                alert('Nhận Đơn Thành Công!!!')
+                                            })
+
+                                        fetch(URL_ON + '/api/thanhtoan/create/', {
+                                            method: 'POST',
+                                            headers: { 'Content-Type': 'application/json' },
+                                            body: JSON.stringify({
+                                                id: id,
+                                                name: custome.customer_name,
+                                                taikhoan: taikhoan,
+                                                number: custome.Phone_Number,
+                                                address: custome.Address,
+                                                note: custome.Note,
+                                            })
+                                        })
+                                    },
+                                },
+                            ]
+                        );
                     })
                     .then(() => {
-                        fetch(URL_FPT + '/api/customer/delete/' + id,
+                        fetch(URL_ON + '/api/customer/delete/' + id,
                             {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
@@ -105,29 +140,24 @@ export default function Cart({ navigation }) {
 
                     })
                     .then(() => {
-                        fetch(URL_FPT + '/api/customer/')
+                        fetch(URL_ON + '/api/customer_re/' + taikhoan)
                             .then(res => res.json())
-                            .then(res => setCustomer(res))
+                            .then(res => setOrders(res))
                             .catch(err => console.log(err))
                     })
                     .catch(err => console.log(err))
                     .finally(() => {
-                        setReset(true);
-                        setTimeout(() => {
-                            setReset(false);
-                        }, 10);
+                        console.log('a')
+
                     })
             }
         })
     }
 
-    if (reset) {
-        return null;
-    }
 
     function handerLamMoi() {
         setIsLoading(true)
-        fetch(URL_FPT + '/api/customer/')
+        fetch(URL_ON + '/api/customer/')
             .then(res => res.json())
             .then(res => {
                 setCustomer(res)
@@ -139,7 +169,13 @@ export default function Cart({ navigation }) {
             .finally(() => {
                 setIsLoading(false)
             })
+
+        fetch(URL_ON + '/api/customer_re/' + taikhoan)
+            .then(res => res.json())
+            .then(res => setOrders(res))
+            .catch(err => console.log(err))
     }
+
 
     // setTimeout(() => {
     //     console.log('a')
@@ -147,13 +183,49 @@ export default function Cart({ navigation }) {
     //         .then(res => res.json())
     //         .then(res => setCustomer(res))
     //         .catch(err => console.log(err))
-    // }, 1000
+    // }, 3000
     // )
 
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => {
+            fetch(URL_ON + '/api/customer/')
+                .then(res => res.json())
+                .then(res => {
+                    setCustomer(res)
+                })
+                .then(() => {
+                    setIsLoading(false)
+                })
+                .catch(err => console.log(err))
+                .finally(() => {
+                    setIsLoading(false)
+                })
+
+            fetch(URL_ON + '/api/customer_re/' + taikhoan)
+                .then(res => res.json())
+                .then(res => setOrders(res))
+                .catch(err => console.log(err))
+            setRefreshing(false);
+        }, 1000);
+    }, []);
 
     return (
-        <View>
-            <ScrollView >
+        <View >
+            <ScrollView
+                contentContainerStyle={{
+                    color: 'black'
+                }}
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} style={{
+                        tintColor: 'black',
+                        backgroundColor: '#FF6666',
+                        size: 10,
+                        marginBottom: 0,
+                    }} />
+                }>
                 <View style={{
                     flexDirection: 'row',
                     justifyContent: 'space-around',
@@ -164,7 +236,7 @@ export default function Cart({ navigation }) {
                     // textAlign: 'center',
                     borderBottomLeftRadius: 70,
                     borderBottomRightRadius: 70,
-                    position: 'relative'
+                    position: 'relative',
 
                 }}>
                     <View style={{
@@ -178,19 +250,12 @@ export default function Cart({ navigation }) {
                             // position: 'relative'
 
                         }}>
-                            {/* <TouchableOpacity>
-                        <Text style={{
-                            fontSize: 18
-                        }}>
-                            Back
-                        </Text>
-                    </TouchableOpacity> */}
                             <View style={{
                                 flexDirection: 'row',
                                 justifyContent: 'space-between',
                                 marginLeft: -30
                             }}>
-                                <TouchableOpacity style={{
+                                <View style={{
                                 }}>
                                     <Ionicons name='menu' style={{
                                         fontSize: 30,
@@ -198,8 +263,8 @@ export default function Cart({ navigation }) {
                                         // marginTop: -100
 
                                     }} />
-                                </TouchableOpacity>
-                                <TouchableOpacity style={{
+                                </View>
+                                <View style={{
 
                                 }}>
                                     <Ionicons name='notifications-outline' style={{
@@ -210,9 +275,9 @@ export default function Cart({ navigation }) {
 
 
                                     }} />
-                                </TouchableOpacity>
+                                </View>
                             </View>
-                            <TouchableOpacity style={{
+                            <View style={{
                                 alignItems: 'center',
                                 marginTop: 20,
 
@@ -223,7 +288,7 @@ export default function Cart({ navigation }) {
                                 }}>
                                     Danh Sách Đơn Hàng
                                 </Text>
-                            </TouchableOpacity>
+                            </View>
                             <Image
                                 style={{
                                     width: 50, height: 50,
@@ -265,7 +330,7 @@ export default function Cart({ navigation }) {
 
 
                     }}>
-                        <TouchableOpacity style={{
+                        <View style={{
                             borderColor: 'black',
 
                         }}>
@@ -279,11 +344,11 @@ export default function Cart({ navigation }) {
                             }}>
                                 10
                             </Text>
-                        </TouchableOpacity>
+                        </View>
                     </View>
 
                     <View>
-                        <TouchableOpacity>
+                        <View>
                             <Text>
                                 Đi Được
                             </Text>
@@ -292,11 +357,11 @@ export default function Cart({ navigation }) {
                             }}>
                                 10
                             </Text>
-                        </TouchableOpacity>
+                        </View>
                     </View>
 
                     <View>
-                        <TouchableOpacity>
+                        <View>
                             <Text>
                                 Hủy
                             </Text>
@@ -305,11 +370,11 @@ export default function Cart({ navigation }) {
                             }}>
                                 10
                             </Text>
-                        </TouchableOpacity>
+                        </View>
                     </View>
 
                     <View>
-                        <TouchableOpacity>
+                        <View>
                             <Text>
                                 Sai Máy
                             </Text>
@@ -318,7 +383,7 @@ export default function Cart({ navigation }) {
                             }}>
                                 10
                             </Text>
-                        </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
                 <View style={{
@@ -353,7 +418,7 @@ export default function Cart({ navigation }) {
                             marginBottom: 30
                         }}>
 
-                        <TouchableOpacity style={{
+                        <View style={{
                             borderColor: 'black',
                             borderWidth: 1,
                             marginTop: 10,
@@ -379,7 +444,7 @@ export default function Cart({ navigation }) {
                                     marginBottom: 20,
 
                                 }}>
-                                <TouchableOpacity style={{
+                                <View style={{
 
                                 }}>
                                     <View style={{
@@ -434,7 +499,7 @@ export default function Cart({ navigation }) {
                                             Số Điện Thoại: {custome.Phone_Number}
                                         </Text>
                                     </View>
-                                </TouchableOpacity>
+                                </View>
 
                                 <View style={{
                                     position: 'absolute',
@@ -485,7 +550,7 @@ export default function Cart({ navigation }) {
                                 </View>
 
                             </View>
-                        </TouchableOpacity>
+                        </View>
                     </View>
                 ))}
 
@@ -503,9 +568,13 @@ export default function Cart({ navigation }) {
                     </Text>
                 </View>
 
-                {orders.map(order => (
+                {orders && orders.map(order => (
                     <View key={order.id
-                    }>
+                    }
+                        style={{
+                            marginBottom: 20
+                        }}
+                    >
                         <View style={{
                             borderColor: 'black',
                             borderWidth: 0.4,
@@ -536,7 +605,7 @@ export default function Cart({ navigation }) {
                                 paddingHorizontal: 20,
                                 marginBottom: 20,
                             }}>
-                                <TouchableOpacity style={{
+                                <View style={{
 
                                 }}>
                                     <Text style={{
@@ -554,7 +623,7 @@ export default function Cart({ navigation }) {
                                     }}>
                                         Địa Chỉ: {order.Address}
                                     </Text>
-                                </TouchableOpacity>
+                                </View>
                             </View>
                             <View>
                                 <View style={{
@@ -623,31 +692,7 @@ export default function Cart({ navigation }) {
 
 
             </ScrollView>
-            <View style={{
-                width: 100,
-                height: 100,
-                borderColor: 'black',
-                borderWidth: 1,
-                shadowColor: "#000",
-                shadowOffset: {
-                    width: 0,
-                    height: 5,
-                },
-                shadowOpacity: 0.34,
-                shadowRadius: 6.27,
 
-                elevation: 10,
-                marginTop: 100
-            }}>
-                <View>
-
-                    <TouchableOpacity style={{
-
-                    }}>
-
-                    </TouchableOpacity>
-                </View>
-            </View>
         </View>
     );
 }

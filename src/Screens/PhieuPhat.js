@@ -1,9 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, RefreshControl } from 'react-native';
 
 export default function PhieuPhat({ navigation }) {
     return (
-        <View >
+        <ScrollView
+
+        >
             <View>
                 <View style={{
                     padding: 20
@@ -80,7 +82,7 @@ export default function PhieuPhat({ navigation }) {
 
                 </View>
             </View>
-        </View >
+        </ScrollView >
     );
 }
 

@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, ScrollView, Animated, Button, BackHandler } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, ScrollView, Animated, Button, BackHandler, RefreshControl } from 'react-native';
 import React, { useEffect, useState, useLayoutEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker'
 
@@ -18,8 +18,8 @@ import UpAnh from '../Components/UpAnh';
 // import Buttons from './Button'
 export default function HomeScrenn({ navigation }) {
 
-    const URL_ON = 'http://192.168.0.112:4000'
-    const URL1_ON = 'http://192.168.0.112:5000'
+    const URL_ON = 'http://192.168.0.114:4000'
+    const URL1_ON = 'http://192.168.0.114:5000'
 
     const URL_CT = 'http://192.168.1.121:4000'
     const URL1_CT = 'http://192.168.1.121:5000'
@@ -63,7 +63,7 @@ export default function HomeScrenn({ navigation }) {
     // console.log(taikhoan)
 
     useEffect(() => {
-        fetch(URL_FPT + '/api/users/' + taikhoan)
+        fetch(URL_ON + '/api/users/' + taikhoan)
             .then(res => res.json())
             .then(res => setThongTin(res))
     }, [taikhoan])
@@ -76,7 +76,7 @@ export default function HomeScrenn({ navigation }) {
     }
 
     useEffect(() => {
-        fetch(URL_FPT + '/posts', options)
+        fetch(URL_ON + '/posts', options)
             .then(res => res.json())
             .then(res => setApi(res))
             .catch((err) => console.log(err))
@@ -84,7 +84,7 @@ export default function HomeScrenn({ navigation }) {
 
     function handerLogout() {
 
-        fetch(URL_FPT + '/api/users/update/token/' + taikhoan, {
+        fetch(URL_ON + '/api/users/update/token/' + taikhoan, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
         })
@@ -134,7 +134,7 @@ export default function HomeScrenn({ navigation }) {
     }
 
     function handerXacNhan() {
-        fetch(URL_FPT + '/api/users/update/img/' + taikhoan, {
+        fetch(URL_ON + '/api/users/update/img/' + taikhoan, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -142,7 +142,7 @@ export default function HomeScrenn({ navigation }) {
             })
         })
             .then(() => {
-                fetch(URL_FPT + '/api/users/' + taikhoan)
+                fetch(URL_ON + '/api/users/' + taikhoan)
                     .then(res => res.json())
                     .then(res => setThongTin(res))
             })
@@ -206,14 +206,30 @@ export default function HomeScrenn({ navigation }) {
 
     }
 
-    // console.log(image)
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 1000);
+    }, []);
 
     return (
         <ScrollView style={{
             flex: 1,
             backgroundColor: '#fff',
             position: 'relative'
-        }} >
+        }}
+            refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} style={{
+                    tintColor: 'black',
+                    backgroundColor: '#2851db',
+                    size: 10,
+                    marginBottom: 0,
+                }} />
+            }
+        >
 
             {/* menu */}
             <View style={{
@@ -380,16 +396,28 @@ export default function HomeScrenn({ navigation }) {
                                         key={thong.id}
                                         onPress={() => handerUpAnh()}
                                     >
-                                        <Image
-                                            style={{
-                                                width: 100,
-                                                height: 120,
-                                                borderRadius: 10,
-                                            }}
-                                            source={{
-                                                uri: thong.img
-                                            }}
-                                        />
+                                        {thong.img == "" ?
+                                            <Image
+                                                style={{
+                                                    width: 100,
+                                                    height: 120,
+                                                    borderRadius: 10,
+                                                }}
+                                                source={{
+                                                    uri: "https://haycafe.vn/wp-content/uploads/2022/02/Avatar-trang.jpg"
+                                                }}
+                                            /> :
+                                            <Image
+                                                style={{
+                                                    width: 100,
+                                                    height: 120,
+                                                    borderRadius: 10,
+                                                }}
+                                                source={{
+                                                    uri: thong.img
+                                                }}
+                                            />
+                                        }
 
                                     </TouchableOpacity>
                                 ))}
