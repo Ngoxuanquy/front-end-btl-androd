@@ -1,9 +1,9 @@
-import { View, Text, TextInput, ScrollView, RefreshControl } from 'react-native'
+import { View, Text, TextInput, ScrollView, RefreshControl, TouchableOpacity } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 
-export default function LichSuDonHang() {
+export default function LichSuDonHang({ navigation }) {
     const [lichSuCTT, setLichSuCTT] = useState([]);
     const [lichSuDTT, setLichSuDTT] = useState([]);
 
@@ -64,6 +64,10 @@ export default function LichSuDonHang() {
         }, 1000);
     }, []);
 
+    function handerChiTiec(id, name) {
+        navigation.replace('Chi Tiết Đơn', { id: id, name: name });
+    }
+
     return (
         <ScrollView
             refreshControl={
@@ -113,7 +117,8 @@ export default function LichSuDonHang() {
                         <Text style={{
                             fontSize: 20,
                             padding: 10,
-                            color: 'red'
+                            color: 'red',
+                            fontWeight: '600'
                         }}>
                             Chưa Thanh Toán
                         </Text>
@@ -135,8 +140,8 @@ export default function LichSuDonHang() {
                                     width: 0,
                                     height: 8,
                                 },
-                                shadowOpacity: 0.44,
-                                shadowRadius: 6.32,
+                                shadowOpacity: 0.14,
+                                shadowRadius: 3.32,
 
                                 elevation: 1,
                                 marginBottom: 10
@@ -207,12 +212,16 @@ export default function LichSuDonHang() {
                                     }}>
                                         (Chưa Thanh Toán)
                                     </Text>
-                                    <Text style={{
-                                        fontSize: 16,
-                                        textDecorationLine: 'underline'
-                                    }}>
-                                        Xem Chi Tiết
-                                    </Text>
+                                    <TouchableOpacity>
+                                        <Text style={{
+                                            fontSize: 16,
+                                            textDecorationLine: 'underline'
+                                        }}
+                                            onPress={() => handerChiTiec(lichSu.id, lichSu.KhachHang)}
+                                        >
+                                            Xem Chi Tiết
+                                        </Text>
+                                    </TouchableOpacity>
                                 </View>
                             </View>
                         </View>
@@ -222,7 +231,8 @@ export default function LichSuDonHang() {
                             fontSize: 20,
                             color: 'green',
                             padding: 10,
-                            marginTop: 10
+                            marginTop: 10,
+                            fontWeight: '600'
                         }}>
                             Đã Thanh Toán
                         </Text>

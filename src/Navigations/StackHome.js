@@ -31,6 +31,7 @@ import PhieuXuatKho from '../Screens/NhapXuatKho/PhieuXuatKho';
 import PhieuDoiHang from '../Screens/NhapXuatKho/PhieuDoiHang';
 import PhieuCapDo from '../Screens/NhapXuatKho/PhieuCapDo';
 import PhieuThuDo from '../Screens/NhapXuatKho/PhieuThuHoiDo';
+import SuaThanhToan from '../Screens/SuaThanhToan';
 
 
 const Stack = createNativeStackNavigator();
@@ -220,6 +221,17 @@ function StackHomes() {
                     headerTintColor: '#fff',
                 }} />
                 <Stack.Screen name="Chỉ Số Cá Nhân" component={ChiSoCaNhan} options={{
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: '#789BF6',
+                        height: 150,
+                        // title: 'My home',
+                        borderBottomLeftRadius: 40,
+                        borderBottomRightRadius: 40
+                    },
+                    headerTintColor: '#fff',
+                }} />
+                <Stack.Screen name="Chi Tiết Đơn" component={SuaThanhToan} options={{
                     headerShown: true,
                     headerStyle: {
                         backgroundColor: '#789BF6',

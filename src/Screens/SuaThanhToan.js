@@ -1,20 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, TouchableOpacity, View, Image, ScrollView, TextInput, ActivityIndicator, Alert, RefreshControl } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Image, ScrollView, TextInput, ActivityIndicator, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function ThanhToan({ route, navigation }) {
+export default function SuaThanhToan({ route, navigation }) {
 
-    const { name, id } = route.params;
-
+    const { id, name } = route.params;
 
     const [cliedId, setCliedID] = useState(0);
     const [Apis, setApi] = useState([])
     const [sanphams, setSanPham] = useState([])
     const [taikhoan, setTaiKhoan] = useState([])
     const [isLoading, setIsLoading] = useState(true)
-
-
 
 
     const Arrays = [
@@ -43,90 +40,6 @@ export default function ThanhToan({ route, navigation }) {
             name: 'All'
         },
     ]
-
-    // const Products = [
-    //     {
-    //         id: 1,
-    //         name: 'Rau Dền',
-    //         price: 100,
-    //         properties: 'Rau',
-    //         img: 'https://media-cdn-v2.laodong.vn/storage/newsportal/2022/1/20/996975/Rau-Den.jpg?w=800&crop=auto&scale=both'
-
-    //     },
-    //     {
-    //         id: 2,
-    //         name: 'Rau Cải',
-    //         price: 100,
-    //         properties: 'Rau',
-    //         img: 'http://media.cooky.vn/images/blog-2016/6-loai-rau-khong-bao-gio-nen-luoc-0.jpg'
-
-    //     },
-    //     {
-    //         id: 3,
-    //         name: 'Rau muống',
-    //         price: 100,
-    //         properties: 'Rau',
-    //         img: 'https://hongngochospital.vn/wp-content/uploads/2013/11/rau-muong.jpg'
-
-    //     },
-    //     {
-    //         id: 4,
-    //         name: 'Thịt Lợn',
-    //         price: 100,
-    //         properties: 'Thịt',
-    //         img: 'https://icdn.dantri.com.vn/FaA3gEccccccccccccos/Image/2011/06/tht6811_a9082.jpg'
-
-    //     },
-    //     {
-    //         id: 5,
-    //         name: 'Thịt Gà',
-    //         price: 100,
-    //         properties: 'Thịt',
-    //         img: 'https://suckhoehangngay.mediacdn.vn/zoom/700_438/154880486097817600/2021/8/29/an-thit-ga-nhieu-co-tot-khong-2-16302301251131276160424-0-97-512-916-crop-16302301919781076935074.jpg'
-
-    //     },
-    //     {
-    //         id: 6,
-    //         name: 'Cá Mập',
-    //         price: 100,
-    //         properties: 'Cá',
-    //         img: 'https://cdnmedia.baotintuc.vn/Upload/ESSoZh9IeVhxwO8Bh87Q/files/2021/10/27/camap271021.jpg'
-
-    //     },
-    //     {
-    //         id: 7,
-    //         name: 'Khủng Long',
-    //         price: 100,
-    //         properties: 'Khủng Long',
-    //         img: 'http://icdn.dantri.com.vn/zoom/1200_630/2021/05/10/khung-long-crop-1620601045917.jpeg'
-
-    //     },
-    //     {
-    //         id: 8,
-    //         name: 'Voi',
-    //         price: 100,
-    //         properties: 'Voi',
-    //         img: 'https://hinhmoc.com/wp-content/uploads/2020/07/con-voi.jpg'
-
-    //     },
-    //     {
-    //         id: 9,
-    //         name: 'Thịt Bò',
-    //         price: 100,
-    //         properties: 'Thịt',
-    //         img: 'https://vinmec-prod.s3.amazonaws.com/images/20191112_133540_928947_thit-bo.max-1800x1800.png'
-
-    //     },
-    //     {
-    //         id: 10,
-    //         name: 'Thịt Hổ',
-    //         price: 100,
-    //         properties: 'Thịt',
-    //         img: 'https://image.thanhnien.vn/w1024/Uploaded/2022/jvunzvu/2022_07_08/ho-8347.jpg'
-
-    //     }
-    // ]
-
 
 
     const [xoa, setXoa] = useState();
@@ -213,7 +126,7 @@ export default function ThanhToan({ route, navigation }) {
 
     useEffect(() => {
         setApi(products)
-    }, [])
+    }, [taikhoan])
 
     function handerCong(id1) {
         // products.map(Product => {
@@ -265,7 +178,7 @@ export default function ThanhToan({ route, navigation }) {
 
 
     function handerDetele(id) {
-        console.log(id)
+
         fetch(URL_ON + '/api/orders/delete/' + id,
             {
                 method: 'POST',
@@ -327,11 +240,10 @@ export default function ThanhToan({ route, navigation }) {
 
     }
 
-
     function handerTTTienMat() {
         return Alert.alert(
             "Are your sure?",
-            "Đơn Này Đã Thanh Toán Bằng Tiền Mặt?",
+            "Bạn Muốn Sửa Thanh Toán Này?",
             [
 
                 // The "No" button
@@ -369,15 +281,7 @@ export default function ThanhToan({ route, navigation }) {
                                             {
                                                 text: "Yes",
                                                 onPress: () => {
-                                                    fetch(URL_ON + '/api/customer_re/delete/' + id,
-                                                        {
-                                                            method: 'POST',
-                                                            headers: { 'Content-Type': 'application/json' },
-                                                        }
-                                                    )
-                                                        .then(() => {
-                                                            navigation.navigate('Cart');
-                                                        })
+                                                    navigation.navigate('Lịch Sử Đơn Hàng');
                                                 },
                                             },
                                         ]
@@ -391,15 +295,16 @@ export default function ThanhToan({ route, navigation }) {
 
     }
 
-    const [refreshing, setRefreshing] = React.useState(false);
+    const [thanhtoans, setThanhToan] = useState([])
 
-    const onRefresh = React.useCallback(() => {
-        setRefreshing(true);
-        setTimeout(() => {
-            setRefreshing(false);
-        }, 1000);
-    }, []);
+    useEffect(() => {
+        fetch(URL_ON + '/api/thanhtoan/id/' + id)
+            .then(res => res.json())
+            .then(res => setThanhToan(res))
+            .catch(err => console.log(err))
+    }, [])
 
+    console.log(thanhtoans)
 
     return (
         <View style={{
@@ -417,7 +322,7 @@ export default function ThanhToan({ route, navigation }) {
                     zIndex: 1
                 }}>
                     <TouchableOpacity style={{
-                        width: '33%',
+                        width: '50%',
                         alignItems: 'center',
                         borderColor: 'black',
                         borderWidth: 0.3,
@@ -426,22 +331,11 @@ export default function ThanhToan({ route, navigation }) {
                         onPress={() => handerTTTienMat()}
                     >
                         <Text>
-                            Tiền Mặt
+                            Sửa Thanh Toán
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={{
-                        width: '33%',
-                        alignItems: 'center',
-                        borderColor: 'black',
-                        borderWidth: 0.3,
-                        paddingVertical: 15
-                    }}>
-                        <Text>
-                            Chuyển Khoản
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={{
-                        width: '33%',
+                        width: '50%',
                         alignItems: 'center',
                         borderColor: 'black',
                         borderWidth: 0.3,
@@ -455,14 +349,7 @@ export default function ThanhToan({ route, navigation }) {
             </View>
 
 
-            <ScrollView refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} style={{
-                    tintColor: 'black',
-                    backgroundColor: '#eeeeee',
-                    size: 10,
-                    marginBottom: 0,
-                }} />
-            }>
+            <ScrollView >
                 <ScrollView horizontal>
                     <View style={{
                         flexDirection: 'row',
@@ -724,6 +611,7 @@ export default function ThanhToan({ route, navigation }) {
                     marginBottom: 100
                 }
                 }>
+
                     <View style={{
                         borderColor: 'black',
                         borderWidth: 1,
@@ -739,6 +627,60 @@ export default function ThanhToan({ route, navigation }) {
                                 flexDirection: 'row',
                                 lineHeight: 23,
                             }}>
+                                <View>
+                                    <Text style={{
+                                        width: 210,
+                                        lineHeight: 23,
+                                        fontSize: 20
+                                    }}>
+                                        Người Phụ Trách:
+                                    </Text>
+                                </View>
+                                <View>
+                                    {thanhtoans.map(thanhtoan => (
+                                        <View key={thanhtoan.id}>
+                                            <Text style={{
+                                                lineHeight: 23,
+                                                fontSize: 20
+                                            }}>
+                                                {thanhtoan.NguoiLam}
+                                            </Text>
+                                        </View>
+                                    ))}
+                                </View>
+                            </View>
+                            <View style={{
+                                flexDirection: 'row',
+                                lineHeight: 23,
+                            }}>
+                                <View>
+                                    <Text style={{
+                                        width: 210,
+                                        lineHeight: 23,
+                                        fontSize: 20
+                                    }}>
+                                        Tên Khách Hàng:
+                                    </Text>
+                                </View>
+                                <View>
+                                    {thanhtoans.map(thanhtoan => (
+                                        <View key={thanhtoan.id}>
+                                            <Text style={{
+                                                lineHeight: 23,
+                                                fontSize: 20
+                                            }}>
+                                                {thanhtoan.KhachHang}
+                                            </Text>
+                                        </View>
+                                    ))}
+                                </View>
+                            </View>
+                            <View style={{
+                                flexDirection: 'row',
+                                lineHeight: 23,
+                            }}>
+
+
                                 <Text style={{
                                     width: 210,
                                     lineHeight: 23,

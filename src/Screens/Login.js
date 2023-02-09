@@ -41,6 +41,7 @@ export default function Login({ navigation }) {
             .then(res => setLogin(res))
     }, [])
 
+    console.log(logins)
 
     function handerSubmit() {
         const user = logins.find(user => user.email === taikhoan)

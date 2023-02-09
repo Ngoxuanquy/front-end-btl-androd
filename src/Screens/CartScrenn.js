@@ -57,7 +57,6 @@ export default function Cart({ navigation }) {
             })
     }, [taikhoan])
 
-    console.log('a12')
 
     useEffect(() => {
         fetch(URL_ON + '/api/customer_re/' + taikhoan)
@@ -213,7 +212,9 @@ export default function Cart({ navigation }) {
     }, []);
 
     return (
-        <View >
+        <View style={{
+            flex: 1
+        }} >
             <ScrollView
                 contentContainerStyle={{
                     color: 'black'
