@@ -13,7 +13,7 @@ const Stack = createNativeStackNavigator();
 
 function Stacks() {
 
-    const URL_ON = 'http://192.168.0.105:4000'
+    const URL_ON = 'http://192.168.0.106:4000'
     const URL1_ON = 'http://192.168.0.105:5000'
 
     const URL_CT = 'http://192.168.1.112:4000'

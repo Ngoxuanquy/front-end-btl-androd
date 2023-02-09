@@ -33,7 +33,7 @@ const HanderCart = () => {
 export default function Tag({ navigation }) {
 
     const [customer, setCustomer] = useState([]);
-    const URL_ON = 'http://192.168.0.114:4000'
+    const URL_ON = 'http://192.168.0.106:4000'
     const URL1_ON = 'http://192.168.0.114:5000'
 
     const URL_CT = 'http://192.168.1.121:4000'

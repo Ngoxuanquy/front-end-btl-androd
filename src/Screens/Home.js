@@ -18,7 +18,7 @@ import UpAnh from '../Components/UpAnh';
 // import Buttons from './Button'
 export default function HomeScrenn({ navigation }) {
 
-    const URL_ON = 'http://192.168.0.114:4000'
+    const URL_ON = 'http://192.168.0.106:4000'
     const URL1_ON = 'http://192.168.0.114:5000'
 
     const URL_CT = 'http://192.168.1.121:4000'

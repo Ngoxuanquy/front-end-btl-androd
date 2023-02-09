@@ -8,7 +8,7 @@ export default function LichSuDonHang({ navigation }) {
     const [lichSuDTT, setLichSuDTT] = useState([]);
 
 
-    const URL_ON = 'http://192.168.0.114:4000'
+    const URL_ON = 'http://192.168.0.106:4000'
     const URL1_ON = 'http://192.168.0.114:5000'
 
     const URL_CT = 'http://192.168.1.121:4000'
@@ -66,6 +66,11 @@ export default function LichSuDonHang({ navigation }) {
 
     function handerChiTiec(id, name) {
         navigation.replace('Chi Tiết Đơn', { id: id, name: name });
+    }
+
+    function handerChiTietDaTT(id, name) {
+        navigation.replace('Chi Tiết Đơn', { id: id, name: name });
+
     }
 
     return (
@@ -328,13 +333,17 @@ export default function LichSuDonHang({ navigation }) {
                                     }}>
                                         {lichSu.TrangThai}
                                     </Text>
-                                    <Text style={{
-                                        fontSize: 16,
-                                        textDecorationLine: 'underline'
+                                    <TouchableOpacity
+                                        onPress={() => handerChiTietDaTT(lichSu.id, lichSu.KhachHang)}
+                                    >
+                                        <Text style={{
+                                            fontSize: 16,
+                                            textDecorationLine: 'underline'
 
-                                    }}>
-                                        Xem Chi Tiết
-                                    </Text>
+                                        }}>
+                                            Xem Chi Tiết
+                                        </Text>
+                                    </TouchableOpacity>
                                 </View>
                             </View>
                         </View>

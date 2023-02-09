@@ -134,7 +134,7 @@ export default function ThanhToan({ route, navigation }) {
     const [orders, setOrder] = useState([]);
     const [customer_name, setCustomer_name] = useState([]);
 
-    const URL_ON = 'http://192.168.0.114:4000'
+    const URL_ON = 'http://192.168.0.106:4000'
     const URL1_ON = 'http://192.168.0.114:5000'
 
     const URL_CT = 'http://192.168.1.121:4000'
@@ -376,7 +376,7 @@ export default function ThanhToan({ route, navigation }) {
                                                         }
                                                     )
                                                         .then(() => {
-                                                            navigation.navigate('Cart');
+                                                            navigation.replace('Cart');
                                                         })
                                                 },
                                             },

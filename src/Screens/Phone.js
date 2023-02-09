@@ -25,7 +25,7 @@ import { useEffect } from 'react';
 const Phone = ({ navigation }) => {
     const [inputValue, setInputValue] = useState('0589401978');
 
-    const URL_ON = 'http://192.168.0.114:4000'
+    const URL_ON = 'http://192.168.0.106:4000'
     const URL1_ON = 'http://192.168.0.114:5000'
 
     const URL_CT = 'http://192.168.1.121:4000'

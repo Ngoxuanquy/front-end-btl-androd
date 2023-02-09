@@ -23,7 +23,7 @@ export default function Cart({ navigation }) {
     const [orders, setOrders] = useState([])
     const [reset, setReset] = useState(false);
 
-    const URL_ON = 'http://192.168.0.114:4000'
+    const URL_ON = 'http://192.168.0.106:4000'
     const URL1_ON = 'http://192.168.0.114:5000'
 
     const URL_CT = 'http://192.168.1.121:4000'
@@ -563,7 +563,8 @@ export default function Cart({ navigation }) {
                 }}>
                     <Text style={{
                         fontSize: 22,
-                        fontWeight: 'bold'
+                        fontWeight: 'bold',
+                        color: 'green'
                     }}>
                         Đơn Đang Thực Hiện
                     </Text>
@@ -595,7 +596,9 @@ export default function Cart({ navigation }) {
                             <Text style={{
                                 fontSize: 18,
                                 color: 'gray',
-                                padding: 10
+                                padding: 10,
+                                color: 'green',
+                                opacity: 0.6
                             }}>
                                 Đơn Đang Thực Hiện
                             </Text>

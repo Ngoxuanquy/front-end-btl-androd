@@ -10,8 +10,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Login({ navigation }) {
 
-    const URL_ON = 'http://192.168.0.114:4000'
-    const URL1_ON = 'http://192.168.0.114:5000'
+    const URL_ON = 'http://192.168.0.106:4000'
+    const URL1_ON = 'http://192.168.0.106:5000'
 
     const URL_CT = 'http://192.168.1.121:4000'
     const URL1_CT = 'http://192.168.1.121:5000'
@@ -41,7 +41,6 @@ export default function Login({ navigation }) {
             .then(res => setLogin(res))
     }, [])
 
-    console.log(logins)
 
     function handerSubmit() {
         const user = logins.find(user => user.email === taikhoan)

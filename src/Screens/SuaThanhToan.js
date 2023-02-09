@@ -47,7 +47,7 @@ export default function SuaThanhToan({ route, navigation }) {
     const [orders, setOrder] = useState([]);
     const [customer_name, setCustomer_name] = useState([]);
 
-    const URL_ON = 'http://192.168.0.114:4000'
+    const URL_ON = 'http://192.168.0.106:4000'
     const URL1_ON = 'http://192.168.0.114:5000'
 
     const URL_CT = 'http://192.168.1.121:4000'
@@ -136,38 +136,32 @@ export default function SuaThanhToan({ route, navigation }) {
         // })
         products.map(Product => {
             if (Product.id == id1) {
-                customer.map(custome => {
-                    if (custome.id == id) {
 
-                        fetch(URL_ON + '/api/orders/create/', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                id: id,
-                                name: custome.name,
-                                taikhoan: taikhoan,
-                                date: new Date(),
-                                number: custome.Number,
-                                address: custome.Address,
-                                img: Product.img,
-                                price: Product.price,
-                                tenhang: Product.name,
-                                idDonHang: id1
-                            })
-                        })
-                            .then(() => {
-                                fetch(URL_ON + '/api/orders/' + name)
-                                    .then(res => res.json())
-                                    .then(res => setOrder(res))
-                                    .catch(err => console.log(err))
-                                    .finally(() => {
-                                    })
-                            })
-                            .then(() => {
-
-                            })
-                    }
+                fetch(URL_ON + '/api/orders/create/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id: id,
+                        name: name,
+                        taikhoan: taikhoan,
+                        date: new Date(),
+                        img: Product.img,
+                        price: Product.price,
+                        tenhang: Product.name,
+                        idDonHang: id1
+                    })
                 })
+                    .then(() => {
+                        fetch(URL_ON + '/api/orders/' + name)
+                            .then(res => res.json())
+                            .then(res => setOrder(res))
+                            .catch(err => console.log(err))
+                            .finally(() => {
+                            })
+                    })
+                    .then(() => {
+
+                    })
             }
         })
     }
