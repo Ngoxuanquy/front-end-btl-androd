@@ -85,7 +85,7 @@ const Phone = ({ navigation }) => {
             refreshControl={
                 <RefreshControl refreshing={refreshing} onRefresh={onRefresh} style={{
                     tintColor: 'black',
-                    backgroundColor: '#33CCFF',
+                    backgroundColor: '#0066FF',
                     size: 10,
                     marginBottom: 0,
                 }} />
@@ -94,11 +94,11 @@ const Phone = ({ navigation }) => {
             <View style={styles.container}>
                 <View style={{
                     height: 100,
-                    backgroundColor: '#33CCFF',
+                    backgroundColor: '#0066FF',
                     justifyContent: 'center',
                     marginBottom: 10,
-                    borderBottomRightRadius: 50,
-                    borderBottomLeftRadius: 50
+                    borderBottomRightRadius: 10,
+                    borderBottomLeftRadius: 10
                 }}>
                     <Text style={{
                         fontSize: 30,

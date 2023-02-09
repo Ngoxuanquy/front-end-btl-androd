@@ -802,17 +802,36 @@ export default function HomeScrenn({ navigation }) {
                             marginBottom: 10,
                             justifyContent: 'space-between',
                         }}>
-                            <Image
-                                style={{
-                                    width: 100,
-                                    height: 120,
-                                    borderRadius: 10,
-                                    marginLeft: -15
-                                }}
-                                source={{
-                                    uri: 'https://thuthuatphanmem.vn/uploads/2018/09/11/hinh-anh-dep-6_044127357.jpg'
-                                }}
-                            />
+                            {thongtin.map(thong => (
+                                <TouchableOpacity
+                                    key={thong.id}
+                                    onPress={() => handerUpAnh()}
+                                >
+                                    {thong.img == "" ?
+                                        <Image
+                                            style={{
+                                                width: 100,
+                                                height: 120,
+                                                borderRadius: 10,
+                                            }}
+                                            source={{
+                                                uri: "https://haycafe.vn/wp-content/uploads/2022/02/Avatar-trang.jpg"
+                                            }}
+                                        /> :
+                                        <Image
+                                            style={{
+                                                width: 100,
+                                                height: 120,
+                                                borderRadius: 10,
+                                            }}
+                                            source={{
+                                                uri: thong.img
+                                            }}
+                                        />
+                                    }
+
+                                </TouchableOpacity>
+                            ))}
                             <View style={{
                                 paddingHorizontal: 10,
                                 marginTop: 7

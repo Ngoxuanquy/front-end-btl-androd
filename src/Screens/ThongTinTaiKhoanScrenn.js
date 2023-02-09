@@ -1,11 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, Image, Button } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, Button, ScrollView, RefreshControl } from 'react-native';
 import { Zocial } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import UpAnh from '../Components/UpAnh';
 import React, { useEffect, useState } from 'react';
 import * as ImagePicker from 'expo-image-picker'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function ThongTinTaiKhoan() {
@@ -13,6 +14,17 @@ export default function ThongTinTaiKhoan() {
     const [isload, setIsLoad] = useState(false)
     const [image, setImage] = useState(null)
     const [isUpAnh, setUpAnh] = useState(false)
+    const [taikhoan, setTaiKhoan] = useState([])
+    const [thongtin, setThongTin] = useState([])
+
+    const URL_ON = 'http://192.168.0.106:4000'
+    const URL1_ON = 'http://192.168.0.114:5000'
+
+    const URL_CT = 'http://192.168.1.121:4000'
+    const URL1_CT = 'http://192.168.1.121:5000'
+
+    const URL_FPT = 'http://192.168.0.145:4000'
+    const URL1_FPT = 'http://192.168.0.145:5000'
 
     const pickImage = async () => {
         // setIsLoad(true)
@@ -37,8 +49,34 @@ export default function ThongTinTaiKhoan() {
         setIsLoad(false)
     }
 
+    AsyncStorage.getItem('taikhoan')
+        .then(res =>
+            setTaiKhoan(res)
+        )
+
+    useEffect(() => {
+        fetch(URL_ON + '/api/users/' + taikhoan)
+            .then(res => res.json())
+            .then(res => setThongTin(res))
+    }, [taikhoan])
+
+
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => {
+            fetch(URL_ON + '/api/users/' + taikhoan)
+                .then(res => res.json())
+                .then(res => setThongTin(res))
+            setRefreshing(false);
+        }, 1000);
+    }, []);
+
     return (
-        <View >
+        <View
+
+        >
             <View>
                 <View>
                     <View style={{
@@ -70,117 +108,147 @@ export default function ThongTinTaiKhoan() {
                         </View>
                     </View>
                 </View>
-                <View style={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginTop: 30
-                }}>
-                    <Image
-                        style={{
-                            width: 200,
-                            height: 200,
-                            borderRadius: 20
-                        }}
-                        source={
-                            {
-                                uri: 'https://image-us.24h.com.vn/upload/4-2019/images/2019-12-17/1576580871-929bdf4f16b86295376a79e7a8a0b7fe.jpg'
-                            }
-                        }
-                    />
-
-                    <View>
-                        <Text style={{
-                            fontSize: 22,
-                            fontWeight: 'bold',
-                            textAlign: 'center',
-                            marginTop: 10
-                        }}>
-                            Ngô Xuân Quy
-                        </Text>
-                        <Text style={{
-                            fontSize: 18,
-                            textAlign: 'center',
-                            opacity: 0.6,
-                            lineHeight: 70
-                        }}>
-                            Số Điện Thoại: 0589401978
-                        </Text>
-                        <Text style={{
-                            fontSize: 18,
-                            textAlign: 'center',
-                            opacity: 0.6,
-                        }} >
-                            Địa Chỉ: Cửa Lò, Nghệ An
-                        </Text>
-                    </View>
-
-                    {isload &&
-                        <View style={{
-                            backgroundColor: 'white',
-                            position: 'absolute',
-                            width: '100%',
-                            bottom: 0,
-                            zIndex: 1
-                        }}>
-                            <View style={{
-                                alignItems: 'center', justifyContent: 'center',
-                                backgroundColor: 'white',
-                                paddingVertical: 2,
-                                marginTop: 3
-                            }}>
-                                <Button title="Thay Ảnh" onPress={pickImage} style={{
-                                }} />
-                            </View>
-                            <View style={{
-                                alignItems: 'center', justifyContent: 'center',
-                                backgroundColor: 'white',
-                                paddingVertical: 2,
-                                marginTop: 3,
-                                borderTopWidth: 0.5
-                            }}>
-                                {image && <Image source={{ uri: image }} style={{ width: 100, height: 100 }} />}
-                                <Button title="Xác Nhận" onPress={() => handerXacNhan()} style={{
-
-                                }} />
-                            </View>
-                            <View style={{
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                borderTopColor: 'gray',
-                                borderTopWidth: 0.5
-                            }}>
-                                <TouchableOpacity>
-                                    <Text style={{
-                                        fontSize: 20,
-                                        marginBottom: 7,
-                                        paddingVertical: 5
-                                    }}
-                                        onPress={() => handerCance()}
-                                    >
-                                        Cance
-                                    </Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
+                <ScrollView
+                    refreshControl={
+                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} style={{
+                            tintColor: 'black',
+                            backgroundColor: '#eeeeee',
+                            size: 10,
+                            marginBottom: 0,
+                        }} />
                     }
-
-                    <TouchableOpacity style={{
+                >
+                    <View style={{
                         justifyContent: 'center',
-                        alignItems: 'center'
-                    }}
-                        onPress={() => { setIsLoad(true) }}
-                    >
+                        alignItems: 'center',
+                        marginTop: 30
+                    }}>
 
-                        <AntDesign name="mail" size={124} color="black" />
-                        <Text style={{
-                            fontSize: 18,
-                            textAlign: 'center'
-                        }}>
-                            (Tệp Đính Kèm)
-                        </Text>
-                    </TouchableOpacity>
+                        {thongtin.map(thong => (
+                            <TouchableOpacity
+                                key={thong.id}
+                                onPress={() => handerUpAnh()}
+                            >
+                                {thong.img == "" ?
+                                    <Image
+                                        style={{
+                                            width: 200,
+                                            height: 200,
+                                            borderRadius: 10,
+                                        }}
+                                        source={{
+                                            uri: "https://haycafe.vn/wp-content/uploads/2022/02/Avatar-trang.jpg"
+                                        }}
+                                    /> :
+                                    <Image
+                                        style={{
+                                            width: 200,
+                                            height: 200,
+                                            borderRadius: 10,
+                                        }}
+                                        source={{
+                                            uri: thong.img
+                                        }}
+                                    />
+                                }
 
-                </View>
+                            </TouchableOpacity>
+                        ))}
+
+                        <View>
+                            <Text style={{
+                                fontSize: 22,
+                                fontWeight: 'bold',
+                                textAlign: 'center',
+                                marginTop: 10
+                            }}>
+                                Ngô Xuân Quy
+                            </Text>
+                            <Text style={{
+                                fontSize: 18,
+                                textAlign: 'center',
+                                opacity: 0.6,
+                                lineHeight: 70
+                            }}>
+                                Số Điện Thoại: 0589401978
+                            </Text>
+                            <Text style={{
+                                fontSize: 18,
+                                textAlign: 'center',
+                                opacity: 0.6,
+                            }} >
+                                Địa Chỉ: Cửa Lò, Nghệ An
+                            </Text>
+                        </View>
+
+                        {isload &&
+                            <View style={{
+                                backgroundColor: 'white',
+                                position: 'absolute',
+                                width: '100%',
+                                bottom: 0,
+                                zIndex: 1
+                            }}>
+                                <View style={{
+                                    alignItems: 'center', justifyContent: 'center',
+                                    backgroundColor: 'white',
+                                    paddingVertical: 2,
+                                    marginTop: 3
+                                }}>
+                                    <Button title="Thay Ảnh" onPress={pickImage} style={{
+                                    }} />
+                                </View>
+                                <View style={{
+                                    alignItems: 'center', justifyContent: 'center',
+                                    backgroundColor: 'white',
+                                    paddingVertical: 2,
+                                    marginTop: 3,
+                                    borderTopWidth: 0.5
+                                }}>
+                                    {image && <Image source={{ uri: image }} style={{ width: 100, height: 100 }} />}
+                                    <Button title="Xác Nhận" onPress={() => handerXacNhan()} style={{
+
+                                    }} />
+                                </View>
+                                <View style={{
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    borderTopColor: 'gray',
+                                    borderTopWidth: 0.5
+                                }}>
+                                    <TouchableOpacity>
+                                        <Text style={{
+                                            fontSize: 20,
+                                            marginBottom: 7,
+                                            paddingVertical: 5
+                                        }}
+                                            onPress={() => handerCance()}
+                                        >
+                                            Cance
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        }
+
+                        <TouchableOpacity style={{
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}
+                            onPress={() => { setIsLoad(true) }}
+                        >
+
+                            <AntDesign name="mail" size={124} color="black" />
+                            <Text style={{
+                                fontSize: 18,
+                                textAlign: 'center'
+                            }}>
+                                (Tệp Đính Kèm)
+                            </Text>
+                        </TouchableOpacity>
+
+                    </View>
+                </ScrollView>
             </View>
         </View>
     );
