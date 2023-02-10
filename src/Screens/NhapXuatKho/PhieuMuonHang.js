@@ -20,6 +20,14 @@ export default function PhieuMuonHang({ navigation }) {
         { label: 'Banana', value: 'banana' }
     ]);
 
+    const [sanPhams, setSanPham] = useState([]);
+
+    useEffect(() => {
+        setSanPham([...sanPhams, value1])
+    }, [value1])
+
+    console.log(sanPhams)
+
     return (
         <View style={styles.container}>
             <View>
@@ -90,200 +98,232 @@ export default function PhieuMuonHang({ navigation }) {
                             />
                         </View>
                     </View>
-
-                    <View style={{
-                        zIndex: -2
+                    <ScrollView style={{
+                        marginBottom: 300
                     }}>
-                        <View>
-                            <Text style={{
-                                fontSize: 22,
-                                padding: 10
-                            }}>
-                                Sản Phẩm Đã Chọn
-                            </Text>
-                        </View>
+
                         <View style={{
-                            justifyContent: 'center',
-                            alignItems: 'center'
+                            zIndex: -2,
                         }}>
-                            <TouchableOpacity style={{
-                                backgroundColor: '#dddddd',
-                                width: '90%',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                borderRadius: 7,
-                            }}>
-                                <View style={{
-                                    marginVertical: 10,
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-around'
+                            <View>
+                                <Text style={{
+                                    fontSize: 22,
+                                    padding: 10
                                 }}>
-                                    <View style={{
-                                        marginLeft: -50,
-                                        justifyContent: 'center',
-                                        alignItems: 'center'
-                                    }}>
-                                        <Text style={{
-                                            textAlign: 'center'
-                                        }}>
-                                            {value1}
-                                        </Text>
-                                    </View>
-                                    <View style={{
-                                        marginRight: 40
-                                    }}>
-
-                                    </View>
-                                    <View style={{
-                                        flexDirection: 'row',
-                                    }}>
-                                        <TouchableOpacity style={{
-                                            width: 35, height: 35,
-                                            borderColor: 'black',
-                                            borderWidth: 1,
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            backgroundColor: 'white'
-                                        }}
-                                        >
-                                            <Text>-</Text>
-                                        </TouchableOpacity>
-                                        <TextInput style={{
-                                            width: 50,
-                                            height: 35,
-                                            borderColor: 'black',
-                                            borderWidth: 1,
-                                            alignItems: 'center',
-                                            textAlign: 'center',
-                                            backgroundColor: 'white'
-
-                                        }}
-
-                                        >1</TextInput>
-                                        <TouchableOpacity style={{
-                                            width: 35, height: 35,
-                                            borderColor: 'black',
-                                            borderWidth: 1,
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            backgroundColor: 'white'
-                                        }}
-                                        >
-                                            <Text>+</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-
-                    <View style={{
-                        padding: 10
-                    }}>
-                        <TouchableOpacity style={{
-                            backgroundColor: 'green',
-                            opacity: 0.6,
-                            width: 80,
-                        }}>
-                            <Text style={{
-                                fontSize: 22,
-                                color: 'white',
-                                textAlign: 'center',
-                                paddingVertical: 7
+                                    Sản Phẩm Đã Chọn
+                                </Text>
+                            </View>
+                            <View style={{
+                                justifyContent: 'center',
+                                alignItems: 'center'
                             }}>
-                                Lưu
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
+                                <TouchableOpacity style={{
+                                    backgroundColor: '#dddddd',
+                                    width: '90%',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    borderRadius: 7,
+                                }}>
+                                    {sanPhams.map((sanPham, index) => (
 
-                    <View>
+                                        <View
+                                            key={index}
+
+                                            style={{
+                                                marginVertical: 10,
+                                                flexDirection: 'row',
+                                                justifyContent: 'space-around',
+                                                marginLeft: 20
+                                            }}>
+                                            <View style={{
+                                                marginLeft: -50,
+                                                justifyContent: 'center',
+                                                alignItems: 'center'
+                                            }}>
+                                                <Text
+                                                    style={{
+                                                        textAlign: 'center',
+                                                        width: 60
+                                                    }}>
+                                                    {sanPham}
+                                                </Text>
+                                            </View>
+                                            <View style={{
+                                                marginRight: 40
+                                            }}>
+
+                                            </View>
+                                            <View style={{
+                                                flexDirection: 'row',
+                                            }}>
+                                                <TouchableOpacity style={{
+                                                    width: 35, height: 35,
+                                                    borderColor: 'black',
+                                                    borderWidth: 1,
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    backgroundColor: 'white'
+                                                }}
+                                                >
+                                                    <Text>-</Text>
+                                                </TouchableOpacity>
+                                                <TextInput style={{
+                                                    width: 50,
+                                                    height: 35,
+                                                    borderColor: 'black',
+                                                    borderWidth: 1,
+                                                    alignItems: 'center',
+                                                    textAlign: 'center',
+                                                    backgroundColor: 'white'
+
+                                                }}
+
+                                                >1</TextInput>
+                                                <TouchableOpacity style={{
+                                                    width: 35, height: 35,
+                                                    borderColor: 'black',
+                                                    borderWidth: 1,
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    backgroundColor: 'white',
+                                                    marginRight: 20
+                                                }}
+                                                >
+                                                    <Text>+</Text>
+                                                </TouchableOpacity>
+
+                                                <TouchableOpacity style={{
+                                                    width: 40,
+                                                    height: 35,
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                    borderColor: 'black',
+                                                    borderWidth: 0.4,
+
+                                                }}>
+                                                    <Text style={{
+                                                        textAlign: 'center'
+                                                    }}>
+                                                        Xóa
+                                                    </Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                        </View>
+                                    ))}
+
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+
                         <View style={{
                             padding: 10
                         }}>
-                            <Text style={{
-                                fontSize: 24,
-                                lineHeight: 30
+                            <TouchableOpacity style={{
+                                backgroundColor: 'green',
+                                opacity: 0.6,
+                                width: 80,
                             }}>
-                                NVKT khác yêu cầu mượn:
-
-                            </Text>
-
-                            <View>
                                 <Text style={{
-                                    fontSize: 18,
+                                    fontSize: 22,
+                                    color: 'white',
+                                    textAlign: 'center',
+                                    paddingVertical: 7
+                                }}>
+                                    Lưu
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+
+                        <View>
+                            <View style={{
+                                padding: 10
+                            }}>
+                                <Text style={{
+                                    fontSize: 24,
                                     lineHeight: 30
                                 }}>
-                                    Ngô Xuân Quy mượn vòi bạc
-                                </Text>
-                                <TouchableOpacity style={{
-                                    backgroundColor: 'green',
-                                    opacity: 0.6,
-                                    width: 120,
-                                    borderRadius: 8,
-                                    marginLeft: 100
-                                }}>
-                                    <Text style={{
-                                        fontSize: 20,
-                                        color: 'white',
-                                        paddingVertical: 7,
-                                        textAlign: 'center',
-                                    }}>
-                                        Xác Nhận
-                                    </Text>
-                                </TouchableOpacity>
-                            </View>
+                                    NVKT khác yêu cầu mượn:
 
-                            <View>
-                                <Text style={{
-                                    fontSize: 18,
-                                    lineHeight: 30
-                                }}>
-                                    Ngô Xuân Quy mượn vòi bạc
                                 </Text>
-                                <TouchableOpacity style={{
-                                    backgroundColor: 'green',
-                                    opacity: 0.6,
-                                    width: 120,
-                                    borderRadius: 8,
-                                    marginLeft: 100
-                                }}>
-                                    <Text style={{
-                                        fontSize: 20,
-                                        color: 'white',
-                                        paddingVertical: 7,
-                                        textAlign: 'center',
-                                    }}>
-                                        Xác Nhận
-                                    </Text>
-                                </TouchableOpacity>
-                            </View>
 
-                            <View>
-                                <Text style={{
-                                    fontSize: 18,
-                                    lineHeight: 30
-                                }}>
-                                    Ngô Xuân Quy mượn vòi bạc
-                                </Text>
-                                <TouchableOpacity style={{
-                                    backgroundColor: 'green',
-                                    opacity: 0.6,
-                                    width: 120,
-                                    borderRadius: 8,
-                                    marginLeft: 100
-                                }}>
+                                <View>
                                     <Text style={{
-                                        fontSize: 20,
-                                        color: 'white',
-                                        paddingVertical: 7,
-                                        textAlign: 'center',
+                                        fontSize: 18,
+                                        lineHeight: 30
                                     }}>
-                                        Xác Nhận
+                                        Ngô Xuân Quy mượn vòi bạc
                                     </Text>
-                                </TouchableOpacity>
+                                    <TouchableOpacity style={{
+                                        backgroundColor: 'green',
+                                        opacity: 0.6,
+                                        width: 120,
+                                        borderRadius: 8,
+                                        marginLeft: 100
+                                    }}>
+                                        <Text style={{
+                                            fontSize: 20,
+                                            color: 'white',
+                                            paddingVertical: 7,
+                                            textAlign: 'center',
+                                        }}>
+                                            Xác Nhận
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
+
+                                <View>
+                                    <Text style={{
+                                        fontSize: 18,
+                                        lineHeight: 30
+                                    }}>
+                                        Ngô Xuân Quy mượn vòi bạc
+                                    </Text>
+                                    <TouchableOpacity style={{
+                                        backgroundColor: 'green',
+                                        opacity: 0.6,
+                                        width: 120,
+                                        borderRadius: 8,
+                                        marginLeft: 100
+                                    }}>
+                                        <Text style={{
+                                            fontSize: 20,
+                                            color: 'white',
+                                            paddingVertical: 7,
+                                            textAlign: 'center',
+                                        }}>
+                                            Xác Nhận
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
+
+                                <View>
+                                    <Text style={{
+                                        fontSize: 18,
+                                        lineHeight: 30
+                                    }}>
+                                        Ngô Xuân Quy mượn vòi bạc
+                                    </Text>
+                                    <TouchableOpacity style={{
+                                        backgroundColor: 'green',
+                                        opacity: 0.6,
+                                        width: 120,
+                                        borderRadius: 8,
+                                        marginLeft: 100
+                                    }}>
+                                        <Text style={{
+                                            fontSize: 20,
+                                            color: 'white',
+                                            paddingVertical: 7,
+                                            textAlign: 'center',
+                                        }}>
+                                            Xác Nhận
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
                         </View>
-                    </View>
+                    </ScrollView>
+
 
                 </View>
             </View>

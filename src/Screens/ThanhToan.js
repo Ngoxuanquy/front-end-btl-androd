@@ -156,7 +156,7 @@ export default function ThanhToan({ route, navigation }) {
     }
 
     useEffect(() => {
-        fetch(URL_ON + '/api/products/')
+        fetch(URL_FPT + '/api/products/')
             .then(res => res.json())
             .then(res => setProducts(res))
             .catch(err => console.log(err))
@@ -188,7 +188,7 @@ export default function ThanhToan({ route, navigation }) {
 
 
     useEffect(() => {
-        fetch(URL_ON + '/api/customer_re/')
+        fetch(URL_FPT + '/api/customer_re/')
             .then(res => res.json())
             .then(res => setCustomer(res))
             .catch(err => console.log(err))
@@ -201,7 +201,7 @@ export default function ThanhToan({ route, navigation }) {
     }, [])
 
     useEffect(() => {
-        fetch(URL_ON + '/api/orders/' + name)
+        fetch(URL_FPT + '/api/orders/' + name)
             .then(res => res.json())
             .then(res => setOrder(res))
             .catch(err => console.log(err))
@@ -226,7 +226,7 @@ export default function ThanhToan({ route, navigation }) {
                 customer.map(custome => {
                     if (custome.id == id) {
 
-                        fetch(URL_ON + '/api/orders/create/', {
+                        fetch(URL_FPT + '/api/orders/create/', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
@@ -243,7 +243,7 @@ export default function ThanhToan({ route, navigation }) {
                             })
                         })
                             .then(() => {
-                                fetch(URL_ON + '/api/orders/' + name)
+                                fetch(URL_FPT + '/api/orders/' + name)
                                     .then(res => res.json())
                                     .then(res => setOrder(res))
                                     .catch(err => console.log(err))
@@ -266,14 +266,14 @@ export default function ThanhToan({ route, navigation }) {
 
     function handerDetele(id) {
         console.log(id)
-        fetch(URL_ON + '/api/orders/delete/' + id,
+        fetch(URL_FPT + '/api/orders/delete/' + id,
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
             }
         )
             .then(() => {
-                fetch(URL_ON + '/api/orders/' + name)
+                fetch(URL_FPT + '/api/orders/' + name)
                     .then(res => res.json())
                     .then(res => setOrder(res))
                     .catch(err => console.log(err))
@@ -290,7 +290,7 @@ export default function ThanhToan({ route, navigation }) {
     })
 
     function handerSoLuong(id, soluong) {
-        fetch(URL_ON + '/api/orders/update/soluong/' + id, {
+        fetch(URL_FPT + '/api/orders/update/soluong/' + id, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -298,7 +298,7 @@ export default function ThanhToan({ route, navigation }) {
             })
         })
             .then(() => {
-                fetch(URL_ON + '/api/orders/' + name)
+                fetch(URL_FPT + '/api/orders/' + name)
                     .then(res => res.json())
                     .then(res => setOrder(res))
                     .catch(err => console.log(err))
@@ -311,7 +311,7 @@ export default function ThanhToan({ route, navigation }) {
             return;
         }
 
-        fetch(URL_ON + '/api/orders/update/soluong/' + id, {
+        fetch(URL_FPT + '/api/orders/update/soluong/' + id, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -319,7 +319,7 @@ export default function ThanhToan({ route, navigation }) {
             })
         })
             .then(() => {
-                fetch(URL_ON + '/api/orders/' + name)
+                fetch(URL_FPT + '/api/orders/' + name)
                     .then(res => res.json())
                     .then(res => setOrder(res))
                     .catch(err => console.log(err))
@@ -345,7 +345,7 @@ export default function ThanhToan({ route, navigation }) {
                     text: "Yes",
                     onPress: () => {
                         orders.map(order => {
-                            fetch(URL_ON + '/api/thanhtoan/update/' + id, {
+                            fetch(URL_FPT + '/api/thanhtoan/update/' + id, {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({
@@ -369,7 +369,7 @@ export default function ThanhToan({ route, navigation }) {
                                             {
                                                 text: "Yes",
                                                 onPress: () => {
-                                                    fetch(URL_ON + '/api/customer_re/delete/' + id,
+                                                    fetch(URL_FPT + '/api/customer_re/delete/' + id,
                                                         {
                                                             method: 'POST',
                                                             headers: { 'Content-Type': 'application/json' },
@@ -634,16 +634,23 @@ export default function ThanhToan({ route, navigation }) {
                                                     justifyContent: 'space-around',
                                                     textAlign: 'center',
                                                     alignItems: 'center',
-                                                    marginLeft: 20,
+                                                    marginLeft: 10,
                                                 }}>
                                                     <View style={{
-                                                        width: 80
+                                                        width: 80,
+                                                        justifyContent: 'center',
+                                                        alignItems: 'center',
+                                                        marginRight: 10
 
                                                     }}>
-                                                        <Text>
-                                                            {Api.name}
+                                                        <Text style={{
+                                                            textAlign: 'center'
+                                                        }}>
+                                                            {Api.TenHang}
                                                         </Text>
-                                                        <Text>
+                                                        <Text style={{
+                                                            textAlign: 'center'
+                                                        }}>
                                                             {Api.price} $
                                                         </Text>
                                                     </View>

@@ -45,7 +45,7 @@ export default function Cart({ navigation }) {
 
 
     useEffect(() => {
-        fetch(URL_ON + '/api/customer/')
+        fetch(URL_FPT + '/api/customer/')
             .then(res => res.json())
             .then(res => setCustomer(res))
             .catch(err => console.log(err))
@@ -59,7 +59,7 @@ export default function Cart({ navigation }) {
 
 
     useEffect(() => {
-        fetch(URL_ON + '/api/customer_re/' + taikhoan)
+        fetch(URL_FPT + '/api/customer_re/' + taikhoan)
             .then(res => res.json())
             .then(res => setOrders(res))
             .catch(err => console.log(err))
@@ -77,7 +77,7 @@ export default function Cart({ navigation }) {
     function handerNhanDon(id) {
         customer.map(custome => {
             if (custome.id == id) {
-                fetch(URL_ON + '/api/customer_re/create/', {
+                fetch(URL_FPT + '/api/customer_re/create/', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -105,14 +105,14 @@ export default function Cart({ navigation }) {
                                 {
                                     text: "Yes",
                                     onPress: () => {
-                                        fetch(URL_ON + '/api/customer/')
+                                        fetch(URL_FPT + '/api/customer/')
                                             .then(res => res.json())
                                             .then(res => setCustomer(res))
                                             .finally(() => {
                                                 alert('Nhận Đơn Thành Công!!!')
                                             })
 
-                                        fetch(URL_ON + '/api/thanhtoan/create/', {
+                                        fetch(URL_FPT + '/api/thanhtoan/create/', {
                                             method: 'POST',
                                             headers: { 'Content-Type': 'application/json' },
                                             body: JSON.stringify({
@@ -130,7 +130,7 @@ export default function Cart({ navigation }) {
                         );
                     })
                     .then(() => {
-                        fetch(URL_ON + '/api/customer/delete/' + id,
+                        fetch(URL_FPT + '/api/customer/delete/' + id,
                             {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
@@ -139,7 +139,7 @@ export default function Cart({ navigation }) {
 
                     })
                     .then(() => {
-                        fetch(URL_ON + '/api/customer_re/' + taikhoan)
+                        fetch(URL_FPT + '/api/customer_re/' + taikhoan)
                             .then(res => res.json())
                             .then(res => setOrders(res))
                             .catch(err => console.log(err))
@@ -156,7 +156,7 @@ export default function Cart({ navigation }) {
 
     function handerLamMoi() {
         setIsLoading(true)
-        fetch(URL_ON + '/api/customer/')
+        fetch(URL_FPT + '/api/customer/')
             .then(res => res.json())
             .then(res => {
                 setCustomer(res)
@@ -169,7 +169,7 @@ export default function Cart({ navigation }) {
                 setIsLoading(false)
             })
 
-        fetch(URL_ON + '/api/customer_re/' + taikhoan)
+        fetch(URL_FPT + '/api/customer_re/' + taikhoan)
             .then(res => res.json())
             .then(res => setOrders(res))
             .catch(err => console.log(err))
@@ -178,7 +178,7 @@ export default function Cart({ navigation }) {
 
     // setTimeout(() => {
     //     console.log('a')
-    //     fetch(URL_ON + '/api/customer/')
+    //     fetch(URL_FPT + '/api/customer/')
     //         .then(res => res.json())
     //         .then(res => setCustomer(res))
     //         .catch(err => console.log(err))
@@ -190,7 +190,7 @@ export default function Cart({ navigation }) {
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         setTimeout(() => {
-            fetch(URL_ON + '/api/customer/')
+            fetch(URL_FPT + '/api/customer/')
                 .then(res => res.json())
                 .then(res => {
                     setCustomer(res)
@@ -203,7 +203,7 @@ export default function Cart({ navigation }) {
                     setIsLoading(false)
                 })
 
-            fetch(URL_ON + '/api/customer_re/' + taikhoan)
+            fetch(URL_FPT + '/api/customer_re/' + taikhoan)
                 .then(res => res.json())
                 .then(res => setOrders(res))
                 .catch(err => console.log(err))
@@ -408,6 +408,17 @@ export default function Cart({ navigation }) {
                             </Text>
                         </TouchableOpacity>
                     </View>
+                </View>
+
+                <View>
+                    <Text style={{
+                        fontSize: 22,
+                        color: 'red',
+                        padding: 10,
+                        fontWeight: '600'
+                    }}>
+                        Đơn Chưa Xác Thực
+                    </Text>
                 </View>
                 {getConten()}
 

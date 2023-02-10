@@ -18,7 +18,7 @@ export default function LichSuDonHang({ navigation }) {
     const URL1_FPT = 'http://192.168.0.145:5000'
 
     useEffect(() => {
-        fetch(URL_ON + '/api/thanhtoan/Chưa Thanh Toán!!!')
+        fetch(URL_FPT + '/api/thanhtoan/Chưa Thanh Toán!!!')
             .then(res => res.json())
             .then(res => setLichSuCTT(res))
             .catch(err => console.log(err))
@@ -31,7 +31,7 @@ export default function LichSuDonHang({ navigation }) {
     }, [])
 
     useEffect(() => {
-        fetch(URL_ON + '/api/thanhtoan/Đã Thanh Toán Bằng Tiền Mặt')
+        fetch(URL_FPT + '/api/thanhtoan/Đã Thanh Toán Bằng Tiền Mặt')
             .then(res => res.json())
             .then(res => setLichSuDTT(res))
             .catch(err => console.log(err))
@@ -49,12 +49,12 @@ export default function LichSuDonHang({ navigation }) {
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         setTimeout(() => {
-            fetch(URL_ON + '/api/thanhtoan/Đã Thanh Toán Bằng Tiền Mặt')
+            fetch(URL_FPT + '/api/thanhtoan/Đã Thanh Toán Bằng Tiền Mặt')
                 .then(res => res.json())
                 .then(res => setLichSuDTT(res))
                 .catch(err => console.log(err))
 
-            fetch(URL_ON + '/api/thanhtoan/Chưa Thanh Toán!!!')
+            fetch(URL_FPT + '/api/thanhtoan/Chưa Thanh Toán!!!')
                 .then(res => res.json())
                 .then(res => setLichSuCTT(res))
                 .catch(err => console.log(err))

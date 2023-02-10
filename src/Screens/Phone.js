@@ -59,7 +59,7 @@ const Phone = ({ navigation }) => {
     };
 
     useEffect(() => {
-        fetch(URL_ON + '/api/customer_re/' + taikhoan)
+        fetch(URL_FPT + '/api/customer_re/' + taikhoan)
             .then(res => res.json())
             .then(res => setOrders(res))
             .catch(err => console.log(err))
@@ -70,7 +70,7 @@ const Phone = ({ navigation }) => {
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         setTimeout(() => {
-            fetch(URL_ON + '/api/customer_re/' + taikhoan)
+            fetch(URL_FPT + '/api/customer_re/' + taikhoan)
                 .then(res => res.json())
                 .then(res => setOrders(res))
                 .catch(err => console.log(err))

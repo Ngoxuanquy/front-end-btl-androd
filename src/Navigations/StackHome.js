@@ -32,6 +32,7 @@ import PhieuDoiHang from '../Screens/NhapXuatKho/PhieuDoiHang';
 import PhieuCapDo from '../Screens/NhapXuatKho/PhieuCapDo';
 import PhieuThuDo from '../Screens/NhapXuatKho/PhieuThuHoiDo';
 import SuaThanhToan from '../Screens/SuaThanhToan';
+import DonVeSinh from '../Screens/DonHang/DonViSinh';
 
 
 const Stack = createNativeStackNavigator();
@@ -262,6 +263,17 @@ function StackHomes() {
                 }} />
                 <Stack.Screen name="Đơn Xin Đi Muộn" component={DonXinDiMuon} options={{
                     headerShown: true
+                }} />
+                <Stack.Screen name="Đơn Vệ Sinh" component={DonVeSinh} options={{
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: '#789BF6',
+                        height: 150,
+                        // title: 'My home',
+                        borderBottomLeftRadius: 40,
+                        borderBottomRightRadius: 40
+                    },
+                    headerTintColor: '#fff',
                 }} />
             </Stack.Navigator>
         </NavigationContainer>

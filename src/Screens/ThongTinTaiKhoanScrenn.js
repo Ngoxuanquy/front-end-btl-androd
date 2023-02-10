@@ -55,7 +55,7 @@ export default function ThongTinTaiKhoan() {
         )
 
     useEffect(() => {
-        fetch(URL_ON + '/api/users/' + taikhoan)
+        fetch(URL_FPT + '/api/users/' + taikhoan)
             .then(res => res.json())
             .then(res => setThongTin(res))
     }, [taikhoan])
@@ -66,7 +66,7 @@ export default function ThongTinTaiKhoan() {
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         setTimeout(() => {
-            fetch(URL_ON + '/api/users/' + taikhoan)
+            fetch(URL_FPT + '/api/users/' + taikhoan)
                 .then(res => res.json())
                 .then(res => setThongTin(res))
             setRefreshing(false);

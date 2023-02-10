@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
 import React from 'react'
 
-export default function DonHang() {
+export default function DonHang({ navigation }) {
     return (
         <View>
             <ScrollView>
@@ -96,7 +96,9 @@ export default function DonHang() {
 
                             elevation: 14,
                             marginTop: 5
-                        }} >
+                        }}
+                            onPress={() => navigation.replace('Đơn Vệ Sinh')}
+                        >
                             <Text style={{
                                 fontSize: 22,
                                 color: 'black',

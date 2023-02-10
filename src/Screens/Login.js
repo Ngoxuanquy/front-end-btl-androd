@@ -36,7 +36,7 @@ export default function Login({ navigation }) {
     };
 
     useLayoutEffect(() => {
-        fetch(URL_ON + '/api/users')
+        fetch(URL_FPT + '/api/users')
             .then(res => res.json())
             .then(res => setLogin(res))
     }, [])
@@ -46,14 +46,14 @@ export default function Login({ navigation }) {
         const user = logins.find(user => user.email === taikhoan)
         if (!user) return alert('sai tk hoặc mk');
 
-        fetch(URL1_ON + '/login', options)
+        fetch(URL1_FPT + '/login', options)
             .then(res => res.json())
             .then(res => {
                 // console.log(res.accessToken)
                 AsyncStorage.setItem('token', res.accessToken);
                 AsyncStorage.setItem('taikhoan', taikhoan);
 
-                fetch(URL_ON + '/api/users/update/' + taikhoan, {
+                fetch(URL_FPT + '/api/users/update/' + taikhoan, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({

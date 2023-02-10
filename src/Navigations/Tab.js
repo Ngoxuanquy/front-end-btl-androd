@@ -43,7 +43,7 @@ export default function Tag({ navigation }) {
     const URL1_FPT = 'http://192.168.0.145:5000'
 
     useEffect(() => {
-        fetch(URL_ON + '/api/customer/')
+        fetch(URL_FPT + '/api/customer/')
             .then(res => res.json())
             .then(res => setCustomer(res))
             .catch(err => console.log(err))
@@ -52,7 +52,7 @@ export default function Tag({ navigation }) {
     }, [])
 
     function handleBackButton() {
-        fetch(URL_ON + '/api/customer/')
+        fetch(URL_FPT + '/api/customer/')
             .then(res => res.json())
             .then(res => setCustomer(res))
             .catch(err => console.log(err))

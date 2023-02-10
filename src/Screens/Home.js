@@ -63,7 +63,7 @@ export default function HomeScrenn({ navigation }) {
     // console.log(taikhoan)
 
     useEffect(() => {
-        fetch(URL_ON + '/api/users/' + taikhoan)
+        fetch(URL_FPT + '/api/users/' + taikhoan)
             .then(res => res.json())
             .then(res => setThongTin(res))
     }, [taikhoan])
@@ -76,7 +76,7 @@ export default function HomeScrenn({ navigation }) {
     }
 
     useEffect(() => {
-        fetch(URL_ON + '/posts', options)
+        fetch(URL_FPT + '/posts', options)
             .then(res => res.json())
             .then(res => setApi(res))
             .catch((err) => console.log(err))
@@ -84,7 +84,7 @@ export default function HomeScrenn({ navigation }) {
 
     function handerLogout() {
 
-        fetch(URL_ON + '/api/users/update/token/' + taikhoan, {
+        fetch(URL_FPT + '/api/users/update/token/' + taikhoan, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
         })
@@ -134,7 +134,7 @@ export default function HomeScrenn({ navigation }) {
     }
 
     function handerXacNhan() {
-        fetch(URL_ON + '/api/users/update/img/' + taikhoan, {
+        fetch(URL_FPT + '/api/users/update/img/' + taikhoan, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -142,7 +142,7 @@ export default function HomeScrenn({ navigation }) {
             })
         })
             .then(() => {
-                fetch(URL_ON + '/api/users/' + taikhoan)
+                fetch(URL_FPT + '/api/users/' + taikhoan)
                     .then(res => res.json())
                     .then(res => setThongTin(res))
             })
