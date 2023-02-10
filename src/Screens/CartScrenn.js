@@ -176,14 +176,13 @@ export default function Cart({ navigation }) {
     }
 
 
-    // setTimeout(() => {
-    //     console.log('a')
-    //     fetch(URL_FPT + '/api/customer/')
-    //         .then(res => res.json())
-    //         .then(res => setCustomer(res))
-    //         .catch(err => console.log(err))
-    // }, 3000
-    // )
+    setTimeout(() => {
+        fetch(URL_FPT + '/api/customer/')
+            .then(res => res.json())
+            .then(res => setCustomer(res))
+            .catch(err => console.log(err))
+    }, 10000
+    )
 
     const [refreshing, setRefreshing] = React.useState(false);
 
