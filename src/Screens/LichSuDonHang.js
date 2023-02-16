@@ -1,72 +1,82 @@
-import { View, Text, TextInput, ScrollView, RefreshControl, TouchableOpacity } from 'react-native'
+import { View, Text, TextInput, ScrollView, RefreshControl, TouchableOpacity, ActivityIndicator } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function LichSuDonHang({ navigation }) {
     const [lichSuCTT, setLichSuCTT] = useState([]);
     const [lichSuDTT, setLichSuDTT] = useState([]);
+    const [lichSuDCK, setLichSuDCK] = useState([]);
+    const [Nos, setNo] = useState([])
+
     const [apis, setApi] = useState([])
     const [Value, setValue] = useState('')
+    const [taikhoan, setTaiKhoan] = useState([])
+    const [token, setToken] = useState([])
+
+    const [isLoading, setIsLoading] = useState(true)
 
 
-    const URL_ON = 'http://192.168.0.106:4000'
-    const URL1_ON = 'http://192.168.0.114:5000'
-
-    const URL_CT = 'http://192.168.1.121:4000'
-    const URL1_CT = 'http://192.168.1.121:5000'
-
-    const URL_FPT = 'http://192.168.0.145:4000'
-    const URL1_FPT = 'http://192.168.0.145:5000'
-
-    useEffect(() => {
-        fetch(URL_FPT + '/api/thanhtoan/Chưa Thanh Toán!!!')
-            .then(res => res.json())
-            .then(res => setLichSuCTT(res))
-            .catch(err => console.log(err))
-            .finally(() => {
-                // setReset(true);
-                // setTimeout(() => {
-                //     setReset(false);
-                // }, 1000);
-            })
-    }, [])
+    AsyncStorage.getItem('taikhoan')
+        .then(res =>
+            setTaiKhoan(res)
+        )
 
 
     useEffect(() => {
-        fetch(URL_FPT + '/api/thanhtoan/Đã Thanh Toán Bằng Tiền Mặt')
+        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/Đã Thanh Toán')
             .then(res => res.json())
             .then(res => setLichSuDTT(res))
             .catch(err => console.log(err))
             .finally(() => {
-                // setReset(true);
-                // setTimeout(() => {
-                //     setReset(false);
-                // }, 1000);
+                setIsLoading(false)
             })
-    }, [])
 
+    }, [taikhoan])
+
+
+
+    useEffect(() => {
+        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/Chưa Thanh Toán!!!')
+            .then(res => res.json())
+            .then(res => setLichSuCTT(res))
+            .catch(err => console.log(err))
+    }, [taikhoan])
+
+    useEffect(() => {
+        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/Nợ')
+            .then(res => res.json())
+            .then(res => setNo(res))
+            .catch(err => console.log(err))
+    }, [taikhoan])
 
     const [refreshing, setRefreshing] = React.useState(false);
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         setTimeout(() => {
-            fetch(URL_FPT + '/api/thanhtoan/Đã Thanh Toán Bằng Tiền Mặt')
-                .then(res => res.json())
-                .then(res => setLichSuDTT(res))
-                .catch(err => console.log(err))
 
-            fetch(URL_FPT + '/api/thanhtoan/Chưa Thanh Toán!!!')
+            fetch('http://192.168.1.165:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/Chưa Thanh Toán!!!')
                 .then(res => res.json())
                 .then(res => setLichSuCTT(res))
                 .catch(err => console.log(err))
 
 
+            fetch('http://192.168.1.165:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/Đã Thanh Toán')
+                .then(res => res.json())
+                .then(res => setLichSuDTT(res))
+                .catch(err => console.log(err))
+
+            fetch('http://192.168.1.165:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/Nợ')
+                .then(res => res.json())
+                .then(res => setNo(res))
+                .catch(err => console.log(err))
+
             setRefreshing(false);
         }, 1000);
-    }, []);
+    }, [taikhoan]);
 
     function handerChiTiec(id, name) {
         navigation.replace('Chi Tiết Đơn', { id: id, name: name });
@@ -77,16 +87,18 @@ export default function LichSuDonHang({ navigation }) {
 
     }
 
+    const [number, setNumber] = useState([])
+
     function handerSearch() {
-        fetch(URL_FPT + '/api/thanhtoan/sdt/' + Value)
+        setIsLoading(true)
+        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/sdt/' + Value)
             .then(res => res.json())
             .then(res => setLichSuDTT(res))
             .catch(err => console.log(err))
             .finally(() => {
-                // setReset(true);
-                // setTimeout(() => {
-                //     setReset(false);
-                // }, 1000);
+                setLichSuCTT([]);
+                setNo([])
+                setIsLoading(false)
             })
     }
 
@@ -159,237 +171,367 @@ export default function LichSuDonHang({ navigation }) {
                             </Text>
                         </View>
                     </View>
-                    <View>
-                        <Text style={{
-                            fontSize: 20,
-                            padding: 10,
-                            color: 'red',
-                            fontWeight: '600'
-                        }}>
-                            Chưa Thanh Toán
-                        </Text>
-                    </View>
-                    {/* Thông tin */}
-                    {lichSuCTT.map(lichSu => (
 
-                        <View
-                            key={lichSu.id}
-                            style={{
-                                backgroundColor: '#eeeeee',
-                                borderColor: 'gray',
-                                borderWidth: 0.4,
-                                marginLeft: 10,
-                                marginRight: 10,
-                                borderRadius: 10,
-                                shadowColor: "#000",
-                                shadowOffset: {
-                                    width: 0,
-                                    height: 8,
-                                },
-                                shadowOpacity: 0.14,
-                                shadowRadius: 3.32,
-
-                                elevation: 1,
-                                marginBottom: 10
-                            }}>
-                            <View style={{
-                                marginTop: 10,
-                                paddingHorizontal: 10,
-                                flexDirection: 'row',
-                                justifyContent: 'space-between',
-                                marginTop: 15
-                            }}>
-                                <View style={{
-                                    flexDirection: 'row',
+                    {isLoading ? <ActivityIndicator /> :
+                        <>
+                            <View>
+                                <Text style={{
+                                    fontSize: 20,
+                                    padding: 10,
+                                    color: 'red',
+                                    fontWeight: '600'
                                 }}>
-                                    <FontAwesome name="money" size={24} color="black" />
-                                    <Text style={{
-                                        marginLeft: 10,
-                                        fontSize: 18
-                                    }}>
-                                        {lichSu.product_id}
-                                    </Text>
-                                </View>
-                                <View>
-                                    <Text style={{
-                                        fontSize: 16,
-                                        marginTop: 5
-                                    }}>
-                                        9h:30
-                                    </Text>
-                                </View>
+                                    Chưa Thanh Toán
+                                </Text>
                             </View>
+                            {/* Thông tin */}
+                            {lichSuCTT.map(lichSu => (
 
-                            <View style={{
-                                paddingHorizontal: 10
-                            }}>
-                                <Text style={{
-                                    fontSize: 18
-                                }}>
-                                    Lõi Lọc Kang, Vòi nước, Bảo dưỡng
-                                </Text>
-                                <Text style={{
-                                    fontSize: 18
-                                }}>
-                                    {lichSu.KhachHang}
-                                </Text>
-                                <Text style={{
-                                    fontSize: 18
-                                }}>
-                                    Mã Đơn Hàng: QQQQ
-                                </Text>
-                                <Text style={{
-                                    fontSize: 18
+                                <View
+                                    key={lichSu.id}
+                                    style={{
+                                        backgroundColor: '#eeeeee',
+                                        borderColor: 'gray',
+                                        borderWidth: 0.4,
+                                        marginLeft: 10,
+                                        marginRight: 10,
+                                        borderRadius: 10,
+                                        shadowColor: "#000",
+                                        shadowOffset: {
+                                            width: 0,
+                                            height: 8,
+                                        },
+                                        shadowOpacity: 0.14,
+                                        shadowRadius: 3.32,
 
-                                }}>
-                                    Ngày Giờ: 10:15 - 14/01/2022
-                                </Text>
-                                <View style={{
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-between',
-                                    paddingHorizontal: 10,
-                                    marginTop: 5,
-                                    marginBottom: 15
-                                }}>
-                                    <Text style={{
-                                        fontSize: 16,
-                                        fontWeight: 'bold'
-
+                                        elevation: 1,
+                                        marginBottom: 10
                                     }}>
-                                        (Chưa Thanh Toán)
-                                    </Text>
-                                    <TouchableOpacity>
+                                    <View style={{
+                                        marginTop: 10,
+                                        paddingHorizontal: 10,
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between',
+                                        marginTop: 15
+                                    }}>
+                                        <View style={{
+                                            flexDirection: 'row',
+                                        }}>
+                                            <FontAwesome name="money" size={24} color="black" />
+                                            <Text style={{
+                                                fontSize: 18
+                                            }}>
+                                                {lichSu.TongTienSauGiam}
+                                                1
+                                            </Text>
+                                        </View>
+                                        <View>
+                                            <Text style={{
+                                                fontSize: 16,
+                                                marginTop: 5
+                                            }}>
+                                                9h:30
+                                            </Text>
+                                        </View>
+                                    </View>
+
+                                    <View style={{
+                                        paddingHorizontal: 10
+                                    }}>
                                         <Text style={{
-                                            fontSize: 16,
-                                            textDecorationLine: 'underline'
-                                        }}
-                                            onPress={() => handerChiTiec(lichSu.id, lichSu.KhachHang)}
-                                        >
-                                            Xem Chi Tiết
+                                            fontSize: 18
+                                        }}>
+                                            Lõi Lọc Kang, Vòi nước, Bảo dưỡng
                                         </Text>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        </View>
-                    ))}
-                    <View>
-                        <Text style={{
-                            fontSize: 20,
-                            color: 'green',
-                            padding: 10,
-                            marginTop: 10,
-                            fontWeight: '600'
-                        }}>
-                            Đã Thanh Toán
-                        </Text>
-                    </View>
-                    {/* Thông tin */}
-                    {lichSuDTT.map(lichSu => (
-                        <View
-                            key={lichSu.id}
-                            style={{
-                                backgroundColor: '#eeeeee',
-                                borderColor: 'black',
-                                borderWidth: 0.4,
-                                marginLeft: 10,
-                                marginRight: 10,
-                                borderRadius: 10,
-                                shadowColor: "#000",
-                                shadowOffset: {
-                                    width: 0,
-                                    height: 8,
-                                },
-                                shadowOpacity: 0.44,
-                                shadowRadius: 2.32,
-
-                                elevation: 1,
-                                opacity: 0.6,
-                                marginTop: 10
-
-                            }}>
-                            <View style={{
-                                marginTop: 10,
-                                paddingHorizontal: 10,
-                                flexDirection: 'row',
-                                justifyContent: 'space-between',
-                                marginTop: 15,
-
-                            }}>
-                                <View style={{
-                                    flexDirection: 'row',
-                                }}>
-                                    <FontAwesome name="money" size={24} color="black" />
-                                    <Text style={{
-                                        marginLeft: 10,
-                                        fontSize: 18
-                                    }}>
-                                        {lichSu.TongTienSauGiamGia}
-                                    </Text>
-                                </View>
-                                <View>
-                                    <Text style={{
-                                        fontSize: 16,
-                                        marginTop: 5
-                                    }}>
-                                        9h:30
-                                    </Text>
-                                </View>
-                            </View>
-
-                            <View style={{
-                                paddingHorizontal: 10
-                            }}>
-                                <Text style={{
-                                    fontSize: 18
-                                }}>
-                                    {lichSu.name}
-                                </Text>
-                                <Text style={{
-                                    fontSize: 18
-                                }}>
-                                    {lichSu.KhachHang}
-                                </Text>
-                                <Text style={{
-                                    fontSize: 18
-                                }}>
-                                    Mã Đơn Hàng: QQQQ
-                                </Text>
-                                <Text style={{
-                                    fontSize: 18
-
-                                }}>
-                                    Ngày Giờ: 10:15 - 14/01/2022
-                                </Text>
-                                <View style={{
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-between',
-                                    paddingHorizontal: 10,
-                                    marginTop: 5,
-                                    marginBottom: 15
-                                }}>
-                                    <Text style={{
-                                        fontSize: 16,
-                                        fontWeight: 'bold'
-
-                                    }}>
-                                        {lichSu.TrangThai}
-                                    </Text>
-                                    <TouchableOpacity
-                                        onPress={() => handerChiTietDaTT(lichSu.id, lichSu.KhachHang)}
-                                    >
                                         <Text style={{
-                                            fontSize: 16,
-                                            textDecorationLine: 'underline'
+                                            fontSize: 18
+                                        }}>
+                                            {lichSu.KhachHang}
+                                        </Text>
+                                        <Text style={{
+                                            fontSize: 18
+                                        }}>
+                                            Mã Đơn Hàng: QQQQ
+                                        </Text>
+                                        <Text style={{
+                                            fontSize: 18
 
                                         }}>
-                                            Xem Chi Tiết
+                                            Ngày Giờ: 10:15 - 14/01/2022
                                         </Text>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        </View>
-                    ))}
+                                        <View style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between',
+                                            paddingHorizontal: 10,
+                                            marginTop: 5,
+                                            marginBottom: 15
+                                        }}>
+                                            <Text style={{
+                                                fontSize: 16,
+                                                fontWeight: 'bold'
 
+                                            }}>
+                                                (Chưa Thanh Toán)
+                                            </Text>
+                                            <TouchableOpacity>
+                                                <Text style={{
+                                                    fontSize: 16,
+                                                    textDecorationLine: 'underline'
+                                                }}
+                                                    onPress={() => handerChiTiec(lichSu.id, lichSu.KhachHang)}
+                                                >
+                                                    Xem Chi Tiết
+                                                </Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                </View>
+                            ))}
+
+                            <View>
+                                <Text style={{
+                                    fontSize: 20,
+                                    color: 'coral',
+                                    padding: 10,
+                                    marginTop: 10,
+                                    fontWeight: '600'
+                                }}>
+                                    Khách Nợ
+                                </Text>
+                            </View>
+
+                            {/* Thông tin */}
+                            {Nos.map(lichSu => (
+                                <View
+                                    key={lichSu.id}
+                                    style={{
+                                        backgroundColor: '#eeeeee',
+                                        borderColor: 'black',
+                                        borderWidth: 0.4,
+                                        marginLeft: 10,
+                                        marginRight: 10,
+                                        borderRadius: 10,
+                                        shadowColor: "#000",
+                                        shadowOffset: {
+                                            width: 0,
+                                            height: 8,
+                                        },
+                                        shadowOpacity: 0.44,
+                                        shadowRadius: 2.32,
+
+                                        elevation: 1,
+                                        opacity: 0.6,
+                                        marginTop: 10
+
+                                    }}>
+                                    <View style={{
+                                        marginTop: 10,
+                                        paddingHorizontal: 10,
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between',
+                                        marginTop: 15,
+
+                                    }}>
+                                        <View style={{
+                                            flexDirection: 'row',
+                                        }}>
+                                            <FontAwesome name="money" size={24} color="black" />
+                                            <Text style={{
+                                                marginLeft: 10,
+                                                fontSize: 18
+                                            }}>
+                                                {lichSu.TongTienSauGiam}
+                                            </Text>
+                                        </View>
+                                        <View>
+                                            <Text style={{
+                                                fontSize: 16,
+                                                marginTop: 5
+                                            }}>
+                                                9h:30
+                                            </Text>
+                                        </View>
+                                    </View>
+
+                                    <View style={{
+                                        paddingHorizontal: 10
+                                    }}>
+                                        <Text style={{
+                                            fontSize: 18
+                                        }}>
+                                            {lichSu.name}
+                                        </Text>
+                                        <Text style={{
+                                            fontSize: 18
+                                        }}>
+                                            {lichSu.KhachHang}
+                                        </Text>
+                                        <Text style={{
+                                            fontSize: 18
+                                        }}>
+                                            Mã Đơn Hàng: QQQQ
+                                        </Text>
+                                        <Text style={{
+                                            fontSize: 18
+
+                                        }}>
+                                            Ngày Giờ: 10:15 - 14/01/2022
+                                        </Text>
+                                        <View style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between',
+                                            paddingHorizontal: 10,
+                                            marginTop: 5,
+                                            marginBottom: 15
+                                        }}>
+                                            <Text style={{
+                                                fontSize: 16,
+                                                fontWeight: 'bold'
+
+                                            }}>
+                                                {lichSu.TrangThai}
+                                            </Text>
+                                            <TouchableOpacity
+                                                onPress={() => handerChiTietDaTT(lichSu.id, lichSu.KhachHang)}
+                                            >
+                                                <Text style={{
+                                                    fontSize: 16,
+                                                    textDecorationLine: 'underline'
+
+                                                }}>
+                                                    Xem Chi Tiết
+                                                </Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                </View>
+                            ))}
+                            <View>
+                                <Text style={{
+                                    fontSize: 20,
+                                    color: 'green',
+                                    padding: 10,
+                                    marginTop: 10,
+                                    fontWeight: '600'
+                                }}>
+                                    Đã Thanh Toán
+                                </Text>
+                            </View>
+                            {/* Thông tin */}
+                            {lichSuDTT.map(lichSu => (
+                                <View
+                                    key={lichSu.id}
+                                    style={{
+                                        backgroundColor: '#eeeeee',
+                                        borderColor: 'black',
+                                        borderWidth: 0.4,
+                                        marginLeft: 10,
+                                        marginRight: 10,
+                                        borderRadius: 10,
+                                        shadowColor: "#000",
+                                        shadowOffset: {
+                                            width: 0,
+                                            height: 8,
+                                        },
+                                        shadowOpacity: 0.44,
+                                        shadowRadius: 2.32,
+
+                                        elevation: 1,
+                                        opacity: 0.6,
+                                        marginTop: 10
+
+                                    }}>
+                                    <View style={{
+                                        marginTop: 10,
+                                        paddingHorizontal: 10,
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between',
+                                        marginTop: 15,
+
+                                    }}>
+                                        <View style={{
+                                            flexDirection: 'row',
+                                        }}>
+                                            <FontAwesome name="money" size={24} color="black" />
+                                            <Text style={{
+                                                marginLeft: 10,
+                                                fontSize: 18
+                                            }}>
+                                                {lichSu.TongTienSauGiam}
+                                            </Text>
+                                        </View>
+                                        <View>
+                                            <Text style={{
+                                                fontSize: 16,
+                                                marginTop: 5
+                                            }}>
+                                                9h:30
+                                            </Text>
+                                        </View>
+                                    </View>
+
+                                    <View style={{
+                                        paddingHorizontal: 10
+                                    }}>
+                                        <Text style={{
+                                            fontSize: 18
+                                        }}>
+                                            {lichSu.name}
+                                        </Text>
+                                        <Text style={{
+                                            fontSize: 18
+                                        }}>
+                                            {lichSu.KhachHang}
+                                        </Text>
+                                        <Text style={{
+                                            fontSize: 18
+                                        }}>
+                                            Mã Đơn Hàng: QQQQ
+                                        </Text>
+                                        <Text style={{
+                                            fontSize: 18
+
+                                        }}>
+                                            Ngày Giờ: 10:15 - 14/01/2022
+                                        </Text>
+                                        <View style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between',
+                                            paddingHorizontal: 10,
+                                            marginTop: 5,
+                                        }}>
+                                            <Text style={{
+                                                fontSize: 16,
+                                                fontWeight: 'bold'
+
+                                            }}>
+                                                {lichSu.TrangThai}
+                                            </Text>
+                                        </View>
+                                        <TouchableOpacity
+                                            onPress={() => handerChiTietDaTT(lichSu.id, lichSu.KhachHang)}
+                                            style={{
+                                                marginBottom: 25
+
+                                            }}
+                                        >
+                                            <Text style={{
+                                                fontSize: 16,
+                                                textDecorationLine: 'underline',
+                                                position: 'absolute',
+                                                right: 0
+
+                                            }}>
+                                                Xem Chi Tiết
+                                            </Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            ))}
+
+
+                        </>
+                    }
 
 
                 </View>

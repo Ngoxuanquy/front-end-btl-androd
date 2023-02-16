@@ -33,17 +33,9 @@ const HanderCart = () => {
 export default function Tag({ navigation }) {
 
     const [customer, setCustomer] = useState([]);
-    const URL_ON = 'http://192.168.0.106:4000'
-    const URL1_ON = 'http://192.168.0.114:5000'
-
-    const URL_CT = 'http://192.168.1.121:4000'
-    const URL1_CT = 'http://192.168.1.121:5000'
-
-    const URL_FPT = 'http://192.168.0.145:4000'
-    const URL1_FPT = 'http://192.168.0.145:5000'
 
     useEffect(() => {
-        fetch(URL_FPT + '/api/customer/')
+        fetch('http://192.168.1.165:4000' + '/api/customer/')
             .then(res => res.json())
             .then(res => setCustomer(res))
             .catch(err => console.log(err))
@@ -52,7 +44,7 @@ export default function Tag({ navigation }) {
     }, [])
 
     function handleBackButton() {
-        fetch(URL_FPT + '/api/customer/')
+        fetch('http://192.168.1.165:4000' + '/api/customer/')
             .then(res => res.json())
             .then(res => setCustomer(res))
             .catch(err => console.log(err))

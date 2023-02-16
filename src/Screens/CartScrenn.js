@@ -23,14 +23,6 @@ export default function Cart({ navigation }) {
     const [orders, setOrders] = useState([])
     const [reset, setReset] = useState(false);
 
-    const URL_ON = 'http://192.168.0.106:4000'
-    const URL1_ON = 'http://192.168.0.114:5000'
-
-    const URL_CT = 'http://192.168.1.121:4000'
-    const URL1_CT = 'http://192.168.1.121:5000'
-
-    const URL_FPT = 'http://192.168.0.145:4000'
-    const URL1_FPT = 'http://192.168.0.145:5000'
 
     const getConten = () => {
         if (isLoading) {
@@ -45,7 +37,7 @@ export default function Cart({ navigation }) {
 
 
     useEffect(() => {
-        fetch(URL_FPT + '/api/customer/')
+        fetch('http://192.168.1.165:4000' + '/api/customer/')
             .then(res => res.json())
             .then(res => setCustomer(res))
             .catch(err => console.log(err))
@@ -59,7 +51,7 @@ export default function Cart({ navigation }) {
 
 
     useEffect(() => {
-        fetch(URL_FPT + '/api/customer_re/' + taikhoan)
+        fetch('http://192.168.1.165:4000' + '/api/customer_re/' + taikhoan)
             .then(res => res.json())
             .then(res => setOrders(res))
             .catch(err => console.log(err))
@@ -77,7 +69,7 @@ export default function Cart({ navigation }) {
     function handerNhanDon(id) {
         customer.map(custome => {
             if (custome.id == id) {
-                fetch(URL_FPT + '/api/customer_re/create/', {
+                fetch('http://192.168.1.165:4000' + '/api/customer_re/create/', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -105,14 +97,14 @@ export default function Cart({ navigation }) {
                                 {
                                     text: "Yes",
                                     onPress: () => {
-                                        fetch(URL_FPT + '/api/customer/')
+                                        fetch('http://192.168.1.165:4000' + '/api/customer/')
                                             .then(res => res.json())
                                             .then(res => setCustomer(res))
                                             .finally(() => {
                                                 alert('Nhận Đơn Thành Công!!!')
                                             })
 
-                                        fetch(URL_FPT + '/api/thanhtoan/create/', {
+                                        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/create/', {
                                             method: 'POST',
                                             headers: { 'Content-Type': 'application/json' },
                                             body: JSON.stringify({
@@ -130,7 +122,7 @@ export default function Cart({ navigation }) {
                         );
                     })
                     .then(() => {
-                        fetch(URL_FPT + '/api/customer/delete/' + id,
+                        fetch('http://192.168.1.165:4000' + '/api/customer/delete/' + id,
                             {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
@@ -139,7 +131,7 @@ export default function Cart({ navigation }) {
 
                     })
                     .then(() => {
-                        fetch(URL_FPT + '/api/customer_re/' + taikhoan)
+                        fetch('http://192.168.1.165:4000' + '/api/customer_re/' + taikhoan)
                             .then(res => res.json())
                             .then(res => setOrders(res))
                             .catch(err => console.log(err))
@@ -156,7 +148,7 @@ export default function Cart({ navigation }) {
 
     function handerLamMoi() {
         setIsLoading(true)
-        fetch(URL_FPT + '/api/customer/')
+        fetch('http://192.168.1.165:4000' + '/api/customer/')
             .then(res => res.json())
             .then(res => {
                 setCustomer(res)
@@ -169,27 +161,31 @@ export default function Cart({ navigation }) {
                 setIsLoading(false)
             })
 
-        fetch(URL_FPT + '/api/customer_re/' + taikhoan)
+        fetch('http://192.168.1.165:4000' + '/api/customer_re/' + taikhoan)
             .then(res => res.json())
             .then(res => setOrders(res))
             .catch(err => console.log(err))
     }
 
 
-    // setTimeout(() => {
-    //     fetch(URL_FPT + '/api/customer/')
-    //         .then(res => res.json())
-    //         .then(res => setCustomer(res))
-    //         .catch(err => console.log(err))
-    // }, 10000
-    // )
+    // useEffect(() => {
+    //     const a = setTimeout(() => {
+    //         fetch('http://192.168.1.165:4000' + '/api/customer/')
+    //             .then(res => res.json())
+    //             .then(res => setCustomer(res))
+    //             .catch(err => console.log(err))
+    //     }, 10000
+    //     )
+    // })
+
+    // console.log('a213')
 
     const [refreshing, setRefreshing] = React.useState(false);
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         const timeout = setTimeout(() => {
-            fetch(URL_FPT + '/api/customer/')
+            fetch('http://192.168.1.165:4000' + '/api/customer/')
                 .then(res => res.json())
                 .then(res => {
                     setCustomer(res)
@@ -202,16 +198,17 @@ export default function Cart({ navigation }) {
                     setIsLoading(false)
                 })
 
-            fetch(URL_FPT + '/api/customer_re/' + taikhoan)
+            fetch('http://192.168.1.165:4000' + '/api/customer_re/' + taikhoan)
                 .then(res => res.json())
                 .then(res => setOrders(res))
                 .catch(err => console.log(err))
             setRefreshing(false);
         }, 1000);
 
-        return clearTimeout(onRefresh)
 
     }, []);
+
+
 
     return (
         <View style={{

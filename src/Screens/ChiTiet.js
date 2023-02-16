@@ -12,19 +12,9 @@ export default function ChiTiet({ route, navigation }) {
     const [isLoad, setIsLoad] = useState(false)
     const [apis, setApi] = useState([])
 
-    const URL_ON = 'http://192.168.0.106:4000'
-    const URL1_ON = 'http://192.168.0.114:5000'
-
-    const URL_CT = 'http://192.168.1.121:4000'
-    const URL1_CT = 'http://192.168.1.121:5000'
-
-    const URL_FPT = 'http://192.168.0.145:4000'
-    const URL1_FPT = 'http://192.168.0.145:5000'
-
-    console.log(name)
 
     useEffect(() => {
-        fetch(URL_FPT + '/api/thanhtoan/khachhang/' + name)
+        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/khachhang/' + name)
             .then(res => res.json())
             .then(res => setApi(res))
             .catch(err => console.log(err))

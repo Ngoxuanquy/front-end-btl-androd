@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar'
-import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions, ScrollView, ActivityIndicator } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons';
 import {
     LineChart,
@@ -10,6 +10,7 @@ import {
     StackedBarChart
 } from "react-native-chart-kit";
 import React, { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function LuongThuong() {
@@ -18,6 +19,9 @@ export default function LuongThuong() {
     const [month, setMonth] = useState(true)
     const [week, setWeek] = useState(false)
     const [cliedId, setCliedID] = useState(0);
+    const [logins, setLogin] = useState([]);
+    const [taikhoan, setTaiKhoan] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
 
     var data_week = {
         labels: ["Tuần 1", "Tuần 2", "Tuần 3", "Tuần 4"],
@@ -86,6 +90,12 @@ export default function LuongThuong() {
 
     ]
 
+    const getConten = () => {
+        if (isLoading) {
+            return <ActivityIndicator />
+        }
+    }
+
     function handerSubmit(slug, id) {
         setCliedID(id)
         if (slug == 'Month') {
@@ -99,205 +109,246 @@ export default function LuongThuong() {
         }
     }
 
+    AsyncStorage.getItem('taikhoan')
+        .then(res =>
+            setTaiKhoan(res)
+        )
+
+    useEffect(() => {
+        fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
+            .then(res => res.json())
+            .then(res => setLogin(res))
+            .finally(() => {
+                setIsLoading(false)
+            })
+    }, [taikhoan])
+
 
     return (
-        <ScrollView style={{
-            backgroundColor: '#3366FF',
-            flex: 1
-        }}>
-            <View >
-                <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-around',
-                    marginTop: 50,
-                    height: 70,
-
-                }}>
-                    <View>
-                        <Image
-                            style={{
-                                width: 70,
-                                height: 70,
-                                borderRadius: 200
-                            }}
-                            source={{
-                                uri: 'https://thuthuatphanmem.vn/uploads/2018/09/11/hinh-anh-dep-6_044127357.jpg'
-                            }}
-                        />
-                    </View>
-                    <View style={{
-                        justifyContent: 'center',
-
+        <>
+            {
+                isLoading ? <ActivityIndicator style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }} /> :
+                    <ScrollView style={{
+                        backgroundColor: '#3366FF',
+                        flex: 1
                     }}>
-                        <Text style={{
-                            textAlign: 'center',
-                            alignItems: 'center',
-                            fontSize: 24,
-                            marginTop: 0,
-                            marginLeft: -40,
-                            color: 'white'
-                        }}>
-                            Ngô Xuân Quy
-                        </Text>
-                    </View>
-                    <View style={{
-                        textAlign: 'center',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        marginTop: 0,
+                        <View >
+                            {logins.map(login => (
+                                <View key={login.id}>
+                                    <View style={{
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-around',
+                                        marginTop: 50,
+                                        height: 70,
+                                    }}>
+                                        <View>
+                                            {login.img == "" ?
+                                                <Image
+                                                    style={{
+                                                        width: 80,
+                                                        height: 80,
+                                                        borderRadius: 10,
+                                                        zIndex: 11
+                                                    }}
+                                                    source={{
+                                                        uri: "https://haycafe.vn/wp-content/uploads/2022/02/Avatar-trang.jpg"
+                                                    }}
+                                                /> :
+                                                <Image
+                                                    style={{
+                                                        width: 100,
+                                                        height: 120,
+                                                        borderRadius: 10,
+                                                    }}
+                                                    source={{
+                                                        uri: login.img
+                                                    }}
+                                                />
+                                            }
+                                        </View>
 
-                    }}>
-                        <FontAwesome name="search" size={24} color="white" />
+                                        <View style={{
+                                            justifyContent: 'center',
 
-                    </View>
-                </View>
+                                        }}>
+                                            <Text style={{
+                                                textAlign: 'center',
+                                                alignItems: 'center',
+                                                fontSize: 24,
+                                                marginTop: 0,
+                                                marginLeft: -40,
+                                                color: 'white'
+                                            }}>
+                                                {login.email}
+                                            </Text>
+                                        </View>
+                                        <View style={{
+                                            textAlign: 'center',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            marginTop: 0,
 
-                <View style={{
-                    marginTop: 20,
-                    marginLeft: 30,
-                    marginBottom: 10
-                }}>
-                    <Text style={{
-                        color: 'white',
-                        fontSize: 20,
-                        opacity: 0.7
-                    }}>
-                        Lương Hiện Tại:
-                    </Text>
-                    <Text style={{
-                        color: 'white',
-                        fontSize: 35,
-                        lineHeight: 50
+                                        }}>
+                                            <FontAwesome name="search" size={24} color="white" />
 
-                    }}>
-                        $ 1.000.000đ
-                    </Text>
-                </View>
+                                        </View>
+                                    </View>
 
+                                    <View style={{
+                                        marginTop: 20,
+                                        marginLeft: 30,
+                                        marginBottom: 10
+                                    }}>
+                                        <Text style={{
+                                            color: 'white',
+                                            fontSize: 20,
+                                            opacity: 0.7
+                                        }}>
+                                            Lương Hiện Tại:
+                                        </Text>
+                                        <Text style={{
+                                            color: 'white',
+                                            fontSize: 35,
+                                            lineHeight: 50
 
-
-                <View style={{
-                    backgroundColor: 'white',
-                    height: 500,
-                    borderTopLeftRadius: 50,
-                    borderTopRightRadius: 50,
-                }}>
-                    <View>
-                        <Text style={{
-                            fontWeight: 'bold',
-                            fontSize: 20,
-                            marginTop: 30,
-                            marginLeft: 20,
-                            marginBottom: 10
-                        }}>
-                            Hàng Tháng
-                        </Text>
-                    </View>
-                    <View style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-around',
-                        marginVertical: 10
-                    }}>
-                        {buttons.map((button, index) => (
-                            <TouchableOpacity
-                                key={index}
-                                onPress={() => handerSubmit(button.button, button.id)}
-                                style={{
-                                    backgroundColor: 'white'
-                                }}
-                            >
-                                <Text style={[
-                                    index + 1 === cliedId ? styles.buttonAction : styles.butonUn,
-                                ]}>
-                                    {button.button}
-                                </Text>
-                            </TouchableOpacity>
-                        ))}
-                    </View>
+                                        }}>
+                                            $ 1.000.000đ
+                                        </Text>
+                                    </View>
+                                </View>
+                            ))}
 
 
-                    <View style={{
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                    }}>
-                        {month &&
-                            <BarChart
-                                // style={graphStyle}
-                                data={data_month}
-                                width={Dimensions.get('window').width - 20}
-                                height={270}
-                                yAxisLabel="$"
-                                chartConfig={chartConfig}
-                                verticalLabelRotation={30}
-                                bezier
-                                style={{
-                                    marginVertical: 8,
-                                    borderRadius: 16,
-                                    shadowOffset: {
-                                        width: 0,
-                                        height: 5,
-                                    },
-                                    shadowOpacity: 0.34,
-                                    shadowRadius: 2.27,
-                                    elevation: 10,
-                                }}
 
-                            />
-                        }
-                        {week &&
-                            <BarChart
-                                // style={graphStyle}
-                                data={data_week}
-                                width={Dimensions.get('window').width - 20}
-                                height={270}
-                                yAxisLabel="$"
-                                chartConfig={chartConfig}
-                                verticalLabelRotation={30}
-                                bezier
-                                style={{
-                                    marginVertical: 8,
-                                    borderRadius: 16,
-                                    shadowOffset: {
-                                        width: 0,
-                                        height: 5,
-                                    },
-                                    shadowOpacity: 0.34,
-                                    shadowRadius: 2.27,
-                                    elevation: 10,
-                                }}
 
-                            />
-                        }
+                            <View style={{
+                                backgroundColor: 'white',
+                                height: 500,
+                                borderTopLeftRadius: 50,
+                                borderTopRightRadius: 50,
+                            }}>
+                                <View>
+                                    <Text style={{
+                                        fontWeight: 'bold',
+                                        fontSize: 20,
+                                        marginTop: 30,
+                                        marginLeft: 20,
+                                        marginBottom: 10
+                                    }}>
+                                        Hàng Tháng
+                                    </Text>
+                                </View>
+                                <View style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-around',
+                                    marginVertical: 10
+                                }}>
+                                    {buttons.map((button, index) => (
+                                        <TouchableOpacity
+                                            key={index}
+                                            onPress={() => handerSubmit(button.button, button.id)}
+                                            style={{
+                                                backgroundColor: 'white'
+                                            }}
+                                        >
+                                            <Text style={[
+                                                index + 1 === cliedId ? styles.buttonAction : styles.butonUn,
+                                            ]}>
+                                                {button.button}
+                                            </Text>
+                                        </TouchableOpacity>
+                                    ))}
+                                </View>
 
-                        {day &&
-                            <BarChart
-                                // style={graphStyle}
-                                data={data_day}
-                                width={Dimensions.get('window').width - 20}
-                                height={270}
-                                yAxisLabel="$"
-                                chartConfig={chartConfig}
-                                verticalLabelRotation={30}
-                                bezier
-                                style={{
-                                    marginVertical: 8,
-                                    borderRadius: 16,
-                                    shadowOffset: {
-                                        width: 0,
-                                        height: 5,
-                                    },
-                                    shadowOpacity: 0.34,
-                                    shadowRadius: 2.27,
-                                    elevation: 10,
-                                }}
 
-                            />
-                        }
+                                <View style={{
+                                    justifyContent: 'center',
+                                    alignItems: 'center'
+                                }}>
+                                    {month &&
+                                        <BarChart
+                                            // style={graphStyle}
+                                            data={data_month}
+                                            width={Dimensions.get('window').width - 20}
+                                            height={270}
+                                            yAxisLabel="$"
+                                            chartConfig={chartConfig}
+                                            verticalLabelRotation={30}
+                                            bezier
+                                            style={{
+                                                marginVertical: 8,
+                                                borderRadius: 16,
+                                                shadowOffset: {
+                                                    width: 0,
+                                                    height: 5,
+                                                },
+                                                shadowOpacity: 0.34,
+                                                shadowRadius: 2.27,
+                                                elevation: 10,
+                                            }}
 
-                    </View>
-                </View>
-            </View>
-        </ScrollView >
+                                        />
+                                    }
+                                    {week &&
+                                        <BarChart
+                                            // style={graphStyle}
+                                            data={data_week}
+                                            width={Dimensions.get('window').width - 20}
+                                            height={270}
+                                            yAxisLabel="$"
+                                            chartConfig={chartConfig}
+                                            verticalLabelRotation={30}
+                                            bezier
+                                            style={{
+                                                marginVertical: 8,
+                                                borderRadius: 16,
+                                                shadowOffset: {
+                                                    width: 0,
+                                                    height: 5,
+                                                },
+                                                shadowOpacity: 0.34,
+                                                shadowRadius: 2.27,
+                                                elevation: 10,
+                                            }}
+
+                                        />
+                                    }
+
+                                    {day &&
+                                        <BarChart
+                                            // style={graphStyle}
+                                            data={data_day}
+                                            width={Dimensions.get('window').width - 20}
+                                            height={270}
+                                            yAxisLabel="$"
+                                            chartConfig={chartConfig}
+                                            verticalLabelRotation={30}
+                                            bezier
+                                            style={{
+                                                marginVertical: 8,
+                                                borderRadius: 16,
+                                                shadowOffset: {
+                                                    width: 0,
+                                                    height: 5,
+                                                },
+                                                shadowOpacity: 0.34,
+                                                shadowRadius: 2.27,
+                                                elevation: 10,
+                                            }}
+
+                                        />
+                                    }
+
+                                </View>
+                            </View>
+                        </View>
+                    </ScrollView >
+            }
+        </>
     )
 }
 

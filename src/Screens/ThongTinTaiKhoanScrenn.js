@@ -17,14 +17,6 @@ export default function ThongTinTaiKhoan() {
     const [taikhoan, setTaiKhoan] = useState([])
     const [thongtin, setThongTin] = useState([])
 
-    const URL_ON = 'http://192.168.0.106:4000'
-    const URL1_ON = 'http://192.168.0.114:5000'
-
-    const URL_CT = 'http://192.168.1.121:4000'
-    const URL1_CT = 'http://192.168.1.121:5000'
-
-    const URL_FPT = 'http://192.168.0.145:4000'
-    const URL1_FPT = 'http://192.168.0.145:5000'
 
     const pickImage = async () => {
         // setIsLoad(true)
@@ -55,7 +47,7 @@ export default function ThongTinTaiKhoan() {
         )
 
     useEffect(() => {
-        fetch(URL_FPT + '/api/users/' + taikhoan)
+        fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
             .then(res => res.json())
             .then(res => setThongTin(res))
     }, [taikhoan])
@@ -66,7 +58,7 @@ export default function ThongTinTaiKhoan() {
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         setTimeout(() => {
-            fetch(URL_FPT + '/api/users/' + taikhoan)
+            fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
                 .then(res => res.json())
                 .then(res => setThongTin(res))
             setRefreshing(false);

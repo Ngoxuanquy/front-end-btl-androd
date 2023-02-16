@@ -48,14 +48,6 @@ export default function ThanhToan({ route, navigation }) {
     const [orders, setOrder] = useState([]);
     const [customer_name, setCustomer_name] = useState([]);
 
-    const URL_ON = 'http://192.168.0.106:4000'
-    const URL1_ON = 'http://192.168.0.114:5000'
-
-    const URL_CT = 'http://192.168.1.121:4000'
-    const URL1_CT = 'http://192.168.1.121:5000'
-
-    const URL_FPT = 'http://192.168.0.145:4000'
-    const URL1_FPT = 'http://192.168.0.145:5000'
 
     AsyncStorage.getItem('taikhoan')
         .then(res =>
@@ -70,7 +62,7 @@ export default function ThanhToan({ route, navigation }) {
     }
 
     useEffect(() => {
-        fetch(URL_FPT + '/api/products/')
+        fetch('http://192.168.1.165:4000' + '/api/products/')
             .then(res => res.json())
             .then(res => setProducts(res))
             .catch(err => console.log(err))
@@ -102,7 +94,7 @@ export default function ThanhToan({ route, navigation }) {
 
 
     useEffect(() => {
-        fetch(URL_FPT + '/api/customer_re/')
+        fetch('http://192.168.1.165:4000' + '/api/customer_re/')
             .then(res => res.json())
             .then(res => setCustomer(res))
             .catch(err => console.log(err))
@@ -115,7 +107,7 @@ export default function ThanhToan({ route, navigation }) {
     }, [])
 
     useEffect(() => {
-        fetch(URL_FPT + '/api/orders/' + name)
+        fetch('http://192.168.1.165:4000' + '/api/orders/' + name)
             .then(res => res.json())
             .then(res => setOrder(res))
             .catch(err => console.log(err))
@@ -140,7 +132,7 @@ export default function ThanhToan({ route, navigation }) {
                 customer.map(custome => {
                     if (custome.id == id) {
 
-                        fetch(URL_FPT + '/api/orders/create/', {
+                        fetch('http://192.168.1.165:4000' + '/api/orders/create/', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
@@ -157,7 +149,7 @@ export default function ThanhToan({ route, navigation }) {
                             })
                         })
                             .then(() => {
-                                fetch(URL_FPT + '/api/orders/' + name)
+                                fetch('http://192.168.1.165:4000' + '/api/orders/' + name)
                                     .then(res => res.json())
                                     .then(res => {
                                         getConten()
@@ -187,14 +179,14 @@ export default function ThanhToan({ route, navigation }) {
 
     function handerDetele(id) {
 
-        fetch(URL_FPT + '/api/orders/delete/' + id,
+        fetch('http://192.168.1.165:4000' + '/api/orders/delete/' + id,
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
             }
         )
             .then(() => {
-                fetch(URL_FPT + '/api/orders/' + name)
+                fetch('http://192.168.1.165:4000' + '/api/orders/' + name)
                     .then(res => res.json())
                     .then(res => setOrder(res))
                     .catch(err => console.log(err))
@@ -211,7 +203,7 @@ export default function ThanhToan({ route, navigation }) {
     })
 
     function handerSoLuong(id, soluong) {
-        fetch(URL_FPT + '/api/orders/update/soluong/' + id, {
+        fetch('http://192.168.1.165:4000' + '/api/orders/update/soluong/' + id, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -219,7 +211,7 @@ export default function ThanhToan({ route, navigation }) {
             })
         })
             .then(() => {
-                fetch(URL_FPT + '/api/orders/' + name)
+                fetch('http://192.168.1.165:4000' + '/api/orders/' + name)
                     .then(res => res.json())
                     .then(res => setOrder(res))
                     .catch(err => console.log(err))
@@ -232,7 +224,7 @@ export default function ThanhToan({ route, navigation }) {
             return;
         }
 
-        fetch(URL_FPT + '/api/orders/update/soluong/' + id, {
+        fetch('http://192.168.1.165:4000' + '/api/orders/update/soluong/' + id, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -240,7 +232,7 @@ export default function ThanhToan({ route, navigation }) {
             })
         })
             .then(() => {
-                fetch(URL_FPT + '/api/orders/' + name)
+                fetch('http://192.168.1.165:4000' + '/api/orders/' + name)
                     .then(res => res.json())
                     .then(res => setOrder(res))
                     .catch(err => console.log(err))
@@ -265,46 +257,45 @@ export default function ThanhToan({ route, navigation }) {
                 {
                     text: "Yes",
                     onPress: () => {
-                        orders.map(order => {
-                            fetch(URL_FPT + '/api/thanhtoan/update/' + id, {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({
-                                    trangthai: "Tiền Mặt",
-                                    tongtien: tongtien
-                                })
+
+                        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/update/' + id, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                trangthai: "Tiền Mặt",
+                                tongtien: tongtien
                             })
-                                .then(() => {
-                                    return Alert.alert(
-                                        "Are your sure?",
-                                        "Bạn Đã Hoàn Thành Đơn?",
-                                        [
-
-                                            // The "No" button
-                                            // Does nothing but dismiss the dialog when tapped
-                                            {
-                                                text: "No",
-                                            },
-
-                                            // The "Yes" button
-                                            {
-                                                text: "Yes",
-                                                onPress: () => {
-                                                    fetch(URL_FPT + '/api/customer_re/delete/' + id,
-                                                        {
-                                                            method: 'POST',
-                                                            headers: { 'Content-Type': 'application/json' },
-                                                        }
-                                                    )
-                                                        .then(() => {
-                                                            navigation.replace('Cart');
-                                                        })
-                                                },
-                                            },
-                                        ]
-                                    );
-                                })
                         })
+                            .then(() => {
+                                return Alert.alert(
+                                    "Are your sure?",
+                                    "Bạn Đã Hoàn Thành Đơn?",
+                                    [
+
+                                        // The "No" button
+                                        // Does nothing but dismiss the dialog when tapped
+                                        {
+                                            text: "No",
+                                        },
+
+                                        // The "Yes" button
+                                        {
+                                            text: "Yes",
+                                            onPress: () => {
+                                                fetch('http://192.168.1.165:4000' + '/api/customer_re/delete/' + id,
+                                                    {
+                                                        method: 'POST',
+                                                        headers: { 'Content-Type': 'application/json' },
+                                                    }
+                                                )
+                                                    .then(() => {
+                                                        navigation.replace('Cart');
+                                                    })
+                                            },
+                                        },
+                                    ]
+                                );
+                            })
                     },
                 },
             ]
@@ -312,12 +303,135 @@ export default function ThanhToan({ route, navigation }) {
 
     }
 
+    function handerTTChuyenKhoan() {
+        return Alert.alert(
+            "Are your sure?",
+            "Đơn Này Đã Thanh Toán Bằng Chuyển Khoản?",
+            [
+
+                // The "No" button
+                // Does nothing but dismiss the dialog when tapped
+                {
+                    text: "No",
+                },
+
+                // The "Yes" button
+                {
+                    text: "Yes",
+                    onPress: () => {
+
+                        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/update/' + id, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                trangthai: "Chuyển Khoản",
+                                tongtien: tongtien
+                            })
+                        })
+                            .then(() => {
+                                return Alert.alert(
+                                    "Are your sure?",
+                                    "Bạn Đã Hoàn Thành Đơn?",
+                                    [
+
+                                        // The "No" button
+                                        // Does nothing but dismiss the dialog when tapped
+                                        {
+                                            text: "No",
+                                        },
+
+                                        // The "Yes" button
+                                        {
+                                            text: "Yes",
+                                            onPress: () => {
+                                                fetch('http://192.168.1.165:4000' + '/api/customer_re/delete/' + id,
+                                                    {
+                                                        method: 'POST',
+                                                        headers: { 'Content-Type': 'application/json' },
+                                                    }
+                                                )
+                                                    .then(() => {
+                                                        navigation.replace('Cart');
+                                                    })
+                                            },
+                                        },
+                                    ]
+                                );
+                            })
+                    },
+                },
+            ]
+        );
+
+    }
+
+    function handerNo() {
+        return Alert.alert(
+            "Are your sure?",
+            "Đơn Này Nợ ?",
+            [
+
+                // The "No" button
+                // Does nothing but dismiss the dialog when tapped
+                {
+                    text: "No",
+                },
+
+                // The "Yes" button
+                {
+                    text: "Yes",
+                    onPress: () => {
+
+                        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/update/' + id, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                trangthai: "Nợ",
+                                tongtien: tongtien
+                            })
+                        })
+                            .then(() => {
+                                return Alert.alert(
+                                    "Are your sure?",
+                                    "Bạn Đã Hoàn Thành Đơn?",
+                                    [
+
+                                        // The "No" button
+                                        // Does nothing but dismiss the dialog when tapped
+                                        {
+                                            text: "No",
+                                        },
+
+                                        // The "Yes" button
+                                        {
+                                            text: "Yes",
+                                            onPress: () => {
+                                                fetch('http://192.168.1.165:4000' + '/api/customer_re/delete/' + id,
+                                                    {
+                                                        method: 'POST',
+                                                        headers: { 'Content-Type': 'application/json' },
+                                                    }
+                                                )
+                                                    .then(() => {
+                                                        navigation.replace('Cart');
+                                                    })
+                                            },
+                                        },
+                                    ]
+                                );
+                            })
+                    },
+                },
+            ]
+        );
+    }
+
     const [refreshing, setRefreshing] = React.useState(false);
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         setTimeout(() => {
-            fetch(URL_FPT + '/api/orders/' + name)
+            fetch('http://192.168.1.165:4000' + '/api/orders/' + name)
                 .then(res => res.json())
                 .then(res => {
                     setOrder(res)
@@ -364,7 +478,10 @@ export default function ThanhToan({ route, navigation }) {
                         borderColor: 'black',
                         borderWidth: 0.3,
                         paddingVertical: 15
-                    }}>
+                    }}
+                        onPress={() => handerTTChuyenKhoan()}
+
+                    >
                         <Text>
                             Chuyển Khoản
                         </Text>
@@ -375,7 +492,9 @@ export default function ThanhToan({ route, navigation }) {
                         borderColor: 'black',
                         borderWidth: 0.3,
                         paddingVertical: 15
-                    }}>
+                    }}
+                        onPress={() => handerNo()}
+                    >
                         <Text>
                             Nợ
                         </Text>

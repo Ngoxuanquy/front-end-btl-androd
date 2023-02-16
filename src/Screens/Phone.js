@@ -24,15 +24,7 @@ import { useEffect } from 'react';
 
 const Phone = ({ navigation }) => {
     const [inputValue, setInputValue] = useState('0589401978');
-
-    const URL_ON = 'http://192.168.0.106:4000'
-    const URL1_ON = 'http://192.168.0.114:5000'
-
-    const URL_CT = 'http://192.168.1.121:4000'
-    const URL1_CT = 'http://192.168.1.121:5000'
-
-    const URL_FPT = 'http://192.168.0.145:4000'
-    const URL1_FPT = 'http://192.168.0.145:5000'
+    const [isLoading, setIsLoading] = useState(true)
 
     const [taikhoan, setTaiKhoan] = useState([])
     const [orders, setOrders] = useState([])
@@ -59,14 +51,18 @@ const Phone = ({ navigation }) => {
     };
 
     useEffect(() => {
-        fetch(URL_FPT + '/api/customer_re/' + taikhoan)
+        fetch('http://192.168.1.165:4000' + '/api/customer_re/' + taikhoan)
             .then(res => res.json())
             .then(res => setOrders(res))
             .catch(err => console.log(err))
-    }, [])
-
-    console.log(orders)
-
+            .finally(() => {
+                setIsLoading(false)
+                // setReset(true);
+                // setTimeout(() => {
+                //     setReset(false);
+                // }, 10);
+            })
+    }, [taikhoan])
 
 
     const [refreshing, setRefreshing] = React.useState(false);
@@ -74,7 +70,7 @@ const Phone = ({ navigation }) => {
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         setTimeout(() => {
-            fetch(URL_FPT + '/api/customer_re/' + taikhoan)
+            fetch('http://192.168.1.165:4000' + '/api/customer_re/' + taikhoan)
                 .then(res => res.json())
                 .then(res => setOrders(res))
                 .catch(err => console.log(err))
@@ -82,9 +78,6 @@ const Phone = ({ navigation }) => {
         }, 1000);
     }, []);
 
-    useEffect(() => {
-        clearTimeout(onRefresh)
-    }, [])
 
     return (
 

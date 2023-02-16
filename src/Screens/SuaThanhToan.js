@@ -47,15 +47,6 @@ export default function SuaThanhToan({ route, navigation }) {
     const [orders, setOrder] = useState([]);
     const [customer_name, setCustomer_name] = useState([]);
 
-    const URL_ON = 'http://192.168.0.106:4000'
-    const URL1_ON = 'http://192.168.0.114:5000'
-
-    const URL_CT = 'http://192.168.1.121:4000'
-    const URL1_CT = 'http://192.168.1.121:5000'
-
-    const URL_FPT = 'http://192.168.0.145:4000'
-    const URL1_FPT = 'http://192.168.0.145:5000'
-
     AsyncStorage.getItem('taikhoan')
         .then(res =>
             setTaiKhoan(res)
@@ -69,7 +60,7 @@ export default function SuaThanhToan({ route, navigation }) {
     }
 
     useEffect(() => {
-        fetch(URL_FPT + '/api/products/')
+        fetch('http://192.168.1.165:4000' + '/api/products/')
             .then(res => res.json())
             .then(res => setProducts(res))
             .catch(err => console.log(err))
@@ -101,7 +92,7 @@ export default function SuaThanhToan({ route, navigation }) {
 
 
     useEffect(() => {
-        fetch(URL_FPT + '/api/customer_re/')
+        fetch('http://192.168.1.165:4000' + '/api/customer_re/')
             .then(res => res.json())
             .then(res => setCustomer(res))
             .catch(err => console.log(err))
@@ -114,7 +105,7 @@ export default function SuaThanhToan({ route, navigation }) {
     }, [])
 
     useEffect(() => {
-        fetch(URL_FPT + '/api/orders/' + name)
+        fetch('http://192.168.1.165:4000' + '/api/orders/' + name)
             .then(res => res.json())
             .then(res => setOrder(res))
             .catch(err => console.log(err))
@@ -137,7 +128,7 @@ export default function SuaThanhToan({ route, navigation }) {
         products.map(Product => {
             if (Product.id == id1) {
 
-                fetch(URL_FPT + '/api/orders/create/', {
+                fetch('http://192.168.1.165:4000' + '/api/orders/create/', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -152,7 +143,7 @@ export default function SuaThanhToan({ route, navigation }) {
                     })
                 })
                     .then(() => {
-                        fetch(URL_FPT + '/api/orders/' + name)
+                        fetch('http://192.168.1.165:4000' + '/api/orders/' + name)
                             .then(res => res.json())
                             .then(res => setOrder(res))
                             .catch(err => console.log(err))
@@ -173,14 +164,14 @@ export default function SuaThanhToan({ route, navigation }) {
 
     function handerDetele(id) {
 
-        fetch(URL_FPT + '/api/orders/delete/' + id,
+        fetch('http://192.168.1.165:4000' + '/api/orders/delete/' + id,
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
             }
         )
             .then(() => {
-                fetch(URL_FPT + '/api/orders/' + name)
+                fetch('http://192.168.1.165:4000' + '/api/orders/' + name)
                     .then(res => res.json())
                     .then(res => setOrder(res))
                     .catch(err => console.log(err))
@@ -197,7 +188,7 @@ export default function SuaThanhToan({ route, navigation }) {
     })
 
     function handerSoLuong(id, soluong) {
-        fetch(URL_FPT + '/api/orders/update/soluong/' + id, {
+        fetch('http://192.168.1.165:4000' + '/api/orders/update/soluong/' + id, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -205,7 +196,7 @@ export default function SuaThanhToan({ route, navigation }) {
             })
         })
             .then(() => {
-                fetch(URL_FPT + '/api/orders/' + name)
+                fetch('http://192.168.1.165:4000' + '/api/orders/' + name)
                     .then(res => res.json())
                     .then(res => setOrder(res))
                     .catch(err => console.log(err))
@@ -218,7 +209,7 @@ export default function SuaThanhToan({ route, navigation }) {
             return;
         }
 
-        fetch(URL_FPT + '/api/orders/update/soluong/' + id, {
+        fetch('http://192.168.1.165:4000' + '/api/orders/update/soluong/' + id, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -226,13 +217,15 @@ export default function SuaThanhToan({ route, navigation }) {
             })
         })
             .then(() => {
-                fetch(URL_FPT + '/api/orders/' + name)
+                fetch('http://192.168.1.165:4000' + '/api/orders/' + name)
                     .then(res => res.json())
                     .then(res => setOrder(res))
                     .catch(err => console.log(err))
             })
 
     }
+
+
 
     function handerTTTienMat() {
         return Alert.alert(
@@ -250,38 +243,51 @@ export default function SuaThanhToan({ route, navigation }) {
                 {
                     text: "Yes",
                     onPress: () => {
-                        orders.map(order => {
-                            fetch(URL_FPT + '/api/thanhtoan/update/' + id, {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({
-                                    trangthai: "Tiền Mặt",
-                                    tongtien: tongtien
-                                })
+                        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/update/' + id, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                trangthai: 'Tiền Mặt',
+                                tongtien: tongtien
                             })
-                                .then(() => {
-                                    return Alert.alert(
-                                        "Are your sure?",
-                                        "Bạn Đã Hoàn Thành Đơn?",
-                                        [
-
-                                            // The "No" button
-                                            // Does nothing but dismiss the dialog when tapped
-                                            {
-                                                text: "No",
-                                            },
-
-                                            // The "Yes" button
-                                            {
-                                                text: "Yes",
-                                                onPress: () => {
-                                                    navigation.navigate('Lịch Sử Đơn Hàng');
-                                                },
-                                            },
-                                        ]
-                                    );
-                                })
                         })
+                            .then(() => {
+                                alert('Sửa Thành Công!!')
+                            })
+                    },
+                },
+            ]
+        );
+
+    }
+
+    function handerTTChuyenKhoan() {
+        return Alert.alert(
+            "Are your sure?",
+            "Bạn Muốn Sửa Thanh Toán Này?",
+            [
+
+                // The "No" button
+                // Does nothing but dismiss the dialog when tapped
+                {
+                    text: "No",
+                },
+
+                // The "Yes" button
+                {
+                    text: "Yes",
+                    onPress: () => {
+                        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/update/' + id, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                trangthai: 'Chuyển Khoản',
+                                tongtien: tongtien
+                            })
+                        })
+                            .then(() => {
+                                alert('Sửa Thành Công!!')
+                            })
                     },
                 },
             ]
@@ -292,13 +298,12 @@ export default function SuaThanhToan({ route, navigation }) {
     const [thanhtoans, setThanhToan] = useState([])
 
     useEffect(() => {
-        fetch(URL_FPT + '/api/thanhtoan/id/' + id)
+        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/id/' + id)
             .then(res => res.json())
             .then(res => setThanhToan(res))
             .catch(err => console.log(err))
     }, [])
 
-    console.log(thanhtoans)
 
     return (
         <View style={{
@@ -316,7 +321,7 @@ export default function SuaThanhToan({ route, navigation }) {
                     zIndex: 1
                 }}>
                     <TouchableOpacity style={{
-                        width: '50%',
+                        width: '33%',
                         alignItems: 'center',
                         borderColor: 'black',
                         borderWidth: 0.3,
@@ -327,9 +332,28 @@ export default function SuaThanhToan({ route, navigation }) {
                         <Text>
                             Sửa Thanh Toán
                         </Text>
+                        <Text>
+                            (Tiền Mặt)
+                        </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={{
-                        width: '50%',
+                        width: '34%',
+                        alignItems: 'center',
+                        borderColor: 'black',
+                        borderWidth: 0.3,
+                        paddingVertical: 15
+                    }}
+                        onPress={() => handerTTChuyenKhoan()}
+                    >
+                        <Text>
+                            Sửa Thanh Toán
+                        </Text>
+                        <Text>
+                            (Chuyển Khoản)
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{
+                        width: '33%',
                         alignItems: 'center',
                         borderColor: 'black',
                         borderWidth: 0.3,

@@ -34,14 +34,6 @@ export default function HomeScrenn({ navigation }) {
             setToken(res)
         )
 
-    const URL_ON = 'http://192.168.0.106:4000'
-    const URL1_ON = 'http://192.168.0.114:5000'
-
-    const URL_CT = 'http://192.168.1.121:4000'
-    const URL1_CT = 'http://192.168.1.121:5000'
-
-    const URL_FPT = 'http://192.168.0.145:4000'
-    const URL1_FPT = 'http://192.168.0.145:5000'
 
     const [isLoad, setIsLoad] = useState(false)
     const [isUpAnh, setUpAnh] = useState(false)
@@ -78,7 +70,7 @@ export default function HomeScrenn({ navigation }) {
     // console.log(taikhoan)
 
     useEffect(() => {
-        fetch(URL_FPT + '/api/users/' + taikhoan)
+        fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
             .then(res => res.json())
             .then(res => setThongTin(res))
     }, [taikhoan])
@@ -91,7 +83,7 @@ export default function HomeScrenn({ navigation }) {
     }
 
     useEffect(() => {
-        fetch(URL_FPT + '/posts', options)
+        fetch('http://192.168.1.165:4000' + '/posts', options)
             .then(res => res.json())
             .then(res => setApi(res))
             .catch((err) => console.log(err))
@@ -99,7 +91,7 @@ export default function HomeScrenn({ navigation }) {
 
     function handerLogout() {
 
-        fetch(URL_FPT + '/api/users/update/token/' + taikhoan, {
+        fetch('http://192.168.1.165:4000' + '/api/users/update/token/' + taikhoan, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
         })
@@ -145,7 +137,7 @@ export default function HomeScrenn({ navigation }) {
     }
 
     function handerXacNhan() {
-        fetch(URL_FPT + '/api/users/update/img/' + taikhoan, {
+        fetch('http://192.168.1.165:4000' + '/api/users/update/img/' + taikhoan, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -153,7 +145,7 @@ export default function HomeScrenn({ navigation }) {
             })
         })
             .then(() => {
-                fetch(URL_FPT + '/api/users/' + taikhoan)
+                fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
                     .then(res => res.json())
                     .then(res => setThongTin(res))
             })

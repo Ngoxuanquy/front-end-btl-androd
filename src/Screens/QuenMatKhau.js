@@ -9,28 +9,21 @@ function QuenMatKhau() {
     const [logins, setLogin] = useState([]);
     const [pass, setPass] = useState('')
 
-    const URL_ON = 'http://192.168.0.106:4000'
-    const URL1_ON = 'http://192.168.0.106:5000'
-
-    const URL_CT = 'http://192.168.1.121:4000'
-    const URL1_CT = 'http://192.168.1.121:5000'
-
-    const URL_FPT = 'http://192.168.0.145:4000'
-    const URL1_FPT = 'http://192.168.0.145:5000'
-
     useEffect(() => {
-        fetch(URL_FPT + '/api/users')
+        fetch('http://192.168.1.165:4000' + '/api/users')
             .then(res => res.json())
             .then(res => setLogin(res))
     }, [])
 
     function handerSubmit() {
+
+        const user = logins.find(user => user.email === email)
+        if (!user) return alert('Email Không Tồn Tại!!!');
+
         logins.map(login => {
             if (login.email == email) {
                 setPass(login.pass)
-            }
-            else {
-                alert('Gmail Không Tồn Tại!!');
+                return;
             }
         })
     }

@@ -11,14 +11,6 @@ import { Entypo } from '@expo/vector-icons';
 
 export default function Login({ navigation }) {
 
-    const URL_ON = 'http://192.168.0.106:4000'
-    const URL1_ON = 'http://192.168.0.106:5000'
-
-    const URL_CT = 'http://192.168.1.121:4000'
-    const URL1_CT = 'http://192.168.1.121:5000'
-
-    const URL_FPT = 'http://192.168.0.145:4000'
-    const URL1_FPT = 'http://192.168.0.145:5000'
 
     const [toggleCheckBox, setToggleCheckBox] = useState(false)
     const [isChecked, setChecked] = useState(false);
@@ -37,7 +29,7 @@ export default function Login({ navigation }) {
     };
 
     useLayoutEffect(() => {
-        fetch(URL_FPT + '/api/users')
+        fetch('http://192.168.1.165:4000' + '/api/users')
             .then(res => res.json())
             .then(res => setLogin(res))
     }, [])
@@ -48,7 +40,7 @@ export default function Login({ navigation }) {
         const user = logins.find(user => user.email === taikhoan)
         if (!user) return alert('sai tk hoặc mk');
 
-        fetch(URL1_FPT + '/login', options)
+        fetch('http://192.168.1.165:5000' + '/login', options)
             .then(res => res.json())
             .then(res => {
                 // console.log(res.accessToken)
@@ -57,7 +49,7 @@ export default function Login({ navigation }) {
                 AsyncStorage.setItem('token', res.accessToken);
                 AsyncStorage.setItem('taikhoan', taikhoan);
 
-                fetch(URL_FPT + '/api/users/update/' + taikhoan, {
+                fetch('http://192.168.1.165:4000' + '/api/users/update/' + taikhoan, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
