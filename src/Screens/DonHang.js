@@ -12,7 +12,7 @@ export default function DonHang({ navigation }) {
                         marginTop: 10
                     }}>
                         <TouchableOpacity style={{
-                            height: 80,
+                            height: 60,
                             backgroundColor: '#DDDDDD',
                             width: '90%',
                             justifyContent: 'center',
@@ -46,7 +46,7 @@ export default function DonHang({ navigation }) {
                         marginTop: 10
                     }}>
                         <TouchableOpacity style={{
-                            height: 80,
+                            height: 60,
                             backgroundColor: '#DDDDDD',
                             width: '90%',
                             justifyContent: 'center',
@@ -80,7 +80,7 @@ export default function DonHang({ navigation }) {
                         marginTop: 10
                     }}>
                         <TouchableOpacity style={{
-                            height: 80,
+                            height: 60,
                             backgroundColor: '#DDDDDD',
                             width: '90%',
                             justifyContent: 'center',
@@ -116,7 +116,7 @@ export default function DonHang({ navigation }) {
                         marginTop: 10
                     }}>
                         <TouchableOpacity style={{
-                            height: 80,
+                            height: 60,
                             backgroundColor: '#DDDDDD',
                             width: '90%',
                             justifyContent: 'center',
@@ -150,7 +150,7 @@ export default function DonHang({ navigation }) {
                         marginTop: 10
                     }}>
                         <TouchableOpacity style={{
-                            height: 80,
+                            height: 60,
                             backgroundColor: '#DDDDDD',
                             width: '90%',
                             justifyContent: 'center',
@@ -184,7 +184,7 @@ export default function DonHang({ navigation }) {
                         marginTop: 10
                     }}>
                         <TouchableOpacity style={{
-                            height: 80,
+                            height: 60,
                             backgroundColor: '#DDDDDD',
                             width: '90%',
                             justifyContent: 'center',
@@ -218,7 +218,7 @@ export default function DonHang({ navigation }) {
                         marginTop: 10
                     }}>
                         <TouchableOpacity style={{
-                            height: 80,
+                            height: 60,
                             backgroundColor: '#DDDDDD',
                             width: '90%',
                             justifyContent: 'center',

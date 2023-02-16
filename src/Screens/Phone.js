@@ -65,6 +65,10 @@ const Phone = ({ navigation }) => {
             .catch(err => console.log(err))
     }, [])
 
+    console.log(orders)
+
+
+
     const [refreshing, setRefreshing] = React.useState(false);
 
     const onRefresh = React.useCallback(() => {
@@ -77,6 +81,10 @@ const Phone = ({ navigation }) => {
             setRefreshing(false);
         }, 1000);
     }, []);
+
+    useEffect(() => {
+        clearTimeout(onRefresh)
+    }, [])
 
     return (
 

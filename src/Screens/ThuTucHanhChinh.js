@@ -1,19 +1,21 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
 // import ThuTucHanhChinh from './ThuTucHanhChinh';
 
 export default function ThuTucHanhChinh({ navigation }) {
     return (
-        <View>
+        <ScrollView>
             <View>
-                <View>
-                    <View>
+                <View >
+                    <View style={{
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
                         <TouchableOpacity style={{
                             backgroundColor: '#dddddd',
                             marginTop: 20,
-                            borderTopRightRadius: 20,
-                            borderBottomRightRadius: 20,
-                            width: '75%'
+                            borderRadius: 10,
+                            width: '90%'
 
                         }}
                             onPress={() => navigation.navigate('Phiếu Đề Nghị')}
@@ -30,15 +32,15 @@ export default function ThuTucHanhChinh({ navigation }) {
                         </TouchableOpacity>
                     </View>
 
-                    <View>
+                    <View style={{
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
                         <TouchableOpacity style={{
                             backgroundColor: '#dddddd',
-                            marginLeft: 120,
                             marginTop: 20,
-                            right: 0,
-                            width: '75%',
-                            borderBottomLeftRadius: 20,
-                            borderTopLeftRadius: 20
+                            width: '90%',
+                            borderRadius: 10
                         }}
                             onPress={() => navigation.navigate('Phiếu Giải Trình')}
 
@@ -54,13 +56,15 @@ export default function ThuTucHanhChinh({ navigation }) {
                         </TouchableOpacity>
                     </View>
 
-                    <View>
+                    <View style={{
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
                         <TouchableOpacity style={{
                             backgroundColor: '#dddddd',
                             marginTop: 20,
-                            borderTopRightRadius: 20,
-                            borderBottomRightRadius: 20,
-                            width: '75%'
+                            borderRadius: 10,
+                            width: '90%'
 
                         }}
                             onPress={() => navigation.navigate('Đơn Xin Nghỉ Phép')}
@@ -78,15 +82,15 @@ export default function ThuTucHanhChinh({ navigation }) {
                     </View>
 
 
-                    <View>
+                    <View style={{
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
                         <TouchableOpacity style={{
                             backgroundColor: '#dddddd',
-                            marginLeft: 120,
                             marginTop: 20,
-                            right: 0,
-                            width: '75%',
-                            borderBottomLeftRadius: 20,
-                            borderTopLeftRadius: 20
+                            width: '90%',
+                            borderRadius: 10
                         }}
                             onPress={() => navigation.navigate('Đơn Xin Nghỉ Việc')}
 
@@ -102,13 +106,15 @@ export default function ThuTucHanhChinh({ navigation }) {
                         </TouchableOpacity>
                     </View>
 
-                    <View>
+                    <View style={{
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
                         <TouchableOpacity style={{
                             backgroundColor: '#dddddd',
                             marginTop: 20,
-                            borderTopRightRadius: 20,
-                            borderBottomRightRadius: 20,
-                            width: '75%'
+                            borderRadius: 10,
+                            width: '90%'
 
                         }}
                             onPress={() => navigation.navigate('Đơn Xin Đi Muộn')}
@@ -125,15 +131,15 @@ export default function ThuTucHanhChinh({ navigation }) {
                         </TouchableOpacity>
                     </View>
 
-                    <View>
+                    <View style={{
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
                         <TouchableOpacity style={{
                             backgroundColor: '#dddddd',
-                            marginLeft: 120,
                             marginTop: 20,
-                            right: 0,
-                            width: '75%',
-                            borderBottomLeftRadius: 20,
-                            borderTopLeftRadius: 20
+                            width: '90%',
+                            borderRadius: 10
                         }}>
                             <Text style={{
                                 fontSize: 20,
@@ -146,13 +152,15 @@ export default function ThuTucHanhChinh({ navigation }) {
                         </TouchableOpacity>
                     </View>
 
-                    <View>
+                    <View style={{
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
                         <TouchableOpacity style={{
                             backgroundColor: '#dddddd',
                             marginTop: 20,
-                            borderTopRightRadius: 20,
-                            borderBottomRightRadius: 20,
-                            width: '75%'
+                            borderRadius: 10,
+                            width: '90%'
 
                         }}>
                             <Text style={{
@@ -168,7 +176,7 @@ export default function ThuTucHanhChinh({ navigation }) {
                 </View>
 
             </View>
-        </View>
+        </ScrollView>
     );
 }
 

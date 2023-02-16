@@ -62,7 +62,6 @@ export default function Tag({ navigation }) {
         return true;
     }
 
-    console.log('aaaa')
 
 
     return (

@@ -15,8 +15,6 @@ export default function ThanhToan({ route, navigation }) {
     const [isLoading, setIsLoading] = useState(true)
 
 
-
-
     const Arrays = [
         {
             id: 1,
@@ -43,90 +41,6 @@ export default function ThanhToan({ route, navigation }) {
             name: 'All'
         },
     ]
-
-    // const Products = [
-    //     {
-    //         id: 1,
-    //         name: 'Rau Dền',
-    //         price: 100,
-    //         properties: 'Rau',
-    //         img: 'https://media-cdn-v2.laodong.vn/storage/newsportal/2022/1/20/996975/Rau-Den.jpg?w=800&crop=auto&scale=both'
-
-    //     },
-    //     {
-    //         id: 2,
-    //         name: 'Rau Cải',
-    //         price: 100,
-    //         properties: 'Rau',
-    //         img: 'http://media.cooky.vn/images/blog-2016/6-loai-rau-khong-bao-gio-nen-luoc-0.jpg'
-
-    //     },
-    //     {
-    //         id: 3,
-    //         name: 'Rau muống',
-    //         price: 100,
-    //         properties: 'Rau',
-    //         img: 'https://hongngochospital.vn/wp-content/uploads/2013/11/rau-muong.jpg'
-
-    //     },
-    //     {
-    //         id: 4,
-    //         name: 'Thịt Lợn',
-    //         price: 100,
-    //         properties: 'Thịt',
-    //         img: 'https://icdn.dantri.com.vn/FaA3gEccccccccccccos/Image/2011/06/tht6811_a9082.jpg'
-
-    //     },
-    //     {
-    //         id: 5,
-    //         name: 'Thịt Gà',
-    //         price: 100,
-    //         properties: 'Thịt',
-    //         img: 'https://suckhoehangngay.mediacdn.vn/zoom/700_438/154880486097817600/2021/8/29/an-thit-ga-nhieu-co-tot-khong-2-16302301251131276160424-0-97-512-916-crop-16302301919781076935074.jpg'
-
-    //     },
-    //     {
-    //         id: 6,
-    //         name: 'Cá Mập',
-    //         price: 100,
-    //         properties: 'Cá',
-    //         img: 'https://cdnmedia.baotintuc.vn/Upload/ESSoZh9IeVhxwO8Bh87Q/files/2021/10/27/camap271021.jpg'
-
-    //     },
-    //     {
-    //         id: 7,
-    //         name: 'Khủng Long',
-    //         price: 100,
-    //         properties: 'Khủng Long',
-    //         img: 'http://icdn.dantri.com.vn/zoom/1200_630/2021/05/10/khung-long-crop-1620601045917.jpeg'
-
-    //     },
-    //     {
-    //         id: 8,
-    //         name: 'Voi',
-    //         price: 100,
-    //         properties: 'Voi',
-    //         img: 'https://hinhmoc.com/wp-content/uploads/2020/07/con-voi.jpg'
-
-    //     },
-    //     {
-    //         id: 9,
-    //         name: 'Thịt Bò',
-    //         price: 100,
-    //         properties: 'Thịt',
-    //         img: 'https://vinmec-prod.s3.amazonaws.com/images/20191112_133540_928947_thit-bo.max-1800x1800.png'
-
-    //     },
-    //     {
-    //         id: 10,
-    //         name: 'Thịt Hổ',
-    //         price: 100,
-    //         properties: 'Thịt',
-    //         img: 'https://image.thanhnien.vn/w1024/Uploaded/2022/jvunzvu/2022_07_08/ho-8347.jpg'
-
-    //     }
-    // ]
-
 
 
     const [xoa, setXoa] = useState();
@@ -245,9 +159,15 @@ export default function ThanhToan({ route, navigation }) {
                             .then(() => {
                                 fetch(URL_FPT + '/api/orders/' + name)
                                     .then(res => res.json())
-                                    .then(res => setOrder(res))
+                                    .then(res => {
+                                        getConten()
+                                        setIsLoading(true)
+
+                                        setOrder(res)
+                                    })
                                     .catch(err => console.log(err))
                                     .finally(() => {
+                                        setIsLoading(false)
                                     })
                             })
                             .then(() => {
@@ -257,6 +177,7 @@ export default function ThanhToan({ route, navigation }) {
                 })
             }
         })
+
     }
 
 
@@ -265,7 +186,7 @@ export default function ThanhToan({ route, navigation }) {
 
 
     function handerDetele(id) {
-        console.log(id)
+
         fetch(URL_FPT + '/api/orders/delete/' + id,
             {
                 method: 'POST',
@@ -277,8 +198,8 @@ export default function ThanhToan({ route, navigation }) {
                     .then(res => res.json())
                     .then(res => setOrder(res))
                     .catch(err => console.log(err))
-
             })
+
     }
 
 
@@ -396,6 +317,14 @@ export default function ThanhToan({ route, navigation }) {
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         setTimeout(() => {
+            fetch(URL_FPT + '/api/orders/' + name)
+                .then(res => res.json())
+                .then(res => {
+                    setOrder(res)
+                })
+                .catch(err => console.log(err))
+                .finally(() => {
+                })
             setRefreshing(false);
         }, 1000);
     }, []);

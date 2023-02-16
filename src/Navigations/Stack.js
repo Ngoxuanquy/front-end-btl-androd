@@ -7,6 +7,7 @@ import Home from '../Screens/Home';
 import Login from '../Screens/Login';
 import Tag from './Tab';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import QuenMatKhau from '../Screens/QuenMatKhau';
 
 
 const Stack = createNativeStackNavigator();
@@ -36,43 +37,65 @@ function Stacks() {
             setTaiKhoan(res)
         )
 
-    // useEffect(() => {
-    //     fetch(URL_CT + '/api/users/' + taikhoan)
-    //         .then(res => res.json())
-    //         .then(res => res.map(re => {
-    //             setToken(re.token)
-    //         }))
-    //         .finally(() => {
-    //             // console.log('a')
-    //             // setReset(true);
-    //             // setTimeout(() => {
-    //             //     setReset(false);
-    //             // }, 10);
-    //         })
-    // }, [])
+    useEffect(() => {
+        fetch(URL_FPT + '/api/users/' + taikhoan)
+            .then(res => res.json())
+            .then(res => res.map(re => {
+                setToken(re.token)
+            }))
+            .finally(() => {
+                // console.log('a')
+                // setReset(true);
+                // setTimeout(() => {
+                //     setReset(false);
+                // }, 10);
+            })
+    }, [])
 
     // if (reset) {
     //     return null;
     // }
 
+    // setTimeout(() => {
+    //     fetch(URL_CT + '/api/users/' + taikhoan)
+    //         .then(res => res.json())
+    //         .then(res => res.map(re => {
+    //             setToken(re.token)
+    //         }))
+    // }, 1000
+    // )
+
+
     return (
         <NavigationContainer independent={true}>
 
             <Stack.Navigator>
-                {/* {token != "" ?
-                    <> */}
+                {/* {token != "" ? */}
+
                 <Stack.Screen name="Login" component={Login} options={{
                     headerShown: false
                 }} />
                 <Stack.Screen name="Home" component={Tag} options={{
                     headerShown: false
                 }} />
-                {/* </>
-                    :
+
+                <Stack.Screen name="QuenMatKhau" component={QuenMatKhau} options={{
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: '#789BF6',
+                        height: 150,
+                        // title: 'My home',
+                        borderBottomLeftRadius: 40,
+                        borderBottomRightRadius: 40
+                    },
+                    headerTintColor: '#fff',
+                }} />
+
+                {/* :
                     <Stack.Screen name="Login" component={Login} options={{
                         headerShown: false
-                    }} />
-                } */}
+                    }} /> */}
+                {/* } */}
             </Stack.Navigator>
 
         </NavigationContainer>

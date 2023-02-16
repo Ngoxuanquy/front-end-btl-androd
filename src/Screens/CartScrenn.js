@@ -176,19 +176,19 @@ export default function Cart({ navigation }) {
     }
 
 
-    setTimeout(() => {
-        fetch(URL_FPT + '/api/customer/')
-            .then(res => res.json())
-            .then(res => setCustomer(res))
-            .catch(err => console.log(err))
-    }, 10000
-    )
+    // setTimeout(() => {
+    //     fetch(URL_FPT + '/api/customer/')
+    //         .then(res => res.json())
+    //         .then(res => setCustomer(res))
+    //         .catch(err => console.log(err))
+    // }, 10000
+    // )
 
     const [refreshing, setRefreshing] = React.useState(false);
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
-        setTimeout(() => {
+        const timeout = setTimeout(() => {
             fetch(URL_FPT + '/api/customer/')
                 .then(res => res.json())
                 .then(res => {
@@ -208,6 +208,9 @@ export default function Cart({ navigation }) {
                 .catch(err => console.log(err))
             setRefreshing(false);
         }, 1000);
+
+        return clearTimeout(onRefresh)
+
     }, []);
 
     return (
@@ -690,7 +693,10 @@ export default function Cart({ navigation }) {
 
 
                                     }}
-                                        onPress={() => navigation.navigate("ChiTiet")}
+                                        onPress={() => navigation.navigate("ChiTiet", {
+                                            name: order.name,
+                                            id: order.id
+                                        })}
                                     >
                                         <Text style={{
                                             color: 'black'

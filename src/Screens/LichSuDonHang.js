@@ -3,9 +3,12 @@ import React, { useState, useEffect } from 'react'
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 
+
 export default function LichSuDonHang({ navigation }) {
     const [lichSuCTT, setLichSuCTT] = useState([]);
     const [lichSuDTT, setLichSuDTT] = useState([]);
+    const [apis, setApi] = useState([])
+    const [Value, setValue] = useState('')
 
 
     const URL_ON = 'http://192.168.0.106:4000'
@@ -29,6 +32,7 @@ export default function LichSuDonHang({ navigation }) {
                 // }, 1000);
             })
     }, [])
+
 
     useEffect(() => {
         fetch(URL_FPT + '/api/thanhtoan/Đã Thanh Toán Bằng Tiền Mặt')
@@ -73,6 +77,19 @@ export default function LichSuDonHang({ navigation }) {
 
     }
 
+    function handerSearch() {
+        fetch(URL_FPT + '/api/thanhtoan/sdt/' + Value)
+            .then(res => res.json())
+            .then(res => setLichSuDTT(res))
+            .catch(err => console.log(err))
+            .finally(() => {
+                // setReset(true);
+                // setTimeout(() => {
+                //     setReset(false);
+                // }, 1000);
+            })
+    }
+
     return (
         <ScrollView
             refreshControl={
@@ -88,25 +105,49 @@ export default function LichSuDonHang({ navigation }) {
                 <View>
                     <View>
                         <View style={{
-                            marginTop: 10
+                            marginTop: 10,
+                            flexDirection: 'row'
                         }}>
-                            <AntDesign name="search1" size={29} color="black" style={{
-                                position: 'absolute',
-                                top: 10,
-                                left: 10
-                            }} />
-                            <TextInput
-                                style={{
-                                    borderColor: 'gray',
-                                    borderWidth: 0.3,
-                                    height: 50,
-                                    paddingLeft: 50,
-                                    paddingRight: 20,
+                            <View>
+                                <AntDesign name="search1" size={29} color="black" style={{
+                                    position: 'absolute',
+                                    top: 10,
+                                    left: 10
+                                }} />
+                                <TextInput
+                                    style={{
+                                        borderColor: 'gray',
+                                        borderWidth: 0.3,
+                                        height: 50,
+                                        paddingLeft: 50,
+                                        paddingRight: 20,
+                                        fontSize: 20,
+                                        color: 'black',
+                                        width: 300
+                                    }}
+                                    placeholder="Nhập Mã Đơn..."
+                                    onChangeText={(e) => setValue(e)}
+                                />
+                            </View>
+                            <TouchableOpacity style={{
+                                width: 70,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderColor: 'gray',
+                                borderWidth: 0.4,
+                                backgroundColor: 'green',
+                                opacity: 0.5
+                            }}
+                                onPress={() => handerSearch()}
+                            >
+                                <Text style={{
+                                    textAlign: 'center',
                                     fontSize: 20,
-                                    color: 'black'
-                                }}
-                                placeholder="Nhập Mã Đơn..."
-                            />
+                                    color: 'white'
+                                }}>
+                                    Tìm
+                                </Text>
+                            </TouchableOpacity>
                         </View>
 
                         <View>

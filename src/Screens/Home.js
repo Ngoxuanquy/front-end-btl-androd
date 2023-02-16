@@ -14,9 +14,25 @@ import DropDownItem from "react-native-drop-down-item";
 import { Accordion, animate, Value } from '@dooboo-ui/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import UpAnh from '../Components/UpAnh';
+import LottieView from 'lottie-react-native';
+// import MaHoa from '../Components/MaHoa';
+import * as Keychain from 'react-native-keychain';
+
 // import { Value } from 'react-native-reanimated';
 // import Buttons from './Button'
 export default function HomeScrenn({ navigation }) {
+
+    const [taikhoan, setTaiKhoan] = useState([])
+    const [token, setToken] = useState([])
+    AsyncStorage.getItem('taikhoan')
+        .then(res =>
+            setTaiKhoan(res)
+        )
+
+    AsyncStorage.getItem('token')
+        .then(res =>
+            setToken(res)
+        )
 
     const URL_ON = 'http://192.168.0.106:4000'
     const URL1_ON = 'http://192.168.0.114:5000'
@@ -29,8 +45,7 @@ export default function HomeScrenn({ navigation }) {
 
     const [isLoad, setIsLoad] = useState(false)
     const [isUpAnh, setUpAnh] = useState(false)
-    const [taikhoan, setTaiKhoan] = useState([])
-    const [token, setToken] = useState([])
+
     const [thongtin, setThongTin] = useState([])
     const [reset, setReset] = useState(false);
 
@@ -127,10 +142,6 @@ export default function HomeScrenn({ navigation }) {
         if (!result.canceled) {
             setImage(result.assets[0].uri)
         }
-
-
-
-
     }
 
     function handerXacNhan() {
@@ -199,10 +210,12 @@ export default function HomeScrenn({ navigation }) {
 
     function handerUpAnh() {
         setUpAnh(true)
+        setImage(null)
     }
 
     function handerCance() {
         setUpAnh(false)
+        setImage(null)
 
     }
 
@@ -230,7 +243,6 @@ export default function HomeScrenn({ navigation }) {
                 }} />
             }
         >
-
             {/* menu */}
             <View style={{
                 marginTop: 0,
@@ -648,11 +660,10 @@ export default function HomeScrenn({ navigation }) {
                     }} >
                         {buttons.map(button => (
                             <TouchableOpacity onPress={() => navigation.navigate(button.button)
-
                             }
                                 key={button.id}
                                 style={{
-                                    width: 100,
+                                    width: 110,
                                     height: 100,
                                     borderColor: 'black',
                                     borderWidth: 1,
@@ -668,6 +679,7 @@ export default function HomeScrenn({ navigation }) {
                                     shadowOpacity: 0.64,
                                     shadowRadius: 2.27,
                                     elevation: 10,
+                                    marginLeft: 5
                                 }}>
                                 <MaterialIcons name={button.icon} style={{
                                     fontSize: 30,
@@ -707,18 +719,23 @@ export default function HomeScrenn({ navigation }) {
                         <Button title="Thay Ảnh" onPress={pickImage} style={{
                         }} />
                     </View>
-                    <View style={{
-                        alignItems: 'center', justifyContent: 'center',
-                        backgroundColor: 'white',
-                        paddingVertical: 2,
-                        marginTop: 3,
-                        borderTopWidth: 0.5
-                    }}>
-                        {image && <Image source={{ uri: image }} style={{ width: 100, height: 100 }} />}
-                        <Button title="Xác Nhận" onPress={() => handerXacNhan()} style={{
+                    {image &&
 
-                        }} />
-                    </View>
+                        <View style={{
+                            alignItems: 'center', justifyContent: 'center',
+                            backgroundColor: 'white',
+                            paddingVertical: 2,
+                            marginTop: 3,
+                            borderTopWidth: 0.5
+                        }}>
+                            <>
+                                <Image source={{ uri: image }} style={{ width: 100, height: 100 }} />
+                                <Button title="Xác Nhận" onPress={() => handerXacNhan()} style={{
+                                }}
+                                />
+                            </>
+                        </View>
+                    }
                     <View style={{
                         justifyContent: 'center',
                         alignItems: 'center',
@@ -768,6 +785,8 @@ export default function HomeScrenn({ navigation }) {
                     </TouchableOpacity>
                 </View>
             }
+
+
 
             {
                 isLoad &&
@@ -1130,50 +1149,48 @@ export default function HomeScrenn({ navigation }) {
                                     Duyệt Chi
                                 </Text>
                             </View>
-                            <TouchableOpacity style={{
-                                flexDirection: 'row',
-                                // height: 60,
-                                padding: 10,
-                                paddingBottom: -10,
-                                borderBottomColor: 'gray',
-                                borderBottomWidth: 0.3,
-                                marginLeft: 10,
-                                marginRight: 10,
-                                height: 60,
-                                textAlign: 'center',
-                                justifyContent: 'flex-start',
-                                alignItems: 'center'
-                            }}
-                                onPress={() => handerLogout()}
-                            >
-                                <FontAwesome name="money" size={24} color="black" style={{
-                                    marginTop: -7
-                                }} />
-                                <Text style={{
-                                    fontSize: 20,
-                                    lineHeight: 30,
-                                    marginLeft: 10
 
-                                }}>
-                                    Đăng Xuất
-                                </Text>
-                            </TouchableOpacity>
+
+                            <View style={{
+                                marginTop: 40
+                            }}>
+                                <TouchableOpacity style={{
+                                    flexDirection: 'row',
+                                    // height: 60,
+                                    padding: 10,
+                                    paddingBottom: -10,
+                                    borderBottomColor: 'gray',
+                                    borderBottomWidth: 0.3,
+                                    marginLeft: 10,
+                                    marginRight: 10,
+                                    height: 60,
+                                    textAlign: 'center',
+                                    justifyContent: 'flex-start',
+                                    alignItems: 'center'
+                                }}
+                                    onPress={() => handerLogout()}
+                                >
+                                    <MaterialIcons name="logout" size={30} color="black" style={{
+                                        marginTop: -3
+                                    }} />
+                                    <Text style={{
+                                        fontSize: 20,
+                                        lineHeight: 30,
+                                        marginLeft: 10
+
+                                    }}>
+                                        Đăng Xuất
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+
                         </View>
-
-
-
-
-
-
                     </ScrollView>
-
                 </View >
 
             }
-
-
-
         </ScrollView >
+
     );
 }
 

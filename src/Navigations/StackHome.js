@@ -68,7 +68,8 @@ function StackHomes() {
                     headerShown: false
                 }} />
                 <Stack.Screen name="DonDangThucHien" component={DonDangThucHien} options={{
-                    headerShown: true
+                    headerShown: true,
+                    
                 }} />
                 <Stack.Screen name="KhoHang" component={KhoHang} options={{
                     headerShown: true,

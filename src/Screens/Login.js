@@ -6,7 +6,8 @@ import Checkbox from 'expo-checkbox';
 
 import { MaterialIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import * as Keychain from 'react-native-keychain';
+import { Entypo } from '@expo/vector-icons';
 
 export default function Login({ navigation }) {
 
@@ -42,6 +43,7 @@ export default function Login({ navigation }) {
     }, [])
 
 
+
     function handerSubmit() {
         const user = logins.find(user => user.email === taikhoan)
         if (!user) return alert('sai tk hoặc mk');
@@ -50,6 +52,8 @@ export default function Login({ navigation }) {
             .then(res => res.json())
             .then(res => {
                 // console.log(res.accessToken)
+                // Keychain.setGenericPassword(taikhoan, matkhau, CONFIG);
+
                 AsyncStorage.setItem('token', res.accessToken);
                 AsyncStorage.setItem('taikhoan', taikhoan);
 
@@ -64,6 +68,15 @@ export default function Login({ navigation }) {
             })
             .catch((err) => console.log(err))
             .finally(() => {
+                // if (isChecked == true) {
+                //     AsyncStorage.setItem("MatKhau", matkhau)
+                //     navigation.replace('Home');
+                //     return;
+                // }
+                // else {
+                //     navigation.replace('Home');
+                //     return;
+                // }
                 navigation.replace('Home');
                 return;
             }
@@ -71,14 +84,24 @@ export default function Login({ navigation }) {
         // .catch(err => console.log(err))
     }
 
-    // function handerSubmit() {
-    //     navigation.replace('Home');
-    // }
+    const [asy_taikhoan, setAsyTaiKhoan] = useState('');
+    const [asy_matkhau, setAsyMatKhau] = useState('');
 
-    // console.log(logins)
+
+    // AsyncStorage.getItem('taikhoan')
+    //     .then(res =>
+    //         setAsyTaiKhoan(res)
+    //     )
+
+    // AsyncStorage.getItem('MatKhau')
+    //     .then(res =>
+    //         setAsyMatKhau(res)
+    //     )
+
 
     return (
         <View style={styles.container}>
+
             <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? "padding" : "height"}
 
@@ -278,17 +301,12 @@ export default function Login({ navigation }) {
                                                 }}
                                                     onChangeText={e => setMatKhau(e)}
                                                 />
-                                                <MaterialIcons
-                                                    name="menu"
-                                                    size={28}
-                                                    color="black"
-                                                    style={{
-                                                        position: 'absolute',
-                                                        right: -10,
-                                                        top: -5,
-                                                        opacity: 0.3
-                                                    }}
-                                                />
+                                                <Entypo name="eye-with-line" size={24} color="black" style={{
+                                                    position: 'absolute',
+                                                    right: -10,
+                                                    top: -5,
+                                                    opacity: 0.3
+                                                }} />
                                             </View>
                                         </View>
                                         <View style={{
@@ -300,23 +318,35 @@ export default function Login({ navigation }) {
                                             <View style={{
                                                 flexDirection: 'row'
                                             }}>
-                                                <Checkbox />
+                                                <Checkbox
+                                                    value={isChecked}
+                                                    onValueChange={setChecked}
+                                                    color={isChecked ? '#4630EB' : undefined}
+                                                />
+                                                <TouchableOpacity
+                                                    onPress={() => setChecked(!isChecked)}
+                                                >
+                                                    <Text style={{
+                                                        color: '#5d92f5',
+                                                        marginLeft: 5,
+                                                        marginTop: 3,
+                                                        fontWeight: 'bold'
+
+                                                    }}>
+                                                        Ghi Nhớ
+                                                    </Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                            <TouchableOpacity
+                                                onPress={() => navigation.navigate('QuenMatKhau')}
+                                            >
                                                 <Text style={{
                                                     color: '#5d92f5',
-                                                    marginLeft: 5,
-                                                    marginTop: 3,
                                                     fontWeight: 'bold'
-
                                                 }}>
-                                                    Ghi Nhớ
+                                                    Quên Mật Khẩu
                                                 </Text>
-                                            </View>
-                                            <Text style={{
-                                                color: '#5d92f5',
-                                                fontWeight: 'bold'
-                                            }}>
-                                                Quên Mật Khẩu
-                                            </Text>
+                                            </TouchableOpacity>
                                         </View>
 
                                         <View style={{

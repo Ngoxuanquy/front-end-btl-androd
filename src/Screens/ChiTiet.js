@@ -5,9 +5,34 @@ import React, { useState, useEffect } from 'react';
 // import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Ionicons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
-export default function ChiTiet({ navigation }) {
+export default function ChiTiet({ route, navigation }) {
+
+    const { name, id } = route.params;
 
     const [isLoad, setIsLoad] = useState(false)
+    const [apis, setApi] = useState([])
+
+    const URL_ON = 'http://192.168.0.106:4000'
+    const URL1_ON = 'http://192.168.0.114:5000'
+
+    const URL_CT = 'http://192.168.1.121:4000'
+    const URL1_CT = 'http://192.168.1.121:5000'
+
+    const URL_FPT = 'http://192.168.0.145:4000'
+    const URL1_FPT = 'http://192.168.0.145:5000'
+
+    console.log(name)
+
+    useEffect(() => {
+        fetch(URL_FPT + '/api/thanhtoan/khachhang/' + name)
+            .then(res => res.json())
+            .then(res => setApi(res))
+            .catch(err => console.log(err))
+            .finally(() => {
+            })
+    }, [])
+
+    console.log(apis)
 
     return (
         <KeyboardAvoidingView style={{
@@ -91,33 +116,39 @@ export default function ChiTiet({ navigation }) {
                                 Thông Tin Khách Hàng
                             </Text>
                         </View>
-                        <View style={{
-                            padding: 10,
-                        }}>
-                            <View style={{
-                                flexDirection: 'row'
-                            }}>
-                                <Ionicons name="ios-people-sharp" size={24} color="black" />
-                                <Text style={{
-                                    fontSize: 18,
-                                    lineHeight: 33,
-                                    marginLeft: 10
+                        {apis.map(api => (
+                            <View
+                                key={api.id}
+                                style={{
+                                    padding: 10,
                                 }}>
-                                    Tên Khách Hàng: Ngô Xuân Quy
-                                </Text>
-                            </View>
-                            <View style={{
-                                flexDirection: 'row'
-                            }}>
-                                <Entypo name="address" size={24} color="black" />
-                                <Text style={{
-                                    fontSize: 18,
-                                    marginLeft: 10
+
+                                <View style={{
+                                    flexDirection: 'row'
                                 }}>
-                                    Địa Chỉ: Hà Nội
-                                </Text>
+                                    <Ionicons name="ios-people-sharp" size={24} color="black" />
+                                    <Text style={{
+                                        fontSize: 18,
+                                        lineHeight: 33,
+                                        marginLeft: 10
+                                    }}>
+                                        Tên Khách Hàng: {api.KhachHang}
+                                    </Text>
+                                </View>
+                                <View style={{
+                                    flexDirection: 'row'
+                                }}>
+                                    <Entypo name="address" size={24} color="black" />
+                                    <Text style={{
+                                        fontSize: 18,
+                                        marginLeft: 10
+                                    }}>
+                                        Địa Chỉ: {api.Address}
+                                    </Text>
+                                </View>
+
                             </View>
-                        </View>
+                        ))}
                         <View style={{
                             justifyContent: 'center',
                             alignItems: 'center',
@@ -142,130 +173,133 @@ export default function ChiTiet({ navigation }) {
                                 </Text>
                             </TouchableOpacity>
                         </View>
+
                     </View>
-
-                    <View>
-                        <View style={{
-                            marginLeft: 10,
-                            marginRight: 10,
-                            borderColor: 'black',
-                            borderWidth: 0.3,
-                            marginTop: 20,
-                            borderRadius: 10,
-                            shadowOffset: {
-                                width: 0,
-                                height: 5,
-                            },
-                            shadowOpacity: 0.34,
-                            shadowRadius: 7.27,
-
-                            elevation: 10,
-                            backgroundColor: '#fff',
-                            marginBottom: 30
-
-
-                        }}>
+                    {apis.map(api => (
+                        <View
+                            key={api.id}
+                        >
                             <View style={{
-                                // borderColor: 'black',
-                                // borderWidth: 0.3,
-                                padding: 10,
-                                // borderBottomLeftRadius: 10,
-                                borderTopLeftRadius: 10,
-                                // backgroundColor: '#FF9999'
-                                // marginLeft: 10
-                            }}>
-                                <Text style={{
-                                    fontSize: 25,
-                                    color: '#00337a',
-                                    textAlign: 'center',
-                                }}>
-                                    Thông Tin Đơn
-                                </Text>
-                            </View>
-                            <View style={{
-                                padding: 10,
+                                marginLeft: 10,
+                                marginRight: 10,
+                                borderColor: 'black',
+                                borderWidth: 0.3,
+                                marginTop: 20,
+                                borderRadius: 10,
+                                shadowOffset: {
+                                    width: 0,
+                                    height: 5,
+                                },
+                                shadowOpacity: 0.34,
+                                shadowRadius: 7.27,
+
+                                elevation: 10,
+                                backgroundColor: '#fff',
+                                marginBottom: 30
+
 
                             }}>
-                                <Text style={{
-                                    fontSize: 18,
-                                    lineHeight: 35,
-                                    marginLeft: 20
+                                <View style={{
+                                    // borderColor: 'black',
+                                    // borderWidth: 0.3,
+                                    padding: 10,
+                                    // borderBottomLeftRadius: 10,
+                                    borderTopLeftRadius: 10,
+                                    // backgroundColor: '#FF9999'
+                                    // marginLeft: 10
+                                }}>
+                                    <Text style={{
+                                        fontSize: 25,
+                                        color: '#00337a',
+                                        textAlign: 'center',
+                                    }}>
+                                        Thông Tin Đơn
+                                    </Text>
+                                </View>
+                                <View style={{
+                                    padding: 10,
 
                                 }}>
-                                    Tên Khách Hàng: Ngô Xuân Quy
-                                </Text>
-                                <Text style={{
-                                    fontSize: 18,
-                                    lineHeight: 35,
-                                    marginLeft: 20
+                                    <Text style={{
+                                        fontSize: 18,
+                                        lineHeight: 35,
+                                        marginLeft: 20
 
-                                }}>
-                                    Số Điện Thoại: 0589401978
-                                </Text>
-                                <Text style={{
-                                    fontSize: 18,
-                                    lineHeight: 35,
-                                    marginLeft: 20,
-                                    marginRight: 20
+                                    }}>
+                                        Tên Khách Hàng: {api.KhachHang}
+                                    </Text>
+                                    <Text style={{
+                                        fontSize: 18,
+                                        lineHeight: 35,
+                                        marginLeft: 20
 
-                                }}>
-                                    Địa Chỉ: Số 1, Ngõ 1, Lê Văn Lương, Hà Nội
-                                </Text>
-                                <Text style={{
-                                    fontSize: 18,
-                                    lineHeight: 35,
-                                    marginLeft: 20
+                                    }}>
+                                        Số Điện Thoại: {api.Phone_Number}
+                                    </Text>
+                                    <Text style={{
+                                        fontSize: 18,
+                                        lineHeight: 35,
+                                        marginLeft: 20,
+                                        marginRight: 20
 
-                                }}>
-                                    Giờ Hẹn Khách: 12h15 - 13/6/2022
-                                </Text>
-                                <Text style={{
-                                    fontSize: 18,
-                                    lineHeight: 35,
-                                    marginLeft: 20
-                                }}>
-                                    Giờ Bắt Đầu: 13h - 18/12/2002
-                                </Text>
-                                <Text style={{
-                                    fontSize: 18,
-                                    lineHeight: 35,
-                                    marginLeft: 20
+                                    }}>
+                                        Địa Chỉ: {api.Address}
+                                    </Text>
+                                    <Text style={{
+                                        fontSize: 18,
+                                        lineHeight: 35,
+                                        marginLeft: 20
+
+                                    }}>
+                                        Giờ Hẹn Khách: 12h15 - 13/6/2022
+                                    </Text>
+                                    <Text style={{
+                                        fontSize: 18,
+                                        lineHeight: 35,
+                                        marginLeft: 20
+                                    }}>
+                                        Giờ Bắt Đầu: 13h - 18/12/2002
+                                    </Text>
+                                    <Text style={{
+                                        fontSize: 18,
+                                        lineHeight: 35,
+                                        marginLeft: 20
 
 
-                                }}>
-                                    Giờ Kết Thúc: 15h - 18/12/2002
-                                </Text>
-                                <Text style={{
-                                    fontSize: 18,
-                                    lineHeight: 35,
-                                    marginLeft: 20
+                                    }}>
+                                        Giờ Kết Thúc: 15h - 18/12/2002
+                                    </Text>
+                                    <Text style={{
+                                        fontSize: 18,
+                                        lineHeight: 35,
+                                        marginLeft: 20
 
-                                }}>
-                                    Khoảng Cách: 12km
-                                </Text>
-                                <Text style={{
-                                    fontSize: 18,
-                                    lineHeight: 35,
-                                    marginLeft: 20
+                                    }}>
+                                        Khoảng Cách: 12km
+                                    </Text>
+                                    <Text style={{
+                                        fontSize: 18,
+                                        lineHeight: 35,
+                                        marginLeft: 20
 
-                                }}>
-                                    Thời Gian Di Chuyển: 30p
-                                </Text>
-                                <Text style={{
-                                    fontSize: 18,
-                                    lineHeight: 35,
-                                    marginLeft: 20
+                                    }}>
+                                        Thời Gian Di Chuyển: 30p
+                                    </Text>
+                                    <Text style={{
+                                        fontSize: 18,
+                                        lineHeight: 35,
+                                        marginLeft: 20
 
-                                }}>
-                                    Loại Máy: RO
-                                </Text>
+                                    }}>
+                                        Loại Máy: RO
+                                    </Text>
+
+                                </View>
 
                             </View>
 
                         </View>
-
-                    </View>
-
+                    ))}
                 </View>
 
                 <View>
