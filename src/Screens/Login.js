@@ -49,6 +49,7 @@ export default function Login({ navigation }) {
                 AsyncStorage.setItem('token', res.accessToken);
                 AsyncStorage.setItem('taikhoan', taikhoan);
 
+
                 fetch('http://192.168.1.165:4000' + '/api/users/update/' + taikhoan, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -69,7 +70,7 @@ export default function Login({ navigation }) {
                 //     navigation.replace('Home');
                 //     return;
                 // }
-                navigation.replace('Home');
+                navigation.replace('BottomTab')
                 return;
             }
             )

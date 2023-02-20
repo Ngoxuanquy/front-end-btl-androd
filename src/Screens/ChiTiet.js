@@ -22,7 +22,6 @@ export default function ChiTiet({ route, navigation }) {
             })
     }, [])
 
-    console.log(apis)
 
     return (
         <KeyboardAvoidingView style={{

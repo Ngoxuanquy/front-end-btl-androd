@@ -3,13 +3,15 @@ import React from 'react'
 
 export default function DonHang({ navigation }) {
     return (
-        <View>
+        <View style={{
+            flex: 1
+        }}>
             <ScrollView>
                 <View>
                     <View style={{
                         justifyContent: 'center',
                         alignItems: 'center',
-                        marginTop: 10
+                        marginTop: 30
                     }}>
                         <TouchableOpacity style={{
                             height: 60,
@@ -43,7 +45,7 @@ export default function DonHang({ navigation }) {
                     <View style={{
                         justifyContent: 'center',
                         alignItems: 'center',
-                        marginTop: 10
+                        marginTop: 20
                     }}>
                         <TouchableOpacity style={{
                             height: 60,
@@ -77,7 +79,7 @@ export default function DonHang({ navigation }) {
                     <View style={{
                         justifyContent: 'center',
                         alignItems: 'center',
-                        marginTop: 10
+                        marginTop: 20
                     }}>
                         <TouchableOpacity style={{
                             height: 60,
@@ -97,7 +99,7 @@ export default function DonHang({ navigation }) {
                             elevation: 14,
                             marginTop: 5
                         }}
-                            onPress={() => navigation.replace('Đơn Vệ Sinh')}
+                            onPress={() => navigation.navigate('Đơn Vệ Sinh')}
                         >
                             <Text style={{
                                 fontSize: 22,
@@ -113,7 +115,7 @@ export default function DonHang({ navigation }) {
                     <View style={{
                         justifyContent: 'center',
                         alignItems: 'center',
-                        marginTop: 10
+                        marginTop: 20
                     }}>
                         <TouchableOpacity style={{
                             height: 60,
@@ -147,7 +149,7 @@ export default function DonHang({ navigation }) {
                     <View style={{
                         justifyContent: 'center',
                         alignItems: 'center',
-                        marginTop: 10
+                        marginTop: 20
                     }}>
                         <TouchableOpacity style={{
                             height: 60,
@@ -181,7 +183,7 @@ export default function DonHang({ navigation }) {
                     <View style={{
                         justifyContent: 'center',
                         alignItems: 'center',
-                        marginTop: 10
+                        marginTop: 20
                     }}>
                         <TouchableOpacity style={{
                             height: 60,
@@ -212,39 +214,7 @@ export default function DonHang({ navigation }) {
                         </TouchableOpacity>
                     </View>
 
-                    <View style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginTop: 10
-                    }}>
-                        <TouchableOpacity style={{
-                            height: 60,
-                            backgroundColor: '#DDDDDD',
-                            width: '90%',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            borderRadius: 15,
-                            shadowColor: "#000",
-                            shadowOffset: {
-                                width: 0,
-                                height: 7,
-                            },
-                            shadowOpacity: 0.11,
-                            shadowRadius: 1.11,
 
-                            elevation: 14,
-                            marginTop: 5
-                        }} >
-                            <Text style={{
-                                fontSize: 22,
-                                color: 'black',
-                                textAlign: 'center',
-
-                            }}>
-                                Đơn Chờ Thực Hiện
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
 
                 </View>
             </ScrollView>

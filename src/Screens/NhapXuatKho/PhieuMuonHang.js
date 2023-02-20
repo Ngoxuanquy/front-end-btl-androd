@@ -10,23 +10,44 @@ export default function PhieuMuonHang({ navigation }) {
 
     const [value, setValue] = useState(null);
     const [items, setItems] = useState([
-        { label: 'Apple', value: 'apple' },
-        { label: 'Banana', value: 'banana' }
+        { label: 'Cường', value: 'Cường' },
+        { label: 'Quy', value: 'Quy' }
     ]);
 
     const [value1, setValue1] = useState(null);
-    const [items1, setItems1] = useState([
-        { label: 'Apple', value: 'apple' },
-        { label: 'Banana', value: 'banana' }
-    ]);
+    const [apis, setApi] = useState([])
+
+
+    useEffect(() => {
+        fetch('http://192.168.1.165:4000' + '/api/users/' + value)
+            .then(res => res.json())
+            .then(res => setApi(res[0].khohangcanhan))
+            .catch((err) => console.log(err))
+    }, [value])
+
+
 
     const [sanPhams, setSanPham] = useState([]);
 
-    useEffect(() => {
-        setSanPham([...sanPhams, value1])
-    }, [value1])
+
+    function handerMuon(id) {
+        apis.map(api => {
+            if (api.id == id) {
+                setSanPham([...sanPhams, api])
+            }
+        })
+    }
 
     console.log(sanPhams)
+
+    function handerDelete(id) {
+        console.log(id)
+        var filtered = sanPhams.filter(function (value, index, arr) {
+            return value.id != id;
+        });
+
+        setSanPham(filtered)
+    }
 
     return (
         <View style={styles.container}>
@@ -77,33 +98,80 @@ export default function PhieuMuonHang({ navigation }) {
                             Sản Phẩm Mượn
                         </Text>
                         <View style={{
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            width: '100%',
-                            marginLeft: 15
+                            flexDirection: 'row',
+                            justifyContent: 'space-around',
+                            marginBottom: 5,
+                            borderWidth: 0.4,
+                            borderColor: 'gray',
+                            paddingVertical: 10
                         }}>
-                            <DropDownPicker
-                                open={open1}
-                                value={value1}
-                                items={items1}
-                                setOpen={setOpen1}
-                                setValue={setValue1}
-                                setItems={setItems1}
-                                style={{
-                                    width: '90%',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
+                            <Text style={{
+                                fontSize: 17,
+                                fontWeight: 'bold'
+                            }}>
+                                Tên Sản Phẩm
+                            </Text>
 
-                                }}
-                            />
+                            <Text style={{
+                                fontSize: 17,
+                                fontWeight: 'bold'
+                            }}>
+                                SL Tồn
+                            </Text>
+                            <Text style={{
+                                fontSize: 17,
+                                fontWeight: 'bold'
+                            }}>
+                                Trạng Thái
+                            </Text>
                         </View>
+                        {apis.map(api => (
+                            <View
+                                key={api.id}
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-around',
+                                    // borderWidth: 0.4,
+                                    // borderColor: 'gray',
+                                    borderBottomColor: 'gray',
+                                    borderBottomWidth: 1,
+                                    paddingVertical: 6
+
+                                }}>
+                                <Text style={{
+                                    fontSize: 16,
+                                    lineHeight: 30
+                                }}>
+                                    {api.TenHang}
+                                </Text>
+
+                                <Text style={{
+                                    fontSize: 16,
+                                    lineHeight: 30
+                                }}>
+                                    {api.SoLuong}
+                                </Text>
+                                <TouchableOpacity style={{
+                                    fontSize: 16,
+                                    lineHeight: 30,
+                                    marginTop: 7
+                                }}
+                                    onPress={() => handerMuon(api.id)}
+                                >
+                                    <Text>
+                                        Mượn
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                        ))}
                     </View>
                     <ScrollView style={{
-                        marginBottom: 300
+                        marginBottom: 300,
+                        zIndex: -100
                     }}>
 
                         <View style={{
-                            zIndex: -2,
+                            zIndex: -2000,
                         }}>
                             <View>
                                 <Text style={{
@@ -124,7 +192,7 @@ export default function PhieuMuonHang({ navigation }) {
                                     alignItems: 'center',
                                     borderRadius: 7,
                                 }}>
-                                    {sanPhams.map((sanPham, index) => (
+                                    {sanPhams == [] ? null : sanPhams.map((sanPham, index) => (
 
                                         <View
                                             key={index}
@@ -145,7 +213,7 @@ export default function PhieuMuonHang({ navigation }) {
                                                         textAlign: 'center',
                                                         width: 60
                                                     }}>
-                                                    {sanPham}
+                                                    {sanPham.TenHang}
                                                 </Text>
                                             </View>
                                             <View style={{
@@ -178,7 +246,9 @@ export default function PhieuMuonHang({ navigation }) {
 
                                                 }}
 
-                                                >1</TextInput>
+                                                >
+                                                    1
+                                                </TextInput>
                                                 <TouchableOpacity style={{
                                                     width: 35, height: 35,
                                                     borderColor: 'black',
@@ -199,10 +269,15 @@ export default function PhieuMuonHang({ navigation }) {
                                                     alignItems: 'center',
                                                     borderColor: 'black',
                                                     borderWidth: 0.4,
-
-                                                }}>
+                                                    backgroundColor: 'red',
+                                                    opacity: 0.7,
+                                                    borderRadius: 6
+                                                }}
+                                                    onPress={() => handerDelete(sanPham.id)}
+                                                >
                                                     <Text style={{
-                                                        textAlign: 'center'
+                                                        textAlign: 'center',
+                                                        color: 'white'
                                                     }}>
                                                         Xóa
                                                     </Text>
@@ -327,7 +402,7 @@ export default function PhieuMuonHang({ navigation }) {
 
                 </View>
             </View>
-        </View>
+        </View >
     );
 }
 

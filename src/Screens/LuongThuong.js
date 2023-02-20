@@ -160,8 +160,8 @@ export default function LuongThuong() {
                                                 /> :
                                                 <Image
                                                     style={{
-                                                        width: 100,
-                                                        height: 120,
+                                                        width: 80,
+                                                        height: 80,
                                                         borderRadius: 10,
                                                     }}
                                                     source={{
@@ -227,11 +227,23 @@ export default function LuongThuong() {
 
                             <View style={{
                                 backgroundColor: 'white',
-                                height: 500,
+                                height: 700,
                                 borderTopLeftRadius: 50,
                                 borderTopRightRadius: 50,
                             }}>
-                                <View>
+                                <View style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-around',
+                                    marginTop: 20
+                                }}>
+                                    <Text style={{
+                                        fontWeight: 'bold',
+                                        fontSize: 20,
+                                        marginTop: 30,
+                                        marginBottom: 10
+                                    }}>
+                                        Hàng Tháng
+                                    </Text>
                                     <Text style={{
                                         fontWeight: 'bold',
                                         fontSize: 20,
@@ -239,13 +251,14 @@ export default function LuongThuong() {
                                         marginLeft: 20,
                                         marginBottom: 10
                                     }}>
-                                        Hàng Tháng
+                                        Ứng Lương
                                     </Text>
                                 </View>
                                 <View style={{
                                     flexDirection: 'row',
                                     justifyContent: 'space-around',
-                                    marginVertical: 10
+                                    marginVertical: 10,
+                                    marginBottom: 30
                                 }}>
                                     {buttons.map((button, index) => (
                                         <TouchableOpacity

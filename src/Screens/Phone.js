@@ -206,7 +206,7 @@ const Phone = ({ navigation }) => {
                                                         marginLeft: 10
 
                                                     }}>
-                                                        {order.number}
+                                                        {order.Number.slice(0, 7)}***
                                                     </Text>
                                                 </View>
 

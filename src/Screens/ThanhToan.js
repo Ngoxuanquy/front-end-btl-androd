@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ThanhToan({ route, navigation }) {
 
-    const { name, id } = route.params;
+    const { name, id_chuyen, number } = route.params;
 
 
     const [cliedId, setCliedID] = useState(0);
@@ -107,7 +107,7 @@ export default function ThanhToan({ route, navigation }) {
     }, [])
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/orders/' + name)
+        fetch('http://192.168.1.165:4000' + '/api/orders/' + id_chuyen)
             .then(res => res.json())
             .then(res => setOrder(res))
             .catch(err => console.log(err))
@@ -116,12 +116,13 @@ export default function ThanhToan({ route, navigation }) {
     }, [])
 
 
-
     useEffect(() => {
         setApi(products)
     }, [])
 
     function handerCong(id1) {
+
+        console.log(id_chuyen)
         // products.map(Product => {
         //     if (Product.id == id) {
         //         setSanPham([...sanphams, Product])
@@ -130,13 +131,13 @@ export default function ThanhToan({ route, navigation }) {
         products.map(Product => {
             if (Product.id == id1) {
                 customer.map(custome => {
-                    if (custome.id == id) {
+                    if (custome.id == id_chuyen) {
 
                         fetch('http://192.168.1.165:4000' + '/api/orders/create/', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
-                                id: id,
+                                id: id_chuyen,
                                 name: custome.name,
                                 taikhoan: taikhoan,
                                 date: new Date(),
@@ -149,7 +150,7 @@ export default function ThanhToan({ route, navigation }) {
                             })
                         })
                             .then(() => {
-                                fetch('http://192.168.1.165:4000' + '/api/orders/' + name)
+                                fetch('http://192.168.1.165:4000' + '/api/orders/' + id_chuyen)
                                     .then(res => res.json())
                                     .then(res => {
                                         getConten()
@@ -172,6 +173,7 @@ export default function ThanhToan({ route, navigation }) {
 
     }
 
+    console.log(id_chuyen)
 
     var TT = 0;
     const [tongtien, setTongTien] = useState()
@@ -186,7 +188,7 @@ export default function ThanhToan({ route, navigation }) {
             }
         )
             .then(() => {
-                fetch('http://192.168.1.165:4000' + '/api/orders/' + name)
+                fetch('http://192.168.1.165:4000' + '/api/orders/' + id_chuyen)
                     .then(res => res.json())
                     .then(res => setOrder(res))
                     .catch(err => console.log(err))
@@ -211,12 +213,15 @@ export default function ThanhToan({ route, navigation }) {
             })
         })
             .then(() => {
-                fetch('http://192.168.1.165:4000' + '/api/orders/' + name)
+                fetch('http://192.168.1.165:4000' + '/api/orders/' + id_chuyen)
                     .then(res => res.json())
                     .then(res => setOrder(res))
                     .catch(err => console.log(err))
             })
     }
+
+
+
 
     function handerTru(id, soluong) {
         if (soluong <= 1) {
@@ -232,7 +237,7 @@ export default function ThanhToan({ route, navigation }) {
             })
         })
             .then(() => {
-                fetch('http://192.168.1.165:4000' + '/api/orders/' + name)
+                fetch('http://192.168.1.165:4000' + '/api/orders/' + id_chuyen)
                     .then(res => res.json())
                     .then(res => setOrder(res))
                     .catch(err => console.log(err))
@@ -258,7 +263,7 @@ export default function ThanhToan({ route, navigation }) {
                     text: "Yes",
                     onPress: () => {
 
-                        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/update/' + id, {
+                        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/update/' + id_chuyen, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
@@ -282,7 +287,7 @@ export default function ThanhToan({ route, navigation }) {
                                         {
                                             text: "Yes",
                                             onPress: () => {
-                                                fetch('http://192.168.1.165:4000' + '/api/customer_re/delete/' + id,
+                                                fetch('http://192.168.1.165:4000' + '/api/customer_re/delete/' + id_chuyen,
                                                     {
                                                         method: 'POST',
                                                         headers: { 'Content-Type': 'application/json' },
@@ -320,7 +325,7 @@ export default function ThanhToan({ route, navigation }) {
                     text: "Yes",
                     onPress: () => {
 
-                        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/update/' + id, {
+                        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/update/' + id_chuyen, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
@@ -344,7 +349,7 @@ export default function ThanhToan({ route, navigation }) {
                                         {
                                             text: "Yes",
                                             onPress: () => {
-                                                fetch('http://192.168.1.165:4000' + '/api/customer_re/delete/' + id,
+                                                fetch('http://192.168.1.165:4000' + '/api/customer_re/delete/' + id_chuyen,
                                                     {
                                                         method: 'POST',
                                                         headers: { 'Content-Type': 'application/json' },
@@ -382,7 +387,7 @@ export default function ThanhToan({ route, navigation }) {
                     text: "Yes",
                     onPress: () => {
 
-                        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/update/' + id, {
+                        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/update/' + id_chuyen, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
@@ -406,7 +411,7 @@ export default function ThanhToan({ route, navigation }) {
                                         {
                                             text: "Yes",
                                             onPress: () => {
-                                                fetch('http://192.168.1.165:4000' + '/api/customer_re/delete/' + id,
+                                                fetch('http://192.168.1.165:4000' + '/api/customer_re/delete/' + id_chuyen,
                                                     {
                                                         method: 'POST',
                                                         headers: { 'Content-Type': 'application/json' },
@@ -431,7 +436,7 @@ export default function ThanhToan({ route, navigation }) {
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         setTimeout(() => {
-            fetch('http://192.168.1.165:4000' + '/api/orders/' + name)
+            fetch('http://192.168.1.165:4000' + '/api/orders/' + id_chuyen)
                 .then(res => res.json())
                 .then(res => {
                     setOrder(res)
@@ -442,6 +447,9 @@ export default function ThanhToan({ route, navigation }) {
             setRefreshing(false);
         }, 1000);
     }, []);
+
+
+    console.log(orders)
 
 
     return (
@@ -460,7 +468,7 @@ export default function ThanhToan({ route, navigation }) {
                     zIndex: 1
                 }}>
                     <TouchableOpacity style={{
-                        width: '33%',
+                        width: '50%',
                         alignItems: 'center',
                         borderColor: 'black',
                         borderWidth: 0.3,
@@ -473,7 +481,7 @@ export default function ThanhToan({ route, navigation }) {
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={{
-                        width: '33%',
+                        width: '50%',
                         alignItems: 'center',
                         borderColor: 'black',
                         borderWidth: 0.3,
@@ -486,19 +494,7 @@ export default function ThanhToan({ route, navigation }) {
                             Chuyển Khoản
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={{
-                        width: '33%',
-                        alignItems: 'center',
-                        borderColor: 'black',
-                        borderWidth: 0.3,
-                        paddingVertical: 15
-                    }}
-                        onPress={() => handerNo()}
-                    >
-                        <Text>
-                            Nợ
-                        </Text>
-                    </TouchableOpacity>
+
                 </View>
             </View>
 
@@ -634,7 +630,7 @@ export default function ThanhToan({ route, navigation }) {
                 <View>
                     <View>
                         <View>
-                            <TouchableOpacity>
+                            <View>
                                 <View style={{
                                     flexDirection: 'row'
                                 }}>
@@ -663,7 +659,7 @@ export default function ThanhToan({ route, navigation }) {
                                                 marginTop: 20
                                             }}>
 
-                                            <TouchableOpacity style={{
+                                            <View style={{
                                                 flexDirection: 'row',
 
                                             }}>
@@ -764,12 +760,12 @@ export default function ThanhToan({ route, navigation }) {
                                                     </TouchableOpacity>
 
                                                 </View>
-                                            </TouchableOpacity>
+                                            </View>
                                         </View>
                                     ))
 
                                 }
-                            </TouchableOpacity>
+                            </View>
                         </View>
                     </View>
                 </View >

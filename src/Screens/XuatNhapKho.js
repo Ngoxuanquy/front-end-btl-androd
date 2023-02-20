@@ -19,7 +19,7 @@ export default function XuatNhapKho({ navigation }) {
                             alignItems: 'center',
                             borderRadius: 7
                         }}
-                            onPress={() => navigation.replace('Phiếu Xuất Kho')}
+                            onPress={() => navigation.navigate('Phiếu Xuất Kho')}
                         >
                             <Text style={{
                                 textAlign: 'center',
@@ -43,7 +43,7 @@ export default function XuatNhapKho({ navigation }) {
                             alignItems: 'center',
                             borderRadius: 7
                         }}
-                            onPress={() => navigation.replace('Phiếu Mượn Hàng')}
+                            onPress={() => navigation.navigate('Phiếu Mượn Hàng')}
 
                         >
                             <Text style={{
@@ -68,7 +68,7 @@ export default function XuatNhapKho({ navigation }) {
                             alignItems: 'center',
                             borderRadius: 7
                         }}
-                            onPress={() => navigation.replace('Phiếu Đổi Hàng')}
+                            onPress={() => navigation.navigate('Phiếu Đổi Hàng')}
 
                         >
                             <Text style={{
@@ -93,7 +93,7 @@ export default function XuatNhapKho({ navigation }) {
                             alignItems: 'center',
                             borderRadius: 7
                         }}
-                            onPress={() => navigation.replace('Phiếu Cấp Đồ')}
+                            onPress={() => navigation.navigate('Phiếu Cấp Đồ')}
 
                         >
                             <Text style={{
@@ -118,7 +118,7 @@ export default function XuatNhapKho({ navigation }) {
                             alignItems: 'center',
                             borderRadius: 7
                         }}
-                            onPress={() => navigation.replace('Phiếu Thu Hồi Đồ')}
+                            onPress={() => navigation.navigate('Phiếu Thu Hồi Đồ')}
 
                         >
                             <Text style={{

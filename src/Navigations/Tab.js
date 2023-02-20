@@ -1,29 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import { Text, View, TouchableOpacity, BackHandler } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import React, { useEffect, useState } from 'react'
+import { Text, View, TouchableOpacity, BackHandler } from 'react-native'
+import { NavigationContainer } from '@react-navigation/native'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
-import Home from '../Screens/Home';
-import Login from '../Screens/Login';
-import Cart from '../Screens/CartScrenn';
-import Phone from '../Screens/Phone';
-import ThongTinTaiKhoan from './../Screens/ThongTinTaiKhoanScrenn';
+import Home from '../Screens/Home'
+import Login from '../Screens/Login'
+import Cart from '../Screens/CartScrenn'
+import Phone from '../Screens/Phone'
+import ThongTinTaiKhoan from './../Screens/ThongTinTaiKhoanScrenn'
 
-import { MaterialIcons } from '@expo/vector-icons';
-import { EvilIcons } from '@expo/vector-icons';
-import { FontAwesome } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons'
+import { EvilIcons } from '@expo/vector-icons'
+import { FontAwesome } from '@expo/vector-icons'
+import { Ionicons } from '@expo/vector-icons'
 
 import StackHome from './StackHome'
-import StackCart from './StackCart';
+import StackCart from './StackCart'
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator()
 const HanderCart = () => {
     return (
         <View>
-            <TouchableOpacity
-                onPress={() => console.log('cart')}
-            >
+            <TouchableOpacity onPress={() => console.log('cart')}>
                 <Cart />
             </TouchableOpacity>
         </View>
@@ -31,81 +29,92 @@ const HanderCart = () => {
 }
 
 export default function Tag({ navigation }) {
+    const [customer, setCustomer] = useState([])
+    // const URL_ON = 'http://192.168.0.106:4000'
+    // const URL1_ON = 'http://192.168.0.114:5000'
 
-    const [customer, setCustomer] = useState([]);
+    // const URL_CT = 'http://192.168.1.121:4000'
+    // const URL1_CT = 'http://192.168.1.121:5000'
 
-    useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/customer/')
-            .then(res => res.json())
-            .then(res => setCustomer(res))
-            .catch(err => console.log(err))
-            .finally(() => {
-            })
-    }, [])
+    // const URL_FPT = 'http://192.168.0.145:4000'
+    // const URL1_FPT = 'http://192.168.0.145:5000'
 
-    function handleBackButton() {
-        fetch('http://192.168.1.165:4000' + '/api/customer/')
-            .then(res => res.json())
-            .then(res => setCustomer(res))
-            .catch(err => console.log(err))
+    // useEffect(() => {
+    //     fetch(URL_FPT + '/api/customer/')
+    //         .then((res) => res.json())
+    //         .then((res) => setCustomer(res))
+    //         .catch((err) => console.log(err))
+    //         .finally(() => { })
+    // }, [])
 
-        console.log(customer)
-        BackHandler.exitApp();
-        return true;
-    }
+    // function handleBackButton() {
+    //     fetch(URL_FPT + '/api/customer/')
+    //         .then((res) => res.json())
+    //         .then((res) => setCustomer(res))
+    //         .catch((err) => console.log(err))
 
+    //     console.log(customer)
+    //     BackHandler.exitApp()
+    //     return true
+    // }
 
 
     return (
-        <NavigationContainer independent={true}>
-            <Tab.Navigator screenOptions={({ route }) => ({
+        <Tab.Navigator
+            initialRouteName="HomeTab"
+            screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => {
-                    let iconName;
+                    let iconName
 
-                    if (route.name === 'Home') {
-                        iconName = focused
-                            ? 'home'
-                            : 'home';
+                    if (route.name === 'HomeTab') {
+                        iconName = focused ? 'home' : 'home'
                     } else if (route.name === 'Phone') {
-                        iconName = focused ? 'call' : 'call';
-                    }
-                    else if (route.name === 'ThongTinTaiKhoan') {
-                        iconName = focused ? 'people' : 'people';
-                    }
-                    else if (route.name === 'Cart') {
-                        iconName = focused ? 'cart' : 'cart';
+                        iconName = focused ? 'call' : 'call'
+                    } else if (route.name === 'ThongTinTaiKhoan') {
+                        iconName = focused ? 'people' : 'people'
+                    } else if (route.name === 'Cart') {
+                        iconName = focused ? 'cart' : 'cart'
                     }
 
                     // You can return any component that you like here!
-                    return <Ionicons name={iconName} size={size} color={color} />;
+                    return <Ionicons name={iconName} size={size} color={color} />
                 },
                 tabBarActiveTintColor: 'tomato',
                 tabBarInactiveTintColor: 'gray',
-            })}>
-                <Tab.Screen name="Home" component={StackHome} options={{
-                    headerShown: false
-                }} />
-                <Tab.Screen name="Phone" component={Phone} options={{
-                    headerShown: false
-                }} />
-
-                <Tab.Screen name="Cart" component={StackCart} options={{
+            })}
+        >
+            <Tab.Screen
+                name="HomeTab"
+                component={StackHome}
+                options={{
                     headerShown: false,
-                    tabBarBadge: customer.length
                 }}
-                    listeners={{
-                        clickButton: () => BackHandler.addEventListener('click', handleBackButton())
-                        , blur: () => BackHandler.removeEventListener('hardwareBackPress', handleBackButton),
+            />
+            <Tab.Screen
+                name="Phone"
+                component={Phone}
+                options={{
+                    headerShown: false,
+                }}
+            />
 
-                    }}
+            <Tab.Screen
+                name="Cart"
+                component={StackCart}
+                options={{
+                    headerShown: false,
+                    tabBarBadge: customer.length,
+                }}
 
-                />
+            />
 
-                <Tab.Screen name="ThongTinTaiKhoan" component={ThongTinTaiKhoan} options={{
-                    headerShown: false
-                }} />
-
-            </Tab.Navigator>
-        </NavigationContainer>
-    );
+            <Tab.Screen
+                name="ThongTinTaiKhoan"
+                component={ThongTinTaiKhoan}
+                options={{
+                    headerShown: false,
+                }}
+            />
+        </Tab.Navigator>
+    )
 }

@@ -23,7 +23,6 @@ export default function Cart({ navigation }) {
     const [orders, setOrders] = useState([])
     const [reset, setReset] = useState(false);
 
-
     const getConten = () => {
         if (isLoading) {
             return <ActivityIndicator />
@@ -178,7 +177,6 @@ export default function Cart({ navigation }) {
     //     )
     // })
 
-    // console.log('a213')
 
     const [refreshing, setRefreshing] = React.useState(false);
 
@@ -655,7 +653,8 @@ export default function Cart({ navigation }) {
                                     }}
                                         onPress={() => navigation.navigate('ThanhToan', {
                                             name: order.name,
-                                            id: order.id
+                                            id_chuyen: order.id,
+                                            number: order.Number
                                         })}
 
                                     >

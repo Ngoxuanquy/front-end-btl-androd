@@ -90,7 +90,7 @@ export default function HomeScrenn({ navigation }) {
     }, [token])
 
     function handerLogout() {
-
+        navigation.replace('Login')
         fetch('http://192.168.1.165:4000' + '/api/users/update/token/' + taikhoan, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -216,9 +216,64 @@ export default function HomeScrenn({ navigation }) {
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         setTimeout(() => {
+            fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
+                .then(res => res.json())
+                .then(res => setChamCong(res[0].chamcong))
+
+
             setRefreshing(false);
         }, 1000);
     }, []);
+
+
+    const [chamcongs, setChamCong] = useState([])
+
+    const [check, setCheck] = useState('')
+    const [giovao, setGioVao] = useState('')
+    const [giora, setGioRa] = useState('')
+
+
+    useEffect(() => {
+        fetch('http://192.168.1.165:4000' + '/api/chamcong/' + taikhoan)
+            .then(res => res.json())
+            .then(res => {
+                res.map(re => {
+                    setCheck(re.date)
+                })
+            }
+            )
+    }, [])
+
+    useEffect(() => {
+        fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
+            .then(res => res.json())
+            .then(res => setChamCong(res[0].chamcong))
+            .finally(() => {
+                chamcongs.map(chamcong => {
+                    if (check.slice(0, 2) == a.getDate() && check.slice(3, 5) == (a.getMonth() + 1) && check.slice(6, 10) == a.getFullYear()) {
+                        setGioVao(chamcong.GioVao)
+                    }
+                })
+            })
+    }, [apis])
+
+
+    useEffect(() => {
+        const a = new Date()
+        chamcongs.map(chamcong => {
+            if (check.slice(0, 2) == a.getDate() && check.slice(3, 5) == (a.getMonth() + 1) && check.slice(6, 10) == a.getFullYear()) {
+                setGioVao(chamcong.GioVao)
+            }
+        })
+
+        chamcongs.map(chamcong => {
+            if (check.slice(0, 2) == a.getDate() && check.slice(3, 5) == (a.getMonth() + 1) && check.slice(6, 10) == a.getFullYear()) {
+                setGioRa(chamcong.GioRa)
+            }
+        })
+    })
+
+    console.log('aaa')
 
     return (
         <ScrollView style={{
@@ -468,13 +523,13 @@ export default function HomeScrenn({ navigation }) {
                                 <Text style={{
                                     lineHeight: 26
                                 }}>
-                                    Bâc 100
+                                    Giờ Vào: {giovao}
                                 </Text>
                                 <Text style={{
                                     lineHeight: 25,
                                     marginBottom: 10
                                 }}>
-                                    10.000.000đ
+                                    Giờ Ra: {giora}
                                 </Text>
 
                             </View>

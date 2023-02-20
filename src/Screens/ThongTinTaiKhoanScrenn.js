@@ -65,6 +65,7 @@ export default function ThongTinTaiKhoan() {
         }, 1000);
     }, []);
 
+
     return (
         <View
 
@@ -110,13 +111,15 @@ export default function ThongTinTaiKhoan() {
                         }} />
                     }
                 >
-                    <View style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginTop: 30
-                    }}>
+                    {thongtin.map(thong => (
+                        <View
+                            key={thong.id}
+                            style={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                marginTop: 30
+                            }}>
 
-                        {thongtin.map(thong => (
                             <TouchableOpacity
                                 key={thong.id}
                                 onPress={() => handerUpAnh()}
@@ -145,101 +148,102 @@ export default function ThongTinTaiKhoan() {
                                 }
 
                             </TouchableOpacity>
-                        ))}
 
-                        <View>
-                            <Text style={{
-                                fontSize: 22,
-                                fontWeight: 'bold',
-                                textAlign: 'center',
-                                marginTop: 10
-                            }}>
-                                Ngô Xuân Quy
-                            </Text>
-                            <Text style={{
-                                fontSize: 18,
-                                textAlign: 'center',
-                                opacity: 0.6,
-                                lineHeight: 70
-                            }}>
-                                Số Điện Thoại: 0589401978
-                            </Text>
-                            <Text style={{
-                                fontSize: 18,
-                                textAlign: 'center',
-                                opacity: 0.6,
-                            }} >
-                                Địa Chỉ: Cửa Lò, Nghệ An
-                            </Text>
-                        </View>
-
-                        {isload &&
-                            <View style={{
-                                backgroundColor: 'white',
-                                position: 'absolute',
-                                width: '100%',
-                                bottom: 0,
-                                zIndex: 1
-                            }}>
-                                <View style={{
-                                    alignItems: 'center', justifyContent: 'center',
-                                    backgroundColor: 'white',
-                                    paddingVertical: 2,
-                                    marginTop: 3
+                            <View>
+                                <Text style={{
+                                    fontSize: 22,
+                                    fontWeight: 'bold',
+                                    textAlign: 'center',
+                                    marginTop: 10
                                 }}>
-                                    <Button title="Thay Ảnh" onPress={pickImage} style={{
-                                    }} />
-                                </View>
-                                <View style={{
-                                    alignItems: 'center', justifyContent: 'center',
-                                    backgroundColor: 'white',
-                                    paddingVertical: 2,
-                                    marginTop: 3,
-                                    borderTopWidth: 0.5
+                                    {thong.email}
+                                </Text>
+                                <Text style={{
+                                    fontSize: 18,
+                                    textAlign: 'center',
+                                    opacity: 0.6,
+                                    lineHeight: 70
                                 }}>
-                                    {image && <Image source={{ uri: image }} style={{ width: 100, height: 100 }} />}
-                                    <Button title="Xác Nhận" onPress={() => handerXacNhan()} style={{
-
-                                    }} />
-                                </View>
-                                <View style={{
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    borderTopColor: 'gray',
-                                    borderTopWidth: 0.5
-                                }}>
-                                    <TouchableOpacity>
-                                        <Text style={{
-                                            fontSize: 20,
-                                            marginBottom: 7,
-                                            paddingVertical: 5
-                                        }}
-                                            onPress={() => handerCance()}
-                                        >
-                                            Cance
-                                        </Text>
-                                    </TouchableOpacity>
-                                </View>
+                                    Số Điện Thoại: 0589401978
+                                </Text>
+                                <Text style={{
+                                    fontSize: 18,
+                                    textAlign: 'center',
+                                    opacity: 0.6,
+                                }} >
+                                    Địa Chỉ: Cửa Lò, Nghệ An
+                                </Text>
                             </View>
-                        }
 
-                        <TouchableOpacity style={{
-                            justifyContent: 'center',
-                            alignItems: 'center'
-                        }}
-                            onPress={() => { setIsLoad(true) }}
-                        >
+                            {isload &&
+                                <View style={{
+                                    backgroundColor: 'white',
+                                    position: 'absolute',
+                                    width: '100%',
+                                    bottom: 0,
+                                    zIndex: 1
+                                }}>
+                                    <View style={{
+                                        alignItems: 'center', justifyContent: 'center',
+                                        backgroundColor: 'white',
+                                        paddingVertical: 2,
+                                        marginTop: 3
+                                    }}>
+                                        <Button title="Thay Ảnh" onPress={pickImage} style={{
+                                        }} />
+                                    </View>
+                                    <View style={{
+                                        alignItems: 'center', justifyContent: 'center',
+                                        backgroundColor: 'white',
+                                        paddingVertical: 2,
+                                        marginTop: 3,
+                                        borderTopWidth: 0.5
+                                    }}>
+                                        {image && <Image source={{ uri: image }} style={{ width: 100, height: 100 }} />}
+                                        <Button title="Xác Nhận" onPress={() => handerXacNhan()} style={{
 
-                            <AntDesign name="mail" size={124} color="black" />
-                            <Text style={{
-                                fontSize: 18,
-                                textAlign: 'center'
-                            }}>
-                                (Tệp Đính Kèm)
-                            </Text>
-                        </TouchableOpacity>
+                                        }} />
+                                    </View>
+                                    <View style={{
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        borderTopColor: 'gray',
+                                        borderTopWidth: 0.5
+                                    }}>
+                                        <TouchableOpacity>
+                                            <Text style={{
+                                                fontSize: 20,
+                                                marginBottom: 7,
+                                                paddingVertical: 5
+                                            }}
+                                                onPress={() => handerCance()}
+                                            >
+                                                Cance
+                                            </Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            }
 
-                    </View>
+                            <TouchableOpacity style={{
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                            }}
+                                onPress={() => { setIsLoad(true) }}
+                            >
+
+                                <AntDesign name="mail" size={124} color="black" />
+                                <Text style={{
+                                    fontSize: 18,
+                                    textAlign: 'center'
+                                }}>
+                                    (Tệp Đính Kèm)
+                                </Text>
+                            </TouchableOpacity>
+
+                        </View>
+                    ))}
+
                 </ScrollView>
             </View>
         </View>

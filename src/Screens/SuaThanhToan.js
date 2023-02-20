@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function SuaThanhToan({ route, navigation }) {
 
-    const { id, name } = route.params;
+    const { id_sua, name } = route.params;
 
     const [cliedId, setCliedID] = useState(0);
     const [Apis, setApi] = useState([])
@@ -105,7 +105,7 @@ export default function SuaThanhToan({ route, navigation }) {
     }, [])
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/orders/' + name)
+        fetch('http://192.168.1.165:4000' + '/api/orders/' + id_sua)
             .then(res => res.json())
             .then(res => setOrder(res))
             .catch(err => console.log(err))
@@ -132,7 +132,7 @@ export default function SuaThanhToan({ route, navigation }) {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        id: id,
+                        id: id_sua,
                         name: name,
                         taikhoan: taikhoan,
                         date: new Date(),
@@ -143,7 +143,7 @@ export default function SuaThanhToan({ route, navigation }) {
                     })
                 })
                     .then(() => {
-                        fetch('http://192.168.1.165:4000' + '/api/orders/' + name)
+                        fetch('http://192.168.1.165:4000' + '/api/orders/' + id_sua)
                             .then(res => res.json())
                             .then(res => setOrder(res))
                             .catch(err => console.log(err))
@@ -171,7 +171,7 @@ export default function SuaThanhToan({ route, navigation }) {
             }
         )
             .then(() => {
-                fetch('http://192.168.1.165:4000' + '/api/orders/' + name)
+                fetch('http://192.168.1.165:4000' + '/api/orders/' + id_sua)
                     .then(res => res.json())
                     .then(res => setOrder(res))
                     .catch(err => console.log(err))
@@ -196,7 +196,7 @@ export default function SuaThanhToan({ route, navigation }) {
             })
         })
             .then(() => {
-                fetch('http://192.168.1.165:4000' + '/api/orders/' + name)
+                fetch('http://192.168.1.165:4000' + '/api/orders/' + id_sua)
                     .then(res => res.json())
                     .then(res => setOrder(res))
                     .catch(err => console.log(err))
@@ -217,7 +217,7 @@ export default function SuaThanhToan({ route, navigation }) {
             })
         })
             .then(() => {
-                fetch('http://192.168.1.165:4000' + '/api/orders/' + name)
+                fetch('http://192.168.1.165:4000' + '/api/orders/' + id_sua)
                     .then(res => res.json())
                     .then(res => setOrder(res))
                     .catch(err => console.log(err))
@@ -243,7 +243,7 @@ export default function SuaThanhToan({ route, navigation }) {
                 {
                     text: "Yes",
                     onPress: () => {
-                        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/update/' + id, {
+                        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/update/' + id_sua, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
@@ -277,7 +277,7 @@ export default function SuaThanhToan({ route, navigation }) {
                 {
                     text: "Yes",
                     onPress: () => {
-                        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/update/' + id, {
+                        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/update/' + id_sua, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
@@ -298,7 +298,7 @@ export default function SuaThanhToan({ route, navigation }) {
     const [thanhtoans, setThanhToan] = useState([])
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/id/' + id)
+        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/id/' + id_sua)
             .then(res => res.json())
             .then(res => setThanhToan(res))
             .catch(err => console.log(err))

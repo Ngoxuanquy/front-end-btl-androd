@@ -79,11 +79,11 @@ export default function LichSuDonHang({ navigation }) {
     }, [taikhoan]);
 
     function handerChiTiec(id, name) {
-        navigation.replace('Chi Tiết Đơn', { id: id, name: name });
+        navigation.navigate('Chi Tiết Đơn', { id_sua: id, name: name });
     }
 
     function handerChiTietDaTT(id, name) {
-        navigation.replace('Chi Tiết Đơn', { id: id, name: name });
+        navigation.navigate('Chi Tiết Đơn', { id_sua: id, name: name });
 
     }
 
