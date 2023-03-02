@@ -42,12 +42,22 @@ export default function PhieuMuonHang({ navigation }) {
 
     const [id_donhang, setID_DonHang] = useState('')
 
-    useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/users/' + value)
-            .then(res => res.json())
-            .then(res => setApi(res[0].khohangcanhan))
-            .catch((err) => console.log(err))
-    }, [value])
+    const [id_users, setId_users] = useState('')
+    AsyncStorage.getItem('taikhoan')
+        .then(res =>
+            setTaiKhoan(res)
+        )
+
+    AsyncStorage.getItem('id_users')
+        .then(res =>
+            setId_users(res)
+        )
+
+
+    const [inventorys, setInventory] = useState([])
+    const [produces, setProduce] = useState([]);
+
+
 
 
     useEffect(() => {
@@ -68,20 +78,20 @@ export default function PhieuMuonHang({ navigation }) {
         setItems(arr)
     }, [taikhoan])
 
+    console.log(apis)
 
-
-    function handerMuon(id) {
+    function handerMuon(id, name) {
 
         let ids1 = id_donhang + 1
 
         apis.map(api => {
-            if (api.id == id && api.SoLuong > 0) {
+            if (api.id == id) {
                 fetch('http://192.168.1.165:4000' + '/api/muonhang/create/', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         id: ids,
-                        tenhang: api.TenHang,
+                        name: name,
                         soluong: 1,
                         nguoimuon: taikhoan,
                         produce: ids1
@@ -92,7 +102,7 @@ export default function PhieuMuonHang({ navigation }) {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
-                                tenhang: api.TenHang,
+                                name: name,
                                 soluong: 1,
                                 nguoimuon: taikhoan
                             })
@@ -284,19 +294,52 @@ export default function PhieuMuonHang({ navigation }) {
     }, [value])
 
     useEffect(() => {
-        if (search != "") {
-            fetch('http://192.168.1.165:4000' + '/api/khocanhan/sanpham/' + idnguoichomuon + '/' + search)
-                .then(res => res.json())
-                .then(res => setApi(res))
-                .catch((err) => console.log(err))
-        }
-        else {
-            fetch('http://192.168.1.165:4000' + '/api/users/' + value)
-                .then(res => res.json())
-                .then(res => setApi(res[0].khohangcanhan))
-                .catch((err) => console.log(err))
-        }
-    }, [search])
+        fetch('http://192.168.1.165:4000' + '/api/products/')
+            .then(res => res.json())
+            .then(res => res.map(api => {
+                setInventory(pre => [...pre, api.inventory])
+            }))
+            .finally(() => {
+
+            })
+    }, [])
+
+
+    useEffect(() => {
+        fetch('http://192.168.1.165:4000' + '/api/products/')
+            .then(res => res.json())
+            .then(res => setProduce(res))
+
+    }, [])
+
+    console.log(idnguoichomuon)
+
+    useEffect(() => {
+        inventorys.map(inventory => {
+            inventory.map(api => {
+                if (api.usersId == idnguoichomuon) {
+                    // return;
+                    setApi(pre => [...pre, api])
+                }
+
+            })
+        })
+    }, [idnguoichomuon])
+
+    // useEffect(() => {
+    //     if (search != "") {
+    //         fetch('http://192.168.1.165:4000' + '/api/khocanhan/sanpham/' + idnguoichomuon + '/' + search)
+    //             .then(res => res.json())
+    //             .then(res => setApi(res))
+    //             .catch((err) => console.log(err))
+    //     }
+    //     else {
+    //         fetch('http://192.168.1.165:4000' + '/api/users/' + value)
+    //             .then(res => res.json())
+    //             .then(res => setApi(res[0].khohangcanhan))
+    //             .catch((err) => console.log(err))
+    //     }
+    // }, [search])
 
 
     function handerXacNhan() {
@@ -478,53 +521,88 @@ export default function PhieuMuonHang({ navigation }) {
                                         Trạng Thái
                                     </Text>
                                 </View>
-                                {apis.map(api => (
-                                    <View
-                                        key={api.id}
-                                        style={{
-                                            flexDirection: 'row',
-                                            justifyContent: 'space-around',
-                                            // borderWidth: 0.4,
-                                            // borderColor: 'gray',
-                                            borderBottomColor: 'gray',
-                                            borderBottomWidth: 1,
-                                            paddingVertical: 6
+                                <View style={{
 
-                                        }}>
-                                        <Text style={{
-                                            fontSize: 16,
-                                            lineHeight: 30
-                                        }}>
-                                            {api.TenHang}
-                                        </Text>
+                                    // paddingVertical: 10
+                                }}>
+                                    {apis.map(api => (
+                                        <View
+                                            key={api.id}
+                                            style={{
+                                                flexDirection: 'row',
+                                                justifyContent: 'center',
+                                                // borderWidth: 0.4,
+                                                // borderColor: 'gray',
+                                                borderBottomColor: 'gray',
+                                                borderBottomWidth: 1,
+                                                paddingVertical: 6
 
-                                        <Text style={{
-                                            fontSize: 16,
-                                            lineHeight: 30
-                                        }}>
-                                            {api.SoLuong}
-                                        </Text>
-                                        <TouchableOpacity style={{
-                                            fontSize: 16,
-                                            lineHeight: 30,
-                                            borderColor: 'gray',
-                                            borderWidth: 0.4,
-                                            padding: 5,
-                                            backgroundColor: 'green',
-                                            opacity: 0.7,
-                                            borderRadius: 5
-                                        }}
-                                            onPress={() => handerMuon(api.id)}
-                                        >
-                                            <Text style={{
-                                                textAlign: 'center',
-                                                color: 'white'
                                             }}>
-                                                Mượn
-                                            </Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                ))}
+                                            {produces.map(produce => (
+                                                <View
+                                                    key={produce.id}
+                                                    style={{
+                                                        flexDirection: 'row',
+                                                        justifyContent: 'center',
+
+                                                    }}>
+                                                    {api.productsId == produce.id ?
+
+                                                        <View
+                                                            key={produce.id}
+                                                            style={{
+                                                                flexDirection: 'row',
+                                                                justifyContent: 'space-around'
+                                                            }}>
+                                                            <View style={{
+                                                                width: '40%',
+                                                                justifyContent: 'center',
+                                                                justifyContent: 'center'
+                                                            }}>
+                                                                <Text style={{
+                                                                    fontSize: 16,
+                                                                    lineHeight: 30,
+                                                                    textAlign: 'left',
+                                                                    marginLeft: -40
+
+                                                                }}>
+                                                                    {produce.name}
+                                                                </Text>
+                                                            </View>
+                                                            <View>
+                                                                <Text style={{
+                                                                    fontSize: 16,
+                                                                    lineHeight: 30
+                                                                }}>
+
+                                                                    {api.exist}
+                                                                </Text>
+                                                            </View>
+
+                                                            <View>
+                                                                <TouchableOpacity
+                                                                    onPress={() => handerMuon(api.id, produce.name)}
+                                                                >
+                                                                    <Text style={{
+                                                                        fontSize: 16,
+                                                                        lineHeight: 30
+                                                                    }}>
+
+                                                                        Mượn
+                                                                    </Text>
+                                                                </TouchableOpacity>
+                                                            </View>
+                                                        </View>
+                                                        : null}
+                                                </View>
+
+                                            ))}
+
+                                        </View>
+
+
+                                    ))}
+                                </View>
                             </View>
 
                             <ScrollView style={{

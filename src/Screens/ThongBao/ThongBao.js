@@ -40,7 +40,7 @@ function App({ navigation }) {
 
             setRefreshing(false);
         }, 1000);
-    }, []);
+    }, [taikhoan]);
 
     return (
 

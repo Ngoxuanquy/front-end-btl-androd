@@ -17,7 +17,6 @@ function ChiTietThongBao({ route, navigation }) {
     const [token, setToken] = useState([])
 
     const [ids, setID] = useState()
-    const [idCaNhan, setIdCaNhan] = useState()
 
 
     AsyncStorage.getItem('taikhoan')
@@ -25,24 +24,50 @@ function ChiTietThongBao({ route, navigation }) {
             setTaiKhoan(res)
         )
 
+    AsyncStorage.getItem('id_users')
+        .then(res =>
+            setId_users(res)
+        )
+
+    const [inventorys, setInventory] = useState([])
+    const [products, setProduce] = useState([]);
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
+        fetch('http://192.168.1.165:4000' + '/api/products/')
             .then(res => res.json())
-            .then(res => setKhoCaNhan(res[0].khohangcanhan))
+            .then(res => res.map(api => {
+                setInventory(pre => [...pre, api.inventory])
+            }))
             .finally(() => {
 
             })
-    }, [taikhoan])
+    }, [])
+
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/users/' + nguoimuon)
+        fetch('http://192.168.1.165:4000' + '/api/products/')
             .then(res => res.json())
-            .then(res => setKhoNguoiMuon(res[0].khohangcanhan))
-            .finally(() => {
+            .then(res => setProduce(res))
+
+    }, [])
+
+
+    useEffect(() => {
+        inventorys.map(inventory => {
+            inventory.map(api => {
+                if (api.usersId == id_users) {
+                    // return;
+                    setKhoCaNhan(pre => [...pre, api])
+                }
 
             })
-    }, [taikhoan])
+        })
+    }, [products])
+
+
+    const [id_users, setId_users] = useState('')
+
+
 
     useEffect(() => {
         fetch('http://192.168.1.165:4000' + '/api/users/' + nguoimuon)
@@ -53,14 +78,18 @@ function ChiTietThongBao({ route, navigation }) {
             })
     }, [taikhoan])
 
-    useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
-            .then(res => res.json())
-            .then(res => setIdCaNhan(res[0].id))
-            .finally(() => {
+    const [orders, setOrder] = useState([]);
 
-            })
-    }, [taikhoan])
+    useEffect(() => {
+        fetch('http://192.168.1.165:4000' + '/api/lichsumuonhang/id/' + id)
+            .then(res => res.json())
+            .then(res => res.map(re => {
+                setOrder(re.MuonHang)
+            }))
+            .catch((err) => console.log(err))
+
+    }, [])
+
 
 
     useEffect(() => {
@@ -88,48 +117,65 @@ function ChiTietThongBao({ route, navigation }) {
 
     }, [])
 
+    useEffect(() => {
+        products.map(product => {
+
+        })
+    }, [])
+
+    console.log(orders)
+
+
     const handerSubmit = () => {
 
-        console.log(id)
-
-        khonguoimuon.map(khonguoimuo => {
-            sanphams.map(sanpham => {
-                if (khonguoimuo.TenHang == sanpham.TenHang) {
-                    fetch('http://192.168.1.165:4000' + '/api/khocanhan/update/' + ids + '/' + khonguoimuo.TenHang, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            soluong: khonguoimuo.SoLuong + sanpham.SoLuong
-                        })
-                    })
-                }
-            })
-        })
-
-        khocanhans.map(khocanhan => {
-            sanphams.map(sanpham => {
-                if (khocanhan.TenHang == sanpham.TenHang) {
-                    fetch('http://192.168.1.165:4000' + '/api/khocanhan/update/' + idCaNhan + '/' + khocanhan.TenHang, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            soluong: khocanhan.SoLuong - sanpham.SoLuong
-                        })
-                    })
-                        .then(() => {
-                            fetch('http://192.168.1.165:4000' + '/api/lichsumuonhang/update/trangthai/' + id, {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-
+        products.map(product => {
+            orders.map(sanpham => {
+                product.inventory.map(a => {
+                    if (product.name == sanpham.TenHang && a.usersId == id_users) {
+                        fetch('http://192.168.1.165:4000' + '/api/inventory/update/' + id_users + '/' + product.id, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                soluong: a.exist - sanpham.SoLuong
                             })
-                            alert('Xác Nhận Thành Công');
-                            navigation.navigate('Thông Báo Công Ty')
+
                         })
-                }
+                        return;
+                    }
+                })
             })
         })
+
+
+        products.map(product => {
+            orders.map(sanpham => {
+                product.inventory.map(a => {
+                    if (product.name == sanpham.TenHang && a.usersId == ids) {
+                        console.log('aaa')
+                        fetch('http://192.168.1.165:4000' + '/api/inventory/update/' + ids + '/' + product.id, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                soluong: a.exist + sanpham.SoLuong
+                            })
+                        })
+                        return;
+
+                    }
+                })
+            })
+        })
+
+        fetch('http://192.168.1.165:4000' + '/api/lichsumuonhang/update/trangthai/' + id, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+
+        })
+        alert('Xác Nhận Thành Công');
+        navigation.navigate('Thông Báo Công Ty')
 
     }
+
 
     return (
         <View>

@@ -18,7 +18,7 @@ function StackCart() {
     return (
         <Stack.Navigator>
             <Stack.Screen
-                name="Cart"
+                name="Cart_home"
                 component={Cart}
                 options={{
                     headerShown: false,

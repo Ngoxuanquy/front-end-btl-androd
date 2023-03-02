@@ -132,7 +132,6 @@ export default function ThanhToan({ route, navigation }) {
             })
         })
 
-        console.log(id_chuyen)
         // products.map(Product => {
         //     if (Product.id == id) {
         //         setSanPham([...sanphams, Product])
@@ -355,7 +354,7 @@ export default function ThanhToan({ route, navigation }) {
                                                     }
                                                 )
                                                     .then(() => {
-                                                        navigation.replace('Cart');
+                                                        navigation.replace('Cart_home');
                                                     })
                                             },
                                         },
@@ -435,7 +434,7 @@ export default function ThanhToan({ route, navigation }) {
                                                     }
                                                 )
                                                     .then(() => {
-                                                        navigation.replace('Cart');
+                                                        navigation.replace('Cart_home');
                                                     })
                                             },
                                         },

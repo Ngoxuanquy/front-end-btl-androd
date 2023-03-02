@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
 
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -26,7 +26,7 @@ export default function PhieuMuon({ navigation }) {
 
 
     return (
-        <View >
+        <ScrollView >
             {apis.map(sanpham => (
                 <View key={sanpham.id} >
                     {/* thông báo */}
@@ -99,7 +99,7 @@ export default function PhieuMuon({ navigation }) {
                     </View>
                 </View>
             ))}
-        </View>
+        </ScrollView>
     );
 }
 
