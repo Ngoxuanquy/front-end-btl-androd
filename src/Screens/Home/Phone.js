@@ -76,7 +76,7 @@ const Phone = ({ navigation }) => {
                 .catch(err => console.log(err))
             setRefreshing(false);
         }, 1000);
-    }, []);
+    }, [taikhoan]);
 
 
     return (

@@ -91,7 +91,7 @@ export default function LichSuDonHang({ navigation }) {
 
     function handerSearch() {
         setIsLoading(true)
-        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/sdt/' + Value)
+        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/code_bill/' + Value)
             .then(res => res.json())
             .then(res => setLichSuDTT(res))
             .catch(err => console.log(err))
@@ -278,7 +278,7 @@ export default function LichSuDonHang({ navigation }) {
                                                     fontSize: 16,
                                                     textDecorationLine: 'underline'
                                                 }}
-                                                    onPress={() => handerChiTiec(lichSu.id, lichSu.KhachHang)}
+                                                    onPress={() => handerChiTiec(lichSu.id, lichSu.code_bill)}
                                                 >
                                                     Xem Chi Tiết
                                                 </Text>
@@ -457,7 +457,7 @@ export default function LichSuDonHang({ navigation }) {
                                                 marginLeft: 10,
                                                 fontSize: 18
                                             }}>
-                                                {lichSu.TongTienSauGiam}
+                                                {lichSu.total_amount_after_discount} $
                                             </Text>
                                         </View>
                                         <View>
@@ -486,13 +486,13 @@ export default function LichSuDonHang({ navigation }) {
                                         <Text style={{
                                             fontSize: 18
                                         }}>
-                                            Mã Đơn Hàng: QQQQ
+                                            Mã Đơn Hàng:  {lichSu.code_bill}
                                         </Text>
                                         <Text style={{
                                             fontSize: 18
 
                                         }}>
-                                            Ngày Giờ: 10:15 - 14/01/2022
+                                            Ngày Giờ: {lichSu.order_date}
                                         </Text>
                                         <View style={{
                                             flexDirection: 'row',
@@ -505,7 +505,7 @@ export default function LichSuDonHang({ navigation }) {
                                                 fontWeight: 'bold'
 
                                             }}>
-                                                {lichSu.TrangThai}
+                                                {lichSu.status}
                                             </Text>
                                         </View>
                                         <TouchableOpacity

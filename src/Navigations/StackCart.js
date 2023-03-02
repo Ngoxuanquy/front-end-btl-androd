@@ -3,15 +3,14 @@ import { View, Text } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
-import Home from '../Screens/Home'
-import Login from '../Screens/Login'
-import Cart from '../Screens/CartScrenn'
-import ChiTiet from '../Screens/ChiTiet'
-import Map from '../Screens/Map'
-import ChupAnh from './../Screens/chup'
-import ThanhToan from '../Screens/ThanhToan'
-import ThuNhap from '../Screens/ThuNhap'
-import Cart_Them from '../Screens/Cart_Them'
+import Home from '../Screens/Home/Home'
+import Cart from '../Screens/Cart/CartScrenn'
+import ChiTiet from '../Screens/Cart/ChiTiet'
+import Map from '../Screens/Cart/Map'
+import ChupAnh from '../Components/chup'
+import ThanhToan from '../Screens/Cart/ThanhToan'
+import ThuNhap from '../Screens/ChiSoCaNhan/ThuNhap'
+import Cart_Them from '../Screens/Cart/Cart_Them'
 
 const Stack = createNativeStackNavigator()
 

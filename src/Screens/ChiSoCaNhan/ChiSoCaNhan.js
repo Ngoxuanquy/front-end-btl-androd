@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import UpAnh from '../Components/UpAnh';
+import UpAnh from '../../Components/UpAnh';
 export default function ChiSoCaNhan({ navigation }) {
     return (
         <View >
@@ -52,7 +52,7 @@ export default function ChiSoCaNhan({ navigation }) {
                             backgroundColor: '#dddddd',
                             paddingVertical: 14
                         }}
-                            onPress={() => navigation.navigate('XacNhanChiSo')}
+                            onPress={() => navigation.navigate('Xác Nhận Chỉ Số')}
                         >
                             <Text style={{
                                 fontSize: 18,
@@ -68,7 +68,7 @@ export default function ChiSoCaNhan({ navigation }) {
                             paddingVertical: 14,
                             marginTop: 20
                         }}
-                            onPress={() => navigation.navigate('PhieuPhat')}
+                            onPress={() => navigation.navigate('Phiếu Phạt')}
 
                         >
                             <Text style={{

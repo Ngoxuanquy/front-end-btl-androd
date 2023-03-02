@@ -4,7 +4,7 @@ import { TextInput } from 'react-native-paper';
 import React, { useState } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import DateTime from '../Components/DateTime';
+import DateTime from '../../Components/DateTime';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 

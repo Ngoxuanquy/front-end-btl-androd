@@ -84,9 +84,9 @@ export default function LuongThuong() {
     }
 
     const buttons = [
-        { id: 1, button: 'Day' },
-        { id: 2, button: 'Week' },
-        { id: 3, button: 'Month' },
+        { id: 0, button: 'Day' },
+        { id: 1, button: 'Week' },
+        { id: 2, button: 'Month' },
 
     ]
 
@@ -269,7 +269,7 @@ export default function LuongThuong() {
                                             }}
                                         >
                                             <Text style={[
-                                                index + 1 === cliedId ? styles.buttonAction : styles.butonUn,
+                                                index === cliedId ? styles.buttonAction : styles.butonUn,
                                             ]}>
                                                 {button.button}
                                             </Text>

@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Image, Button, ScrollView, Re
 import { Zocial } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
-import UpAnh from '../Components/UpAnh';
+import UpAnh from '../../Components/UpAnh';
 import React, { useEffect, useState } from 'react';
 import * as ImagePicker from 'expo-image-picker'
 import AsyncStorage from '@react-native-async-storage/async-storage';

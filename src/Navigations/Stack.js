@@ -3,8 +3,8 @@ import { View, Text } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
-import Home from '../Screens/Home'
-import Login from '../Screens/Login'
+import Home from '../Screens/Home/Home'
+import Logins from '../Screens/DangNhap/DangNhap'
 import Tab from './Tab'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
@@ -49,7 +49,7 @@ function Stacks() {
                     <> */}
                 <Stack.Screen
                     name="Login"
-                    component={Login}
+                    component={Logins}
                     options={{
                         headerShown: false,
                     }}

@@ -66,82 +66,82 @@ export default function Cart({ navigation }) {
     // console.log(orders)
 
     function handerNhanDon(id) {
-        customer.map(custome => {
-            if (custome.id == id) {
-                fetch('http://192.168.1.165:4000' + '/api/customer_re/create/', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        id: id,
-                        name: custome.customer_name,
-                        taikhoan: taikhoan,
-                        number: custome.Phone_Number,
-                        address: custome.Address,
-                        note: custome.Note,
-                    })
-                })
-                    .then(() => {
-                        return Alert.alert(
-                            "Are your sure?",
-                            "Bạn Nhận Đơn Này?",
-                            [
 
-                                // The "No" button
-                                // Does nothing but dismiss the dialog when tapped
-                                {
-                                    text: "No",
-                                },
+        return Alert.alert(
+            "Are your sure?",
+            "Bạn Nhận Đơn Này?",
+            [
 
-                                // The "Yes" button
-                                {
-                                    text: "Yes",
-                                    onPress: () => {
-                                        fetch('http://192.168.1.165:4000' + '/api/customer/')
-                                            .then(res => res.json())
-                                            .then(res => setCustomer(res))
-                                            .finally(() => {
-                                                alert('Nhận Đơn Thành Công!!!')
+                // The "No" button
+                // Does nothing but dismiss the dialog when tapped
+                {
+                    text: "No",
+                },
+
+                // The "Yes" button
+                {
+                    text: "Yes",
+                    onPress: () => {
+                        customer.map(custome => {
+                            if (custome.id == id) {
+                                fetch('http://192.168.1.165:4000' + '/api/customer_re/create/', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({
+                                        id: id,
+                                        name: custome.customer_name,
+                                        taikhoan: taikhoan,
+                                        number: custome.phone_number,
+                                        address: custome.Address,
+                                        note: custome.Note,
+                                    })
+                                })
+                                    .then(() => {
+                                        fetch('http://192.168.1.165:4000' + '/api/customer/delete/' + id,
+                                            {
+                                                method: 'POST',
+                                                headers: { 'Content-Type': 'application/json' },
+                                            }
+                                        )
+                                            .then(() => {
+                                                fetch('http://192.168.1.165:4000' + '/api/customer/')
+                                                    .then(res => res.json())
+                                                    .then(res => setCustomer(res))
+                                                    .finally(() => {
+                                                        alert('Nhận Đơn Thành Công!!!')
+
+                                                    })
                                             })
-
                                         fetch('http://192.168.1.165:4000' + '/api/thanhtoan/create/', {
                                             method: 'POST',
                                             headers: { 'Content-Type': 'application/json' },
                                             body: JSON.stringify({
                                                 id: id,
-                                                name: custome.customer_name,
                                                 taikhoan: taikhoan,
-                                                number: custome.Phone_Number,
-                                                address: custome.Address,
-                                                note: custome.Note,
+
                                             })
                                         })
-                                    },
-                                },
-                            ]
-                        );
-                    })
-                    .then(() => {
-                        fetch('http://192.168.1.165:4000' + '/api/customer/delete/' + id,
-                            {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
+
+                                            .then(() => {
+                                                fetch('http://192.168.1.165:4000' + '/api/customer_re/' + taikhoan)
+                                                    .then(res => res.json())
+                                                    .then(res => setOrders(res))
+                                                    .catch(err => console.log(err))
+                                            })
+                                            .catch(err => console.log(err))
+                                            .finally(() => {
+
+                                            })
+                                    })
                             }
-                        )
+                        })
 
-                    })
-                    .then(() => {
-                        fetch('http://192.168.1.165:4000' + '/api/customer_re/' + taikhoan)
-                            .then(res => res.json())
-                            .then(res => setOrders(res))
-                            .catch(err => console.log(err))
-                    })
-                    .catch(err => console.log(err))
-                    .finally(() => {
-                        console.log('a')
+                    },
+                },
 
-                    })
-            }
-        })
+            ]
+        );
+
     }
 
 
@@ -204,7 +204,7 @@ export default function Cart({ navigation }) {
         }, 1000);
 
 
-    }, []);
+    }, [taikhoan]);
 
 
 

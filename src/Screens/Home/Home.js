@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, ScrollView, Animated, Button, BackHandler, RefreshControl } from 'react-native';
 import React, { useEffect, useState, useLayoutEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker'
@@ -13,14 +12,24 @@ import { FontAwesome } from '@expo/vector-icons';
 import DropDownItem from "react-native-drop-down-item";
 import { Accordion, animate, Value } from '@dooboo-ui/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import UpAnh from '../Components/UpAnh';
+import UpAnh from '../../Components/UpAnh';
 import LottieView from 'lottie-react-native';
 // import MaHoa from '../Components/MaHoa';
 import * as Keychain from 'react-native-keychain';
+import * as Notifications from 'expo-notifications';
+
 
 // import { Value } from 'react-native-reanimated';
 // import Buttons from './Button'
 export default function HomeScrenn({ navigation }) {
+
+    Notifications.setNotificationHandler({
+        handleNotification: async () => ({
+            shouldShowAlert: true,
+            shouldPlaySound: false,
+            shouldSetBadge: false,
+        }),
+    });
 
     const [taikhoan, setTaiKhoan] = useState([])
     const [token, setToken] = useState([])
@@ -33,6 +42,39 @@ export default function HomeScrenn({ navigation }) {
         .then(res =>
             setToken(res)
         )
+
+
+    const [token_test, setTokenTest] = useState()
+
+    async function getToken() {
+
+        const { status } = await Notifications.getPermissionsAsync()
+        if (status !== 'granted') {
+            const { status } = await Notifications.requestPermissionsAsync()
+            if (status !== 'granted') {
+                alert('Looix')
+                return;
+            }
+        }
+
+        const tokenData = await Notifications.getExpoPushTokenAsync()
+        const token = tokenData.data
+        setTokenTest(token);
+    }
+
+    useEffect(() => {
+        fetch('http://192.168.1.165:4000' + '/api/tokenthongbao/update/token/' + taikhoan, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                // taikhoan: taikhoan,
+                token: token_test,
+            })
+        })
+    }, [token_test])
+
+
+    getToken()
 
 
     const [isLoad, setIsLoad] = useState(false)
@@ -196,7 +238,7 @@ export default function HomeScrenn({ navigation }) {
             id: 8, button: 'Kho Hàng Cá Nhân', icon: 'account-balance',
         },
         {
-            id: 9, button: 'Phiếu Mượn', icon: 'library-books',
+            id: 9, button: 'Lịch Sử Phiếu Mượn', icon: 'library-books',
         },
     ]
 
@@ -216,14 +258,24 @@ export default function HomeScrenn({ navigation }) {
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         setTimeout(() => {
-            fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
+            fetch('http://192.168.1.165:4000' + '/api/users/')
                 .then(res => res.json())
-                .then(res => setChamCong(res[0].chamcong))
-
+                .then(res => {
+                    res.map(re => {
+                        re.ChamCong.map(r => {
+                            console.log(r)
+                            if (r.Email === taikhoan) {
+                                console.log('a')
+                                setChamCong(re.ChamCong)
+                            }
+                            return;
+                        })
+                    })
+                })
 
             setRefreshing(false);
         }, 1000);
-    }, []);
+    }, [chamcongs]);
 
 
     const [chamcongs, setChamCong] = useState([])
@@ -234,28 +286,42 @@ export default function HomeScrenn({ navigation }) {
 
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/chamcong/' + taikhoan)
+        fetch('http://192.168.1.165:4000' + '/api/users/')
             .then(res => res.json())
             .then(res => {
                 res.map(re => {
-                    setCheck(re.date)
+                    re.ChamCong.map(r => {
+                        if (r.Email === taikhoan) {
+                            setChamCong(re.ChamCong)
+                        }
+                        return;
+                    })
+                })
+            })
+            .finally(() => {
+
+            })
+    }, [taikhoan])
+
+    // console.log(chamcongs)
+    // console.log(taikhoan)
+
+    useEffect(() => {
+        fetch('http://192.168.1.165:4000' + '/api/chamcong/')
+            .then(res => res.json())
+            .then(res => {
+                res.map(re => {
+                    if (re.Email === taikhoan) {
+                        setCheck(re.date)
+                    }
+                    else {
+                        setCheck('')
+                        return;
+                    }
                 })
             }
             )
-    }, [])
-
-    useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
-            .then(res => res.json())
-            .then(res => setChamCong(res[0].chamcong))
-            .finally(() => {
-                chamcongs.map(chamcong => {
-                    if (check.slice(0, 2) == a.getDate() && check.slice(3, 5) == (a.getMonth() + 1) && check.slice(6, 10) == a.getFullYear()) {
-                        setGioVao(chamcong.GioVao)
-                    }
-                })
-            })
-    }, [apis])
+    }, [chamcongs])
 
 
     useEffect(() => {
@@ -263,17 +329,20 @@ export default function HomeScrenn({ navigation }) {
         chamcongs.map(chamcong => {
             if (check.slice(0, 2) == a.getDate() && check.slice(3, 5) == (a.getMonth() + 1) && check.slice(6, 10) == a.getFullYear()) {
                 setGioVao(chamcong.GioVao)
+                return;
             }
         })
 
         chamcongs.map(chamcong => {
             if (check.slice(0, 2) == a.getDate() && check.slice(3, 5) == (a.getMonth() + 1) && check.slice(6, 10) == a.getFullYear()) {
                 setGioRa(chamcong.GioRa)
+                return;
+
             }
         })
     })
 
-    console.log('aaa')
+
 
     return (
         <ScrollView style={{
@@ -404,7 +473,9 @@ export default function HomeScrenn({ navigation }) {
                     </TouchableOpacity>
                     <TouchableOpacity style={{
                         marginTop: 20
-                    }}>
+                    }}
+                        onPress={() => getToken()}
+                    >
 
                         <MaterialIcons name='notifications' style={{
                             fontSize: 30,

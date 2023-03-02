@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
-import DateTime from '../Components/DateTime';
+import DateTime from '../../Components/DateTime';
 
 export default function DonXinNghiPhep({ navigation }) {
     return (

@@ -9,18 +9,22 @@ export default function ChiTiet({ route, navigation }) {
 
     const { name, id } = route.params;
 
+    console.log(id)
+
     const [isLoad, setIsLoad] = useState(false)
     const [apis, setApi] = useState([])
 
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/khachhang/' + name)
+        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/id/' + id)
             .then(res => res.json())
             .then(res => setApi(res))
             .catch(err => console.log(err))
             .finally(() => {
             })
-    }, [])
+    }, [id])
+
+    console.log(apis)
 
 
     return (
@@ -111,6 +115,18 @@ export default function ChiTiet({ route, navigation }) {
                                 style={{
                                     padding: 10,
                                 }}>
+                                <View style={{
+                                    flexDirection: 'row'
+                                }}>
+                                    <Ionicons name="ios-people-sharp" size={24} color="black" />
+                                    <Text style={{
+                                        fontSize: 18,
+                                        lineHeight: 33,
+                                        marginLeft: 10
+                                    }}>
+                                        Mã Đơn Hàng: {api.code_bill}
+                                    </Text>
+                                </View>
 
                                 <View style={{
                                     flexDirection: 'row'

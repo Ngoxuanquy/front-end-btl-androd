@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { BarCodeScanner } from 'expo-barcode-scanner'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const QRCode = () => {
+const QRCode = ({ navigation }) => {
     const [hasPermission, setHasPermission] = useState(null)
     const [scanned, setScannes] = useState(false)
     const [text, setText] = useState('')
@@ -47,19 +47,22 @@ const QRCode = () => {
             .then(res =>
                 setDate(res)
             )
-    }, [])
+    }, [taikhoan])
+
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/chamcong/' + taikhoan)
+        fetch('http://192.168.1.165:4000' + '/api/chamcong/')
             .then(res => res.json())
             .then(res => {
                 res.map(re => {
-                    setCheck(re.date)
-
+                    if (re.Email == taikhoan) {
+                        setCheck(re.date)
+                    }
                 })
             }
             )
-    }, [])
+    })
+
 
 
     const handleBarCodeScanned = ({ type, data }) => {
@@ -86,6 +89,8 @@ const QRCode = () => {
             })
                 .then(() => {
                     alert('Chấm Vào!!!')
+                    navigation.replace('BottomTab')
+
                 })
         }
 
@@ -98,6 +103,7 @@ const QRCode = () => {
                 })
                     .then(() => {
                         alert('Chấm Công Ra')
+                        navigation.replace('BottomTab')
 
                     })
             }

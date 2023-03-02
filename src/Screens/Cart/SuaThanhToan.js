@@ -1,12 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, TouchableOpacity, View, Image, ScrollView, TextInput, ActivityIndicator, Alert, RefreshControl } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Image, ScrollView, TextInput, ActivityIndicator, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function ThanhToan({ route, navigation }) {
+export default function SuaThanhToan({ route, navigation }) {
 
-    const { name, id_chuyen, number } = route.params;
-
+    const { id_sua, name } = route.params;
 
     const [cliedId, setCliedID] = useState(0);
     const [Apis, setApi] = useState([])
@@ -48,7 +47,6 @@ export default function ThanhToan({ route, navigation }) {
     const [orders, setOrder] = useState([]);
     const [customer_name, setCustomer_name] = useState([]);
 
-
     AsyncStorage.getItem('taikhoan')
         .then(res =>
             setTaiKhoan(res)
@@ -62,14 +60,15 @@ export default function ThanhToan({ route, navigation }) {
     }
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/products/')
+        fetch('http://192.168.1.165:4000' + '/api/products')
             .then(res => res.json())
             .then(res => setProducts(res))
             .catch(err => console.log(err))
             .finally(() => {
                 setIsLoading(false)
             })
-    }, [])
+    }, [taikhoan])
+
 
     const [product, setProduct] = useState(products);
     const [customer, setCustomer] = useState([])
@@ -107,7 +106,7 @@ export default function ThanhToan({ route, navigation }) {
     }, [])
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/orders/' + id_chuyen)
+        fetch('http://192.168.1.165:4000' + '/api/transaction_lines/oderhistory_id/' + id_sua)
             .then(res => res.json())
             .then(res => setOrder(res))
             .catch(err => console.log(err))
@@ -115,14 +114,13 @@ export default function ThanhToan({ route, navigation }) {
             })
     }, [])
 
+    console.log(id_sua)
 
     useEffect(() => {
         setApi(products)
-    }, [])
+    }, [taikhoan])
 
     function handerCong(id1) {
-
-        console.log(id_chuyen)
         // products.map(Product => {
         //     if (Product.id == id) {
         //         setSanPham([...sanphams, Product])
@@ -130,50 +128,33 @@ export default function ThanhToan({ route, navigation }) {
         // })
         products.map(Product => {
             if (Product.id == id1) {
-                customer.map(custome => {
-                    if (custome.id == id_chuyen) {
 
-                        fetch('http://192.168.1.165:4000' + '/api/orders/create/', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                id: id_chuyen,
-                                name: custome.name,
-                                taikhoan: taikhoan,
-                                date: new Date(),
-                                number: custome.Number,
-                                address: custome.Address,
-                                img: Product.img,
-                                price: Product.price,
-                                tenhang: Product.name,
-                                idDonHang: id1
-                            })
-                        })
-                            .then(() => {
-                                fetch('http://192.168.1.165:4000' + '/api/orders/' + id_chuyen)
-                                    .then(res => res.json())
-                                    .then(res => {
-                                        getConten()
-                                        setIsLoading(true)
-
-                                        setOrder(res)
-                                    })
-                                    .catch(err => console.log(err))
-                                    .finally(() => {
-                                        setIsLoading(false)
-                                    })
-                            })
-                            .then(() => {
-
-                            })
-                    }
+                fetch('http://192.168.1.165:4000' + '/api/transaction_lines/create/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id: id_sua,
+                        name: Product.name,
+                        price: Product.price,
+                        total_sale: 0,
+                        idDonHang: id1
+                    })
                 })
+                    .then(() => {
+                        fetch('http://192.168.1.165:4000' + '/api/transaction_lines/oderhistory_id/' + id_sua)
+                            .then(res => res.json())
+                            .then(res => setOrder(res))
+                            .catch(err => console.log(err))
+                            .finally(() => {
+                            })
+                    })
+                    .then(() => {
+
+                    })
             }
         })
-
     }
 
-    console.log(id_chuyen)
 
     var TT = 0;
     const [tongtien, setTongTien] = useState()
@@ -181,31 +162,32 @@ export default function ThanhToan({ route, navigation }) {
 
     function handerDetele(id) {
 
-        fetch('http://192.168.1.165:4000' + '/api/orders/delete/' + id,
+        fetch('http://192.168.1.165:4000' + '/api/transaction_lines/delete/' + id,
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
             }
         )
             .then(() => {
-                fetch('http://192.168.1.165:4000' + '/api/orders/' + id_chuyen)
+                fetch('http://192.168.1.165:4000' + '/api/orders/' + id_sua)
                     .then(res => res.json())
                     .then(res => setOrder(res))
                     .catch(err => console.log(err))
-            })
 
+            })
     }
 
 
     useEffect(() => {
         orders.map(sanpham => {
-            TT += sanpham.price * sanpham.SoLuong
+            TT += sanpham.price * sanpham.number_of
         })
         setTongTien(TT)
     })
 
+
     function handerSoLuong(id, soluong) {
-        fetch('http://192.168.1.165:4000' + '/api/orders/update/soluong/' + id, {
+        fetch('http://192.168.1.165:4000' + '/api/transaction_lines/update/soluong/' + id, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -213,15 +195,12 @@ export default function ThanhToan({ route, navigation }) {
             })
         })
             .then(() => {
-                fetch('http://192.168.1.165:4000' + '/api/orders/' + id_chuyen)
+                fetch('http://192.168.1.165:4000' + '/api/transaction_lines/oderhistory_id/' + id_sua)
                     .then(res => res.json())
                     .then(res => setOrder(res))
                     .catch(err => console.log(err))
             })
     }
-
-
-
 
     function handerTru(id, soluong) {
         if (soluong <= 1) {
@@ -229,7 +208,7 @@ export default function ThanhToan({ route, navigation }) {
             return;
         }
 
-        fetch('http://192.168.1.165:4000' + '/api/orders/update/soluong/' + id, {
+        fetch('http://192.168.1.165:4000' + '/api/transaction_lines/update/soluong/' + id, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -237,7 +216,7 @@ export default function ThanhToan({ route, navigation }) {
             })
         })
             .then(() => {
-                fetch('http://192.168.1.165:4000' + '/api/orders/' + id_chuyen)
+                fetch('http://192.168.1.165:4000' + '/api/transaction_lines/oderhistory_id/' + id_sua)
                     .then(res => res.json())
                     .then(res => setOrder(res))
                     .catch(err => console.log(err))
@@ -245,11 +224,33 @@ export default function ThanhToan({ route, navigation }) {
 
     }
 
+    const [khocanhans, setKhoCaNhan] = useState([])
+    const [idCaNhan, setIdCaNhan] = useState()
+
+    // useEffect(() => {
+    //     fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
+    //         .then(res => res.json())
+    //         .then(res => setIdCaNhan(res[0].id))
+    //         .finally(() => {
+
+    //         })
+    // }, [taikhoan])
+
+
+    // useEffect(() => {
+    //     fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
+    //         .then(res => res.json())
+    //         .then(res => setKhoCaNhan(res[0].khohangcanhan))
+    //         .finally(() => {
+
+    //         })
+    // }, [taikhoan])
+
 
     function handerTTTienMat() {
         return Alert.alert(
             "Are your sure?",
-            "Đơn Này Đã Thanh Toán Bằng Tiền Mặt?",
+            "Bạn Muốn Sửa Thanh Toán Này?",
             [
 
                 // The "No" button
@@ -263,43 +264,34 @@ export default function ThanhToan({ route, navigation }) {
                     text: "Yes",
                     onPress: () => {
 
-                        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/update/' + id_chuyen, {
+                        products.map((product, index) => {
+                            orders.map(sanpham => {
+                                product.inventory.map(a => {
+                                    console.log(sanpham)
+                                    if (product.name == sanpham.name && a.usersId == 1) {
+                                        console.log('aaa')
+                                        fetch('http://192.168.1.165:4000' + '/api/inventory/update/' + 1 + '/' + product.id, {
+                                            method: 'POST',
+                                            headers: { 'Content-Type': 'application/json' },
+                                            body: JSON.stringify({
+                                                soluong: a.exist - sanpham.number_of
+                                            })
+                                        })
+                                    }
+                                })
+                            })
+                        })
+
+                        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/update/' + id_sua, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
-                                trangthai: "Tiền Mặt",
+                                trangthai: 'Tiền Mặt',
                                 tongtien: tongtien
                             })
                         })
                             .then(() => {
-                                return Alert.alert(
-                                    "Are your sure?",
-                                    "Bạn Đã Hoàn Thành Đơn?",
-                                    [
-
-                                        // The "No" button
-                                        // Does nothing but dismiss the dialog when tapped
-                                        {
-                                            text: "No",
-                                        },
-
-                                        // The "Yes" button
-                                        {
-                                            text: "Yes",
-                                            onPress: () => {
-                                                fetch('http://192.168.1.165:4000' + '/api/customer_re/delete/' + id_chuyen,
-                                                    {
-                                                        method: 'POST',
-                                                        headers: { 'Content-Type': 'application/json' },
-                                                    }
-                                                )
-                                                    .then(() => {
-                                                        navigation.replace('Cart');
-                                                    })
-                                            },
-                                        },
-                                    ]
-                                );
+                                alert('Sửa Thành Công!!')
                             })
                     },
                 },
@@ -311,7 +303,7 @@ export default function ThanhToan({ route, navigation }) {
     function handerTTChuyenKhoan() {
         return Alert.alert(
             "Are your sure?",
-            "Đơn Này Đã Thanh Toán Bằng Chuyển Khoản?",
+            "Bạn Muốn Sửa Thanh Toán Này?",
             [
 
                 // The "No" button
@@ -324,44 +316,34 @@ export default function ThanhToan({ route, navigation }) {
                 {
                     text: "Yes",
                     onPress: () => {
+                        products.map((product, index) => {
+                            orders.map(sanpham => {
+                                product.inventory.map(a => {
+                                    console.log(sanpham)
+                                    if (product.name == sanpham.name && a.usersId == 1) {
+                                        console.log('aaa')
+                                        fetch('http://192.168.1.165:4000' + '/api/inventory/update/' + 1 + '/' + product.id, {
+                                            method: 'POST',
+                                            headers: { 'Content-Type': 'application/json' },
+                                            body: JSON.stringify({
+                                                soluong: a.exist - sanpham.number_of
+                                            })
+                                        })
+                                    }
+                                })
+                            })
+                        })
 
-                        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/update/' + id_chuyen, {
+                        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/update/' + id_sua, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
-                                trangthai: "Chuyển Khoản",
+                                trangthai: 'Chuyển Khoản',
                                 tongtien: tongtien
                             })
                         })
                             .then(() => {
-                                return Alert.alert(
-                                    "Are your sure?",
-                                    "Bạn Đã Hoàn Thành Đơn?",
-                                    [
-
-                                        // The "No" button
-                                        // Does nothing but dismiss the dialog when tapped
-                                        {
-                                            text: "No",
-                                        },
-
-                                        // The "Yes" button
-                                        {
-                                            text: "Yes",
-                                            onPress: () => {
-                                                fetch('http://192.168.1.165:4000' + '/api/customer_re/delete/' + id_chuyen,
-                                                    {
-                                                        method: 'POST',
-                                                        headers: { 'Content-Type': 'application/json' },
-                                                    }
-                                                )
-                                                    .then(() => {
-                                                        navigation.replace('Cart');
-                                                    })
-                                            },
-                                        },
-                                    ]
-                                );
+                                alert('Sửa Thành Công!!')
                             })
                     },
                 },
@@ -370,86 +352,14 @@ export default function ThanhToan({ route, navigation }) {
 
     }
 
-    function handerNo() {
-        return Alert.alert(
-            "Are your sure?",
-            "Đơn Này Nợ ?",
-            [
+    const [thanhtoans, setThanhToan] = useState([])
 
-                // The "No" button
-                // Does nothing but dismiss the dialog when tapped
-                {
-                    text: "No",
-                },
-
-                // The "Yes" button
-                {
-                    text: "Yes",
-                    onPress: () => {
-
-                        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/update/' + id_chuyen, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                trangthai: "Nợ",
-                                tongtien: tongtien
-                            })
-                        })
-                            .then(() => {
-                                return Alert.alert(
-                                    "Are your sure?",
-                                    "Bạn Đã Hoàn Thành Đơn?",
-                                    [
-
-                                        // The "No" button
-                                        // Does nothing but dismiss the dialog when tapped
-                                        {
-                                            text: "No",
-                                        },
-
-                                        // The "Yes" button
-                                        {
-                                            text: "Yes",
-                                            onPress: () => {
-                                                fetch('http://192.168.1.165:4000' + '/api/customer_re/delete/' + id_chuyen,
-                                                    {
-                                                        method: 'POST',
-                                                        headers: { 'Content-Type': 'application/json' },
-                                                    }
-                                                )
-                                                    .then(() => {
-                                                        navigation.replace('Cart');
-                                                    })
-                                            },
-                                        },
-                                    ]
-                                );
-                            })
-                    },
-                },
-            ]
-        );
-    }
-
-    const [refreshing, setRefreshing] = React.useState(false);
-
-    const onRefresh = React.useCallback(() => {
-        setRefreshing(true);
-        setTimeout(() => {
-            fetch('http://192.168.1.165:4000' + '/api/orders/' + id_chuyen)
-                .then(res => res.json())
-                .then(res => {
-                    setOrder(res)
-                })
-                .catch(err => console.log(err))
-                .finally(() => {
-                })
-            setRefreshing(false);
-        }, 1000);
-    }, []);
-
-
-    console.log(orders)
+    useEffect(() => {
+        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/id/' + id_sua)
+            .then(res => res.json())
+            .then(res => setThanhToan(res))
+            .catch(err => console.log(err))
+    }, [])
 
 
     return (
@@ -468,7 +378,7 @@ export default function ThanhToan({ route, navigation }) {
                     zIndex: 1
                 }}>
                     <TouchableOpacity style={{
-                        width: '50%',
+                        width: '33%',
                         alignItems: 'center',
                         borderColor: 'black',
                         borderWidth: 0.3,
@@ -477,36 +387,44 @@ export default function ThanhToan({ route, navigation }) {
                         onPress={() => handerTTTienMat()}
                     >
                         <Text>
-                            Tiền Mặt
+                            Sửa Thanh Toán
+                        </Text>
+                        <Text>
+                            (Tiền Mặt)
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={{
-                        width: '50%',
+                        width: '34%',
                         alignItems: 'center',
                         borderColor: 'black',
                         borderWidth: 0.3,
                         paddingVertical: 15
                     }}
                         onPress={() => handerTTChuyenKhoan()}
-
                     >
                         <Text>
-                            Chuyển Khoản
+                            Sửa Thanh Toán
+                        </Text>
+                        <Text>
+                            (Chuyển Khoản)
                         </Text>
                     </TouchableOpacity>
-
+                    <TouchableOpacity style={{
+                        width: '33%',
+                        alignItems: 'center',
+                        borderColor: 'black',
+                        borderWidth: 0.3,
+                        paddingVertical: 15
+                    }}>
+                        <Text>
+                            Nợ
+                        </Text>
+                    </TouchableOpacity>
                 </View>
             </View>
 
 
-            <ScrollView refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} style={{
-                    tintColor: 'black',
-                    backgroundColor: '#eeeeee',
-                    size: 10,
-                    marginBottom: 0,
-                }} />
-            }>
+            <ScrollView >
                 <ScrollView horizontal>
                     <View style={{
                         flexDirection: 'row',
@@ -630,7 +548,7 @@ export default function ThanhToan({ route, navigation }) {
                 <View>
                     <View>
                         <View>
-                            <View>
+                            <TouchableOpacity>
                                 <View style={{
                                     flexDirection: 'row'
                                 }}>
@@ -659,7 +577,7 @@ export default function ThanhToan({ route, navigation }) {
                                                 marginTop: 20
                                             }}>
 
-                                            <View style={{
+                                            <TouchableOpacity style={{
                                                 flexDirection: 'row',
 
                                             }}>
@@ -678,23 +596,16 @@ export default function ThanhToan({ route, navigation }) {
                                                     justifyContent: 'space-around',
                                                     textAlign: 'center',
                                                     alignItems: 'center',
-                                                    marginLeft: 10,
+                                                    marginLeft: 20,
                                                 }}>
                                                     <View style={{
-                                                        width: 80,
-                                                        justifyContent: 'center',
-                                                        alignItems: 'center',
-                                                        marginRight: 10
+                                                        width: 80
 
                                                     }}>
-                                                        <Text style={{
-                                                            textAlign: 'center'
-                                                        }}>
-                                                            {Api.TenHang}
+                                                        <Text>
+                                                            {Api.name}
                                                         </Text>
-                                                        <Text style={{
-                                                            textAlign: 'center'
-                                                        }}>
+                                                        <Text>
                                                             {Api.price} $
                                                         </Text>
                                                     </View>
@@ -710,7 +621,7 @@ export default function ThanhToan({ route, navigation }) {
                                                             alignItems: 'center',
                                                             justifyContent: 'center'
                                                         }}
-                                                            onPress={() => handerTru(Api.id, Api.SoLuong)}
+                                                            onPress={() => handerTru(Api.id, Api.number_of)}
                                                         >
                                                             <Text>-</Text>
                                                         </TouchableOpacity>
@@ -724,7 +635,7 @@ export default function ThanhToan({ route, navigation }) {
                                                         }}
 
                                                         >
-                                                            {Api.SoLuong}
+                                                            {Api.number_of}
 
                                                         </TextInput>
                                                         <TouchableOpacity style={{
@@ -734,7 +645,7 @@ export default function ThanhToan({ route, navigation }) {
                                                             alignItems: 'center',
                                                             justifyContent: 'center'
                                                         }}
-                                                            onPress={() => handerSoLuong(Api.id, Api.SoLuong)}
+                                                            onPress={() => handerSoLuong(Api.id, Api.number_of)}
                                                         >
                                                             <Text>+</Text>
                                                         </TouchableOpacity>
@@ -760,12 +671,12 @@ export default function ThanhToan({ route, navigation }) {
                                                     </TouchableOpacity>
 
                                                 </View>
-                                            </View>
+                                            </TouchableOpacity>
                                         </View>
                                     ))
 
                                 }
-                            </View>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </View >
@@ -775,6 +686,7 @@ export default function ThanhToan({ route, navigation }) {
                     marginBottom: 100
                 }
                 }>
+
                     <View style={{
                         borderColor: 'black',
                         borderWidth: 1,
@@ -790,6 +702,60 @@ export default function ThanhToan({ route, navigation }) {
                                 flexDirection: 'row',
                                 lineHeight: 23,
                             }}>
+                                <View>
+                                    <Text style={{
+                                        width: 210,
+                                        lineHeight: 23,
+                                        fontSize: 20
+                                    }}>
+                                        Người Phụ Trách:
+                                    </Text>
+                                </View>
+                                <View>
+                                    {thanhtoans.map(thanhtoan => (
+                                        <View key={thanhtoan.id}>
+                                            <Text style={{
+                                                lineHeight: 23,
+                                                fontSize: 20
+                                            }}>
+                                                {thanhtoan.NguoiLam}
+                                            </Text>
+                                        </View>
+                                    ))}
+                                </View>
+                            </View>
+                            <View style={{
+                                flexDirection: 'row',
+                                lineHeight: 23,
+                            }}>
+                                <View>
+                                    <Text style={{
+                                        width: 210,
+                                        lineHeight: 23,
+                                        fontSize: 20
+                                    }}>
+                                        Tên Khách Hàng:
+                                    </Text>
+                                </View>
+                                <View>
+                                    {thanhtoans.map(thanhtoan => (
+                                        <View key={thanhtoan.id}>
+                                            <Text style={{
+                                                lineHeight: 23,
+                                                fontSize: 20
+                                            }}>
+                                                {thanhtoan.KhachHang}
+                                            </Text>
+                                        </View>
+                                    ))}
+                                </View>
+                            </View>
+                            <View style={{
+                                flexDirection: 'row',
+                                lineHeight: 23,
+                            }}>
+
+
                                 <Text style={{
                                     width: 210,
                                     lineHeight: 23,

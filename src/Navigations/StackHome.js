@@ -3,36 +3,36 @@ import { View, Text } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
-import Home from '../Screens/Home'
-import Login from '../Screens/Login'
-import QRCode from '../Screens/QRCode'
-import DonDangThucHien from '../Screens/DonDangThucHien'
-import KhoHang from './../Screens/KhoHang'
-import LichSuDonHang from './../Screens/LichSuDonHang'
-import Chart from '../Screens/Char'
-import ThongBao from '../Screens/ThongBao'
-import LuongThuong from './../Screens/LuongThuong'
-import Cart_Them from '../Screens/Cart_Them'
-import ChiSoCaNhan from '../Screens/ChiSoCaNhan'
-import ThuTucHanhChinh from '../Screens/ThuTucHanhChinh'
-import DonHang from '../Screens/DonHang'
-import XacNhanChiSo from '../Screens/XacNhanChiSo'
-import PhieuPhat from '../Screens/PhieuPhat'
-import PhieuDeNghi from '../Screens/ThieuDeNghi'
-import PhieuGiaiTrinh from '../Screens/PhieuGiaiTrinh'
-import DonXinNghiPhep from '../Screens/DonXinNghiPhep'
-import DonXinNghiViec from '../Screens/DonXinNghiViec'
-import DonXinDiMuon from '../Screens/DonXinDiMuon'
-import XuatNhapKho from '../Screens/XuatNhapKho'
-import KhoHangCaNhan from '../Screens/KhoHangCaNhan'
-import PhieuMuon from '../Screens/PhieuMuon'
+import Home from '../Screens/Home/Home'
+import QRCode from '../Screens/Home/QRCode'
+import DonDangThucHien from '../Screens/DonHang/DonDangThucHien'
+import KhoHang from './../Screens/Home/KhoHang'
+import LichSuDonHang from './../Screens/Home/LichSuDonHang'
+import Chart from '../Components/Char'
+import ThongBao from '../Screens/ThongBao/ThongBao'
+import LuongThuong from './../Screens/Home/LuongThuong'
+import Cart_Them from '../Screens/Cart/Cart_Them'
+import ChiSoCaNhan from '../Screens/ChiSoCaNhan/ChiSoCaNhan'
+import ThuTucHanhChinh from '../Screens/Home/ThuTucHanhChinh'
+import DonHang from '../Screens/Home/DonHang'
+import XacNhanChiSo from '../Screens/ChiSoCaNhan/XacNhanChiSo'
+import PhieuPhat from '../Screens/DonXin/PhieuPhat'
+import PhieuDeNghi from '../Screens/DonXin/ThieuDeNghi'
+import PhieuGiaiTrinh from '../Screens/DonXin/PhieuGiaiTrinh'
+import DonXinNghiPhep from '../Screens/DonXin/DonXinNghiPhep'
+import DonXinNghiViec from '../Screens/DonXin/DonXinNghiViec'
+import DonXinDiMuon from '../Screens/DonXin/DonXinDiMuon'
+import XuatNhapKho from '../Screens/Home/XuatNhapKho'
+import KhoHangCaNhan from '../Screens/ChiSoCaNhan/KhoHangCaNhan'
+import PhieuMuon from '../Screens/DonXin/PhieuMuon'
 import PhieuMuonHang from '../Screens/NhapXuatKho/PhieuMuonHang'
 import PhieuXuatKho from '../Screens/NhapXuatKho/PhieuXuatKho'
 import PhieuDoiHang from '../Screens/NhapXuatKho/PhieuDoiHang'
 import PhieuCapDo from '../Screens/NhapXuatKho/PhieuCapDo'
 import PhieuThuDo from '../Screens/NhapXuatKho/PhieuThuHoiDo'
-import SuaThanhToan from '../Screens/SuaThanhToan'
+import SuaThanhToan from '../Screens/Cart/SuaThanhToan'
 import DonVeSinh from '../Screens/DonHang/DonViSinh'
+import ChiTietThongBao from '../Screens/ThongBao/ChiTietThongBao'
 // import DonThuNo from '../Screens/DonHang/DonThuNo'
 // import DonKhachNo from '../Screens/DonHang/DonKhachNo'
 // import DonChoThucHien from '../Screens/DonHang/DonChoThucHien'
@@ -265,7 +265,7 @@ function StackHomes() {
                 }}
             />
             <Stack.Screen
-                name="Phiếu Mượn"
+                name="Lịch Sử Phiếu Mượn"
                 component={PhieuMuon}
                 options={{
                     headerShown: true,
@@ -336,6 +336,14 @@ function StackHomes() {
                 component={XacNhanChiSo}
                 options={{
                     headerShown: true,
+                    headerStyle: {
+                        backgroundColor: '#789BF6',
+                        height: 150,
+                        // title: 'My home',
+                        borderBottomLeftRadius: 40,
+                        borderBottomRightRadius: 40,
+                    },
+                    headerTintColor: '#fff',
                 }}
             />
             <Stack.Screen
@@ -343,6 +351,14 @@ function StackHomes() {
                 component={PhieuPhat}
                 options={{
                     headerShown: true,
+                    headerStyle: {
+                        backgroundColor: '#789BF6',
+                        height: 150,
+                        // title: 'My home',
+                        borderBottomLeftRadius: 40,
+                        borderBottomRightRadius: 40,
+                    },
+                    headerTintColor: '#fff',
                 }}
             />
             <Stack.Screen
@@ -350,6 +366,14 @@ function StackHomes() {
                 component={PhieuDeNghi}
                 options={{
                     headerShown: true,
+                    headerStyle: {
+                        backgroundColor: '#789BF6',
+                        height: 150,
+                        // title: 'My home',
+                        borderBottomLeftRadius: 40,
+                        borderBottomRightRadius: 40,
+                    },
+                    headerTintColor: '#fff',
                 }}
             />
             <Stack.Screen
@@ -383,6 +407,22 @@ function StackHomes() {
             <Stack.Screen
                 name="Đơn Vệ Sinh"
                 component={DonVeSinh}
+                options={{
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: '#789BF6',
+                        height: 150,
+                        // title: 'My home',
+                        borderBottomLeftRadius: 40,
+                        borderBottomRightRadius: 40,
+                    },
+                    headerTintColor: '#fff',
+                }}
+            />
+
+            <Stack.Screen
+                name="Chi Tiết Thông Báo"
+                component={ChiTietThongBao}
                 options={{
                     headerShown: true,
                     headerStyle: {
