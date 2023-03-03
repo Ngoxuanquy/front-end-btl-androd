@@ -78,10 +78,10 @@ export default function PhieuMuonHang({ navigation }) {
         setItems(arr)
     }, [taikhoan])
 
-    console.log(apis)
 
     function handerMuon(id, name) {
 
+        console.log(apis)
         let ids1 = id_donhang + 1
 
         apis.map(api => {
@@ -94,7 +94,8 @@ export default function PhieuMuonHang({ navigation }) {
                         name: name,
                         soluong: 1,
                         nguoimuon: taikhoan,
-                        produce: ids1
+                        lichsu_id: ids1,
+                        produce_id: api.productsId
                     })
                 })
                     .then(() => {
@@ -229,7 +230,6 @@ export default function PhieuMuonHang({ navigation }) {
             .catch((err) => console.log(err))
     }, [value])
 
-    console.log(token)
 
     async function Gui() {
 
@@ -312,7 +312,6 @@ export default function PhieuMuonHang({ navigation }) {
 
     }, [])
 
-    console.log(idnguoichomuon)
 
     useEffect(() => {
         inventorys.map(inventory => {

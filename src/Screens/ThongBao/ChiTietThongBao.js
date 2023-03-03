@@ -76,7 +76,7 @@ function ChiTietThongBao({ route, navigation }) {
             .finally(() => {
 
             })
-    }, [taikhoan])
+    }, [nguoimuon])
 
     const [orders, setOrder] = useState([]);
 
@@ -123,56 +123,150 @@ function ChiTietThongBao({ route, navigation }) {
         })
     }, [])
 
-    console.log(orders)
+    // useEffect(() => {
+    //     for (var i = 0; i < 2; i++) {
+
+    //         products.map(product => {
+    //             orders.map(sanpham => {
+    //                 product.inventory.map(a => {
+    //                     if (product.name == sanpham.TenHang && a.usersId == id_users) {
+    //                         console.log(id_users)
+    //                         fetch('http://192.168.1.165:4000' + '/api/inventory/update/' + id_users + '/' + product.id, {
+    //                             method: 'POST',
+    //                             headers: { 'Content-Type': 'application/json' },
+    //                             body: JSON.stringify({
+    //                                 soluong: a.exist - sanpham.SoLuong
+    //                             })
+
+    //                         })
+    //                             .then(() => {
+    //                                 products.map(product => {
+    //                                     orders.map(sanpham => {
+    //                                         product.inventory.map(a => {
+    //                                             if (product.name == sanpham.TenHang && a.usersId == ids) {
+    //                                                 console.log('aaa')
+    //                                                 fetch('http://192.168.1.165:4000' + '/api/inventory/update/' + ids + '/' + product.id, {
+    //                                                     method: 'POST',
+    //                                                     headers: { 'Content-Type': 'application/json' },
+    //                                                     body: JSON.stringify({
+    //                                                         soluong: a.exist + sanpham.SoLuong
+    //                                                     })
+    //                                                 })
+
+    //                                             }
+    //                                         })
+    //                                     })
+    //                                 })
+    //                             })
+    //                     }
+    //                 })
+    //             })
+    //         })
+    //     }
+    // })
+
+    const [tonkhos, setTonKho] = useState([])
+
+    const [hangmuons, setHangMuon] = useState([])
+
+
+    useEffect(() => {
+        fetch('http://192.168.1.165:4000' + '/api/MuonHang/id/' + id)
+            .then(res => res.json())
+            .then(res => setHangMuon(res))
+            .catch((err) => console.log(err))
+
+    }, [])
+
+    useEffect(() => {
+        fetch('http://192.168.1.165:4000' + '/api/inventory')
+            .then(res => res.json())
+            .then(res => setTonKho(res))
+            .catch((err) => console.log(err))
+
+    }, [inventorys])
+
+    // // console.log(id_users)
+
+
+
+    // useEffect(() => {
+    //     hangmuons.map(hangmuon => {
+    //         tonkhos.map(tonkho => {
+    //             if (tonkho.productsId == hangmuon.produce && tonkho.usersId == id_users) {
+    //                 console.log('aaa1')
+    //                 fetch('http://192.168.1.165:4000' + '/api/inventory/update/' + id_users + '/' + tonkho.productsId, {
+    //                     method: 'POST',
+    //                     headers: { 'Content-Type': 'application/json' },
+    //                     body: JSON.stringify({
+    //                         soluong: tonkho.exist - hangmuon.SoLuong
+    //                     })
+
+    //                 })
+    //             }
+    //             else if (tonkho.productsId == hangmuon.produce && tonkho.usersId == ids) {
+    //                 fetch('http://192.168.1.165:4000' + '/api/inventory/update/' + ids + '/' + tonkho.productsId, {
+    //                     method: 'POST',
+    //                     headers: { 'Content-Type': 'application/json' },
+    //                     body: JSON.stringify({
+    //                         soluong: tonkho.exist + hangmuon.SoLuong
+    //                     })
+
+    //                 })
+    //             }
+    //         })
+    //     })
+
+    //     // hangmuons.map(hangmuon => {
+    //     //     tonkhos.map(tonkho => {
+
+    //     //     })
+    //     // })
+
+    // }, [])
+
 
 
     const handerSubmit = () => {
 
-        products.map(product => {
-            orders.map(sanpham => {
-                product.inventory.map(a => {
-                    if (product.name == sanpham.TenHang && a.usersId == id_users) {
-                        fetch('http://192.168.1.165:4000' + '/api/inventory/update/' + id_users + '/' + product.id, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                soluong: a.exist - sanpham.SoLuong
-                            })
-
+        hangmuons.map(hangmuon => {
+            tonkhos.map(tonkho => {
+                if (tonkho.productsId == hangmuon.produce && tonkho.usersId == id_users) {
+                    fetch('http://192.168.1.165:4000' + '/api/inventory/update/' + id_users + '/' + tonkho.productsId, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            soluong: tonkho.exist - hangmuon.SoLuong
                         })
-                        return;
-                    }
-                })
+
+                    })
+                }
+                else if (tonkho.productsId == hangmuon.produce && tonkho.usersId == ids) {
+                    console.log('aaa1')
+
+                    fetch('http://192.168.1.165:4000' + '/api/inventory/update/' + ids + '/' + tonkho.productsId, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            soluong: tonkho.exist + hangmuon.SoLuong
+                        })
+
+                    })
+                }
             })
         })
 
-
-        products.map(product => {
-            orders.map(sanpham => {
-                product.inventory.map(a => {
-                    if (product.name == sanpham.TenHang && a.usersId == ids) {
-                        console.log('aaa')
-                        fetch('http://192.168.1.165:4000' + '/api/inventory/update/' + ids + '/' + product.id, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                soluong: a.exist + sanpham.SoLuong
-                            })
-                        })
-                        return;
-
-                    }
-                })
-            })
-        })
 
         fetch('http://192.168.1.165:4000' + '/api/lichsumuonhang/update/trangthai/' + id, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
 
         })
-        alert('Xác Nhận Thành Công');
-        navigation.navigate('Thông Báo Công Ty')
+            .then(() => {
+                alert('Xác Nhận Thành Công');
+                navigation.navigate('Thông Báo Công Ty')
+
+            })
 
     }
 

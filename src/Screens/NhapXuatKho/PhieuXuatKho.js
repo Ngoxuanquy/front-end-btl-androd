@@ -82,36 +82,36 @@ export default function PhieuXuatKho({ navigation }) {
     }, [taikhoan])
 
 
-    useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/users')
-            .then(res => res.json())
-            .then(res => res.map(re => {
-                if (re.email !== taikhoan) {
-                    return;
-                }
-                fetch('http://192.168.1.165:4000' + '/api/khocanhan/user_id/' + re.id)
-                    .then(res => res.json())
-                    .then(res => res.map(re => {
-                        if (re.SoLuong < re.TieuChuan) {
-                            setSanPhamThieu(prev => [...prev, re])
-                            return;
-                        }
-                    }))
-                fetch('http://192.168.1.165:4000' + '/api/khocanhan/user_id/' + re.id)
-                    .then(res => res.json())
-                    .then(res => res.map(re => {
-                        if (re.SoLuong > re.TieuChuan) {
-                            setSanPhamThua(prev => [...prev, re])
-                        }
-                    }))
-                    .catch((err) => console.log(err))
-                    .finally(() => {
-                        setLoading2(false)
-                        setLoading3(false)
-                    })
+    // useEffect(() => {
+    //     fetch('http://192.168.1.165:4000' + '/api/users')
+    //         .then(res => res.json())
+    //         .then(res => res.map(re => {
+    //             if (re.email !== taikhoan) {
+    //                 return;
+    //             }
+    //             fetch('http://192.168.1.165:4000' + '/api/khocanhan/user_id/' + re.id)
+    //                 .then(res => res.json())
+    //                 .then(res => res.map(re => {
+    //                     if (re.SoLuong < re.TieuChuan) {
+    //                         setSanPhamThieu(prev => [...prev, re])
+    //                         return;
+    //                     }
+    //                 }))
+    //             fetch('http://192.168.1.165:4000' + '/api/khocanhan/user_id/' + re.id)
+    //                 .then(res => res.json())
+    //                 .then(res => res.map(re => {
+    //                     if (re.SoLuong > re.TieuChuan) {
+    //                         setSanPhamThua(prev => [...prev, re])
+    //                     }
+    //                 }))
+    //                 .catch((err) => console.log(err))
+    //                 .finally(() => {
+    //                     setLoading2(false)
+    //                     setLoading3(false)
+    //                 })
 
-            }))
-    }, [taikhoan])
+    //         }))
+    // }, [taikhoan])
 
 
     // console.log(sanphamthieu)
