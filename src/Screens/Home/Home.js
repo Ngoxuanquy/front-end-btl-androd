@@ -263,9 +263,7 @@ export default function HomeScrenn({ navigation }) {
                 .then(res => {
                     res.map(re => {
                         re.ChamCong.map(r => {
-                            console.log(r)
                             if (r.Email === taikhoan) {
-                                console.log('a')
                                 setChamCong(re.ChamCong)
                             }
                             return;

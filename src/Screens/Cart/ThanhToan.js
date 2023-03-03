@@ -8,6 +8,7 @@ export default function ThanhToan({ route, navigation }) {
 
     const { name, id_chuyen, number } = route.params;
 
+    console.log(name)
 
     const [cliedId, setCliedID] = useState(0);
     const [Apis, setApi] = useState([])

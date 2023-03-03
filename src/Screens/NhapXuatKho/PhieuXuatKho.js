@@ -65,13 +65,13 @@ export default function PhieuXuatKho({ navigation }) {
 
     const [apis, setApi] = useState([])
 
-    useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
-            .then(res => res.json())
-            .then(res => setApi(res[0].khohangcanhan))
-            .finally(() => {
-            })
-    }, [taikhoan])
+    // useEffect(() => {
+    //     fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
+    //         .then(res => res.json())
+    //         .then(res => setApi(res[0].khohangcanhan))
+    //         .finally(() => {
+    //         })
+    // }, [taikhoan])
 
 
     useEffect(() => {
@@ -318,7 +318,7 @@ export default function PhieuXuatKho({ navigation }) {
                                             fontSize: 17,
                                             fontWeight: 'bold'
                                         }}>
-                                            Tên Khách Hàng
+                                            Mã Hóa Đơn
                                         </Text>
                                     </View>
                                     <View style={{
@@ -375,7 +375,7 @@ export default function PhieuXuatKho({ navigation }) {
                                                     fontSize: 16,
                                                     lineHeight: 30
                                                 }}>
-                                                    {sanpham.KhachHang}
+                                                    {sanpham.code_bill}
                                                 </Text>
                                             </View>
 
@@ -389,7 +389,7 @@ export default function PhieuXuatKho({ navigation }) {
                                                     lineHeight: 30,
                                                     textAlign: 'center'
                                                 }}>
-                                                    {sanpham.TongTienSauGiam}
+                                                    {sanpham.total_amount_after_discount}
 
                                                 </Text>
                                             </View>
