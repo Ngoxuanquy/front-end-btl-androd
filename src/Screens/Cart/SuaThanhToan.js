@@ -60,7 +60,7 @@ export default function SuaThanhToan({ route, navigation }) {
     }
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/products')
+        fetch('http://192.168.0.112:4000' + '/api/products')
             .then(res => res.json())
             .then(res => setProducts(res))
             .catch(err => console.log(err))
@@ -93,7 +93,7 @@ export default function SuaThanhToan({ route, navigation }) {
 
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/customer_re/')
+        fetch('http://192.168.0.112:4000' + '/api/customer_re/')
             .then(res => res.json())
             .then(res => setCustomer(res))
             .catch(err => console.log(err))
@@ -106,7 +106,7 @@ export default function SuaThanhToan({ route, navigation }) {
     }, [])
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/transaction_lines/oderhistory_id/' + id_sua)
+        fetch('http://192.168.0.112:4000' + '/api/transaction_lines/oderhistory_id/' + id_sua)
             .then(res => res.json())
             .then(res => setOrder(res))
             .catch(err => console.log(err))
@@ -129,7 +129,7 @@ export default function SuaThanhToan({ route, navigation }) {
         products.map(Product => {
             if (Product.id == id1) {
 
-                fetch('http://192.168.1.165:4000' + '/api/transaction_lines/create/', {
+                fetch('http://192.168.0.112:4000' + '/api/transaction_lines/create/', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -141,7 +141,7 @@ export default function SuaThanhToan({ route, navigation }) {
                     })
                 })
                     .then(() => {
-                        fetch('http://192.168.1.165:4000' + '/api/transaction_lines/oderhistory_id/' + id_sua)
+                        fetch('http://192.168.0.112:4000' + '/api/transaction_lines/oderhistory_id/' + id_sua)
                             .then(res => res.json())
                             .then(res => setOrder(res))
                             .catch(err => console.log(err))
@@ -162,14 +162,14 @@ export default function SuaThanhToan({ route, navigation }) {
 
     function handerDetele(id) {
 
-        fetch('http://192.168.1.165:4000' + '/api/transaction_lines/delete/' + id,
+        fetch('http://192.168.0.112:4000' + '/api/transaction_lines/delete/' + id,
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
             }
         )
             .then(() => {
-                fetch('http://192.168.1.165:4000' + '/api/orders/' + id_sua)
+                fetch('http://192.168.0.112:4000' + '/api/orders/' + id_sua)
                     .then(res => res.json())
                     .then(res => setOrder(res))
                     .catch(err => console.log(err))
@@ -187,7 +187,7 @@ export default function SuaThanhToan({ route, navigation }) {
 
 
     function handerSoLuong(id, soluong) {
-        fetch('http://192.168.1.165:4000' + '/api/transaction_lines/update/soluong/' + id, {
+        fetch('http://192.168.0.112:4000' + '/api/transaction_lines/update/soluong/' + id, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -195,7 +195,7 @@ export default function SuaThanhToan({ route, navigation }) {
             })
         })
             .then(() => {
-                fetch('http://192.168.1.165:4000' + '/api/transaction_lines/oderhistory_id/' + id_sua)
+                fetch('http://192.168.0.112:4000' + '/api/transaction_lines/oderhistory_id/' + id_sua)
                     .then(res => res.json())
                     .then(res => setOrder(res))
                     .catch(err => console.log(err))
@@ -208,7 +208,7 @@ export default function SuaThanhToan({ route, navigation }) {
             return;
         }
 
-        fetch('http://192.168.1.165:4000' + '/api/transaction_lines/update/soluong/' + id, {
+        fetch('http://192.168.0.112:4000' + '/api/transaction_lines/update/soluong/' + id, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -216,7 +216,7 @@ export default function SuaThanhToan({ route, navigation }) {
             })
         })
             .then(() => {
-                fetch('http://192.168.1.165:4000' + '/api/transaction_lines/oderhistory_id/' + id_sua)
+                fetch('http://192.168.0.112:4000' + '/api/transaction_lines/oderhistory_id/' + id_sua)
                     .then(res => res.json())
                     .then(res => setOrder(res))
                     .catch(err => console.log(err))
@@ -228,7 +228,7 @@ export default function SuaThanhToan({ route, navigation }) {
     const [idCaNhan, setIdCaNhan] = useState()
 
     // useEffect(() => {
-    //     fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
+    //     fetch('http://192.168.0.112:4000' + '/api/users/' + taikhoan)
     //         .then(res => res.json())
     //         .then(res => setIdCaNhan(res[0].id))
     //         .finally(() => {
@@ -238,7 +238,7 @@ export default function SuaThanhToan({ route, navigation }) {
 
 
     // useEffect(() => {
-    //     fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
+    //     fetch('http://192.168.0.112:4000' + '/api/users/' + taikhoan)
     //         .then(res => res.json())
     //         .then(res => setKhoCaNhan(res[0].khohangcanhan))
     //         .finally(() => {
@@ -270,7 +270,7 @@ export default function SuaThanhToan({ route, navigation }) {
                                     console.log(sanpham)
                                     if (product.name == sanpham.name && a.usersId == 1) {
                                         console.log('aaa')
-                                        fetch('http://192.168.1.165:4000' + '/api/inventory/update/' + 1 + '/' + product.id, {
+                                        fetch('http://192.168.0.112:4000' + '/api/inventory/update/' + 1 + '/' + product.id, {
                                             method: 'POST',
                                             headers: { 'Content-Type': 'application/json' },
                                             body: JSON.stringify({
@@ -282,7 +282,7 @@ export default function SuaThanhToan({ route, navigation }) {
                             })
                         })
 
-                        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/update/' + id_sua, {
+                        fetch('http://192.168.0.112:4000' + '/api/thanhtoan/update/' + id_sua, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
@@ -322,7 +322,7 @@ export default function SuaThanhToan({ route, navigation }) {
                                     console.log(sanpham)
                                     if (product.name == sanpham.name && a.usersId == 1) {
                                         console.log('aaa')
-                                        fetch('http://192.168.1.165:4000' + '/api/inventory/update/' + 1 + '/' + product.id, {
+                                        fetch('http://192.168.0.112:4000' + '/api/inventory/update/' + 1 + '/' + product.id, {
                                             method: 'POST',
                                             headers: { 'Content-Type': 'application/json' },
                                             body: JSON.stringify({
@@ -334,7 +334,7 @@ export default function SuaThanhToan({ route, navigation }) {
                             })
                         })
 
-                        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/update/' + id_sua, {
+                        fetch('http://192.168.0.112:4000' + '/api/thanhtoan/update/' + id_sua, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
@@ -355,7 +355,7 @@ export default function SuaThanhToan({ route, navigation }) {
     const [thanhtoans, setThanhToan] = useState([])
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/id/' + id_sua)
+        fetch('http://192.168.0.112:4000' + '/api/thanhtoan/id/' + id_sua)
             .then(res => res.json())
             .then(res => setThanhToan(res))
             .catch(err => console.log(err))

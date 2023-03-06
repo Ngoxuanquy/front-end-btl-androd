@@ -115,13 +115,61 @@ export default function LuongThuong() {
         )
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
+        fetch('http://192.168.0.112:4000' + '/api/users/' + taikhoan)
             .then(res => res.json())
             .then(res => setLogin(res))
             .finally(() => {
                 setIsLoading(false)
             })
     }, [taikhoan])
+
+    const [luongs, setLuong] = useState()
+
+    useEffect(() => {
+        fetch('http://192.168.0.112:4000' + '/api/chisocanhan/email/' + taikhoan)
+            .then(res => res.json())
+            .then(res => setLuong(res[0].luong_tam_tinh))
+            .catch((err) => console.log(err))
+    }, [taikhoan])
+
+    const [luongtamtinhs, setLuongTamTinh] = useState()
+
+    useEffect(() => {
+        fetch('http://192.168.0.112:4000' + '/api/chisocanhan/email/' + taikhoan)
+            .then(res => res.json())
+            .then(res => setLuongTamTinh(res[0].gia_tri_TB_hien_tai))
+            .catch((err) => console.log(err))
+    }, [taikhoan])
+
+    useEffect(() => {
+        if (luongtamtinhs > 2000 && luongtamtinhs < 3000) {
+            fetch('http://192.168.0.112:4000' + '/api/chisocanhan/update/luong/' + taikhoan, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    luong: 20000
+                })
+            })
+        }
+        else if (luongtamtinhs > 1000 && luongtamtinhs < 2000) {
+            fetch('http://192.168.0.112:4000' + '/api/chisocanhan/update/luong/' + taikhoan, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    luong: 10000
+                })
+            })
+        }
+        else if (luongtamtinhs >= 3000) {
+            fetch('http://192.168.0.112:4000' + '/api/chisocanhan/update/luong/' + taikhoan, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    luong: 30000
+                })
+            })
+        }
+    }, [luongtamtinhs])
 
 
     return (
@@ -216,7 +264,7 @@ export default function LuongThuong() {
                                             lineHeight: 50
 
                                         }}>
-                                            $ 1.000.000đ
+                                            $ {luongs}
                                         </Text>
                                     </View>
                                 </View>

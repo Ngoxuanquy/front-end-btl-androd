@@ -16,7 +16,7 @@ export default function ChiTiet({ route, navigation }) {
 
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/id/' + id)
+        fetch('http://192.168.0.112:4000' + '/api/thanhtoan/id/' + id)
             .then(res => res.json())
             .then(res => setApi(res))
             .catch(err => console.log(err))

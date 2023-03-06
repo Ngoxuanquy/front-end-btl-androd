@@ -47,7 +47,7 @@ export default function ThongTinTaiKhoan() {
         )
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
+        fetch('http://192.168.0.112:4000' + '/api/users/' + taikhoan)
             .then(res => res.json())
             .then(res => setThongTin(res))
     }, [taikhoan])
@@ -58,7 +58,7 @@ export default function ThongTinTaiKhoan() {
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         setTimeout(() => {
-            fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
+            fetch('http://192.168.0.112:4000' + '/api/users/' + taikhoan)
                 .then(res => res.json())
                 .then(res => setThongTin(res))
             setRefreshing(false);

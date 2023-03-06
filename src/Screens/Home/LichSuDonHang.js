@@ -26,7 +26,7 @@ export default function LichSuDonHang({ navigation }) {
 
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/Đã Thanh Toán')
+        fetch('http://192.168.0.112:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/Đã Thanh Toán')
             .then(res => res.json())
             .then(res => setLichSuDTT(res))
             .catch(err => console.log(err))
@@ -39,14 +39,14 @@ export default function LichSuDonHang({ navigation }) {
 
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/Chưa Thanh Toán!!!')
+        fetch('http://192.168.0.112:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/Chưa Thanh Toán!!!')
             .then(res => res.json())
             .then(res => setLichSuCTT(res))
             .catch(err => console.log(err))
     }, [taikhoan])
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/Nợ')
+        fetch('http://192.168.0.112:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/Nợ')
             .then(res => res.json())
             .then(res => setNo(res))
             .catch(err => console.log(err))
@@ -58,18 +58,18 @@ export default function LichSuDonHang({ navigation }) {
         setRefreshing(true);
         setTimeout(() => {
 
-            fetch('http://192.168.1.165:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/Chưa Thanh Toán!!!')
+            fetch('http://192.168.0.112:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/Chưa Thanh Toán!!!')
                 .then(res => res.json())
                 .then(res => setLichSuCTT(res))
                 .catch(err => console.log(err))
 
 
-            fetch('http://192.168.1.165:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/Đã Thanh Toán')
+            fetch('http://192.168.0.112:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/Đã Thanh Toán')
                 .then(res => res.json())
                 .then(res => setLichSuDTT(res))
                 .catch(err => console.log(err))
 
-            fetch('http://192.168.1.165:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/Nợ')
+            fetch('http://192.168.0.112:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/Nợ')
                 .then(res => res.json())
                 .then(res => setNo(res))
                 .catch(err => console.log(err))
@@ -91,7 +91,7 @@ export default function LichSuDonHang({ navigation }) {
 
     function handerSearch() {
         setIsLoading(true)
-        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/code_bill/' + Value)
+        fetch('http://192.168.0.112:4000' + '/api/thanhtoan/code_bill/' + Value)
             .then(res => res.json())
             .then(res => setLichSuDTT(res))
             .catch(err => console.log(err))

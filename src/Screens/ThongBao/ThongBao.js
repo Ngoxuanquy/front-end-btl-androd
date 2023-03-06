@@ -23,7 +23,7 @@ function App({ navigation }) {
 
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/lichsumuonhang/khachhang/' + taikhoan + '/Chưa Xác Nhận')
+        fetch('http://192.168.0.112:4000' + '/api/lichsumuonhang/khachhang/' + taikhoan + '/Chưa Xác Nhận')
             .then(res => res.json())
             .then(res => setSanPham(res))
     }, [taikhoan])
@@ -34,7 +34,7 @@ function App({ navigation }) {
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         setTimeout(() => {
-            fetch('http://192.168.1.165:4000' + '/api/lichsumuonhang/khachhang/' + taikhoan + '/Chưa Xác Nhận')
+            fetch('http://192.168.0.112:4000' + '/api/lichsumuonhang/khachhang/' + taikhoan + '/Chưa Xác Nhận')
                 .then(res => res.json())
                 .then(res => setSanPham(res))
 

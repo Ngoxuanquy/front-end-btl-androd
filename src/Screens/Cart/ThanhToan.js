@@ -8,7 +8,6 @@ export default function ThanhToan({ route, navigation }) {
 
     const { name, id_chuyen, number } = route.params;
 
-    console.log(name)
 
     const [cliedId, setCliedID] = useState(0);
     const [Apis, setApi] = useState([])
@@ -63,7 +62,7 @@ export default function ThanhToan({ route, navigation }) {
     }
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/products/')
+        fetch('http://192.168.0.112:4000' + '/api/products/')
             .then(res => res.json())
             .then(res => setProducts(res))
             .catch(err => console.log(err))
@@ -93,9 +92,30 @@ export default function ThanhToan({ route, navigation }) {
         setProduct(data);
     }
 
+    const [trungbinhs, setTrungBinh] = useState()
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/customer_re/')
+        fetch('http://192.168.0.112:4000' + '/api/chisocanhan/email/' + taikhoan)
+            .then(res => res.json())
+            .then(res => setTrungBinh(res[0].gia_tri_TB_hien_tai))
+            .catch((err) => console.log(err))
+    }, [taikhoan])
+
+    const [soluongs, setSoLuong] = useState()
+
+    useEffect(() => {
+        fetch('http://192.168.0.112:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/Đã Thanh Toán')
+            .then(res => res.json())
+            .then(res => setSoLuong(res))
+            .catch(err => console.log(err))
+            .finally(() => {
+            })
+
+    }, [taikhoan])
+
+
+    useEffect(() => {
+        fetch('http://192.168.0.112:4000' + '/api/customer_re/')
             .then(res => res.json())
             .then(res => setCustomer(res))
             .catch(err => console.log(err))
@@ -108,7 +128,7 @@ export default function ThanhToan({ route, navigation }) {
     }, [])
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/transaction_lines/oderhistory_id/' + id_chuyen)
+        fetch('http://192.168.0.112:4000' + '/api/transaction_lines/oderhistory_id/' + id_chuyen)
             .then(res => res.json())
             .then(res => setOrder(res))
             .catch(err => console.log(err))
@@ -123,7 +143,7 @@ export default function ThanhToan({ route, navigation }) {
 
 
     function handerCong(id1) {
-        fetch('http://192.168.1.165:4000' + '/api/orders/create/', {
+        fetch('http://192.168.0.112:4000' + '/api/orders/create/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -143,7 +163,7 @@ export default function ThanhToan({ route, navigation }) {
                 customer.map(custome => {
                     if (custome.id == id_chuyen) {
 
-                        fetch('http://192.168.1.165:4000' + '/api/transaction_lines/create/', {
+                        fetch('http://192.168.0.112:4000' + '/api/transaction_lines/create/', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
@@ -158,7 +178,7 @@ export default function ThanhToan({ route, navigation }) {
 
 
                             .then(() => {
-                                fetch('http://192.168.1.165:4000' + '/api/transaction_lines/oderhistory_id/' + id_chuyen)
+                                fetch('http://192.168.0.112:4000' + '/api/transaction_lines/oderhistory_id/' + id_chuyen)
                                     .then(res => res.json())
                                     .then(res => {
                                         getConten()
@@ -190,20 +210,20 @@ export default function ThanhToan({ route, navigation }) {
 
 
 
-        fetch('http://192.168.1.165:4000' + '/api/transaction_lines/delete/' + id,
+        fetch('http://192.168.0.112:4000' + '/api/transaction_lines/delete/' + id,
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
             }
         )
             .then(() => {
-                fetch('http://192.168.1.165:4000' + '/api/transaction_lines/oderhistory_id/' + id_chuyen)
+                fetch('http://192.168.0.112:4000' + '/api/transaction_lines/oderhistory_id/' + id_chuyen)
                     .then(res => res.json())
                     .then(res => setOrder(res))
                     .catch(err => console.log(err))
             })
             .then(() => {
-                fetch('http://192.168.1.165:4000' + '/api/orders/delete/' + id,
+                fetch('http://192.168.0.112:4000' + '/api/orders/delete/' + id,
                     {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -222,7 +242,7 @@ export default function ThanhToan({ route, navigation }) {
     })
 
     function handerSoLuong(id, soluong) {
-        fetch('http://192.168.1.165:4000' + '/api/transaction_lines/update/soluong/' + id, {
+        fetch('http://192.168.0.112:4000' + '/api/transaction_lines/update/soluong/' + id, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -230,7 +250,7 @@ export default function ThanhToan({ route, navigation }) {
             })
         })
             .then(() => {
-                fetch('http://192.168.1.165:4000' + '/api/transaction_lines/oderhistory_id/' + id_chuyen)
+                fetch('http://192.168.0.112:4000' + '/api/transaction_lines/oderhistory_id/' + id_chuyen)
                     .then(res => res.json())
                     .then(res => setOrder(res))
                     .catch(err => console.log(err))
@@ -247,7 +267,7 @@ export default function ThanhToan({ route, navigation }) {
             return;
         }
 
-        fetch('http://192.168.1.165:4000' + '/api/transaction_lines/update/soluong/' + id, {
+        fetch('http://192.168.0.112:4000' + '/api/transaction_lines/update/soluong/' + id, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -255,7 +275,7 @@ export default function ThanhToan({ route, navigation }) {
             })
         })
             .then(() => {
-                fetch('http://192.168.1.165:4000' + '/api/transaction_lines/oderhistory_id/' + id_chuyen)
+                fetch('http://192.168.0.112:4000' + '/api/transaction_lines/oderhistory_id/' + id_chuyen)
                     .then(res => res.json())
                     .then(res => setOrder(res))
                     .catch(err => console.log(err))
@@ -266,7 +286,7 @@ export default function ThanhToan({ route, navigation }) {
     const [idCaNhan, setIdCaNhan] = useState()
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
+        fetch('http://192.168.0.112:4000' + '/api/users/' + taikhoan)
             .then(res => res.json())
             .then(res => setIdCaNhan(res[0].id))
             .finally(() => {
@@ -276,7 +296,7 @@ export default function ThanhToan({ route, navigation }) {
 
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
+        fetch('http://192.168.0.112:4000' + '/api/users/' + taikhoan)
             .then(res => res.json())
             .then(res => setKhoCaNhan(res[0].khohangcanhan))
             .finally(() => {
@@ -306,7 +326,7 @@ export default function ThanhToan({ route, navigation }) {
                     text: "Yes",
                     onPress: () => {
 
-                        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/update/' + id_chuyen, {
+                        fetch('http://192.168.0.112:4000' + '/api/thanhtoan/update/' + id_chuyen, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
@@ -333,10 +353,8 @@ export default function ThanhToan({ route, navigation }) {
                                                 products.map((product, index) => {
                                                     orders.map(sanpham => {
                                                         product.inventory.map(a => {
-                                                            console.log(sanpham)
                                                             if (product.name == sanpham.name && a.usersId == 1) {
-                                                                console.log('aaa')
-                                                                fetch('http://192.168.1.165:4000' + '/api/inventory/update/' + 1 + '/' + product.id, {
+                                                                fetch('http://192.168.0.112:4000' + '/api/inventory/update/' + 1 + '/' + product.id, {
                                                                     method: 'POST',
                                                                     headers: { 'Content-Type': 'application/json' },
                                                                     body: JSON.stringify({
@@ -348,13 +366,22 @@ export default function ThanhToan({ route, navigation }) {
                                                     })
                                                 })
 
-                                                fetch('http://192.168.1.165:4000' + '/api/customer_re/delete/' + id_chuyen,
+                                                fetch('http://192.168.0.112:4000' + '/api/customer_re/delete/' + id_chuyen,
                                                     {
                                                         method: 'POST',
                                                         headers: { 'Content-Type': 'application/json' },
                                                     }
                                                 )
                                                     .then(() => {
+                                                        if (tongtien > 0) {
+                                                            fetch('http://192.168.0.112:4000' + '/api/chisocanhan/update/giatritb/' + taikhoan, {
+                                                                method: 'POST',
+                                                                headers: { 'Content-Type': 'application/json' },
+                                                                body: JSON.stringify({
+                                                                    giatrittb: ((trungbinhs + tongtien) / (soluongs.length + 1)).toFixed(2)
+                                                                })
+                                                            })
+                                                        }
                                                         navigation.replace('Cart_home');
                                                     })
                                             },
@@ -386,7 +413,7 @@ export default function ThanhToan({ route, navigation }) {
                     text: "Yes",
                     onPress: () => {
 
-                        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/update/' + id_chuyen, {
+                        fetch('http://192.168.0.112:4000' + '/api/thanhtoan/update/' + id_chuyen, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
@@ -413,10 +440,8 @@ export default function ThanhToan({ route, navigation }) {
                                                 products.map((product, index) => {
                                                     orders.map(sanpham => {
                                                         product.inventory.map(a => {
-                                                            console.log(sanpham)
                                                             if (product.name == sanpham.name && a.usersId == 1) {
-                                                                console.log('aaa')
-                                                                fetch('http://192.168.1.165:4000' + '/api/inventory/update/' + 1 + '/' + product.id, {
+                                                                fetch('http://192.168.0.112:4000' + '/api/inventory/update/' + 1 + '/' + product.id, {
                                                                     method: 'POST',
                                                                     headers: { 'Content-Type': 'application/json' },
                                                                     body: JSON.stringify({
@@ -428,13 +453,22 @@ export default function ThanhToan({ route, navigation }) {
                                                     })
                                                 })
 
-                                                fetch('http://192.168.1.165:4000' + '/api/customer_re/delete/' + id_chuyen,
+                                                fetch('http://192.168.0.112:4000' + '/api/customer_re/delete/' + id_chuyen,
                                                     {
                                                         method: 'POST',
                                                         headers: { 'Content-Type': 'application/json' },
                                                     }
                                                 )
                                                     .then(() => {
+                                                        if (tongtien > 0) {
+                                                            fetch('http://192.168.0.112:4000' + '/api/chisocanhan/update/giatritb/' + taikhoan, {
+                                                                method: 'POST',
+                                                                headers: { 'Content-Type': 'application/json' },
+                                                                body: JSON.stringify({
+                                                                    giatrittb: ((trungbinhs + tongtien) / (soluongs.length + 1)).toFixed(2)
+                                                                })
+                                                            })
+                                                        }
                                                         navigation.replace('Cart_home');
                                                     })
                                             },
@@ -466,7 +500,7 @@ export default function ThanhToan({ route, navigation }) {
                     text: "Yes",
                     onPress: () => {
 
-                        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/update/' + id_chuyen, {
+                        fetch('http://192.168.0.112:4000' + '/api/thanhtoan/update/' + id_chuyen, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
@@ -490,7 +524,7 @@ export default function ThanhToan({ route, navigation }) {
                                         {
                                             text: "Yes",
                                             onPress: () => {
-                                                fetch('http://192.168.1.165:4000' + '/api/customer_re/delete/' + id_chuyen,
+                                                fetch('http://192.168.0.112:4000' + '/api/customer_re/delete/' + id_chuyen,
                                                     {
                                                         method: 'POST',
                                                         headers: { 'Content-Type': 'application/json' },
@@ -515,7 +549,7 @@ export default function ThanhToan({ route, navigation }) {
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         setTimeout(() => {
-            fetch('http://192.168.1.165:4000' + '/api/orders/authorId/' + id_chuyen)
+            fetch('http://192.168.0.112:4000' + '/api/orders/authorId/' + id_chuyen)
                 .then(res => res.json())
                 .then(res => {
                     setOrder(res)
@@ -538,13 +572,13 @@ export default function ThanhToan({ route, navigation }) {
 
     useEffect(() => {
         if (search != "") {
-            fetch('http://192.168.1.165:4000' + '/api/products/name/' + search)
+            fetch('http://192.168.0.112:4000' + '/api/products/name/' + search)
                 .then(res => res.json())
                 .then(res => setProducts(res))
                 .catch((err) => console.log(err))
         }
         else {
-            fetch('http://192.168.1.165:4000' + '/api/products/')
+            fetch('http://192.168.0.112:4000' + '/api/products/')
                 .then(res => res.json())
                 .then(res => setProducts(res))
                 .catch((err) => console.log(err))

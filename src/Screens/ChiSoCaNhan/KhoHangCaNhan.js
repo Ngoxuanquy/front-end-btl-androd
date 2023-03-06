@@ -26,7 +26,7 @@ export default function KhoHangCaNhan({ navigation }) {
     const [produces, setProduce] = useState([]);
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/products/')
+        fetch('http://192.168.0.112:4000' + '/api/products/')
             .then(res => res.json())
             .then(res => res.map(api => {
                 setInventory(pre => [...pre, api.inventory])
@@ -38,7 +38,7 @@ export default function KhoHangCaNhan({ navigation }) {
 
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/products/')
+        fetch('http://192.168.0.112:4000' + '/api/products/')
             .then(res => res.json())
             .then(res => setProduce(res))
 

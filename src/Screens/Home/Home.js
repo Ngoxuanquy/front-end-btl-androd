@@ -63,7 +63,7 @@ export default function HomeScrenn({ navigation }) {
     }
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/tokenthongbao/update/token/' + taikhoan, {
+        fetch('http://192.168.0.112:4000' + '/api/tokenthongbao/update/token/' + taikhoan, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -112,7 +112,7 @@ export default function HomeScrenn({ navigation }) {
     // console.log(taikhoan)
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
+        fetch('http://192.168.0.112:4000' + '/api/users/' + taikhoan)
             .then(res => res.json())
             .then(res => setThongTin(res))
     }, [taikhoan])
@@ -125,7 +125,7 @@ export default function HomeScrenn({ navigation }) {
     }
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/posts', options)
+        fetch('http://192.168.0.112:4000' + '/posts', options)
             .then(res => res.json())
             .then(res => setApi(res))
             .catch((err) => console.log(err))
@@ -133,7 +133,7 @@ export default function HomeScrenn({ navigation }) {
 
     function handerLogout() {
         navigation.replace('Login')
-        fetch('http://192.168.1.165:4000' + '/api/users/update/token/' + taikhoan, {
+        fetch('http://192.168.0.112:4000' + '/api/users/update/token/' + taikhoan, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
         })
@@ -179,7 +179,7 @@ export default function HomeScrenn({ navigation }) {
     }
 
     function handerXacNhan() {
-        fetch('http://192.168.1.165:4000' + '/api/users/update/img/' + taikhoan, {
+        fetch('http://192.168.0.112:4000' + '/api/users/update/img/' + taikhoan, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -187,7 +187,7 @@ export default function HomeScrenn({ navigation }) {
             })
         })
             .then(() => {
-                fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
+                fetch('http://192.168.0.112:4000' + '/api/users/' + taikhoan)
                     .then(res => res.json())
                     .then(res => setThongTin(res))
             })
@@ -258,7 +258,7 @@ export default function HomeScrenn({ navigation }) {
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         setTimeout(() => {
-            fetch('http://192.168.1.165:4000' + '/api/users/')
+            fetch('http://192.168.0.112:4000' + '/api/users/')
                 .then(res => res.json())
                 .then(res => {
                     res.map(re => {
@@ -284,7 +284,7 @@ export default function HomeScrenn({ navigation }) {
 
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/users/')
+        fetch('http://192.168.0.112:4000' + '/api/users/')
             .then(res => res.json())
             .then(res => {
                 res.map(re => {
@@ -305,7 +305,7 @@ export default function HomeScrenn({ navigation }) {
     // console.log(taikhoan)
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/chamcong/')
+        fetch('http://192.168.0.112:4000' + '/api/chamcong/')
             .then(res => res.json())
             .then(res => {
                 res.map(re => {
