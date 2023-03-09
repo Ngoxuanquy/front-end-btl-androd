@@ -65,7 +65,7 @@ export default function ThongTinTaiKhoan() {
                 .then(res => setThongTin(res))
             setRefreshing(false);
         }, 1000);
-    }, []);
+    }, [taikhoan]);
 
 
     return (

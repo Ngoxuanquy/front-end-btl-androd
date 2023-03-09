@@ -420,7 +420,7 @@ export default function ThuTucHanhChinh({ navigation }) {
                             , {
                                 backgroundColor: theme.background
                             }]}
-                            onPress={() => navigation.navigate('Đơn Xin Đi Muộn')}
+                            onPress={() => navigation.navigate('Đơn Xin Part Time')}
                         >
                             <View style={{
                                 flexDirection: 'row',

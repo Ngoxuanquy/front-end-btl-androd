@@ -1,8 +1,7 @@
-import { View, Text, Button } from 'react-native'
+import { View, Text, Button, Modal, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { DataTable } from 'react-native-paper'
 import { TouchableOpacity } from 'react-native'
-import Modal from 'react-native-modalbox'
 import { useHeaderHeight } from '@react-navigation/elements'
 import Checkbox from 'expo-checkbox'
 
@@ -123,7 +122,8 @@ const DonXinPartTime = () => {
     const handleClick = (id) => {
         setDangKyId(id)
         setIsOpen(true)
-        fetch(`http://192.168.1.156:1000/api/lichdangkyparttime/${id}`)
+        console.log(isOpen)
+        fetch("http://192.168.1.156:1000/api/lichdangkyparttime/${id}")
             .then((res) => res.json())
             .then((data) => setNgayDangKy(data))
     }
@@ -269,117 +269,116 @@ const DonXinPartTime = () => {
             <Text style={{ textAlign: 'center', fontSize: 20, paddingVertical: 12 }}>
                 Lịch đã đăng ký
             </Text>
-            {isOpen && (
-                <View style={{ flex: 1, position: 'absolute', top: 40 }}>
-                    <Modal
-                        isOpen={isOpen}
-                        onClosed={() => setIsOpen(false)}
-                        style={{
-                            height: 1000,
-                            marginTop: -40,
-                        }}
-                    >
+
+            <View style={{ flex: 1 }}>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={isOpen}
+                    onRequestClose={() => {
+                        console.log('Close')
+                        setIsOpen(false)
+                    }}
+                >
+                    <ScrollView style={{ flex: 1, paddingTop: 40, backgroundColor: '#fff' }}>
+                        <Text
+                            style={{
+                                textAlign: 'center',
+                                fontWeight: 'bold',
+                                fontSize: 24,
+                                paddingVertical: 12,
+                            }}
+                        >
+                            Lịch đã đăng ký
+                        </Text>
                         <View>
-                            <Text
+                            <DataTable>
+                                <DataTable.Header>
+                                    <DataTable.Title>Ngày</DataTable.Title>
+                                    <DataTable.Title>Sáng</DataTable.Title>
+                                    <DataTable.Title>Chiều</DataTable.Title>
+                                    <DataTable.Title>Tối</DataTable.Title>
+                                </DataTable.Header>
+                            </DataTable>
+                            {ngayDangKy.map((item) => (
+                                <DataTable.Row key={item.id}>
+                                    <DataTable.Cell>{item.date}</DataTable.Cell>
+                                    <DataTable.Cell>
+                                        <Checkbox
+                                            value={item.sang}
+                                            onValueChange={() => handleAdd(item, 'sang')}
+                                        />
+                                    </DataTable.Cell>
+                                    <DataTable.Cell>
+                                        <Checkbox
+                                            value={item.chieu}
+                                            onValueChange={() => handleAdd(item, 'chieu')}
+                                        />
+                                    </DataTable.Cell>
+                                    <DataTable.Cell>
+                                        <Checkbox
+                                            value={item.toi}
+                                            onValueChange={() => handleAdd(item, 'toi')}
+                                        />
+                                    </DataTable.Cell>
+                                </DataTable.Row>
+                            ))}
+                        </View>
+                        {ngayDangKy.length > 0 && (
+                            <View
                                 style={{
-                                    textAlign: 'center',
-                                    fontWeight: 'bold',
-                                    fontSize: 24,
-                                    paddingVertical: 12,
+                                    flexDirection: 'row',
+                                    marginTop: 32,
+                                    marginBottom: 60,
+                                    justifyContent: 'flex-end',
                                 }}
                             >
-                                Lịch đã đăng ký
-                            </Text>
-                            <View>
-                                <DataTable>
-                                    <DataTable.Header>
-                                        <DataTable.Title>Ngày</DataTable.Title>
-                                        <DataTable.Title>Sáng</DataTable.Title>
-                                        <DataTable.Title>Chiều</DataTable.Title>
-                                        <DataTable.Title>Tối</DataTable.Title>
-                                    </DataTable.Header>
-                                </DataTable>
-                                {ngayDangKy.map((item) => (
-                                    <DataTable.Row key={item.id}>
-                                        <DataTable.Cell>{item.date}</DataTable.Cell>
-                                        <DataTable.Cell>
-                                            <Checkbox
-                                                value={item.sang}
-                                                onValueChange={() => handleAdd(item, 'sang')}
-                                            />
-                                        </DataTable.Cell>
-                                        <DataTable.Cell>
-                                            <Checkbox
-                                                value={item.chieu}
-                                                onValueChange={() => handleAdd(item, 'chieu')}
-                                            />
-                                        </DataTable.Cell>
-                                        <DataTable.Cell>
-                                            <Checkbox
-                                                value={item.toi}
-                                                onValueChange={() => handleAdd(item, 'toi')}
-                                            />
-                                        </DataTable.Cell>
-                                    </DataTable.Row>
-                                ))}
-                            </View>
-                            {ngayDangKy.length > 0 && (
-                                <View
+                                <TouchableOpacity
                                     style={{
-                                        flexDirection: 'row',
-                                        marginTop: 32,
-                                        justifyContent: 'flex-end',
+                                        paddingHorizontal: 16,
+                                        paddingVertical: 8,
+                                        marginRight: 20,
+                                        borderRadius: 4,
+                                        backgroundColor: '#d63232',
                                     }}
+                                    onPress={() => setIsOpen(false)}
                                 >
-                                    <TouchableOpacity
+                                    <Text
                                         style={{
-                                            paddingHorizontal: 16,
-                                            paddingVertical: 8,
-                                            marginRight: 20,
-                                            borderRadius: 4,
-                                            backgroundColor: '#d63232',
+                                            fontSize: 16,
+                                            color: 'white',
+                                            fontWeight: 'bold',
                                         }}
-                                        onPress={() => setIsOpen(false)}
                                     >
-                                        <Text
-                                            style={{
-                                                fontSize: 16,
-                                                color: 'white',
-                                                fontWeight: 'bold',
-                                            }}
-                                        >
-                                            Đóng
-                                        </Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
+                                        Đóng
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={{
+                                        paddingHorizontal: 16,
+                                        paddingVertical: 8,
+                                        marginRight: 20,
+                                        borderRadius: 4,
+                                        backgroundColor: '#3c8dbc',
+                                    }}
+                                    onPress={handleSubmitNgayDk}
+                                >
+                                    <Text
                                         style={{
-                                            paddingHorizontal: 16,
-                                            paddingVertical: 8,
-                                            marginRight: 20,
-                                            borderRadius: 4,
-                                            backgroundColor: '#3c8dbc',
+                                            fontSize: 16,
+                                            color: 'white',
+                                            fontWeight: 'bold',
                                         }}
-                                        onPress={handleSubmitNgayDk}
                                     >
-                                        <Text
-                                            style={{
-                                                fontSize: 16,
-                                                color: 'white',
-                                                fontWeight: 'bold',
-                                            }}
-                                        >
-                                            Lưu
-                                        </Text>
-                                    </TouchableOpacity>
-                                </View>
-                            )}
-                        </View>
-                        <View style={{ position: 'absolute', top: 0, right: 0 }}>
-                            <Button title="X" color="black" onPress={() => setIsOpen(false)} />
-                        </View>
-                    </Modal>
-                </View>
-            )}
+                                        Lưu
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                        )}
+                    </ScrollView>
+                </Modal>
+            </View>
+
             <View>
                 <DataTable>
                     <DataTable.Header>
