@@ -19,7 +19,6 @@ import XacNhanChiSo from '../Screens/ChiSoCaNhan/XacNhanChiSo'
 import PhieuPhat from '../Screens/DonXin/PhieuPhat'
 import PhieuDeNghi from '../Screens/DonXin/ThieuDeNghi'
 import PhieuGiaiTrinh from '../Screens/DonXin/PhieuGiaiTrinh'
-import DonXinNghiPhep from '../Screens/DonXin/DonXinNghiPhep'
 import DonXinNghiViec from '../Screens/DonXin/DonXinNghiViec'
 import DonXinDiMuon from '../Screens/DonXin/DonXinDiMuon'
 import XuatNhapKho from '../Screens/Home/XuatNhapKho'
@@ -39,6 +38,7 @@ import DonThuNo from '../Screens/DonHang/DonThuNo'
 import DonKhachNo from '../Screens/DonHang/DonKhachNo'
 import DonHoanThanh from '../Screens/DonHang/DonHoanThanh'
 import DonChuaBanGiao from '../Screens/DonHang/DonChuaBanGiao'
+import DonXinNghiPhep from '../Screens/DonXin/DonXinNghiPhep';
 
 const Stack = createNativeStackNavigator()
 
@@ -382,6 +382,14 @@ function StackHomes() {
                 component={PhieuGiaiTrinh}
                 options={{
                     headerShown: true,
+                    headerStyle: {
+                        backgroundColor: '#262626',
+                        height: 150,
+                        // title: 'My home',
+                        borderBottomLeftRadius: 40,
+                        borderBottomRightRadius: 40,
+                    },
+                    headerTintColor: '#fff',
                 }}
             />
             <Stack.Screen
@@ -389,6 +397,14 @@ function StackHomes() {
                 component={DonXinNghiPhep}
                 options={{
                     headerShown: true,
+                    headerStyle: {
+                        backgroundColor: '#262626',
+                        height: 150,
+                        // title: 'My home',
+                        borderBottomLeftRadius: 40,
+                        borderBottomRightRadius: 40,
+                    },
+                    headerTintColor: '#fff',
                 }}
             />
             <Stack.Screen
@@ -396,6 +412,14 @@ function StackHomes() {
                 component={DonXinNghiViec}
                 options={{
                     headerShown: true,
+                    headerStyle: {
+                        backgroundColor: '#262626',
+                        height: 150,
+                        // title: 'My home',
+                        borderBottomLeftRadius: 40,
+                        borderBottomRightRadius: 40,
+                    },
+                    headerTintColor: '#fff',
                 }}
             />
             <Stack.Screen
@@ -403,6 +427,14 @@ function StackHomes() {
                 component={DonXinDiMuon}
                 options={{
                     headerShown: true,
+                    headerStyle: {
+                        backgroundColor: '#262626',
+                        height: 150,
+                        // title: 'My home',
+                        borderBottomLeftRadius: 40,
+                        borderBottomRightRadius: 40,
+                    },
+                    headerTintColor: '#fff',
                 }}
             />
             <Stack.Screen
@@ -516,6 +548,22 @@ function StackHomes() {
             <Stack.Screen
                 name="Đơn Chưa Bàn Giao"
                 component={DonChuaBanGiao}
+                options={{
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: '#262626',
+                        height: 150,
+                        // title: 'My home',
+                        borderBottomLeftRadius: 40,
+                        borderBottomRightRadius: 40,
+                    },
+                    headerTintColor: '#fff',
+                }}
+            />
+
+            <Stack.Screen
+                name="Đơn Xin nghỉ phép"
+                component={DonXinNghiPhep}
                 options={{
                     headerShown: true,
                     headerStyle: {
