@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
     LineChart,
@@ -11,6 +11,7 @@ import {
     StackedBarChart
 } from "react-native-chart-kit";
 import { FontAwesome5 } from '@expo/vector-icons';
+import ThemeConText from '../../../config/themeConText';
 
 // import Ionicons from 'react-native-vector-icons/Ionicons';
 import 'react-native-gesture-handler';
@@ -19,6 +20,7 @@ import { Ionicons } from '@expo/vector-icons';
 export default function ChiSoCaNhan({ navigation }) {
 
     const luong = useRef();
+    const theme = useContext(ThemeConText)
 
     function handlePress(event) {
         console.log(event.target.value);
@@ -136,7 +138,7 @@ export default function ChiSoCaNhan({ navigation }) {
         backgroundGradientFromOpacity: 0,
         backgroundGradientTo: "#fff",
         backgroundGradientToOpacity: 0.1,
-        color: (opacity = 1) => `rgba(255,20,147, ${opacity})`,
+        color: (opacity = 1) => theme.color,
         strokeWidth: 1, // optional, default 3
         barPercentage: 0.5,
         useShadowColorFromDataset: false,// optional
@@ -196,14 +198,14 @@ export default function ChiSoCaNhan({ navigation }) {
 
         {
             name: "TB Hiện Tại",
-            population: parseFloat(luongtamtinhs),
+            population: luongtamtinhs,
             color: "#56d187",
             legendFontColor: "green",
             legendFontSize: 15,
         },
         {
             name: "TB thiếu",
-            population: parseFloat(7000 - luongtamtinhs),
+            population: 7000 - luongtamtinhs,
             color: "#f5b41d",
             legendFontColor: "#7F7F7F",
             legendFontSize: 15,
@@ -233,7 +235,7 @@ export default function ChiSoCaNhan({ navigation }) {
     };
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: theme.maunen }]}>
             <ScrollView style={{
                 width: '100%'
             }}>
@@ -244,13 +246,15 @@ export default function ChiSoCaNhan({ navigation }) {
                     <Text style={{
                         fontSize: 23,
                         paddingHorizontal: 20,
-                        marginTop: 15
+                        marginTop: 15,
+                        color: theme.color
 
                     }}>Lương Tạm Tính</Text>
                     <Text style={{
                         fontSize: 23,
                         paddingHorizontal: 20,
-                        marginTop: 15
+                        marginTop: 15,
+                        color: theme.color
 
                     }}>Ngày Công</Text>
                 </View>
@@ -258,7 +262,7 @@ export default function ChiSoCaNhan({ navigation }) {
 
                 <View style={{
                     flexDirection: 'row',
-                    backgroundColor: '#fff',
+                    backgroundColor: theme.maunen,
                     justifyContent: 'center',
                     alignItems: 'center'
                 }}>
@@ -284,9 +288,11 @@ export default function ChiSoCaNhan({ navigation }) {
                                         chartConfig={chartConfig}
                                         hideLegend={true}
                                         style={{
-                                            backgroundColor: 'white',
+                                            backgroundColor: theme.maunen,
                                             justifyContent: 'center',
-                                            alignItems: 'center'
+                                            alignItems: 'center',
+                                            borderRadius: 20
+
                                         }}
 
                                     />
@@ -299,7 +305,10 @@ export default function ChiSoCaNhan({ navigation }) {
                                     top: '35%'
                                 }}>
                                     <FontAwesome5 name="money-bill-wave" size={30} color="green" />
-                                    <Text>
+                                    <Text style={{
+                                        color: theme.color
+
+                                    }}>
                                         40%
                                     </Text>
                                 </View>
@@ -312,13 +321,17 @@ export default function ChiSoCaNhan({ navigation }) {
                             }}>
                                 <Text style={{
                                     fontSize: 23,
-                                    fontWeight: 'bold'
+                                    fontWeight: 'bold',
+                                    color: theme.color
+
                                 }}>
                                     1.000.000 đ
                                 </Text>
                                 <Text style={{
                                     fontSize: 17,
-                                    opacity: 0.3
+                                    opacity: 0.3,
+                                    color: theme.color
+
                                 }}>
                                 </Text>
                             </View>
@@ -345,9 +358,10 @@ export default function ChiSoCaNhan({ navigation }) {
                                         chartConfig={chartConfig}
                                         hideLegend={true}
                                         style={{
-                                            backgroundColor: 'white',
+                                            backgroundColor: theme.background,
                                             justifyContent: 'center',
-                                            alignItems: 'center'
+                                            alignItems: 'center',
+                                            borderRadius: 20
                                         }}
 
                                     />
@@ -363,7 +377,9 @@ export default function ChiSoCaNhan({ navigation }) {
                                         fontSize: 22,
                                         textAlign: 'center',
                                         marginLeft: 10,
-                                        marginTop: 5
+                                        marginTop: 5,
+                                        color: theme.color
+
                                     }}>
                                         1
                                     </Text>
@@ -379,7 +395,8 @@ export default function ChiSoCaNhan({ navigation }) {
                                     fontSize: 15,
                                     fontWeight: 'bold',
                                     color: 'red',
-                                    opacity: 0.5
+                                    color: theme.color
+
                                 }}>
                                     Cố Gắng Hơn Nhé
                                 </Text>
@@ -400,7 +417,9 @@ export default function ChiSoCaNhan({ navigation }) {
                 }}>
                     <Text style={{
                         padding: 20,
-                        fontSize: 22
+                        fontSize: 22,
+                        color: theme.color
+
                     }}>
                         Giá Trị Trung Bình : 700,000đ
                     </Text>
@@ -437,7 +456,9 @@ export default function ChiSoCaNhan({ navigation }) {
                         padding: 20,
                         fontSize: 22,
                         alignItems: 'flex-start',
-                        textAlign: 'left'
+                        textAlign: 'left',
+                        color: theme.color
+
                     }}>
                         Số Đơn Phát Sinh
                     </Text>
@@ -458,6 +479,8 @@ export default function ChiSoCaNhan({ navigation }) {
                                 borderRadius: 16,
 
                             }}
+                            backgroundColor={theme.background}
+
 
                         />
                     </View>
@@ -479,7 +502,9 @@ export default function ChiSoCaNhan({ navigation }) {
                         padding: 20,
                         fontSize: 22,
                         alignItems: 'flex-start',
-                        textAlign: 'left'
+                        textAlign: 'left',
+                        color: theme.color
+
                     }}>
                         Số Đơn Vệ Sinh
                     </Text>
@@ -512,7 +537,9 @@ export default function ChiSoCaNhan({ navigation }) {
                     }}>
                         <Text style={{
                             padding: 20,
-                            fontSize: 22
+                            fontSize: 22,
+                            color: theme.color
+
                         }}>
                             Tỉ Lệ Vệ Sinh
                         </Text>
@@ -538,7 +565,9 @@ export default function ChiSoCaNhan({ navigation }) {
                     }}>
                         <Text style={{
                             padding: 20,
-                            fontSize: 22
+                            fontSize: 22,
+                            color: theme.color
+
                         }}>
                             Chỉ Số OLE
                         </Text>
@@ -568,7 +597,9 @@ export default function ChiSoCaNhan({ navigation }) {
                     <Text style={{
                         fontSize: 22,
                         marginTop: 20,
-                        marginBottom: 10
+                        marginBottom: 10,
+                        color: theme.color
+
                     }}>
                         Sales Report
                     </Text>

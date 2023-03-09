@@ -23,6 +23,7 @@ import { EventRegister } from 'react-native-event-listeners'
 // import { Value } from 'react-native-reanimated';
 // import Buttons from './Button'
 import ThemeConText from '../../../config/themeConText';
+import { BottomSheet, ListItem } from '@rneui/themed';
 
 export default function HomeScrenn({ navigation }) {
 
@@ -248,7 +249,9 @@ export default function HomeScrenn({ navigation }) {
     ]
 
     function handerUpAnh() {
+        console.log('a')
         setUpAnh(true)
+        setIsVisible(true)
         setImage(null)
     }
 
@@ -365,7 +368,30 @@ export default function HomeScrenn({ navigation }) {
 
     const [mode, setMode] = useState(false)
 
+    const [isVisible, setIsVisible] = useState(false);
+    const list = [
+        { title: 'Up Ảnh' },
+        { title: 'UpDate' },
 
+        {
+            title: 'Cance',
+            containerStyle: { backgroundColor: 'red', marginBottom: 20, },
+            titleStyle: { color: 'white' },
+            onPress: () => setIsVisible(false),
+        },
+    ];
+
+    function handerXuLy(title) {
+        if (title == 'Up Ảnh') {
+            pickImage();
+        }
+        else if (title == 'UpDate') {
+            handerXacNhan();
+        }
+        else {
+            setIsVisible(false)
+        }
+    }
 
     return (
         <ScrollView
@@ -484,14 +510,37 @@ export default function HomeScrenn({ navigation }) {
                                 flexDirection: 'row',
                                 marginLeft: -10
                             }}>
-                                <Image
-                                    style={{
-                                        width: 70,
-                                        height: 70,
-                                        borderRadius: 200
-                                    }}
-                                    source={{ uri: 'https://phongkhamdongphuong.net/wp-content/uploads/2022/04/hinh-anh-dep-4.jpg' }}
-                                />
+
+                                {thongtin.map(thong => (
+                                    <TouchableOpacity
+                                        key={thong.id}
+                                        onPress={() => handerUpAnh()}
+                                    >
+                                        {thong.img == "" ?
+                                            <Image
+                                                style={{
+                                                    width: 80,
+                                                    height: 80,
+                                                    borderRadius: 200,
+                                                }}
+                                                source={{
+                                                    uri: "https://haycafe.vn/wp-content/uploads/2022/02/Avatar-trang.jpg"
+                                                }}
+                                            /> :
+                                            <Image
+                                                style={{
+                                                    width: 80,
+                                                    height: 80,
+                                                    borderRadius: 200,
+                                                }}
+                                                source={{
+                                                    uri: thong.img
+                                                }}
+                                            />
+                                        }
+
+                                    </TouchableOpacity>
+                                ))}
                                 <View>
                                     <Text style={[
                                         {
@@ -504,7 +553,7 @@ export default function HomeScrenn({ navigation }) {
                                             color: theme.color
                                         }]}
                                     >
-                                        Ngô Xuân Quy
+                                        {taikhoan}
                                     </Text>
                                     <Text
                                         style={[
@@ -532,7 +581,8 @@ export default function HomeScrenn({ navigation }) {
                                             {
                                                 backgroundColor: '#fff',
                                                 padding: 10,
-                                                borderRadius: 10
+                                                borderRadius: 10,
+                                                marginLeft: 30
                                             }
                                             , {
                                                 backgroundColor: theme.background
@@ -547,6 +597,20 @@ export default function HomeScrenn({ navigation }) {
                                     </TouchableOpacity>
                                 </View>
                             </View>
+
+                            <BottomSheet modalProps={{}} isVisible={isVisible}>
+                                {list.map((l, i) => (
+                                    <ListItem
+                                        key={i}
+                                        containerStyle={l.containerStyle}
+                                        onPress={() => handerXuLy(l.title)}
+                                    >
+                                        <ListItem.Content>
+                                            <ListItem.Title style={l.titleStyle}>{l.title}</ListItem.Title>
+                                        </ListItem.Content>
+                                    </ListItem>
+                                ))}
+                            </BottomSheet>
 
                             <View style={{
                                 flexDirection: 'row',

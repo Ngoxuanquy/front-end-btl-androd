@@ -1,14 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Axios from 'axios';
 import * as Notifications from 'expo-notifications';
+import ThemeConText from '../../../config/themeConText';
 
 
 export default function PhieuMuonHang({ navigation }) {
 
+    const theme = useContext(ThemeConText)
 
     Notifications.setNotificationHandler({
         handleNotification: async () => ({
@@ -81,7 +83,6 @@ export default function PhieuMuonHang({ navigation }) {
 
     function handerMuon(id, name) {
 
-        console.log(apis)
         let ids1 = id_donhang + 1
 
         apis.map(api => {
@@ -199,6 +200,7 @@ export default function PhieuMuonHang({ navigation }) {
 
     function handerCong(id, soluong) {
 
+        console.log(soluong)
 
         fetch('http://192.168.1.165:4000' + '/api/muonhang/update/soluong/' + id, {
             method: 'POST',
@@ -249,7 +251,15 @@ export default function PhieuMuonHang({ navigation }) {
     }
 
     function handerSubmit() {
-        let id = id_donhang + 1
+        let id;
+        if (id_donhang == 0) {
+            id = 1
+        }
+        else {
+            id = id_donhang + 1
+        }
+
+        console.log(id_donhang)
 
         fetch('http://192.168.1.165:4000' + '/api/muonhang/update/lichsumuonhangId/' + id,
             {
@@ -282,6 +292,7 @@ export default function PhieuMuonHang({ navigation }) {
                         navigation.navigate('Nhập-Xuất Kho')
                     })
             })
+            .catch(err => console.log(err))
 
 
 
@@ -382,13 +393,14 @@ export default function PhieuMuonHang({ navigation }) {
 
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: theme.maunen }]}>
             <View>
                 <View>
                     <View >
                         <Text style={{
                             fontSize: 20,
-                            padding: 10
+                            padding: 10,
+                            color: theme.color
                         }}>
                             Kho Cho Mượn
                         </Text>
@@ -398,7 +410,7 @@ export default function PhieuMuonHang({ navigation }) {
                             width: '100%',
                             marginLeft: 15,
                             zIndex: 100,
-                            backgroundColor: 'white',
+                            backgroundColor: theme.background
 
                         }}>
                             <DropDownPicker
@@ -413,8 +425,11 @@ export default function PhieuMuonHang({ navigation }) {
                                     justifyContent: 'center',
                                     alignItems: 'center',
                                     zIndex: 100,
-                                    backgroundColor: 'white',
+                                    backgroundColor: theme.background,
+                                    borderColor: theme.color,
+                                    color: theme.color
                                 }}
+
 
                             />
                         </View>
@@ -454,14 +469,18 @@ export default function PhieuMuonHang({ navigation }) {
                             }}>
                                 <Text style={{
                                     fontSize: 20,
-                                    padding: 10
+                                    padding: 10,
+                                    color: theme.color
+
                                 }}>
                                     Sản Phẩm Mượn
                                 </Text>
                                 <View style={{
                                 }}>
                                     <View style={{
-                                        marginLeft: 10
+                                        marginLeft: 10,
+                                        color: theme.color
+
                                     }}>
                                         <Text>
                                             Tìm Kiếm
@@ -491,7 +510,9 @@ export default function PhieuMuonHang({ navigation }) {
                                             padding: 5
                                         }}>
                                             <Text style={{
-                                                textAlign: 'center'
+                                                textAlign: 'center',
+                                                color: theme.color
+
                                             }}>
                                                 Tìm
                                             </Text>
@@ -509,20 +530,26 @@ export default function PhieuMuonHang({ navigation }) {
                                 }}>
                                     <Text style={{
                                         fontSize: 17,
-                                        fontWeight: 'bold'
+                                        fontWeight: 'bold',
+                                        color: theme.color
+
                                     }}>
                                         Tên Sản Phẩm
                                     </Text>
 
                                     <Text style={{
                                         fontSize: 17,
-                                        fontWeight: 'bold'
+                                        fontWeight: 'bold',
+                                        color: theme.color
+
                                     }}>
                                         SL Tồn
                                     </Text>
                                     <Text style={{
                                         fontSize: 17,
-                                        fontWeight: 'bold'
+                                        fontWeight: 'bold',
+                                        color: theme.color
+
                                     }}>
                                         Trạng Thái
                                     </Text>
@@ -569,7 +596,9 @@ export default function PhieuMuonHang({ navigation }) {
                                                                     fontSize: 16,
                                                                     lineHeight: 30,
                                                                     textAlign: 'left',
-                                                                    marginLeft: -40
+                                                                    marginLeft: -40,
+                                                                    color: theme.color
+
 
                                                                 }}>
                                                                     {produce.name}
@@ -578,7 +607,9 @@ export default function PhieuMuonHang({ navigation }) {
                                                             <View>
                                                                 <Text style={{
                                                                     fontSize: 16,
-                                                                    lineHeight: 30
+                                                                    lineHeight: 30,
+                                                                    color: theme.color
+
                                                                 }}>
 
                                                                     {api.exist}
@@ -591,7 +622,10 @@ export default function PhieuMuonHang({ navigation }) {
                                                                 >
                                                                     <Text style={{
                                                                         fontSize: 16,
-                                                                        lineHeight: 30
+                                                                        lineHeight: 30,
+                                                                        color: theme.color,
+                                                                        marginLeft: 30
+
                                                                     }}>
 
                                                                         Mượn
@@ -622,7 +656,9 @@ export default function PhieuMuonHang({ navigation }) {
                                     <View>
                                         <Text style={{
                                             fontSize: 22,
-                                            padding: 10
+                                            padding: 10,
+                                            color: theme.color
+
                                         }}>
                                             Sản Phẩm Đã Chọn
                                         </Text>
@@ -632,7 +668,7 @@ export default function PhieuMuonHang({ navigation }) {
                                         alignItems: 'center'
                                     }}>
                                         <View style={{
-                                            backgroundColor: '#dddddd',
+                                            backgroundColor: theme.background,
                                             width: '90%',
                                             justifyContent: 'center',
                                             alignItems: 'center',
@@ -657,7 +693,9 @@ export default function PhieuMuonHang({ navigation }) {
                                                         <Text
                                                             style={{
                                                                 textAlign: 'center',
-                                                                width: 60
+                                                                width: 60,
+                                                                color: theme.color
+
                                                             }}>
                                                             {sanPham.TenHang}
                                                         </Text>
@@ -672,24 +710,26 @@ export default function PhieuMuonHang({ navigation }) {
                                                     }}>
                                                         <TouchableOpacity style={{
                                                             width: 35, height: 35,
-                                                            borderColor: 'black',
+                                                            borderColor: theme.color,
                                                             borderWidth: 1,
                                                             alignItems: 'center',
                                                             justifyContent: 'center',
-                                                            backgroundColor: 'white'
                                                         }}
                                                             onPress={() => handerTru(sanPham.id, sanPham.SoLuong)}
                                                         >
-                                                            <Text>-</Text>
+                                                            <Text style={{
+                                                                color: theme.color
+                                                            }}>-</Text>
                                                         </TouchableOpacity>
                                                         <TextInput style={{
                                                             width: 50,
                                                             height: 35,
-                                                            borderColor: 'black',
+                                                            borderColor: theme.color,
                                                             borderWidth: 1,
                                                             alignItems: 'center',
                                                             textAlign: 'center',
-                                                            backgroundColor: 'white'
+                                                            // backgroundColor: 'white',
+                                                            color: theme.color
 
                                                         }}
 
@@ -698,17 +738,19 @@ export default function PhieuMuonHang({ navigation }) {
                                                         </TextInput>
                                                         <TouchableOpacity style={{
                                                             width: 35, height: 35,
-                                                            borderColor: 'black',
+                                                            borderColor: theme.color,
                                                             borderWidth: 1,
                                                             alignItems: 'center',
                                                             justifyContent: 'center',
-                                                            backgroundColor: 'white',
+                                                            // backgroundColor: 'white',
                                                             marginRight: 20
                                                         }}
                                                             onPress={() => handerCong(sanPham.id, sanPham.SoLuong)}
 
                                                         >
-                                                            <Text>+</Text>
+                                                            <Text style={{
+                                                                color: theme.color
+                                                            }}>+</Text>
                                                         </TouchableOpacity>
 
                                                         <TouchableOpacity style={{
@@ -745,7 +787,7 @@ export default function PhieuMuonHang({ navigation }) {
                                 }}>
                                     <TouchableOpacity style={{
                                         backgroundColor: 'green',
-                                        opacity: 0.6,
+                                        // opacity: 0.6,
                                         width: 130,
 
                                     }}
@@ -762,94 +804,7 @@ export default function PhieuMuonHang({ navigation }) {
                                     </TouchableOpacity>
                                 </View>
 
-                                <View>
-                                    <View style={{
-                                        padding: 10
-                                    }}>
-                                        <Text style={{
-                                            fontSize: 24,
-                                            lineHeight: 30
-                                        }}>
-                                            NVKT khác yêu cầu mượn:
 
-                                        </Text>
-
-                                        <View>
-                                            <Text style={{
-                                                fontSize: 18,
-                                                lineHeight: 30
-                                            }}>
-                                                Ngô Xuân Quy mượn vòi bạc
-                                            </Text>
-                                            <TouchableOpacity style={{
-                                                backgroundColor: 'green',
-                                                opacity: 0.6,
-                                                width: 120,
-                                                borderRadius: 8,
-                                                marginLeft: 100
-                                            }}>
-                                                <Text style={{
-                                                    fontSize: 20,
-                                                    color: 'white',
-                                                    paddingVertical: 7,
-                                                    textAlign: 'center',
-                                                }}>
-                                                    Xác Nhận
-                                                </Text>
-                                            </TouchableOpacity>
-                                        </View>
-
-                                        <View>
-                                            <Text style={{
-                                                fontSize: 18,
-                                                lineHeight: 30
-                                            }}>
-                                                Ngô Xuân Quy mượn vòi bạc
-                                            </Text>
-                                            <TouchableOpacity style={{
-                                                backgroundColor: 'green',
-                                                opacity: 0.6,
-                                                width: 120,
-                                                borderRadius: 8,
-                                                marginLeft: 100
-                                            }}>
-                                                <Text style={{
-                                                    fontSize: 20,
-                                                    color: 'white',
-                                                    paddingVertical: 7,
-                                                    textAlign: 'center',
-                                                }}>
-                                                    Xác Nhận
-                                                </Text>
-                                            </TouchableOpacity>
-                                        </View>
-
-                                        <View>
-                                            <Text style={{
-                                                fontSize: 18,
-                                                lineHeight: 30
-                                            }}>
-                                                Ngô Xuân Quy mượn vòi bạc
-                                            </Text>
-                                            <TouchableOpacity style={{
-                                                backgroundColor: 'green',
-                                                opacity: 0.6,
-                                                width: 120,
-                                                borderRadius: 8,
-                                                marginLeft: 100
-                                            }}>
-                                                <Text style={{
-                                                    fontSize: 20,
-                                                    color: 'white',
-                                                    paddingVertical: 7,
-                                                    textAlign: 'center',
-                                                }}>
-                                                    Xác Nhận
-                                                </Text>
-                                            </TouchableOpacity>
-                                        </View>
-                                    </View>
-                                </View>
                             </ScrollView>
 
                         </>}

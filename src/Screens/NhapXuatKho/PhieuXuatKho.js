@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
     Button,
@@ -9,9 +9,11 @@ import {
     ListItem,
     Avatar,
 } from '@rneui/themed';
+import ThemeConText from '../../../config/themeConText';
 
 export default function PhieuXuatKho({ navigation }) {
 
+    const theme = useContext(ThemeConText)
     const [taikhoan, setTaiKhoan] = useState([])
 
     const [sanphams, setSanPham] = useState([])
@@ -253,17 +255,16 @@ export default function PhieuXuatKho({ navigation }) {
 
 
     return (
-        <ScrollView style={styles.container}>
+        <ScrollView style={[styles.container, { backgroundColor: theme.maunen }]}>
             <View>
                 {/* Kho Toongr */}
-
                 <View>
-
                     <View>
                         <View>
                             <Text style={{
                                 padding: 10,
-                                fontSize: 20
+                                fontSize: 20,
+                                color: theme.color
                             }}>
                                 Sản Phẩm Đã Đi Làm
                             </Text>
@@ -285,7 +286,9 @@ export default function PhieuXuatKho({ navigation }) {
                             }}>
                                 <Text style={{
                                     fontSize: 17,
-                                    fontWeight: 'bold'
+                                    fontWeight: 'bold',
+                                    color: theme.color
+
                                 }}>
                                     Mã Hóa Đơn
                                 </Text>
@@ -297,7 +300,9 @@ export default function PhieuXuatKho({ navigation }) {
                             }}>
                                 <Text style={{
                                     fontSize: 17,
-                                    fontWeight: 'bold'
+                                    fontWeight: 'bold',
+                                    color: theme.color
+
                                 }}>
                                     Đơn Giá
                                 </Text>
@@ -309,7 +314,9 @@ export default function PhieuXuatKho({ navigation }) {
                             }}>
                                 <Text style={{
                                     fontSize: 17,
-                                    fontWeight: 'bold'
+                                    fontWeight: 'bold',
+                                    color: theme.color
+
                                 }}>
                                     Trạng Thái
                                 </Text>
@@ -342,7 +349,9 @@ export default function PhieuXuatKho({ navigation }) {
                                     }}>
                                         <Text style={{
                                             fontSize: 16,
-                                            lineHeight: 30
+                                            lineHeight: 30,
+                                            color: theme.color
+
                                         }}>
                                             {sanpham.code_bill}
                                         </Text>
@@ -356,7 +365,9 @@ export default function PhieuXuatKho({ navigation }) {
                                         <Text style={{
                                             fontSize: 16,
                                             lineHeight: 30,
-                                            textAlign: 'center'
+                                            textAlign: 'center',
+                                            color: theme.color
+
                                         }}>
                                             {sanpham.total_amount_after_discount}
 
@@ -366,35 +377,48 @@ export default function PhieuXuatKho({ navigation }) {
                                     <View style={{
                                         width: '30%',
                                         justifyContent: 'center',
-                                        alignItems: 'center'
+                                        alignItems: 'center',
                                     }}>
                                         <Button
                                             title="Xem Chi Tiết"
                                             onPress={() => toggleDialog4(sanpham.id)}
-                                            buttonStyle={styles.button}
+                                            buttonStyle={[styles.button]}
                                         />
                                         <Dialog
                                             isVisible={visible4}
                                             onBackdropPress={toggleDialog4}
+
                                         >
                                             <Dialog.Title title="Chi Tiết Sản Phẩm" />
-                                            <View>
+                                            <View >
                                                 <View>
                                                     {chitietkhachhangs.map(chitietkhachhang => (
                                                         <View key={chitietkhachhang.id}>
-                                                            <Text>
+                                                            <Text style={{
+                                                                // color: theme.color
+
+                                                            }}>
                                                                 Khách Hàng:   {chitietkhachhang.name}
                                                             </Text>
-                                                            <Text>
+                                                            <Text style={{
+                                                                // color: theme.color
+
+                                                            }}>
                                                                 Người Làm: {chitietkhachhang.Author_email}
                                                             </Text>
-                                                            <Text>
+                                                            <Text style={{
+                                                                // color: theme.color
+                                                            }}>
                                                                 Trạng Thái: {chitietkhachhang.TrangThai}
                                                             </Text>
-                                                            <Text>
+                                                            <Text style={{
+                                                                // color: theme.color
+                                                            }}>
                                                                 Điện Thoại: {chitietkhachhang.Number}
                                                             </Text>
-                                                            <Text>
+                                                            <Text style={{
+                                                                // color: theme.color
+                                                            }}>
                                                                 Địa Chỉ: {chitietkhachhang.Address}
                                                             </Text>
                                                         </View>
@@ -409,19 +433,25 @@ export default function PhieuXuatKho({ navigation }) {
                                                     }}>
                                                         <Text style={{
                                                             fontSize: 17,
-                                                            fontWeight: 'bold'
+                                                            fontWeight: 'bold',
+                                                            // color: theme.color
+
                                                         }}>
                                                             Tên SP
                                                         </Text>
                                                         <Text style={{
                                                             fontSize: 17,
-                                                            fontWeight: 'bold'
+                                                            fontWeight: 'bold',
+                                                            // color: theme.color
+
                                                         }}>
                                                             Đơn Giá
                                                         </Text>
                                                         <Text style={{
                                                             fontSize: 17,
-                                                            fontWeight: 'bold'
+                                                            fontWeight: 'bold',
+                                                            // color: theme.color
+
                                                         }}>
                                                             SL Tồn
                                                         </Text>
@@ -440,24 +470,30 @@ export default function PhieuXuatKho({ navigation }) {
                                                                     // borderColor: 'gray',
                                                                     borderBottomColor: 'gray',
                                                                     borderBottomWidth: 1,
-                                                                    paddingVertical: 6
+                                                                    paddingVertical: 6,
 
                                                                 }}>
                                                                     <Text style={{
                                                                         fontSize: 16,
-                                                                        lineHeight: 30
+                                                                        lineHeight: 30,
+                                                                        // color: theme.color
+
                                                                     }}>
                                                                         {chitietsanpham.name}
                                                                     </Text>
                                                                     <Text style={{
                                                                         fontSize: 16,
-                                                                        lineHeight: 30
+                                                                        lineHeight: 30,
+                                                                        // color: theme.color
+                                                                        color: 'black'
                                                                     }}>
                                                                         {chitietsanpham.price}
                                                                     </Text>
                                                                     <Text style={{
                                                                         fontSize: 16,
-                                                                        lineHeight: 30
+                                                                        lineHeight: 30,
+                                                                        // color: theme.color
+
                                                                     }}>
                                                                         {chitietsanpham.number_of}
                                                                     </Text>
@@ -491,7 +527,9 @@ export default function PhieuXuatKho({ navigation }) {
                         <View>
                             <Text style={{
                                 padding: 10,
-                                fontSize: 20
+                                fontSize: 20,
+                                color: theme.color
+
                             }}>
                                 Số Sản Phẩm Cần Cấp
                             </Text>
@@ -513,7 +551,9 @@ export default function PhieuXuatKho({ navigation }) {
                             }}>
                                 <Text style={{
                                     fontSize: 17,
-                                    fontWeight: 'bold'
+                                    fontWeight: 'bold',
+                                    color: theme.color
+
                                 }}>
                                     Tên Sản Phẩm
                                 </Text>
@@ -525,7 +565,9 @@ export default function PhieuXuatKho({ navigation }) {
                             }}>
                                 <Text style={{
                                     fontSize: 17,
-                                    fontWeight: 'bold'
+                                    fontWeight: 'bold',
+                                    color: theme.color
+
                                 }}>
                                     Đơn Giá
                                 </Text>
@@ -537,7 +579,9 @@ export default function PhieuXuatKho({ navigation }) {
                             }}>
                                 <Text style={{
                                     fontSize: 17,
-                                    fontWeight: 'bold'
+                                    fontWeight: 'bold',
+                                    color: theme.color
+
                                 }}>
                                     SL Còn
                                 </Text>
@@ -550,7 +594,9 @@ export default function PhieuXuatKho({ navigation }) {
                             }}>
                                 <Text style={{
                                     fontSize: 17,
-                                    fontWeight: 'bold'
+                                    fontWeight: 'bold',
+                                    color: theme.color
+
                                 }}>
                                     Tiêu Chuẩn
                                 </Text>
@@ -563,7 +609,9 @@ export default function PhieuXuatKho({ navigation }) {
                             }}>
                                 <Text style={{
                                     fontSize: 17,
-                                    fontWeight: 'bold'
+                                    fontWeight: 'bold',
+                                    color: theme.color
+
                                 }}>
                                     Trạng Thái
                                 </Text>
@@ -594,7 +642,9 @@ export default function PhieuXuatKho({ navigation }) {
                                     }}>
                                         <Text style={{
                                             fontSize: 16,
-                                            lineHeight: 30
+                                            lineHeight: 30,
+                                            color: theme.color
+
                                         }}>
                                             {sanpham.productsId}
                                         </Text>
@@ -608,7 +658,9 @@ export default function PhieuXuatKho({ navigation }) {
                                         <Text style={{
                                             fontSize: 16,
                                             lineHeight: 30,
-                                            textAlign: 'center'
+                                            textAlign: 'center',
+                                            color: theme.color
+
                                         }}>
                                             {sanpham.exist}
 
@@ -623,7 +675,8 @@ export default function PhieuXuatKho({ navigation }) {
                                         <Text style={{
                                             fontSize: 16,
                                             lineHeight: 30,
-                                            textAlign: 'center'
+                                            textAlign: 'center',
+                                            color: theme.color
 
                                         }}>
                                             {sanpham.SoLuong}
@@ -639,7 +692,8 @@ export default function PhieuXuatKho({ navigation }) {
                                         <Text style={{
                                             fontSize: 16,
                                             lineHeight: 30,
-                                            textAlign: 'center'
+                                            textAlign: 'center',
+                                            color: theme.color
 
                                         }}>
                                             {sanpham.tieu_chuan}
@@ -657,7 +711,8 @@ export default function PhieuXuatKho({ navigation }) {
                                                 fontSize: 16,
                                                 lineHeight: 30,
                                                 textAlign: 'center',
-                                                color: 'green'
+                                                color: 'green',
+
                                             }}>
                                                 Cấp
 
@@ -690,7 +745,9 @@ export default function PhieuXuatKho({ navigation }) {
                         <View>
                             <Text style={{
                                 padding: 10,
-                                fontSize: 20
+                                fontSize: 20,
+                                color: theme.color
+
                             }}>
                                 Số Sản Phẩm Cần Trả
                             </Text>
@@ -712,7 +769,9 @@ export default function PhieuXuatKho({ navigation }) {
                             }}>
                                 <Text style={{
                                     fontSize: 17,
-                                    fontWeight: 'bold'
+                                    fontWeight: 'bold',
+                                    color: theme.color
+
                                 }}>
                                     Tên Sản Phẩm
                                 </Text>
@@ -724,7 +783,9 @@ export default function PhieuXuatKho({ navigation }) {
                             }}>
                                 <Text style={{
                                     fontSize: 17,
-                                    fontWeight: 'bold'
+                                    fontWeight: 'bold',
+                                    color: theme.color
+
                                 }}>
                                     Đơn Giá
                                 </Text>
@@ -736,7 +797,9 @@ export default function PhieuXuatKho({ navigation }) {
                             }}>
                                 <Text style={{
                                     fontSize: 17,
-                                    fontWeight: 'bold'
+                                    fontWeight: 'bold',
+                                    color: theme.color
+
                                 }}>
                                     SL Còn
                                 </Text>
@@ -749,7 +812,9 @@ export default function PhieuXuatKho({ navigation }) {
                             }}>
                                 <Text style={{
                                     fontSize: 17,
-                                    fontWeight: 'bold'
+                                    fontWeight: 'bold',
+                                    color: theme.color
+
                                 }}>
                                     Tiêu Chuẩn
                                 </Text>
@@ -762,7 +827,9 @@ export default function PhieuXuatKho({ navigation }) {
                             }}>
                                 <Text style={{
                                     fontSize: 17,
-                                    fontWeight: 'bold'
+                                    fontWeight: 'bold',
+                                    color: theme.color
+
                                 }}>
                                     Trạng Thái
                                 </Text>
@@ -793,7 +860,9 @@ export default function PhieuXuatKho({ navigation }) {
                                     }}>
                                         <Text style={{
                                             fontSize: 16,
-                                            lineHeight: 30
+                                            lineHeight: 30,
+                                            color: theme.color
+
                                         }}>
                                             {sanpham.productsId}
                                         </Text>
@@ -807,7 +876,9 @@ export default function PhieuXuatKho({ navigation }) {
                                         <Text style={{
                                             fontSize: 16,
                                             lineHeight: 30,
-                                            textAlign: 'center'
+                                            textAlign: 'center',
+                                            color: theme.color
+
                                         }}>
                                             {sanpham.price}
 
@@ -822,7 +893,9 @@ export default function PhieuXuatKho({ navigation }) {
                                         <Text style={{
                                             fontSize: 16,
                                             lineHeight: 30,
-                                            textAlign: 'center'
+                                            textAlign: 'center',
+                                            color: theme.color
+
 
                                         }}>
                                             {sanpham.exist}
@@ -838,8 +911,8 @@ export default function PhieuXuatKho({ navigation }) {
                                         <Text style={{
                                             fontSize: 16,
                                             lineHeight: 30,
-                                            textAlign: 'center'
-
+                                            textAlign: 'center',
+                                            color: theme.color
                                         }}>
                                             {sanpham.tieu_chuan}
 
@@ -885,7 +958,9 @@ export default function PhieuXuatKho({ navigation }) {
                     <View>
                         <Text style={{
                             fontSize: 20,
-                            padding: 10
+                            padding: 10,
+                            color: theme.color
+
                         }}>
                             Lich Sử Đơn Hàng
                         </Text>
@@ -899,25 +974,33 @@ export default function PhieuXuatKho({ navigation }) {
                         }}>
                             <Text style={{
                                 fontSize: 17,
-                                fontWeight: 'bold'
+                                fontWeight: 'bold',
+                                color: theme.color
+
                             }}>
                                 Tên
                             </Text>
                             <Text style={{
                                 fontSize: 17,
-                                fontWeight: 'bold'
+                                fontWeight: 'bold',
+                                color: theme.color
+
                             }}>
                                 Ngày
                             </Text>
                             <Text style={{
                                 fontSize: 17,
-                                fontWeight: 'bold'
+                                fontWeight: 'bold',
+                                color: theme.color
+
                             }}>
                                 Trạng Thái
                             </Text>
                             <Text style={{
                                 fontSize: 17,
-                                fontWeight: 'bold'
+                                fontWeight: 'bold',
+                                color: theme.color
+
                             }}>
                                 Chi Tiết
                             </Text>

@@ -629,7 +629,8 @@ export default function Cart({ navigation }) {
                         fontSize: 22,
                         fontWeight: 'bold',
                         color: 'green',
-                        opacity: 0.6
+                        opacity: 0.8,
+                        // color: theme.color
                     }}>
                         Đơn Đang Thực Hiện
                     </Text>
@@ -660,7 +661,8 @@ export default function Cart({ navigation }) {
                                 color: 'gray',
                                 padding: 10,
                                 color: 'green',
-                                opacity: 0.6
+                                color: theme.color
+
                             }}>
                                 Đơn Đang Thực Hiện
                             </Text>

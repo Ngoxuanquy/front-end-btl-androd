@@ -87,6 +87,8 @@ const Phone = ({ navigation }) => {
 
 
         <ScrollView
+            style={{
+            }}
             refreshControl={
                 <RefreshControl refreshing={refreshing} onRefresh={onRefresh} style={{
                     tintColor: 'black',
@@ -96,7 +98,8 @@ const Phone = ({ navigation }) => {
                 }} />
             }
         >
-            <View >
+            <View style={{
+            }}>
                 <LinearGradient
                     // Background Linear Gradient
                     start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 1 }}
@@ -128,11 +131,15 @@ const Phone = ({ navigation }) => {
                 </LinearGradient>
                 <KeyboardAvoidingView
                     behavior={Platform.OS === "ios" ? "padding" : "height"}
-                    style={styles.container}
+                // style={styles.container}
                 >
-                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                        <View style={[styles.container, { backgroundColor: theme.maunen }]}>
-                            <View  >
+                    <TouchableWithoutFeedback onPress={Keyboard.dismiss} style={{
+                    }}>
+
+                        <View style={[styles.container, { backgroundColor: theme.maunen, }]}>
+                            <View style={{
+                                flex: 1
+                            }} >
                                 <Text style={{
                                     fontSize: 25,
                                     padding: 20,
@@ -144,7 +151,8 @@ const Phone = ({ navigation }) => {
                                 </Text>
                                 {orders.map(order => (
 
-                                    <View key={order.id}>
+                                    <View key={order.id} style={{
+                                    }}>
                                         <View style={[{
                                             marginLeft: 10,
                                             marginRight: 10,

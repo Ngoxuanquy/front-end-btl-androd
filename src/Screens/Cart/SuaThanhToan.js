@@ -366,7 +366,7 @@ export default function SuaThanhToan({ route, navigation }) {
     return (
         <View style={{
             flex: 1,
-            backgroundColor: theme.background
+            backgroundColor: theme.maunen
         }}>
             <View style={{
                 position: 'absolute',
@@ -382,43 +382,59 @@ export default function SuaThanhToan({ route, navigation }) {
                     <TouchableOpacity style={{
                         width: '33%',
                         alignItems: 'center',
-                        borderColor: 'black',
+                        borderColor: theme.color,
                         borderWidth: 0.3,
-                        paddingVertical: 15
+                        paddingVertical: 15,
+                        backgroundColor: theme.background
+
                     }}
                         onPress={() => handerTTTienMat()}
                     >
-                        <Text>
+                        <Text style={{
+                            color: theme.color
+                        }}>
                             Sửa Thanh Toán
                         </Text>
-                        <Text>
+                        <Text style={{
+                            color: theme.color
+                        }}>
                             (Tiền Mặt)
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={{
                         width: '34%',
                         alignItems: 'center',
-                        borderColor: 'black',
+                        borderColor: theme.color,
                         borderWidth: 0.3,
-                        paddingVertical: 15
+                        paddingVertical: 15,
+                        backgroundColor: theme.background
+
                     }}
                         onPress={() => handerTTChuyenKhoan()}
                     >
-                        <Text>
+                        <Text style={{
+                            color: theme.color
+                        }}>
                             Sửa Thanh Toán
                         </Text>
-                        <Text>
+                        <Text style={{
+                            color: theme.color
+                        }}>
                             (Chuyển Khoản)
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={{
                         width: '33%',
                         alignItems: 'center',
-                        borderColor: 'black',
+                        borderColor: theme.color,
                         borderWidth: 0.3,
-                        paddingVertical: 15
+                        paddingVertical: 15,
+                        backgroundColor: theme.background
+
                     }}>
-                        <Text>
+                        <Text style={{
+                            color: theme.color
+                        }}>
                             Nợ
                         </Text>
                     </TouchableOpacity>
@@ -441,12 +457,17 @@ export default function SuaThanhToan({ route, navigation }) {
                                 <TouchableOpacity
                                     onPress={() => handerProperties(Array.name, Array.id)}
                                     style={{
-                                        borderRadius: 10
+                                        borderRadius: 10,
+                                        backgroundColor: theme.background
                                     }}
                                 >
                                     <Text style={
                                         [
                                             index + 1 === cliedId ? styles.buttonAction : styles.butonUn,
+                                            {
+                                                color: theme.color
+                                            }
+
                                             // styles.butonUn
                                         ]}>
                                         {Array.name}
@@ -507,10 +528,14 @@ export default function SuaThanhToan({ route, navigation }) {
                                                     width: 80
 
                                                 }}>
-                                                    <Text>
+                                                    <Text style={{
+                                                        color: theme.color
+                                                    }}>
                                                         {Api.name}
                                                     </Text>
-                                                    <Text>
+                                                    <Text style={{
+                                                        color: theme.color
+                                                    }}>
                                                         {Api.price} $
                                                     </Text>
                                                 </View>
@@ -565,7 +590,8 @@ export default function SuaThanhToan({ route, navigation }) {
                                     <Text style={{
                                         padding: 10,
                                         marginTop: 17,
-                                        fontSize: 13
+                                        fontSize: 13,
+                                        color: theme.color
                                     }} >
                                         (Chưa Thanh Toán)
                                     </Text>
@@ -604,10 +630,14 @@ export default function SuaThanhToan({ route, navigation }) {
                                                         width: 80
 
                                                     }}>
-                                                        <Text>
+                                                        <Text style={{
+                                                            color: theme.color
+                                                        }}>
                                                             {Api.name}
                                                         </Text>
-                                                        <Text>
+                                                        <Text style={{
+                                                            color: theme.color
+                                                        }}>
                                                             {Api.price} $
                                                         </Text>
                                                     </View>
@@ -618,22 +648,26 @@ export default function SuaThanhToan({ route, navigation }) {
                                                     }}>
                                                         <TouchableOpacity style={{
                                                             width: 35, height: 35,
-                                                            borderColor: 'black',
+                                                            borderColor: theme.color,
                                                             borderWidth: 1,
                                                             alignItems: 'center',
-                                                            justifyContent: 'center'
+                                                            justifyContent: 'center',
+
                                                         }}
                                                             onPress={() => handerTru(Api.id, Api.number_of)}
                                                         >
-                                                            <Text>-</Text>
+                                                            <Text style={{
+                                                                color: theme.color
+                                                            }}>-</Text>
                                                         </TouchableOpacity>
                                                         <TextInput style={{
                                                             width: 50,
                                                             height: 35,
-                                                            borderColor: 'black',
+                                                            borderColor: theme.color,
                                                             borderWidth: 1,
                                                             alignItems: 'center',
-                                                            textAlign: 'center'
+                                                            textAlign: 'center',
+                                                            color: theme.color
                                                         }}
 
                                                         >
@@ -642,14 +676,16 @@ export default function SuaThanhToan({ route, navigation }) {
                                                         </TextInput>
                                                         <TouchableOpacity style={{
                                                             width: 35, height: 35,
-                                                            borderColor: 'black',
+                                                            borderColor: theme.color,
                                                             borderWidth: 1,
                                                             alignItems: 'center',
                                                             justifyContent: 'center'
                                                         }}
                                                             onPress={() => handerSoLuong(Api.id, Api.number_of)}
                                                         >
-                                                            <Text>+</Text>
+                                                            <Text style={{
+                                                                color: theme.color
+                                                            }}>+</Text>
                                                         </TouchableOpacity>
                                                     </View>
 
@@ -684,31 +720,35 @@ export default function SuaThanhToan({ route, navigation }) {
                 </View >
 
                 {/* Tổng Tiền  */}
-                <View View style={{
-                    marginBottom: 100
+                <View style={{
+                    marginBottom: 100,
                 }
                 }>
 
                     <View style={{
-                        borderColor: 'black',
+                        borderColor: theme.color,
                         borderWidth: 1,
                         marginLeft: 10,
                         marginRight: 10,
                         marginTop: 30,
                         padding: 10,
-                        borderRadius: 6
+                        borderRadius: 6,
+                        backgroundColor: theme.background
+
                     }}>
 
                         <TouchableOpacity >
                             <View style={{
                                 flexDirection: 'row',
                                 lineHeight: 23,
+
                             }}>
                                 <View>
                                     <Text style={{
                                         width: 210,
                                         lineHeight: 23,
-                                        fontSize: 20
+                                        fontSize: 20,
+                                        color: theme.color
                                     }}>
                                         Người Phụ Trách:
                                     </Text>
@@ -734,7 +774,8 @@ export default function SuaThanhToan({ route, navigation }) {
                                     <Text style={{
                                         width: 210,
                                         lineHeight: 23,
-                                        fontSize: 20
+                                        fontSize: 20,
+                                        color: theme.color
                                     }}>
                                         Tên Khách Hàng:
                                     </Text>
@@ -744,7 +785,8 @@ export default function SuaThanhToan({ route, navigation }) {
                                         <View key={thanhtoan.id}>
                                             <Text style={{
                                                 lineHeight: 23,
-                                                fontSize: 20
+                                                fontSize: 20,
+                                                color: theme.color
                                             }}>
                                                 {thanhtoan.KhachHang}
                                             </Text>
@@ -761,14 +803,16 @@ export default function SuaThanhToan({ route, navigation }) {
                                 <Text style={{
                                     width: 210,
                                     lineHeight: 23,
-                                    fontSize: 20
+                                    fontSize: 20,
+                                    color: theme.color
                                 }}>
                                     Tổng Tiền:
                                 </Text>
                                 <Text style={{
 
                                     lineHeight: 23,
-                                    fontSize: 20
+                                    fontSize: 20,
+                                    color: theme.color
                                 }}>
                                     {tongtien}
                                 </Text>
@@ -779,13 +823,15 @@ export default function SuaThanhToan({ route, navigation }) {
                                 <Text style={{
                                     width: 210,
                                     lineHeight: 23,
-                                    fontSize: 20
+                                    fontSize: 20,
+                                    color: theme.color
                                 }}>
                                     VAT:
                                 </Text>
                                 <Text style={{
                                     lineHeight: 23,
-                                    fontSize: 20
+                                    fontSize: 20,
+                                    color: theme.color
                                 }}>
                                     {(tongtien * 10) / 100}
 
@@ -798,19 +844,21 @@ export default function SuaThanhToan({ route, navigation }) {
                                 <Text style={{
                                     width: 210,
                                     lineHeight: 23,
-                                    fontSize: 20
+                                    fontSize: 20,
+                                    color: theme.color
                                 }}>
                                     Giảm Giá:
                                 </Text>
                                 <Text style={{
                                     lineHeight: 23,
-                                    fontSize: 20
+                                    fontSize: 20,
+                                    color: theme.color
                                 }}>
                                     10
                                 </Text>
                             </View>
                             <View style={{
-                                borderColor: 'black',
+                                borderColor: theme.color,
                                 borderWidth: 0.4,
                                 marginVertical: 10
                             }}>
@@ -823,6 +871,7 @@ export default function SuaThanhToan({ route, navigation }) {
                                     lineHeight: 23,
                                     fontSize: 20,
                                     width: 210,
+                                    color: theme.color
 
                                 }}>
                                     Tổng cần thanh toán:
@@ -831,7 +880,8 @@ export default function SuaThanhToan({ route, navigation }) {
                                     color: 'red',
                                     lineHeight: 23,
                                     fontSize: 20,
-                                    fontWeight: "bold"
+                                    fontWeight: "bold",
+                                    color: theme.color
                                 }}>
                                     {tongtien == 0 ? 0 : tongtien + ((tongtien * 10) / 100) - 10}
                                 </Text>
@@ -859,12 +909,10 @@ const styles = StyleSheet.create({
         height: 50,
         borderColor: 'black',
         borderWidth: 0.4,
-        marginTop: 10,
         padding: 10,
         alignItems: 'center',
         justifyContent: 'center',
         textAlign: 'center',
-        backgroundColor: '#DDDDDD',
         // borderRadius: 10,
         shadowOffset: {
             width: 0,
@@ -879,11 +927,11 @@ const styles = StyleSheet.create({
     },
     buttonAction: {
         backgroundColor: '#CC3333',
+        // backgroundColor: theme.background,
         width: 120,
         height: 50,
         borderColor: 'black',
         borderWidth: 0.3,
-        marginTop: 20,
         padding: 10,
         alignItems: 'center',
         justifyContent: 'center',
@@ -899,7 +947,7 @@ const styles = StyleSheet.create({
         shadowRadius: 3.27,
         elevation: 10,
         borderRadius: 100,
-        marginLeft: 10
+        marginLeft: 10,
 
     }
 });
