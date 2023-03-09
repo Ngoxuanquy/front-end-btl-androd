@@ -1,11 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Feather } from '@expo/vector-icons';
+import ThemeConText from '../../../config/themeConText';
 
 export default function PhieuMuon({ navigation }) {
+
+    const theme = useContext(ThemeConText)
 
     const [apis, setApi] = useState([])
     const [taikhoan, setTaiKhoan] = useState()
@@ -19,22 +22,25 @@ export default function PhieuMuon({ navigation }) {
 
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/lichsumuonhang/khachhang/' + taikhoan + '/Đã Xác Nhận')
+        fetch('http://192.168.1.165:4000' + '/api/lichsumuonhang/khachhang/' + taikhoan + '/Đã Xác Nhận')
             .then(res => res.json())
             .then(res => setApi(res))
     }, [taikhoan])
 
 
     return (
-        <ScrollView >
+        <ScrollView style={{
+            backgroundColor: theme.maunen
+        }}>
             {apis.map(sanpham => (
                 <View key={sanpham.id} >
                     {/* thông báo */}
                     <View style={{
-                        backgroundColor: '#fff',
+                        backgroundColor: theme.background,
                         width: '100%',
                         padding: 15,
-                        marginTop: 5
+                        marginTop: 5,
+                        borderRadius: 10
 
                     }}>
                         <View style={{
@@ -65,7 +71,7 @@ export default function PhieuMuon({ navigation }) {
                                 <Text style={{
                                     fontSize: 15,
                                     fontWeight: 'bold',
-
+                                    color: theme.color
                                 }}>
                                     Phòng Điều Hành:
                                     <Text style={{
@@ -82,7 +88,10 @@ export default function PhieuMuon({ navigation }) {
                                     <TouchableOpacity
                                         onPress={() => navigation.navigate('Chi Tiết Thông Báo', { id: sanpham.id })}
                                     >
-                                        <Text >
+                                        <Text style={{
+                                            color: theme.color
+
+                                        }}>
                                             Xem Chi Tiết
                                         </Text>
                                     </TouchableOpacity>
@@ -90,7 +99,9 @@ export default function PhieuMuon({ navigation }) {
                                 <Text style={{
                                     fontSize: 13,
                                     marginTop: 5,
-                                    opacity: 0.5
+                                    opacity: 0.5,
+                                    color: theme.color
+
                                 }}>
                                     {sanpham.date}
                                 </Text>

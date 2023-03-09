@@ -4,13 +4,15 @@ import { Zocial } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import UpAnh from '../../Components/UpAnh';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import * as ImagePicker from 'expo-image-picker'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import ThemeConText from '../../../config/themeConText';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function ThongTinTaiKhoan() {
 
+    const theme = useContext(ThemeConText)
     const [isload, setIsLoad] = useState(false)
     const [image, setImage] = useState(null)
     const [isUpAnh, setUpAnh] = useState(false)
@@ -47,7 +49,7 @@ export default function ThongTinTaiKhoan() {
         )
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/users/' + taikhoan)
+        fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
             .then(res => res.json())
             .then(res => setThongTin(res))
     }, [taikhoan])
@@ -58,7 +60,7 @@ export default function ThongTinTaiKhoan() {
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         setTimeout(() => {
-            fetch('http://192.168.0.112:4000' + '/api/users/' + taikhoan)
+            fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
                 .then(res => res.json())
                 .then(res => setThongTin(res))
             setRefreshing(false);
@@ -68,181 +70,248 @@ export default function ThongTinTaiKhoan() {
 
     return (
         <View
-
+            style={[
+                {
+                    flex: 1
+                }
+                , {
+                    backgroundColor: theme.maunen
+                }]}
         >
-            <View>
+            <View style={{}}>
                 <View>
-                    <View style={{
-                        backgroundColor: '#0097d9',
-                        height: 90,
-                        justifyContent: 'center',
-                        borderBottomRightRadius: 50,
-                        borderBottomLeftRadius: 50,
-                    }}>
-                        <View style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-around'
+                    <View >
+                        <LinearGradient
+                            // Background Linear Gradient
+                            start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 1 }}
+                            colors={['#fff', '#8ed4d1', '#3ddbb5', '#17e3b2']}
+                            style={{
+                                width: "100%",
+                                height: 120,
+                                flex: -1,
+                                borderBottomLeftRadius: 20,
+                                borderBottomRightRadius: 20
+                            }}
+                        >
+                            <View style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-around',
+                                marginTop: 50
 
-                        }}>
-                            <Ionicons name="ios-return-up-back" size={27} color="white" style={{
-                                marginTop: 5
-                            }} />
-                            <Text style={{
-                                fontSize: 28,
-                                color: 'white',
-                                textAlign: 'center',
-                                marginTop: 5
                             }}>
-                                Tài Khoản
-                            </Text>
-                            <Ionicons name="notifications-outline" size={27} color="white" style={{
-                                marginTop: 7
-                            }} />
-                        </View>
+                                <Ionicons name="ios-return-up-back" size={27} color="white" style={{
+                                    color: theme.color,
+                                    marginTop: 5,
+                                }} />
+                                <Text style={{
+                                    fontSize: 28,
+                                    // color: 'white',
+                                    textAlign: 'center',
+                                    marginTop: 5,
+                                    color: theme.color
+                                }}>
+                                    Tài Khoản
+                                </Text>
+                                <Ionicons name="notifications-outline" size={27} color="white" style={{
+                                    marginTop: 7,
+                                    color: theme.color
+
+                                }} />
+                            </View>
+                        </LinearGradient>
                     </View>
                 </View>
                 <ScrollView
+
                     refreshControl={
                         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} style={{
                             tintColor: 'black',
-                            backgroundColor: '#eeeeee',
+                            backgroundColor: theme.maunen,
                             size: 10,
                             marginBottom: 0,
                         }} />
                     }
                 >
-                    {thongtin.map(thong => (
-                        <View
-                            key={thong.id}
-                            style={{
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                marginTop: 30
-                            }}>
+                    <View style={{
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        marginTop: 20,
+                        borderRadius: 20
+                    }}>
+                        <View style={[
+                            {
+                                width: '90%',
+                                borderRadius: 20
 
-                            <TouchableOpacity
-                                key={thong.id}
-                                onPress={() => handerUpAnh()}
-                            >
-                                {thong.img == "" ?
-                                    <Image
-                                        style={{
-                                            width: 200,
-                                            height: 200,
-                                            borderRadius: 10,
-                                        }}
-                                        source={{
-                                            uri: "https://haycafe.vn/wp-content/uploads/2022/02/Avatar-trang.jpg"
-                                        }}
-                                    /> :
-                                    <Image
-                                        style={{
-                                            width: 200,
-                                            height: 200,
-                                            borderRadius: 10,
-                                        }}
-                                        source={{
-                                            uri: thong.img
-                                        }}
-                                    />
-                                }
-
-                            </TouchableOpacity>
-
-                            <View>
-                                <Text style={{
-                                    fontSize: 22,
-                                    fontWeight: 'bold',
-                                    textAlign: 'center',
-                                    marginTop: 10
-                                }}>
-                                    {thong.email}
-                                </Text>
-                                <Text style={{
-                                    fontSize: 18,
-                                    textAlign: 'center',
-                                    opacity: 0.6,
-                                    lineHeight: 70
-                                }}>
-                                    Số Điện Thoại: 0589401978
-                                </Text>
-                                <Text style={{
-                                    fontSize: 18,
-                                    textAlign: 'center',
-                                    opacity: 0.6,
-                                }} >
-                                    Địa Chỉ: Cửa Lò, Nghệ An
-                                </Text>
-                            </View>
-
-                            {isload &&
-                                <View style={{
-                                    backgroundColor: 'white',
-                                    position: 'absolute',
-                                    width: '100%',
-                                    bottom: 0,
-                                    zIndex: 1
-                                }}>
-                                    <View style={{
-                                        alignItems: 'center', justifyContent: 'center',
-                                        backgroundColor: 'white',
-                                        paddingVertical: 2,
-                                        marginTop: 3
-                                    }}>
-                                        <Button title="Thay Ảnh" onPress={pickImage} style={{
-                                        }} />
-                                    </View>
-                                    <View style={{
-                                        alignItems: 'center', justifyContent: 'center',
-                                        backgroundColor: 'white',
-                                        paddingVertical: 2,
-                                        marginTop: 3,
-                                        borderTopWidth: 0.5
-                                    }}>
-                                        {image && <Image source={{ uri: image }} style={{ width: 100, height: 100 }} />}
-                                        <Button title="Xác Nhận" onPress={() => handerXacNhan()} style={{
-
-                                        }} />
-                                    </View>
-                                    <View style={{
+                            }
+                            , {
+                                backgroundColor: theme.background
+                            }]}>
+                            {thongtin.map(thong => (
+                                <View
+                                    key={thong.id}
+                                    style={{
                                         justifyContent: 'center',
                                         alignItems: 'center',
-                                        borderTopColor: 'gray',
-                                        borderTopWidth: 0.5
+                                        marginTop: 30
                                     }}>
-                                        <TouchableOpacity>
-                                            <Text style={{
-                                                fontSize: 20,
-                                                marginBottom: 7,
-                                                paddingVertical: 5
-                                            }}
-                                                onPress={() => handerCance()}
-                                            >
-                                                Cance
-                                            </Text>
-                                        </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        key={thong.id}
+                                        onPress={() => handerUpAnh()}
+                                    >
+                                        {thong.img == "" ?
+                                            <Image
+                                                style={{
+                                                    width: 200,
+                                                    height: 200,
+                                                    borderRadius: 10,
+                                                }}
+                                                source={{
+                                                    uri: "https://haycafe.vn/wp-content/uploads/2022/02/Avatar-trang.jpg"
+                                                }}
+                                            /> :
+                                            <Image
+                                                style={{
+                                                    width: 200,
+                                                    height: 200,
+                                                    borderRadius: 10,
+                                                }}
+                                                source={{
+                                                    uri: thong.img
+                                                }}
+                                            />
+                                        }
+
+                                    </TouchableOpacity>
+
+                                    <View style={{
+
+                                    }}>
+                                        <Text
+                                            style={[
+                                                {
+                                                    fontSize: 22,
+                                                    fontWeight: 'bold',
+                                                    textAlign: 'center',
+                                                    marginTop: 10
+                                                }
+                                                , {
+                                                    color: theme.color
+                                                }]}
+                                        >
+                                            {thong.email}
+                                        </Text>
+                                        <Text
+                                            style={[
+                                                {
+                                                    fontSize: 18,
+                                                    textAlign: 'center',
+                                                    opacity: 0.6,
+                                                    lineHeight: 70
+                                                }
+                                                , {
+                                                    color: theme.color
+                                                }]}
+                                        >
+                                            Số Điện Thoại: 0589401978
+                                        </Text>
+                                        <Text style={[
+                                            {
+                                                fontSize: 18,
+                                                textAlign: 'center',
+                                                opacity: 0.6,
+                                                lineHeight: 70
+                                            }
+                                            , {
+                                                color: theme.color
+                                            }]}>
+                                            Địa Chỉ: Cửa Lò, Nghệ An
+                                        </Text>
                                     </View>
+                                    {isload &&
+                                        <View style={{
+                                            backgroundColor: 'white',
+                                            position: 'absolute',
+                                            width: '100%',
+                                            bottom: 0,
+                                            zIndex: 1
+                                        }}>
+                                            <View style={{
+                                                alignItems: 'center', justifyContent: 'center',
+                                                backgroundColor: 'white',
+                                                paddingVertical: 2,
+                                                marginTop: 3
+                                            }}>
+                                                <Button title="Thay Ảnh" onPress={pickImage} style={{
+                                                }} />
+                                            </View>
+                                            <View style={{
+                                                alignItems: 'center', justifyContent: 'center',
+                                                backgroundColor: 'white',
+                                                paddingVertical: 2,
+                                                marginTop: 3,
+                                                borderTopWidth: 0.5
+                                            }}>
+                                                {image && <Image source={{ uri: image }} />}
+                                                <Button title="Xác Nhận" onPress={() => handerXacNhan()} style={{
+
+                                                }} />
+                                            </View>
+                                            <View style={{
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                borderTopColor: 'gray',
+                                                borderTopWidth: 0.5
+                                            }}>
+                                                <TouchableOpacity>
+                                                    <Text style={{
+                                                        fontSize: 20,
+                                                        marginBottom: 7,
+                                                        paddingVertical: 5
+                                                    }}
+                                                        onPress={() => handerCance()}
+                                                    >
+                                                        Cance
+                                                    </Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                        </View>
+                                    }
+
+                                    <TouchableOpacity style={{
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        marginBottom: 30
+                                    }}
+                                        onPress={() => { setIsLoad(true) }}
+                                    >
+
+                                        <AntDesign name="mail" size={124} style={[
+                                            {
+
+                                            }
+                                            , {
+                                                color: theme.color
+                                            }]} />
+                                        <Text
+                                            style={[
+                                                {
+                                                    fontSize: 18,
+                                                    textAlign: 'center'
+                                                }
+                                                , {
+                                                    color: theme.color
+                                                }]}
+                                        >
+                                            (Tệp Đính Kèm)
+                                        </Text>
+                                    </TouchableOpacity>
+
                                 </View>
-                            }
-
-                            <TouchableOpacity style={{
-                                justifyContent: 'center',
-                                alignItems: 'center'
-                            }}
-                                onPress={() => { setIsLoad(true) }}
-                            >
-
-                                <AntDesign name="mail" size={124} color="black" />
-                                <Text style={{
-                                    fontSize: 18,
-                                    textAlign: 'center'
-                                }}>
-                                    (Tệp Đính Kèm)
-                                </Text>
-                            </TouchableOpacity>
-
+                            ))}
                         </View>
-                    ))}
+                    </View>
 
                 </ScrollView>
             </View>

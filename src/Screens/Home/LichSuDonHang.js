@@ -1,11 +1,14 @@
 import { View, Text, TextInput, ScrollView, RefreshControl, TouchableOpacity, ActivityIndicator } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import ThemeConText from '../../../config/themeConText';
 
 export default function LichSuDonHang({ navigation }) {
+
+    const theme = useContext(ThemeConText)
+
     const [lichSuCTT, setLichSuCTT] = useState([]);
     const [lichSuDTT, setLichSuDTT] = useState([]);
     const [lichSuDCK, setLichSuDCK] = useState([]);
@@ -26,7 +29,7 @@ export default function LichSuDonHang({ navigation }) {
 
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/Đã Thanh Toán')
+        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/Đã Thanh Toán')
             .then(res => res.json())
             .then(res => setLichSuDTT(res))
             .catch(err => console.log(err))
@@ -39,14 +42,14 @@ export default function LichSuDonHang({ navigation }) {
 
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/Chưa Thanh Toán!!!')
+        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/Chưa Thanh Toán!!!')
             .then(res => res.json())
             .then(res => setLichSuCTT(res))
             .catch(err => console.log(err))
     }, [taikhoan])
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/Nợ')
+        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/Nợ')
             .then(res => res.json())
             .then(res => setNo(res))
             .catch(err => console.log(err))
@@ -58,18 +61,18 @@ export default function LichSuDonHang({ navigation }) {
         setRefreshing(true);
         setTimeout(() => {
 
-            fetch('http://192.168.0.112:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/Chưa Thanh Toán!!!')
+            fetch('http://192.168.1.165:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/Chưa Thanh Toán!!!')
                 .then(res => res.json())
                 .then(res => setLichSuCTT(res))
                 .catch(err => console.log(err))
 
 
-            fetch('http://192.168.0.112:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/Đã Thanh Toán')
+            fetch('http://192.168.1.165:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/Đã Thanh Toán')
                 .then(res => res.json())
                 .then(res => setLichSuDTT(res))
                 .catch(err => console.log(err))
 
-            fetch('http://192.168.0.112:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/Nợ')
+            fetch('http://192.168.1.165:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/Nợ')
                 .then(res => res.json())
                 .then(res => setNo(res))
                 .catch(err => console.log(err))
@@ -91,7 +94,7 @@ export default function LichSuDonHang({ navigation }) {
 
     function handerSearch() {
         setIsLoading(true)
-        fetch('http://192.168.0.112:4000' + '/api/thanhtoan/code_bill/' + Value)
+        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/code_bill/' + Value)
             .then(res => res.json())
             .then(res => setLichSuDTT(res))
             .catch(err => console.log(err))
@@ -104,10 +107,13 @@ export default function LichSuDonHang({ navigation }) {
 
     return (
         <ScrollView
+            style={{
+                backgroundColor: theme.maunen
+            }}
             refreshControl={
                 <RefreshControl refreshing={refreshing} onRefresh={onRefresh} style={{
                     tintColor: 'black',
-                    backgroundColor: '#eeeeee',
+                    backgroundColor: theme.maunen,
                     size: 10,
                     marginBottom: 0,
                 }} />
@@ -124,7 +130,9 @@ export default function LichSuDonHang({ navigation }) {
                                 <AntDesign name="search1" size={29} color="black" style={{
                                     position: 'absolute',
                                     top: 10,
-                                    left: 10
+                                    left: 10,
+                                    color: theme.color,
+
                                 }} />
                                 <TextInput
                                     style={{
@@ -134,10 +142,12 @@ export default function LichSuDonHang({ navigation }) {
                                         paddingLeft: 50,
                                         paddingRight: 20,
                                         fontSize: 20,
-                                        color: 'black',
+                                        color: theme.color,
                                         width: 300
                                     }}
                                     placeholder="Nhập Mã Đơn..."
+                                    placeholderTextColor={theme.color}
+
                                     onChangeText={(e) => setValue(e)}
                                 />
                             </View>
@@ -155,7 +165,7 @@ export default function LichSuDonHang({ navigation }) {
                                 <Text style={{
                                     textAlign: 'center',
                                     fontSize: 20,
-                                    color: 'white'
+                                    color: theme.color,
                                 }}>
                                     Tìm
                                 </Text>
@@ -165,7 +175,9 @@ export default function LichSuDonHang({ navigation }) {
                         <View>
                             <Text style={{
                                 padding: 10,
-                                fontSize: 20
+                                fontSize: 20,
+                                color: theme.color,
+
                             }}>
                                 Hôm Nay, 14/01/2022
                             </Text>
@@ -190,7 +202,7 @@ export default function LichSuDonHang({ navigation }) {
                                 <View
                                     key={lichSu.id}
                                     style={{
-                                        backgroundColor: '#eeeeee',
+                                        backgroundColor: theme.background,
                                         borderColor: 'gray',
                                         borderWidth: 0.4,
                                         marginLeft: 10,
@@ -217,9 +229,14 @@ export default function LichSuDonHang({ navigation }) {
                                         <View style={{
                                             flexDirection: 'row',
                                         }}>
-                                            <FontAwesome name="money" size={24} color="black" />
+                                            <FontAwesome name="money" size={24} style={{
+                                                color: theme.color,
+
+                                            }} />
                                             <Text style={{
-                                                fontSize: 18
+                                                fontSize: 18,
+                                                color: theme.color,
+
                                             }}>
                                                 {lichSu.TongTienSauGiam}
                                                 1
@@ -228,7 +245,9 @@ export default function LichSuDonHang({ navigation }) {
                                         <View>
                                             <Text style={{
                                                 fontSize: 16,
-                                                marginTop: 5
+                                                marginTop: 5,
+                                                color: theme.color,
+
                                             }}>
                                                 9h:30
                                             </Text>
@@ -239,22 +258,30 @@ export default function LichSuDonHang({ navigation }) {
                                         paddingHorizontal: 10
                                     }}>
                                         <Text style={{
-                                            fontSize: 18
+                                            fontSize: 18,
+                                            color: theme.color,
+
                                         }}>
                                             Lõi Lọc Kang, Vòi nước, Bảo dưỡng
                                         </Text>
                                         <Text style={{
-                                            fontSize: 18
+                                            fontSize: 18,
+                                            color: theme.color,
+
                                         }}>
                                             {lichSu.KhachHang}
                                         </Text>
                                         <Text style={{
-                                            fontSize: 18
+                                            fontSize: 18,
+                                            color: theme.color,
+
                                         }}>
                                             Mã Đơn Hàng: QQQQ
                                         </Text>
                                         <Text style={{
-                                            fontSize: 18
+                                            fontSize: 18,
+                                            color: theme.color,
+
 
                                         }}>
                                             Ngày Giờ: 10:15 - 14/01/2022
@@ -268,15 +295,17 @@ export default function LichSuDonHang({ navigation }) {
                                         }}>
                                             <Text style={{
                                                 fontSize: 16,
-                                                fontWeight: 'bold'
-
+                                                fontWeight: 'bold',
+                                                color: theme.color,
                                             }}>
                                                 (Chưa Thanh Toán)
                                             </Text>
                                             <TouchableOpacity>
                                                 <Text style={{
                                                     fontSize: 16,
-                                                    textDecorationLine: 'underline'
+                                                    textDecorationLine: 'underline',
+                                                    color: theme.color,
+
                                                 }}
                                                     onPress={() => handerChiTiec(lichSu.id, lichSu.code_bill)}
                                                 >
@@ -305,7 +334,7 @@ export default function LichSuDonHang({ navigation }) {
                                 <View
                                     key={lichSu.id}
                                     style={{
-                                        backgroundColor: '#eeeeee',
+                                        backgroundColor: theme.background,
                                         borderColor: 'black',
                                         borderWidth: 0.4,
                                         marginLeft: 10,

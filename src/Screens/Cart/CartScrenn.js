@@ -6,16 +6,20 @@ import { StyleSheet, Text, TouchableOpacity, View, ScrollView, Image, Dimensions
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import React, {
-    useEffect, useState
+    useEffect, useState,
+    useContext
 } from 'react';
 import { AntDesign } from '@expo/vector-icons';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Ionicon } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import ThemeConText from '../../../config/themeConText';
 
 export default function Cart({ navigation }) {
 
+    const theme = useContext(ThemeConText)
     const [isload, setIsLoad] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
     const [customer, setCustomer] = useState([])
@@ -36,7 +40,7 @@ export default function Cart({ navigation }) {
 
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/customer/')
+        fetch('http://192.168.1.165:4000' + '/api/customer/')
             .then(res => res.json())
             .then(res => setCustomer(res))
             .catch(err => console.log(err))
@@ -50,7 +54,7 @@ export default function Cart({ navigation }) {
 
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/customer_re/' + taikhoan)
+        fetch('http://192.168.1.165:4000' + '/api/customer_re/' + taikhoan)
             .then(res => res.json())
             .then(res => setOrders(res))
             .catch(err => console.log(err))
@@ -83,7 +87,7 @@ export default function Cart({ navigation }) {
                     onPress: () => {
                         customer.map(custome => {
                             if (custome.id == id) {
-                                fetch('http://192.168.0.112:4000' + '/api/customer_re/create/', {
+                                fetch('http://192.168.1.165:4000' + '/api/customer_re/create/', {
                                     method: 'POST',
                                     headers: { 'Content-Type': 'application/json' },
                                     body: JSON.stringify({
@@ -96,14 +100,14 @@ export default function Cart({ navigation }) {
                                     })
                                 })
                                     .then(() => {
-                                        fetch('http://192.168.0.112:4000' + '/api/customer/delete/' + id,
+                                        fetch('http://192.168.1.165:4000' + '/api/customer/delete/' + id,
                                             {
                                                 method: 'POST',
                                                 headers: { 'Content-Type': 'application/json' },
                                             }
                                         )
                                             .then(() => {
-                                                fetch('http://192.168.0.112:4000' + '/api/customer/')
+                                                fetch('http://192.168.1.165:4000' + '/api/customer/')
                                                     .then(res => res.json())
                                                     .then(res => setCustomer(res))
                                                     .finally(() => {
@@ -111,7 +115,7 @@ export default function Cart({ navigation }) {
 
                                                     })
                                             })
-                                        fetch('http://192.168.0.112:4000' + '/api/thanhtoan/create/', {
+                                        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/create/', {
                                             method: 'POST',
                                             headers: { 'Content-Type': 'application/json' },
                                             body: JSON.stringify({
@@ -122,7 +126,7 @@ export default function Cart({ navigation }) {
                                         })
 
                                             .then(() => {
-                                                fetch('http://192.168.0.112:4000' + '/api/customer_re/' + taikhoan)
+                                                fetch('http://192.168.1.165:4000' + '/api/customer_re/' + taikhoan)
                                                     .then(res => res.json())
                                                     .then(res => setOrders(res))
                                                     .catch(err => console.log(err))
@@ -133,7 +137,7 @@ export default function Cart({ navigation }) {
                                             })
                                     })
                                     .then(() => {
-                                        fetch('http://192.168.0.112:4000' + '/api/customer_history/create/', {
+                                        fetch('http://192.168.1.165:4000' + '/api/customer_history/create/', {
                                             method: 'POST',
                                             headers: { 'Content-Type': 'application/json' },
                                             body: JSON.stringify({
@@ -160,7 +164,7 @@ export default function Cart({ navigation }) {
 
     function handerLamMoi() {
         setIsLoading(true)
-        fetch('http://192.168.0.112:4000' + '/api/customer/')
+        fetch('http://192.168.1.165:4000' + '/api/customer/')
             .then(res => res.json())
             .then(res => {
                 setCustomer(res)
@@ -173,7 +177,7 @@ export default function Cart({ navigation }) {
                 setIsLoading(false)
             })
 
-        fetch('http://192.168.0.112:4000' + '/api/customer_re/' + taikhoan)
+        fetch('http://192.168.1.165:4000' + '/api/customer_re/' + taikhoan)
             .then(res => res.json())
             .then(res => setOrders(res))
             .catch(err => console.log(err))
@@ -182,7 +186,7 @@ export default function Cart({ navigation }) {
 
     // useEffect(() => {
     //     const a = setTimeout(() => {
-    //         fetch('http://192.168.0.112:4000' + '/api/customer/')
+    //         fetch('http://192.168.1.165:4000' + '/api/customer/')
     //             .then(res => res.json())
     //             .then(res => setCustomer(res))
     //             .catch(err => console.log(err))
@@ -196,7 +200,7 @@ export default function Cart({ navigation }) {
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         const timeout = setTimeout(() => {
-            fetch('http://192.168.0.112:4000' + '/api/customer/')
+            fetch('http://192.168.1.165:4000' + '/api/customer/')
                 .then(res => res.json())
                 .then(res => {
                     setCustomer(res)
@@ -209,7 +213,7 @@ export default function Cart({ navigation }) {
                     setIsLoading(false)
                 })
 
-            fetch('http://192.168.0.112:4000' + '/api/customer_re/' + taikhoan)
+            fetch('http://192.168.1.165:4000' + '/api/customer_re/' + taikhoan)
                 .then(res => res.json())
                 .then(res => setOrders(res))
                 .catch(err => console.log(err))
@@ -222,9 +226,15 @@ export default function Cart({ navigation }) {
 
 
     return (
-        <View style={{
-            flex: 1
-        }} >
+        <View
+            style={[
+                {
+                    flex: 1,
+                }
+                , {
+                    backgroundColor: theme.maunen
+                }]}
+        >
             <ScrollView
                 contentContainerStyle={{
                     color: 'black'
@@ -232,109 +242,78 @@ export default function Cart({ navigation }) {
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} style={{
                         tintColor: 'black',
-                        backgroundColor: '#FF6666',
+                        backgroundColor: '#E6E6FA',
                         size: 10,
                         marginBottom: 0,
                     }} />
                 }>
                 <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-around',
-                    // marginTop: 50,
-                    marginBottom: 20,
-                    height: 160,
-                    backgroundColor: '#FF6666',
-                    // textAlign: 'center',
-                    borderBottomLeftRadius: 70,
-                    borderBottomRightRadius: 70,
-                    position: 'relative',
-
+                    marginBottom: 30
                 }}>
+                    <LinearGradient
+                        // Background Linear Gradient
+                        colors={['#E6E6FA', '#D8BFD8', '#DDA0DD', '#DA70D6']}
+                        style={{
+                            width: "100%",
+                            height: 170,
+                            borderBottomRightRadius: 40,
+                            borderBottomLeftRadius: 40,
+                            position: 'relative'
+                        }}
+                    />
+
                     <View style={{
-                        textAlign: 'center',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        position: 'relative',
-                        // height: 300
+                        position: 'absolute',
+                        left: '22%',
+                        top: '45%'
                     }}>
-                        <View style={{
-                            // position: 'relative'
-
+                        <Text style={{
+                            fontSize: 25,
+                            color: 'white'
                         }}>
-                            <View style={{
-                                flexDirection: 'row',
-                                justifyContent: 'space-between',
-                                marginLeft: -30
-                            }}>
-                                <View style={{
-                                }}>
-                                    <Ionicons name='menu' style={{
-                                        fontSize: 30,
-                                        color: 'white',
-                                        // marginTop: -100
+                            Đơn Chờ Thực Hiện
+                        </Text>
+                        <Image
+                            style={{
+                                width: 50, height: 50,
+                                position: 'absolute',
+                                marginTop: 30,
+                                marginLeft: Dimensions.get('window').width - 150
 
-                                    }} />
-                                </View>
-                                <View style={{
-
-                                }}>
-                                    <Ionicons name='notifications-outline' style={{
-                                        fontSize: 30,
-                                        color: 'white',
-                                        // marginTop: -100,
-                                        marginRight: -30
-
-
-                                    }} />
-                                </View>
-                            </View>
-                            <View style={{
-                                alignItems: 'center',
-                                marginTop: 20,
-
-                            }}>
-                                <Text style={{
-                                    fontSize: 25,
-                                    color: 'white'
-                                }}>
-                                    Danh Sách Đơn Hàng
-                                </Text>
-                            </View>
-                            <Image
-                                style={{
-                                    width: 50, height: 50,
-                                    position: 'absolute',
-                                    marginTop: 80,
-                                    marginLeft: Dimensions.get('window').width - 150
-
-                                }}
-                                source={{
-                                    uri: 'https://cdn.pixabay.com/photo/2015/12/11/06/37/santa-hat-1087709_960_720.png'
-                                }}
-                            />
-                        </View>
+                            }}
+                            source={{
+                                uri: 'https://cdn.pixabay.com/photo/2015/12/11/06/37/santa-hat-1087709_960_720.png'
+                            }}
+                        />
                     </View>
-                </View>
-                <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-around',
-                    alignItems: 'center',
-                    borderColor: 'black',
-                    borderWidth: 1,
-                    paddingVertical: 10,
-                    marginLeft: 10,
-                    marginRight: 10,
-                    borderRadius: 10,
-                    backgroundColor: '#CCCCCC',
-                    shadowOffset: {
-                        width: 0,
-                        height: 5,
-                    },
-                    shadowOpacity: 0.34,
-                    shadowRadius: 2.27,
 
-                    elevation: 10,
-                }}>
+                </View>
+                <View
+                    style={[
+                        {
+                            flexDirection: 'row',
+                            justifyContent: 'space-around',
+                            alignItems: 'center',
+                            borderColor: 'black',
+                            borderWidth: 0.4,
+                            paddingVertical: 10,
+                            marginLeft: 10,
+                            marginRight: 10,
+                            borderRadius: 10,
+                            backgroundColor: '#fff',
+                            shadowOffset: {
+                                width: 0,
+                                height: 5,
+                            },
+                            shadowOpacity: 0.34,
+                            shadowRadius: 2.27,
+
+                            elevation: 10,
+                        }
+                        , {
+                            backgroundColor: theme.background
+                        }]}
+                >
                     <View style={{
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -345,14 +324,23 @@ export default function Cart({ navigation }) {
                             borderColor: 'black',
 
                         }}>
-                            <Text style={{
-                                color: 'black'
-                            }} >
+                            <Text
+                                style={[
+                                    {
+                                    }
+                                    , {
+                                        color: theme.color
+                                    }]}
+                            >
                                 Tổng Đơn
                             </Text>
-                            <Text style={{
-                                textAlign: 'center'
-                            }}>
+                            <Text style={[
+                                {
+                                    textAlign: 'center'
+                                }
+                                , {
+                                    color: theme.color
+                                }]}>
                                 10
                             </Text>
                         </View>
@@ -360,12 +348,23 @@ export default function Cart({ navigation }) {
 
                     <View>
                         <View>
-                            <Text>
+                            <Text
+                                style={[
+                                    {
+                                    }
+                                    , {
+                                        color: theme.color
+                                    }]}
+                            >
                                 Đi Được
                             </Text>
-                            <Text style={{
-                                textAlign: 'center'
-                            }}>
+                            <Text style={[
+                                {
+                                    textAlign: 'center'
+                                }
+                                , {
+                                    color: theme.color
+                                }]}>
                                 10
                             </Text>
                         </View>
@@ -373,12 +372,23 @@ export default function Cart({ navigation }) {
 
                     <View>
                         <View>
-                            <Text>
+                            <Text
+                                style={[
+                                    {
+                                    }
+                                    , {
+                                        color: theme.color
+                                    }]}
+                            >
                                 Hủy
                             </Text>
-                            <Text style={{
-                                textAlign: 'center'
-                            }}>
+                            <Text style={[
+                                {
+                                    textAlign: 'center'
+                                }
+                                , {
+                                    color: theme.color
+                                }]}>
                                 10
                             </Text>
                         </View>
@@ -386,12 +396,23 @@ export default function Cart({ navigation }) {
 
                     <View>
                         <View>
-                            <Text>
+                            <Text
+                                style={[
+                                    {
+                                    }
+                                    , {
+                                        color: theme.color
+                                    }]}
+                            >
                                 Sai Máy
                             </Text>
-                            <Text style={{
-                                textAlign: 'center'
-                            }}>
+                            <Text style={[
+                                {
+                                    textAlign: 'center'
+                                }
+                                , {
+                                    color: theme.color
+                                }]}>
                                 10
                             </Text>
                         </View>
@@ -406,8 +427,9 @@ export default function Cart({ navigation }) {
                         top: 10
                     }}>
                         <TouchableOpacity style={{
-                            backgroundColor: '#dddddd',
+                            backgroundColor: '#99CCFF',
                             padding: 7,
+                            borderRadius: 8
                         }}
                             onPress={() => handerLamMoi()}
                         >
@@ -425,7 +447,8 @@ export default function Cart({ navigation }) {
                         fontSize: 22,
                         color: 'red',
                         padding: 10,
-                        fontWeight: '600'
+                        fontWeight: '600',
+                        opacity: 0.6
                     }}>
                         Đơn Chưa Xác Thực
                     </Text>
@@ -473,11 +496,17 @@ export default function Cart({ navigation }) {
                                         flexDirection: 'row'
                                     }}>
                                         <AntDesign name="key" size={24} color="black" />
-                                        <Text style={{
-                                            lineHeight: 30,
-                                            fontSize: 18,
-                                            marginLeft: 10
-                                        }}>
+                                        <Text
+                                            style={[
+                                                {
+                                                    lineHeight: 30,
+                                                    fontSize: 18,
+                                                    marginLeft: 10
+                                                }
+                                                , {
+                                                    color: theme.color
+                                                }]}
+                                        >
                                             Mã Đơn: abc
                                         </Text>
                                     </View>
@@ -485,12 +514,17 @@ export default function Cart({ navigation }) {
                                         flexDirection: 'row'
                                     }}>
                                         <Ionicons name="people" size={24} color="black" />
-                                        <Text style={{
-                                            lineHeight: 30,
-                                            fontSize: 18,
-                                            marginLeft: 10
-
-                                        }}>
+                                        <Text
+                                            style={[
+                                                {
+                                                    lineHeight: 30,
+                                                    fontSize: 18,
+                                                    marginLeft: 10
+                                                }
+                                                , {
+                                                    color: theme.color
+                                                }]}
+                                        >
                                             Tên Khóa: {custome.customer_name}
                                         </Text>
                                     </View>
@@ -498,12 +532,15 @@ export default function Cart({ navigation }) {
                                         flexDirection: 'row'
                                     }}>
                                         <Entypo name="address" size={24} color="black" />
-                                        <Text style={{
-                                            lineHeight: 30,
-                                            fontSize: 18,
-                                            // marginBottom: 20,
-                                            marginLeft: 10
-                                        }}>
+                                        <Text style={[
+                                            {
+                                                lineHeight: 30,
+                                                fontSize: 18,
+                                                marginLeft: 10
+                                            }
+                                            , {
+                                                color: theme.color
+                                            }]}>
                                             Địa Chỉ: {custome.Address}
                                         </Text>
                                     </View>
@@ -512,12 +549,18 @@ export default function Cart({ navigation }) {
                                         flexDirection: 'row'
                                     }}>
                                         <Entypo name="address" size={24} color="black" />
-                                        <Text style={{
-                                            lineHeight: 30,
-                                            fontSize: 18,
-                                            marginBottom: 20,
-                                            marginLeft: 10
-                                        }}>
+                                        <Text
+                                            style={[
+                                                {
+                                                    lineHeight: 30,
+                                                    fontSize: 18,
+                                                    marginBottom: 20,
+                                                    marginLeft: 10
+                                                }
+                                                , {
+                                                    color: theme.color
+                                                }]}
+                                        >
                                             Số Điện Thoại: {custome.Phone_Number}
                                         </Text>
                                     </View>
@@ -585,7 +628,8 @@ export default function Cart({ navigation }) {
                     <Text style={{
                         fontSize: 22,
                         fontWeight: 'bold',
-                        color: 'green'
+                        color: 'green',
+                        opacity: 0.6
                     }}>
                         Đơn Đang Thực Hiện
                     </Text>
@@ -598,22 +642,19 @@ export default function Cart({ navigation }) {
                             marginBottom: 20
                         }}
                     >
-                        <View style={{
-                            borderColor: 'black',
-                            borderWidth: 0.4,
-                            marginLeft: 10,
-                            marginRight: 10,
-                            borderRadius: 10,
-                            // shadowOffset: {
-                            //     width: 0,
-                            //     height: 5,
-                            // },
-                            // shadowOpacity: 0.34,
-                            // shadowRadius: 6.27,
-                            // elevation: 10,
-
-
-                        }}>
+                        <View
+                            style={[
+                                {
+                                    borderColor: 'black',
+                                    borderWidth: 0.4,
+                                    marginLeft: 10,
+                                    marginRight: 10,
+                                    borderRadius: 10,
+                                }
+                                , {
+                                    backgroundColor: theme.background
+                                }]}
+                        >
                             <Text style={{
                                 fontSize: 18,
                                 color: 'gray',
@@ -633,19 +674,34 @@ export default function Cart({ navigation }) {
                                 <View style={{
 
                                 }}>
-                                    <Text style={{
-                                        lineHeight: 30
-                                    }}>
+                                    <Text style={[
+                                        {
+                                            lineHeight: 30,
+
+                                        }
+                                        , {
+                                            color: theme.color
+                                        }]}>
                                         Mã Đơn: abc
                                     </Text>
-                                    <Text style={{
-                                        lineHeight: 30
-                                    }}>
+                                    <Text style={[
+                                        {
+                                            lineHeight: 30,
+
+                                        }
+                                        , {
+                                            color: theme.color
+                                        }]}>
                                         Tên Khóa: {order.name}
                                     </Text>
-                                    <Text style={{
-                                        lineHeight: 30
-                                    }}>
+                                    <Text style={[
+                                        {
+                                            lineHeight: 30,
+
+                                        }
+                                        , {
+                                            color: theme.color
+                                        }]}>
                                         Địa Chỉ: {order.Address}
                                     </Text>
                                 </View>

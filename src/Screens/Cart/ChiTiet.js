@@ -1,22 +1,24 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView, KeyboardAvoidingView, Image, Dimensions } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 // import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Ionicons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
+import ThemeConText from '../../../config/themeConText';
+
 export default function ChiTiet({ route, navigation }) {
 
     const { name, id } = route.params;
+    const theme = useContext(ThemeConText)
 
-    console.log(id)
 
     const [isLoad, setIsLoad] = useState(false)
     const [apis, setApi] = useState([])
 
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/thanhtoan/id/' + id)
+        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/id/' + id)
             .then(res => res.json())
             .then(res => setApi(res))
             .catch(err => console.log(err))
@@ -24,12 +26,11 @@ export default function ChiTiet({ route, navigation }) {
             })
     }, [id])
 
-    console.log(apis)
 
 
     return (
         <KeyboardAvoidingView style={{
-            backgroundColor: '#fff',
+            backgroundColor: theme.background,
         }}>
             {/* <View> */}
             {/* ẩn hiên img */}
@@ -73,7 +74,8 @@ export default function ChiTiet({ route, navigation }) {
                 : null}
             <ScrollView >
                 <View style={{
-                    backgroundColor: '#a8e3e3',
+                    backgroundColor: theme.maunen,
+
                 }}>
                     <View style={{
                         marginRight: 10,
@@ -82,7 +84,8 @@ export default function ChiTiet({ route, navigation }) {
                         borderWidth: 0.3,
                         marginTop: 20,
                         borderRadius: 10,
-                        backgroundColor: '#fff',
+                        backgroundColor: theme.background,
+
                         shadowOffset: {
                             width: 0,
                             height: 5,
@@ -104,7 +107,8 @@ export default function ChiTiet({ route, navigation }) {
                                 fontSize: 25,
                                 color: '#00337a',
                                 textAlign: 'center',
-                                marginLeft: -20
+                                marginLeft: -20,
+                                color: theme.color
                             }}>
                                 Thông Tin Khách Hàng
                             </Text>
@@ -118,11 +122,16 @@ export default function ChiTiet({ route, navigation }) {
                                 <View style={{
                                     flexDirection: 'row'
                                 }}>
-                                    <Ionicons name="ios-people-sharp" size={24} color="black" />
+                                    <Ionicons name="ios-people-sharp" size={24} color="black" style={{
+                                        color: theme.color
+
+                                    }} />
                                     <Text style={{
                                         fontSize: 18,
                                         lineHeight: 33,
-                                        marginLeft: 10
+                                        marginLeft: 10,
+                                        color: theme.color
+
                                     }}>
                                         Mã Đơn Hàng: {api.code_bill}
                                     </Text>
@@ -131,11 +140,16 @@ export default function ChiTiet({ route, navigation }) {
                                 <View style={{
                                     flexDirection: 'row'
                                 }}>
-                                    <Ionicons name="ios-people-sharp" size={24} color="black" />
+                                    <Ionicons name="ios-people-sharp" size={24} color="black" style={{
+                                        color: theme.color
+
+                                    }} />
                                     <Text style={{
                                         fontSize: 18,
                                         lineHeight: 33,
-                                        marginLeft: 10
+                                        marginLeft: 10,
+                                        color: theme.color
+
                                     }}>
                                         Tên Khách Hàng: {api.KhachHang}
                                     </Text>
@@ -143,10 +157,15 @@ export default function ChiTiet({ route, navigation }) {
                                 <View style={{
                                     flexDirection: 'row'
                                 }}>
-                                    <Entypo name="address" size={24} color="black" />
+                                    <Entypo name="address" size={24} color="black" style={{
+                                        color: theme.color
+
+                                    }} />
                                     <Text style={{
                                         fontSize: 18,
-                                        marginLeft: 10
+                                        marginLeft: 10,
+                                        color: theme.color
+
                                     }}>
                                         Địa Chỉ: {api.Address}
                                     </Text>
@@ -160,19 +179,22 @@ export default function ChiTiet({ route, navigation }) {
                             padding: 10
                         }}>
                             <TouchableOpacity style={{
-                                borderColor: 'black',
+                                borderColor: theme.color,
                                 borderWidth: 0.4,
                                 width: 160,
                                 padding: 8,
                                 borderRadius: 10,
-                                backgroundColor: '#F5F5F5'
+                                backgroundColor: theme.background,
+
 
                             }}
                                 onPress={() => navigation.replace('Map')}
                             >
                                 <Text style={{
                                     fontSize: 18,
-                                    textAlign: 'center'
+                                    textAlign: 'center',
+                                    color: theme.color
+
                                 }}>
                                     Google Map
                                 </Text>
@@ -199,7 +221,7 @@ export default function ChiTiet({ route, navigation }) {
                                 shadowRadius: 7.27,
 
                                 elevation: 10,
-                                backgroundColor: '#fff',
+                                backgroundColor: theme.background,
                                 marginBottom: 30
 
 
@@ -217,6 +239,8 @@ export default function ChiTiet({ route, navigation }) {
                                         fontSize: 25,
                                         color: '#00337a',
                                         textAlign: 'center',
+                                        color: theme.color
+
                                     }}>
                                         Thông Tin Đơn
                                     </Text>
@@ -228,7 +252,9 @@ export default function ChiTiet({ route, navigation }) {
                                     <Text style={{
                                         fontSize: 18,
                                         lineHeight: 35,
-                                        marginLeft: 20
+                                        marginLeft: 20,
+                                        color: theme.color
+
 
                                     }}>
                                         Tên Khách Hàng: {api.KhachHang}
@@ -236,7 +262,8 @@ export default function ChiTiet({ route, navigation }) {
                                     <Text style={{
                                         fontSize: 18,
                                         lineHeight: 35,
-                                        marginLeft: 20
+                                        marginLeft: 20,
+                                        color: theme.color
 
                                     }}>
                                         Số Điện Thoại: {api.Phone_Number}
@@ -245,7 +272,9 @@ export default function ChiTiet({ route, navigation }) {
                                         fontSize: 18,
                                         lineHeight: 35,
                                         marginLeft: 20,
-                                        marginRight: 20
+                                        marginRight: 20,
+                                        color: theme.color
+
 
                                     }}>
                                         Địa Chỉ: {api.Address}
@@ -253,7 +282,9 @@ export default function ChiTiet({ route, navigation }) {
                                     <Text style={{
                                         fontSize: 18,
                                         lineHeight: 35,
-                                        marginLeft: 20
+                                        marginLeft: 20,
+                                        color: theme.color
+
 
                                     }}>
                                         Giờ Hẹn Khách: 12h15 - 13/6/2022
@@ -261,14 +292,18 @@ export default function ChiTiet({ route, navigation }) {
                                     <Text style={{
                                         fontSize: 18,
                                         lineHeight: 35,
-                                        marginLeft: 20
+                                        marginLeft: 20,
+                                        color: theme.color
+
                                     }}>
                                         Giờ Bắt Đầu: 13h - 18/12/2002
                                     </Text>
                                     <Text style={{
                                         fontSize: 18,
                                         lineHeight: 35,
-                                        marginLeft: 20
+                                        marginLeft: 20,
+                                        color: theme.color
+
 
 
                                     }}>
@@ -277,7 +312,9 @@ export default function ChiTiet({ route, navigation }) {
                                     <Text style={{
                                         fontSize: 18,
                                         lineHeight: 35,
-                                        marginLeft: 20
+                                        marginLeft: 20,
+                                        color: theme.color
+
 
                                     }}>
                                         Khoảng Cách: 12km
@@ -285,7 +322,9 @@ export default function ChiTiet({ route, navigation }) {
                                     <Text style={{
                                         fontSize: 18,
                                         lineHeight: 35,
-                                        marginLeft: 20
+                                        marginLeft: 20,
+                                        color: theme.color
+
 
                                     }}>
                                         Thời Gian Di Chuyển: 30p
@@ -293,7 +332,9 @@ export default function ChiTiet({ route, navigation }) {
                                     <Text style={{
                                         fontSize: 18,
                                         lineHeight: 35,
-                                        marginLeft: 20
+                                        marginLeft: 20,
+                                        color: theme.color
+
 
                                     }}>
                                         Loại Máy: RO
@@ -311,7 +352,9 @@ export default function ChiTiet({ route, navigation }) {
                     <View>
                         <Text style={{
                             fontSize: 18,
-                            padding: 10
+                            padding: 10,
+                            color: theme.color
+
                         }}>
                             Comment
                         </Text>
@@ -326,7 +369,10 @@ export default function ChiTiet({ route, navigation }) {
                             flexDirection: 'row',
                             justifyContent: 'space-around'
                         }}>
-                            <Ionicons name="ios-people-circle-outline" size={34} color="black" />
+                            <Ionicons name="ios-people-circle-outline" size={34} color="black" style={{
+                                color: theme.color
+
+                            }} />
                             <TextInput
                                 style={{
                                     width: '100%',
@@ -336,7 +382,9 @@ export default function ChiTiet({ route, navigation }) {
                                     width: 250,
                                     borderRadius: 6,
                                     paddingLeft: 10,
-                                    paddingRight: 10
+                                    paddingRight: 10,
+                                    color: theme.color
+
 
                                 }}
                                 placeholder="Viết Bình Luận..."
@@ -358,7 +406,9 @@ export default function ChiTiet({ route, navigation }) {
                                 <Text style={{
                                     textAlign: 'center',
                                     color: 'white',
-                                    fontWeight: 'bold'
+                                    fontWeight: 'bold',
+                                    color: theme.color
+
                                 }}>
                                     Gửi
                                 </Text>
@@ -372,23 +422,34 @@ export default function ChiTiet({ route, navigation }) {
                             // justifyContent: 'space-between',
                             padding: 10
                         }}>
-                            <Ionicons name="ios-people-circle-outline" size={34} color="black" />
+                            <Ionicons name="ios-people-circle-outline" size={34} color="black" style={{
+                                color: theme.color
+
+                            }} />
 
                             <View style={{
                                 marginLeft: 20
                             }}>
-                                <Text>
+                                <Text style={{
+                                    color: theme.color
+
+                                }}>
                                     Ngô Xuân Quy
 
                                 </Text>
-                                <Text>
+                                <Text style={{
+                                    color: theme.color
+
+                                }}>
                                     Sản Phẩm Tốt Quá
                                 </Text>
                             </View>
                             <View>
                                 <Text style={{
                                     fontSize: 12,
-                                    opacity: 0.5
+                                    opacity: 0.5,
+                                    color: theme.color
+
                                 }}>
                                     15h20
                                 </Text>
@@ -399,23 +460,35 @@ export default function ChiTiet({ route, navigation }) {
                             // justifyContent: 'space-between',
                             padding: 10
                         }}>
-                            <Ionicons name="ios-people-circle-outline" size={34} color="black" />
+                            <Ionicons name="ios-people-circle-outline" size={34} color="black" style={{
+                                color: theme.color
+
+                            }} />
 
                             <View style={{
-                                marginLeft: 20
+                                marginLeft: 20,
+
                             }}>
-                                <Text>
+                                <Text style={{
+                                    color: theme.color
+
+                                }}>
                                     Ngô Xuân Quy
 
                                 </Text>
-                                <Text>
+                                <Text style={{
+                                    color: theme.color
+
+                                }}>
                                     Sản Phẩm Tốt Quá
                                 </Text>
                             </View>
                             <View>
                                 <Text style={{
                                     fontSize: 12,
-                                    opacity: 0.5
+                                    opacity: 0.5,
+                                    color: theme.color
+
                                 }}>
                                     15h20
                                 </Text>

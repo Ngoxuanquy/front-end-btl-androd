@@ -56,7 +56,7 @@ export default function PhieuXuatKho({ navigation }) {
 
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan)
+        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan)
             .then(res => res.json())
             .then(res => setSanPham(res))
             .catch(err => console.log(err))
@@ -78,7 +78,7 @@ export default function PhieuXuatKho({ navigation }) {
 
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/inventory/userID/' + id_users)
+        fetch('http://192.168.1.165:4000' + '/api/inventory/userID/' + id_users)
             .then(res => res.json())
             .then(res => setKhoCaNhan(res))
             .catch(err => console.log(err))
@@ -88,7 +88,7 @@ export default function PhieuXuatKho({ navigation }) {
 
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/khotong/')
+        fetch('http://192.168.1.165:4000' + '/api/khotong/')
             .then(res => res.json())
             .then(res => setKhoTong(res))
             .catch(err => console.log(err))
@@ -118,7 +118,7 @@ export default function PhieuXuatKho({ navigation }) {
     //     console.log(id)
 
 
-    //     fetch('http://192.168.0.112:4000' + '/api/khocanhan/user_id/' + 1)
+    //     fetch('http://192.168.1.165:4000' + '/api/khocanhan/user_id/' + 1)
     //         .then(res => res.json())
     //         .then(res => res.map(re => {
     //             if (re.SoLuong > re.TieuChuan) {
@@ -179,7 +179,7 @@ export default function PhieuXuatKho({ navigation }) {
     const [lichsuxuathangs, setLichSuXuatHang] = useState([])
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/lichsuxuathang/name/' + taikhoan)
+        fetch('http://192.168.1.165:4000' + '/api/lichsuxuathang/name/' + taikhoan)
             .then(res => res.json())
             .then(res => setLichSuXuatHang(res))
             .catch(err => console.log(err))
@@ -190,7 +190,7 @@ export default function PhieuXuatKho({ navigation }) {
 
 
     function handerSubmit() {
-        fetch('http://192.168.0.112:4000' + '/api/lichsuxuathang/create/', {
+        fetch('http://192.168.1.165:4000' + '/api/lichsuxuathang/create/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -198,14 +198,14 @@ export default function PhieuXuatKho({ navigation }) {
             })
         })
             .then((
-                fetch('http://192.168.0.112:4000' + '/api/lichsuxuathang/')
+                fetch('http://192.168.1.165:4000' + '/api/lichsuxuathang/')
                     .then(res => res.json())
                     .then(res => {
                         let max_val = res.reduce(function (accumulator, element) {
                             return (accumulator.id > element.id) ? accumulator.id : element.id
                         });
                         sanphamthieu.map(sanphamthie => {
-                            fetch('http://192.168.0.112:4000' + '/api/xuathang/create/', {
+                            fetch('http://192.168.1.165:4000' + '/api/xuathang/create/', {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({
@@ -219,7 +219,7 @@ export default function PhieuXuatKho({ navigation }) {
                         })
 
                         sanphamthua.map(sanphamthu => {
-                            fetch('http://192.168.0.112:4000' + '/api/xuathang/create/', {
+                            fetch('http://192.168.1.165:4000' + '/api/xuathang/create/', {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({
@@ -254,840 +254,813 @@ export default function PhieuXuatKho({ navigation }) {
 
     return (
         <ScrollView style={styles.container}>
-            <ScrollView horizontal>
-                <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-around',
-                    marginTop: 20,
-                    marginBottom: 20
-                }}>
-                    {buttons.map((button, index) => (
-                        <TouchableOpacity
-                            key={button.id}
-                            style={{
-
-                            }}
-                            onPress={() => handerChon(button.button, button.id)}
-                        >
-                            <Text
-                                style={
-                                    [
-                                        index === cliedId ? styles.buttonAction : styles.butonUn,
-                                        // styles.butonUn
-                                    ]
-                                }
-                            >
-                                {button.button}
-                            </Text>
-                        </TouchableOpacity>
-                    ))}
-                </View>
-            </ScrollView>
             <View>
                 {/* Kho Toongr */}
-                {isloadDaLam &&
+
+                <View>
+
                     <View>
-                        {loading1 ? <ActivityIndicator /> :
-                            <View>
-                                <View>
-                                    <Text style={{
-                                        padding: 10,
-                                        fontSize: 20
-                                    }}>
-                                        Sản Phẩm Đã Đi Làm
-                                    </Text>
+                        <View>
+                            <Text style={{
+                                padding: 10,
+                                fontSize: 20
+                            }}>
+                                Sản Phẩm Đã Đi Làm
+                            </Text>
 
-                                </View>
+                        </View>
 
-                                <View style={{
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-around',
-                                    marginBottom: 5,
-                                    borderWidth: 0.4,
-                                    borderColor: 'gray',
-                                    paddingVertical: 10
+                        <View style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-around',
+                            marginBottom: 5,
+                            borderWidth: 0.4,
+                            borderColor: 'gray',
+                            paddingVertical: 10
+                        }}>
+                            <View style={{
+                                width: '40%',
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                            }}>
+                                <Text style={{
+                                    fontSize: 17,
+                                    fontWeight: 'bold'
                                 }}>
+                                    Mã Hóa Đơn
+                                </Text>
+                            </View>
+                            <View style={{
+                                width: '30%',
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                            }}>
+                                <Text style={{
+                                    fontSize: 17,
+                                    fontWeight: 'bold'
+                                }}>
+                                    Đơn Giá
+                                </Text>
+                            </View>
+                            <View style={{
+                                width: '30%',
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                            }}>
+                                <Text style={{
+                                    fontSize: 17,
+                                    fontWeight: 'bold'
+                                }}>
+                                    Trạng Thái
+                                </Text>
+                            </View>
+
+
+                        </View>
+
+                        <View style={{
+
+                            // paddingVertical: 10
+                        }}>
+                            {sanphams.map(sanpham => (
+                                <View
+                                    key={sanpham.id}
+                                    style={{
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-around',
+                                        // borderWidth: 0.4,
+                                        // borderColor: 'gray',
+                                        borderBottomColor: 'gray',
+                                        borderBottomWidth: 1,
+                                        paddingVertical: 6
+
+                                    }}>
                                     <View style={{
                                         width: '40%',
                                         justifyContent: 'center',
                                         alignItems: 'center'
                                     }}>
                                         <Text style={{
-                                            fontSize: 17,
-                                            fontWeight: 'bold'
+                                            fontSize: 16,
+                                            lineHeight: 30
                                         }}>
-                                            Mã Hóa Đơn
+                                            {sanpham.code_bill}
                                         </Text>
                                     </View>
+
                                     <View style={{
                                         width: '30%',
                                         justifyContent: 'center',
                                         alignItems: 'center'
                                     }}>
                                         <Text style={{
-                                            fontSize: 17,
-                                            fontWeight: 'bold'
+                                            fontSize: 16,
+                                            lineHeight: 30,
+                                            textAlign: 'center'
                                         }}>
-                                            Đơn Giá
+                                            {sanpham.total_amount_after_discount}
+
                                         </Text>
                                     </View>
+
                                     <View style={{
                                         width: '30%',
                                         justifyContent: 'center',
                                         alignItems: 'center'
                                     }}>
-                                        <Text style={{
-                                            fontSize: 17,
-                                            fontWeight: 'bold'
-                                        }}>
-                                            Trạng Thái
-                                        </Text>
-                                    </View>
-
-
-                                </View>
-
-                                <View style={{
-
-                                    // paddingVertical: 10
-                                }}>
-                                    {sanphams.map(sanpham => (
-                                        <View
-                                            key={sanpham.id}
-                                            style={{
-                                                flexDirection: 'row',
-                                                justifyContent: 'space-around',
-                                                // borderWidth: 0.4,
-                                                // borderColor: 'gray',
-                                                borderBottomColor: 'gray',
-                                                borderBottomWidth: 1,
-                                                paddingVertical: 6
-
-                                            }}>
-                                            <View style={{
-                                                width: '40%',
-                                                justifyContent: 'center',
-                                                alignItems: 'center'
-                                            }}>
-                                                <Text style={{
-                                                    fontSize: 16,
-                                                    lineHeight: 30
-                                                }}>
-                                                    {sanpham.code_bill}
-                                                </Text>
-                                            </View>
-
-                                            <View style={{
-                                                width: '30%',
-                                                justifyContent: 'center',
-                                                alignItems: 'center'
-                                            }}>
-                                                <Text style={{
-                                                    fontSize: 16,
-                                                    lineHeight: 30,
-                                                    textAlign: 'center'
-                                                }}>
-                                                    {sanpham.total_amount_after_discount}
-
-                                                </Text>
-                                            </View>
-
-                                            <View style={{
-                                                width: '30%',
-                                                justifyContent: 'center',
-                                                alignItems: 'center'
-                                            }}>
-                                                <Button
-                                                    title="Xem Chi Tiết"
-                                                    onPress={() => toggleDialog4(sanpham.id)}
-                                                    buttonStyle={styles.button}
-                                                />
-                                                <Dialog
-                                                    isVisible={visible4}
-                                                    onBackdropPress={toggleDialog4}
-                                                >
-                                                    <Dialog.Title title="Chi Tiết Sản Phẩm" />
-                                                    <View>
-                                                        <View>
-                                                            {chitietkhachhangs.map(chitietkhachhang => (
-                                                                <View key={chitietkhachhang.id}>
-                                                                    <Text>
-                                                                        Khách Hàng:   {chitietkhachhang.name}
-                                                                    </Text>
-                                                                    <Text>
-                                                                        Người Làm: {chitietkhachhang.Author_email}
-                                                                    </Text>
-                                                                    <Text>
-                                                                        Trạng Thái: {chitietkhachhang.TrangThai}
-                                                                    </Text>
-                                                                    <Text>
-                                                                        Điện Thoại: {chitietkhachhang.Number}
-                                                                    </Text>
-                                                                    <Text>
-                                                                        Địa Chỉ: {chitietkhachhang.Address}
-                                                                    </Text>
-                                                                </View>
-                                                            ))}
+                                        <Button
+                                            title="Xem Chi Tiết"
+                                            onPress={() => toggleDialog4(sanpham.id)}
+                                            buttonStyle={styles.button}
+                                        />
+                                        <Dialog
+                                            isVisible={visible4}
+                                            onBackdropPress={toggleDialog4}
+                                        >
+                                            <Dialog.Title title="Chi Tiết Sản Phẩm" />
+                                            <View>
+                                                <View>
+                                                    {chitietkhachhangs.map(chitietkhachhang => (
+                                                        <View key={chitietkhachhang.id}>
+                                                            <Text>
+                                                                Khách Hàng:   {chitietkhachhang.name}
+                                                            </Text>
+                                                            <Text>
+                                                                Người Làm: {chitietkhachhang.Author_email}
+                                                            </Text>
+                                                            <Text>
+                                                                Trạng Thái: {chitietkhachhang.TrangThai}
+                                                            </Text>
+                                                            <Text>
+                                                                Điện Thoại: {chitietkhachhang.Number}
+                                                            </Text>
+                                                            <Text>
+                                                                Địa Chỉ: {chitietkhachhang.Address}
+                                                            </Text>
                                                         </View>
-                                                        <View>
-                                                            <View style={{
-                                                                flexDirection: 'row',
-                                                                justifyContent: 'space-around',
-                                                                borderColor: 'gray',
-                                                                paddingVertical: 10
-                                                            }}>
-                                                                <Text style={{
-                                                                    fontSize: 17,
-                                                                    fontWeight: 'bold'
-                                                                }}>
-                                                                    Tên SP
-                                                                </Text>
-                                                                <Text style={{
-                                                                    fontSize: 17,
-                                                                    fontWeight: 'bold'
-                                                                }}>
-                                                                    Đơn Giá
-                                                                </Text>
-                                                                <Text style={{
-                                                                    fontSize: 17,
-                                                                    fontWeight: 'bold'
-                                                                }}>
-                                                                    SL Tồn
-                                                                </Text>
-                                                            </View>
-                                                            {chitietsanphams.map(chitietsanpham => (
-                                                                <View key={chitietsanpham.id}>
-
-                                                                    <View style={{
-
-                                                                        // paddingVertical: 10
-                                                                    }}>
-                                                                        <View style={{
-                                                                            flexDirection: 'row',
-                                                                            justifyContent: 'space-around',
-                                                                            // borderWidth: 0.4,
-                                                                            // borderColor: 'gray',
-                                                                            borderBottomColor: 'gray',
-                                                                            borderBottomWidth: 1,
-                                                                            paddingVertical: 6
-
-                                                                        }}>
-                                                                            <Text style={{
-                                                                                fontSize: 16,
-                                                                                lineHeight: 30
-                                                                            }}>
-                                                                                {chitietsanpham.name}
-                                                                            </Text>
-                                                                            <Text style={{
-                                                                                fontSize: 16,
-                                                                                lineHeight: 30
-                                                                            }}>
-                                                                                {chitietsanpham.price}
-                                                                            </Text>
-                                                                            <Text style={{
-                                                                                fontSize: 16,
-                                                                                lineHeight: 30
-                                                                            }}>
-                                                                                {chitietsanpham.number_of}
-                                                                            </Text>
-                                                                        </View>
-
-
-                                                                    </View>
-
-                                                                </View>
-                                                            ))}
-                                                        </View>
+                                                    ))}
+                                                </View>
+                                                <View>
+                                                    <View style={{
+                                                        flexDirection: 'row',
+                                                        justifyContent: 'space-around',
+                                                        borderColor: 'gray',
+                                                        paddingVertical: 10
+                                                    }}>
+                                                        <Text style={{
+                                                            fontSize: 17,
+                                                            fontWeight: 'bold'
+                                                        }}>
+                                                            Tên SP
+                                                        </Text>
+                                                        <Text style={{
+                                                            fontSize: 17,
+                                                            fontWeight: 'bold'
+                                                        }}>
+                                                            Đơn Giá
+                                                        </Text>
+                                                        <Text style={{
+                                                            fontSize: 17,
+                                                            fontWeight: 'bold'
+                                                        }}>
+                                                            SL Tồn
+                                                        </Text>
                                                     </View>
-                                                </Dialog>
+                                                    {chitietsanphams.map(chitietsanpham => (
+                                                        <View key={chitietsanpham.id}>
+
+                                                            <View style={{
+
+                                                                // paddingVertical: 10
+                                                            }}>
+                                                                <View style={{
+                                                                    flexDirection: 'row',
+                                                                    justifyContent: 'space-around',
+                                                                    // borderWidth: 0.4,
+                                                                    // borderColor: 'gray',
+                                                                    borderBottomColor: 'gray',
+                                                                    borderBottomWidth: 1,
+                                                                    paddingVertical: 6
+
+                                                                }}>
+                                                                    <Text style={{
+                                                                        fontSize: 16,
+                                                                        lineHeight: 30
+                                                                    }}>
+                                                                        {chitietsanpham.name}
+                                                                    </Text>
+                                                                    <Text style={{
+                                                                        fontSize: 16,
+                                                                        lineHeight: 30
+                                                                    }}>
+                                                                        {chitietsanpham.price}
+                                                                    </Text>
+                                                                    <Text style={{
+                                                                        fontSize: 16,
+                                                                        lineHeight: 30
+                                                                    }}>
+                                                                        {chitietsanpham.number_of}
+                                                                    </Text>
+                                                                </View>
+
+
+                                                            </View>
+
+                                                        </View>
+                                                    ))}
+                                                </View>
                                             </View>
+                                        </Dialog>
+                                    </View>
 
-                                        </View>
-
-                                    ))}
                                 </View>
-                            </View>
-                        }
+
+                            ))}
+                        </View>
                     </View>
-                }
+
+                </View>
+
 
 
                 {/* Kho Ca Nhan */}
-                {isloadCanCap &&
-                    <>
-                        {/* {loading2 ? <ActivityIndicator /> : */}
+
+                <>
+                    {/* {loading2 ? <ActivityIndicator /> : */}
+                    <View>
                         <View>
-                            <View>
+                            <Text style={{
+                                padding: 10,
+                                fontSize: 20
+                            }}>
+                                Số Sản Phẩm Cần Cấp
+                            </Text>
+
+                        </View>
+
+                        <View style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-around',
+                            marginBottom: 5,
+                            borderWidth: 0.4,
+                            borderColor: 'gray',
+                            paddingVertical: 10
+                        }}>
+                            <View style={{
+                                width: '30%',
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                            }}>
                                 <Text style={{
-                                    padding: 10,
-                                    fontSize: 20
+                                    fontSize: 17,
+                                    fontWeight: 'bold'
                                 }}>
-                                    Số Sản Phẩm Cần Cấp
+                                    Tên Sản Phẩm
                                 </Text>
-
+                            </View>
+                            <View style={{
+                                width: '10%',
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                            }}>
+                                <Text style={{
+                                    fontSize: 17,
+                                    fontWeight: 'bold'
+                                }}>
+                                    Đơn Giá
+                                </Text>
+                            </View>
+                            <View style={{
+                                width: '10%',
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                            }}>
+                                <Text style={{
+                                    fontSize: 17,
+                                    fontWeight: 'bold'
+                                }}>
+                                    SL Còn
+                                </Text>
                             </View>
 
                             <View style={{
-                                flexDirection: 'row',
-                                justifyContent: 'space-around',
-                                marginBottom: 5,
-                                borderWidth: 0.4,
-                                borderColor: 'gray',
-                                paddingVertical: 10
+                                width: '15%',
+                                justifyContent: 'center',
+                                alignItems: 'center'
                             }}>
-                                <View style={{
-                                    width: '30%',
-                                    justifyContent: 'center',
-                                    alignItems: 'center'
+                                <Text style={{
+                                    fontSize: 17,
+                                    fontWeight: 'bold'
                                 }}>
-                                    <Text style={{
-                                        fontSize: 17,
-                                        fontWeight: 'bold'
-                                    }}>
-                                        Tên Sản Phẩm
-                                    </Text>
-                                </View>
-                                <View style={{
-                                    width: '10%',
-                                    justifyContent: 'center',
-                                    alignItems: 'center'
-                                }}>
-                                    <Text style={{
-                                        fontSize: 17,
-                                        fontWeight: 'bold'
-                                    }}>
-                                        Đơn Giá
-                                    </Text>
-                                </View>
-                                <View style={{
-                                    width: '10%',
-                                    justifyContent: 'center',
-                                    alignItems: 'center'
-                                }}>
-                                    <Text style={{
-                                        fontSize: 17,
-                                        fontWeight: 'bold'
-                                    }}>
-                                        SL Còn
-                                    </Text>
-                                </View>
-
-                                <View style={{
-                                    width: '15%',
-                                    justifyContent: 'center',
-                                    alignItems: 'center'
-                                }}>
-                                    <Text style={{
-                                        fontSize: 17,
-                                        fontWeight: 'bold'
-                                    }}>
-                                        Tiêu Chuẩn
-                                    </Text>
-                                </View>
-
-                                <View style={{
-                                    width: '15%',
-                                    justifyContent: 'center',
-                                    alignItems: 'center'
-                                }}>
-                                    <Text style={{
-                                        fontSize: 17,
-                                        fontWeight: 'bold'
-                                    }}>
-                                        Trạng Thái
-                                    </Text>
-                                </View>
+                                    Tiêu Chuẩn
+                                </Text>
                             </View>
 
                             <View style={{
-
-                                // paddingVertical: 10
+                                width: '15%',
+                                justifyContent: 'center',
+                                alignItems: 'center'
                             }}>
-                                {sanphamthieu.map(sanpham => (
-                                    <View
-                                        key={sanpham.id}
-                                        style={{
-                                            flexDirection: 'row',
-                                            justifyContent: 'space-around',
-                                            // borderWidth: 0.4,
-                                            // borderColor: 'gray',
-                                            borderBottomColor: 'gray',
-                                            borderBottomWidth: 1,
-                                            paddingVertical: 6
-
-                                        }}>
-                                        <View style={{
-                                            width: '30%',
-                                            justifyContent: 'center',
-                                            alignItems: 'center'
-                                        }}>
-                                            <Text style={{
-                                                fontSize: 16,
-                                                lineHeight: 30
-                                            }}>
-                                                {sanpham.productsId}
-                                            </Text>
-                                        </View>
-
-                                        <View style={{
-                                            width: '10%',
-                                            justifyContent: 'center',
-                                            alignItems: 'center'
-                                        }}>
-                                            <Text style={{
-                                                fontSize: 16,
-                                                lineHeight: 30,
-                                                textAlign: 'center'
-                                            }}>
-                                                {sanpham.exist}
-
-                                            </Text>
-                                        </View>
-
-                                        <View style={{
-                                            width: '10%',
-                                            justifyContent: 'center',
-                                            alignItems: 'center'
-                                        }}>
-                                            <Text style={{
-                                                fontSize: 16,
-                                                lineHeight: 30,
-                                                textAlign: 'center'
-
-                                            }}>
-                                                {sanpham.SoLuong}
-
-                                            </Text>
-                                        </View>
-
-                                        <View style={{
-                                            width: '15%',
-                                            justifyContent: 'center',
-                                            alignItems: 'center'
-                                        }}>
-                                            <Text style={{
-                                                fontSize: 16,
-                                                lineHeight: 30,
-                                                textAlign: 'center'
-
-                                            }}>
-                                                {sanpham.tieu_chuan}
-
-                                            </Text>
-                                        </View>
-
-                                        <View style={{
-                                            width: '15%',
-                                            justifyContent: 'center',
-                                            alignItems: 'center'
-                                        }}>
-                                            {sanpham.exist < sanpham.tieu_chuan ?
-                                                <Text style={{
-                                                    fontSize: 16,
-                                                    lineHeight: 30,
-                                                    textAlign: 'center',
-                                                    color: 'green'
-                                                }}>
-                                                    Cấp
-
-                                                </Text>
-                                                :
-                                                <Text style={{
-                                                    fontSize: 16,
-                                                    lineHeight: 30,
-                                                    textAlign: 'center',
-                                                    color: 'red'
-                                                }}>
-                                                    Thừa
-
-                                                </Text>
-                                            }
-                                        </View>
-                                    </View>
-
-                                ))}
+                                <Text style={{
+                                    fontSize: 17,
+                                    fontWeight: 'bold'
+                                }}>
+                                    Trạng Thái
+                                </Text>
                             </View>
                         </View>
-                        {/* } */}
-                    </>
-                }
 
-                {isloadCanTra &&
-                    <>
-                        {/* {loading3 ? <ActivityIndicator /> : */}
-                        <View>
-                            <View>
-                                <Text style={{
-                                    padding: 10,
-                                    fontSize: 20
-                                }}>
-                                    Số Sản Phẩm Cần Trả
-                                </Text>
+                        <View style={{
 
-                            </View>
+                            // paddingVertical: 10
+                        }}>
+                            {sanphamthieu.map(sanpham => (
+                                <View
+                                    key={sanpham.id}
+                                    style={{
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-around',
+                                        // borderWidth: 0.4,
+                                        // borderColor: 'gray',
+                                        borderBottomColor: 'gray',
+                                        borderBottomWidth: 1,
+                                        paddingVertical: 6
 
-                            <View style={{
-                                flexDirection: 'row',
-                                justifyContent: 'space-around',
-                                marginBottom: 5,
-                                borderWidth: 0.4,
-                                borderColor: 'gray',
-                                paddingVertical: 10
-                            }}>
-                                <View style={{
-                                    width: '30%',
-                                    justifyContent: 'center',
-                                    alignItems: 'center'
-                                }}>
-                                    <Text style={{
-                                        fontSize: 17,
-                                        fontWeight: 'bold'
                                     }}>
-                                        Tên Sản Phẩm
-                                    </Text>
-                                </View>
-                                <View style={{
-                                    width: '10%',
-                                    justifyContent: 'center',
-                                    alignItems: 'center'
-                                }}>
-                                    <Text style={{
-                                        fontSize: 17,
-                                        fontWeight: 'bold'
+                                    <View style={{
+                                        width: '30%',
+                                        justifyContent: 'center',
+                                        alignItems: 'center'
                                     }}>
-                                        Đơn Giá
-                                    </Text>
-                                </View>
-                                <View style={{
-                                    width: '10%',
-                                    justifyContent: 'center',
-                                    alignItems: 'center'
-                                }}>
-                                    <Text style={{
-                                        fontSize: 17,
-                                        fontWeight: 'bold'
-                                    }}>
-                                        SL Còn
-                                    </Text>
-                                </View>
-
-                                <View style={{
-                                    width: '15%',
-                                    justifyContent: 'center',
-                                    alignItems: 'center'
-                                }}>
-                                    <Text style={{
-                                        fontSize: 17,
-                                        fontWeight: 'bold'
-                                    }}>
-                                        Tiêu Chuẩn
-                                    </Text>
-                                </View>
-
-                                <View style={{
-                                    width: '15%',
-                                    justifyContent: 'center',
-                                    alignItems: 'center'
-                                }}>
-                                    <Text style={{
-                                        fontSize: 17,
-                                        fontWeight: 'bold'
-                                    }}>
-                                        Trạng Thái
-                                    </Text>
-                                </View>
-                            </View>
-
-                            <View style={{
-
-                                // paddingVertical: 10
-                            }}>
-                                {sanphamthua.map(sanpham => (
-                                    <View
-                                        key={sanpham.id}
-                                        style={{
-                                            flexDirection: 'row',
-                                            justifyContent: 'space-around',
-                                            // borderWidth: 0.4,
-                                            // borderColor: 'gray',
-                                            borderBottomColor: 'gray',
-                                            borderBottomWidth: 1,
-                                            paddingVertical: 6
-
+                                        <Text style={{
+                                            fontSize: 16,
+                                            lineHeight: 30
                                         }}>
-                                        <View style={{
-                                            width: '30%',
-                                            justifyContent: 'center',
-                                            alignItems: 'center'
-                                        }}>
-                                            <Text style={{
-                                                fontSize: 16,
-                                                lineHeight: 30
-                                            }}>
-                                                {sanpham.productsId}
-                                            </Text>
-                                        </View>
-
-                                        <View style={{
-                                            width: '10%',
-                                            justifyContent: 'center',
-                                            alignItems: 'center'
-                                        }}>
-                                            <Text style={{
-                                                fontSize: 16,
-                                                lineHeight: 30,
-                                                textAlign: 'center'
-                                            }}>
-                                                {sanpham.price}
-
-                                            </Text>
-                                        </View>
-
-                                        <View style={{
-                                            width: '10%',
-                                            justifyContent: 'center',
-                                            alignItems: 'center'
-                                        }}>
-                                            <Text style={{
-                                                fontSize: 16,
-                                                lineHeight: 30,
-                                                textAlign: 'center'
-
-                                            }}>
-                                                {sanpham.exist}
-
-                                            </Text>
-                                        </View>
-
-                                        <View style={{
-                                            width: '15%',
-                                            justifyContent: 'center',
-                                            alignItems: 'center'
-                                        }}>
-                                            <Text style={{
-                                                fontSize: 16,
-                                                lineHeight: 30,
-                                                textAlign: 'center'
-
-                                            }}>
-                                                {sanpham.tieu_chuan}
-
-                                            </Text>
-                                        </View>
-
-                                        <View style={{
-                                            width: '15%',
-                                            justifyContent: 'center',
-                                            alignItems: 'center'
-                                        }}>
-                                            {sanpham.SoLuong < sanpham.TieuChuan ?
-                                                <Text style={{
-                                                    fontSize: 16,
-                                                    lineHeight: 30,
-                                                    textAlign: 'center',
-                                                    color: 'green'
-                                                }}>
-                                                    Cấp
-
-                                                </Text>
-                                                :
-                                                <Text style={{
-                                                    fontSize: 16,
-                                                    lineHeight: 30,
-                                                    textAlign: 'center',
-                                                    color: 'red'
-                                                }}>
-                                                    Thừa
-
-                                                </Text>
-                                            }
-                                        </View>
+                                            {sanpham.productsId}
+                                        </Text>
                                     </View>
 
-                                ))}
+                                    <View style={{
+                                        width: '10%',
+                                        justifyContent: 'center',
+                                        alignItems: 'center'
+                                    }}>
+                                        <Text style={{
+                                            fontSize: 16,
+                                            lineHeight: 30,
+                                            textAlign: 'center'
+                                        }}>
+                                            {sanpham.exist}
+
+                                        </Text>
+                                    </View>
+
+                                    <View style={{
+                                        width: '10%',
+                                        justifyContent: 'center',
+                                        alignItems: 'center'
+                                    }}>
+                                        <Text style={{
+                                            fontSize: 16,
+                                            lineHeight: 30,
+                                            textAlign: 'center'
+
+                                        }}>
+                                            {sanpham.SoLuong}
+
+                                        </Text>
+                                    </View>
+
+                                    <View style={{
+                                        width: '15%',
+                                        justifyContent: 'center',
+                                        alignItems: 'center'
+                                    }}>
+                                        <Text style={{
+                                            fontSize: 16,
+                                            lineHeight: 30,
+                                            textAlign: 'center'
+
+                                        }}>
+                                            {sanpham.tieu_chuan}
+
+                                        </Text>
+                                    </View>
+
+                                    <View style={{
+                                        width: '15%',
+                                        justifyContent: 'center',
+                                        alignItems: 'center'
+                                    }}>
+                                        {sanpham.exist < sanpham.tieu_chuan ?
+                                            <Text style={{
+                                                fontSize: 16,
+                                                lineHeight: 30,
+                                                textAlign: 'center',
+                                                color: 'green'
+                                            }}>
+                                                Cấp
+
+                                            </Text>
+                                            :
+                                            <Text style={{
+                                                fontSize: 16,
+                                                lineHeight: 30,
+                                                textAlign: 'center',
+                                                color: 'red'
+                                            }}>
+                                                Thừa
+
+                                            </Text>
+                                        }
+                                    </View>
+                                </View>
+
+                            ))}
+                        </View>
+                    </View>
+                    {/* } */}
+                </>
+
+
+
+                <>
+                    {/* {loading3 ? <ActivityIndicator /> : */}
+                    <View>
+                        <View>
+                            <Text style={{
+                                padding: 10,
+                                fontSize: 20
+                            }}>
+                                Số Sản Phẩm Cần Trả
+                            </Text>
+
+                        </View>
+
+                        <View style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-around',
+                            marginBottom: 5,
+                            borderWidth: 0.4,
+                            borderColor: 'gray',
+                            paddingVertical: 10
+                        }}>
+                            <View style={{
+                                width: '30%',
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                            }}>
+                                <Text style={{
+                                    fontSize: 17,
+                                    fontWeight: 'bold'
+                                }}>
+                                    Tên Sản Phẩm
+                                </Text>
+                            </View>
+                            <View style={{
+                                width: '10%',
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                            }}>
+                                <Text style={{
+                                    fontSize: 17,
+                                    fontWeight: 'bold'
+                                }}>
+                                    Đơn Giá
+                                </Text>
+                            </View>
+                            <View style={{
+                                width: '10%',
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                            }}>
+                                <Text style={{
+                                    fontSize: 17,
+                                    fontWeight: 'bold'
+                                }}>
+                                    SL Còn
+                                </Text>
+                            </View>
+
+                            <View style={{
+                                width: '15%',
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                            }}>
+                                <Text style={{
+                                    fontSize: 17,
+                                    fontWeight: 'bold'
+                                }}>
+                                    Tiêu Chuẩn
+                                </Text>
+                            </View>
+
+                            <View style={{
+                                width: '15%',
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                            }}>
+                                <Text style={{
+                                    fontSize: 17,
+                                    fontWeight: 'bold'
+                                }}>
+                                    Trạng Thái
+                                </Text>
                             </View>
                         </View>
-                        {/* } */}
-                    </>
-                }
 
-                {isloadLichSu &&
-                    <>
-                        {loading4 ? <ActivityIndicator /> :
-                            <View>
-                                <View style={{
+                        <View style={{
+
+                            // paddingVertical: 10
+                        }}>
+                            {sanphamthua.map(sanpham => (
+                                <View
+                                    key={sanpham.id}
+                                    style={{
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-around',
+                                        // borderWidth: 0.4,
+                                        // borderColor: 'gray',
+                                        borderBottomColor: 'gray',
+                                        borderBottomWidth: 1,
+                                        paddingVertical: 6
+
+                                    }}>
+                                    <View style={{
+                                        width: '30%',
+                                        justifyContent: 'center',
+                                        alignItems: 'center'
+                                    }}>
+                                        <Text style={{
+                                            fontSize: 16,
+                                            lineHeight: 30
+                                        }}>
+                                            {sanpham.productsId}
+                                        </Text>
+                                    </View>
+
+                                    <View style={{
+                                        width: '10%',
+                                        justifyContent: 'center',
+                                        alignItems: 'center'
+                                    }}>
+                                        <Text style={{
+                                            fontSize: 16,
+                                            lineHeight: 30,
+                                            textAlign: 'center'
+                                        }}>
+                                            {sanpham.price}
+
+                                        </Text>
+                                    </View>
+
+                                    <View style={{
+                                        width: '10%',
+                                        justifyContent: 'center',
+                                        alignItems: 'center'
+                                    }}>
+                                        <Text style={{
+                                            fontSize: 16,
+                                            lineHeight: 30,
+                                            textAlign: 'center'
+
+                                        }}>
+                                            {sanpham.exist}
+
+                                        </Text>
+                                    </View>
+
+                                    <View style={{
+                                        width: '15%',
+                                        justifyContent: 'center',
+                                        alignItems: 'center'
+                                    }}>
+                                        <Text style={{
+                                            fontSize: 16,
+                                            lineHeight: 30,
+                                            textAlign: 'center'
+
+                                        }}>
+                                            {sanpham.tieu_chuan}
+
+                                        </Text>
+                                    </View>
+
+                                    <View style={{
+                                        width: '15%',
+                                        justifyContent: 'center',
+                                        alignItems: 'center'
+                                    }}>
+                                        {sanpham.SoLuong < sanpham.TieuChuan ?
+                                            <Text style={{
+                                                fontSize: 16,
+                                                lineHeight: 30,
+                                                textAlign: 'center',
+                                                color: 'green'
+                                            }}>
+                                                Cấp
+
+                                            </Text>
+                                            :
+                                            <Text style={{
+                                                fontSize: 16,
+                                                lineHeight: 30,
+                                                textAlign: 'center',
+                                                color: 'red'
+                                            }}>
+                                                Thừa
+
+                                            </Text>
+                                        }
+                                    </View>
+                                </View>
+
+                            ))}
+                        </View>
+                    </View>
+                    {/* } */}
+                </>
+
+                <>
+                    <View>
+                        <Text style={{
+                            fontSize: 20,
+                            padding: 10
+                        }}>
+                            Lich Sử Đơn Hàng
+                        </Text>
+                        <View style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-around',
+                            marginBottom: 5,
+                            borderWidth: 0.4,
+                            borderColor: 'gray',
+                            paddingVertical: 10
+                        }}>
+                            <Text style={{
+                                fontSize: 17,
+                                fontWeight: 'bold'
+                            }}>
+                                Tên
+                            </Text>
+                            <Text style={{
+                                fontSize: 17,
+                                fontWeight: 'bold'
+                            }}>
+                                Ngày
+                            </Text>
+                            <Text style={{
+                                fontSize: 17,
+                                fontWeight: 'bold'
+                            }}>
+                                Trạng Thái
+                            </Text>
+                            <Text style={{
+                                fontSize: 17,
+                                fontWeight: 'bold'
+                            }}>
+                                Chi Tiết
+                            </Text>
+                        </View>
+                        {
+                            lichsuxuathangs.map(lichsuxuathang => (
+                                <View key={lichsuxuathang.id} style={{
                                     flexDirection: 'row',
                                     justifyContent: 'space-around',
                                     marginBottom: 5,
-                                    borderWidth: 0.4,
-                                    borderColor: 'gray',
+                                    borderBottomColor: 'gray',
+                                    borderBottomWidth: 0.4,
                                     paddingVertical: 10
                                 }}>
-                                    <Text style={{
-                                        fontSize: 17,
-                                        fontWeight: 'bold'
-                                    }}>
-                                        Tên
+                                    <Text>
+                                        {lichsuxuathang.Name}
                                     </Text>
-                                    <Text style={{
-                                        fontSize: 17,
-                                        fontWeight: 'bold'
-                                    }}>
-                                        Ngày
+                                    <Text>
+                                        {lichsuxuathang.date}
                                     </Text>
-                                    <Text style={{
-                                        fontSize: 17,
-                                        fontWeight: 'bold'
-                                    }}>
-                                        Trạng Thái
-                                    </Text>
-                                    <Text style={{
-                                        fontSize: 17,
-                                        fontWeight: 'bold'
-                                    }}>
-                                        Chi Tiết
-                                    </Text>
-                                </View>
-                                {
-                                    lichsuxuathangs.map(lichsuxuathang => (
-                                        <View key={lichsuxuathang.id} style={{
-                                            flexDirection: 'row',
-                                            justifyContent: 'space-around',
-                                            marginBottom: 5,
-                                            borderBottomColor: 'gray',
-                                            borderBottomWidth: 0.4,
-                                            paddingVertical: 10
-                                        }}>
-                                            <Text>
-                                                {lichsuxuathang.Name}
+                                    {
+                                        lichsuxuathang.TrangThai == "Chưa Duyệt" ?
+                                            <Text style={{
+                                                color: 'red',
+                                                opacity: 0.7
+                                            }}>
+                                                {lichsuxuathang.TrangThai}
                                             </Text>
-                                            <Text>
-                                                {lichsuxuathang.date}
+                                            :
+                                            <Text style={{
+                                                color: 'green',
+                                                opacity: 0.7
+                                            }}>
+                                                {lichsuxuathang.TrangThai}
                                             </Text>
-                                            {
-                                                lichsuxuathang.TrangThai == "Chưa Duyệt" ?
+                                    }
+                                    <Button
+                                        title="Chi Tiết"
+                                        onPress={() => toggleDialog5(lichsuxuathang.id)}
+                                        buttonStyle={styles.button}
+                                    />
+                                    <Dialog
+                                        isVisible={visible4}
+                                        onBackdropPress={toggleDialog5}
+                                    >
+                                        <Dialog.Title title="Chi Tiết Sản Phẩm" />
+                                        <View>
+                                            <Text style={{
+                                                fontSize: 16,
+                                                color: 'red',
+                                                opacity: 0.7
+                                            }}>
+                                                Chú Thích:
+                                            </Text>
+                                            <View>
+                                                <Text>
+                                                    Dương là số hàng đc Cấp
+                                                </Text>
+                                            </View>
+                                            <View>
+                                                <Text>
+                                                    Âm là số hàng phải trả
+                                                </Text>
+                                            </View>
+                                            <View>
+                                                <View style={{
+                                                    flexDirection: 'row',
+                                                    justifyContent: 'space-around',
+                                                    borderColor: 'gray',
+                                                    paddingVertical: 10
+                                                }}>
                                                     <Text style={{
-                                                        color: 'red',
-                                                        opacity: 0.7
+                                                        fontSize: 17,
+                                                        fontWeight: 'bold'
                                                     }}>
-                                                        {lichsuxuathang.TrangThai}
+                                                        Tên SP
                                                     </Text>
-                                                    :
                                                     <Text style={{
-                                                        color: 'green',
-                                                        opacity: 0.7
+                                                        fontSize: 17,
+                                                        fontWeight: 'bold'
                                                     }}>
-                                                        {lichsuxuathang.TrangThai}
+                                                        Đơn Giá
                                                     </Text>
-                                            }
-                                            <Button
-                                                title="Chi Tiết"
-                                                onPress={() => toggleDialog5(lichsuxuathang.id)}
-                                                buttonStyle={styles.button}
-                                            />
-                                            <Dialog
-                                                isVisible={visible4}
-                                                onBackdropPress={toggleDialog5}
-                                            >
-                                                <Dialog.Title title="Chi Tiết Sản Phẩm" />
-                                                <View>
                                                     <Text style={{
-                                                        fontSize: 16,
-                                                        color: 'red',
-                                                        opacity: 0.7
+                                                        fontSize: 17,
+                                                        fontWeight: 'bold'
                                                     }}>
-                                                        Chú Thích:
+                                                        SL Tồn
                                                     </Text>
-                                                    <View>
-                                                        <Text>
-                                                            Dương là số hàng đc Cấp
-                                                        </Text>
-                                                    </View>
-                                                    <View>
-                                                        <Text>
-                                                            Âm là số hàng phải trả
-                                                        </Text>
-                                                    </View>
-                                                    <View>
-                                                        <View style={{
-                                                            flexDirection: 'row',
-                                                            justifyContent: 'space-around',
-                                                            borderColor: 'gray',
-                                                            paddingVertical: 10
-                                                        }}>
-                                                            <Text style={{
-                                                                fontSize: 17,
-                                                                fontWeight: 'bold'
-                                                            }}>
-                                                                Tên SP
-                                                            </Text>
-                                                            <Text style={{
-                                                                fontSize: 17,
-                                                                fontWeight: 'bold'
-                                                            }}>
-                                                                Đơn Giá
-                                                            </Text>
-                                                            <Text style={{
-                                                                fontSize: 17,
-                                                                fontWeight: 'bold'
-                                                            }}>
-                                                                SL Tồn
-                                                            </Text>
-                                                        </View>
-                                                        {xuathangs.map(xuathang => (
-                                                            <View key={xuathang.id}>
-
-                                                                <View style={{
-
-                                                                    // paddingVertical: 10
-                                                                }}>
-                                                                    <View style={{
-                                                                        flexDirection: 'row',
-                                                                        justifyContent: 'space-around',
-                                                                        // borderWidth: 0.4,
-                                                                        // borderColor: 'gray',
-                                                                        borderBottomColor: 'gray',
-                                                                        borderBottomWidth: 1,
-                                                                        paddingVertical: 6
-
-                                                                    }}>
-                                                                        <Text style={{
-                                                                            fontSize: 16,
-                                                                            lineHeight: 30
-                                                                        }}>
-                                                                            {xuathang.TenHang}
-                                                                        </Text>
-                                                                        <Text style={{
-                                                                            fontSize: 16,
-                                                                            lineHeight: 30
-                                                                        }}>
-                                                                            {xuathang.price}
-                                                                        </Text>
-                                                                        <Text style={{
-                                                                            fontSize: 16,
-                                                                            lineHeight: 30
-                                                                        }}>
-                                                                            {xuathang.SoLuong}
-                                                                        </Text>
-                                                                    </View>
-
-
-                                                                </View>
-
-                                                            </View>
-                                                        ))}
-                                                    </View>
                                                 </View>
-                                            </Dialog>
+                                                {xuathangs.map(xuathang => (
+                                                    <View key={xuathang.id}>
+
+                                                        <View style={{
+
+                                                            // paddingVertical: 10
+                                                        }}>
+                                                            <View style={{
+                                                                flexDirection: 'row',
+                                                                justifyContent: 'space-around',
+                                                                // borderWidth: 0.4,
+                                                                // borderColor: 'gray',
+                                                                borderBottomColor: 'gray',
+                                                                borderBottomWidth: 1,
+                                                                paddingVertical: 6
+
+                                                            }}>
+                                                                <Text style={{
+                                                                    fontSize: 16,
+                                                                    lineHeight: 30
+                                                                }}>
+                                                                    {xuathang.TenHang}
+                                                                </Text>
+                                                                <Text style={{
+                                                                    fontSize: 16,
+                                                                    lineHeight: 30
+                                                                }}>
+                                                                    {xuathang.price}
+                                                                </Text>
+                                                                <Text style={{
+                                                                    fontSize: 16,
+                                                                    lineHeight: 30
+                                                                }}>
+                                                                    {xuathang.SoLuong}
+                                                                </Text>
+                                                            </View>
+
+
+                                                        </View>
+
+                                                    </View>
+                                                ))}
+                                            </View>
                                         </View>
+                                    </Dialog>
+                                </View>
 
 
-                                    ))
-                                }
-                            </View>
+                            ))
                         }
-                    </>
-                }
+                    </View>
+                </>
+
 
                 <View style={{
                     marginLeft: 40,

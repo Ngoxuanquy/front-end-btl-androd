@@ -61,7 +61,7 @@ export default function PhieuMuonHang({ navigation }) {
 
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/users/' + value)
+        fetch('http://192.168.1.165:4000' + '/api/users/' + value)
             .then(res => res.json())
             .then(res => setId(res[0].id))
             .catch((err) => console.log(err))
@@ -86,7 +86,7 @@ export default function PhieuMuonHang({ navigation }) {
 
         apis.map(api => {
             if (api.id == id) {
-                fetch('http://192.168.0.112:4000' + '/api/muonhang/create/', {
+                fetch('http://192.168.1.165:4000' + '/api/muonhang/create/', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -94,12 +94,12 @@ export default function PhieuMuonHang({ navigation }) {
                         name: name,
                         soluong: 1,
                         nguoimuon: taikhoan,
-                        lichsu_id: ids1,
+                        lichsu_id: Number(ids1),
                         produce_id: api.productsId
                     })
                 })
                     .then(() => {
-                        fetch('http://192.168.0.112:4000' + '/api/muonhangnhap/create/', {
+                        fetch('http://192.168.1.165:4000' + '/api/muonhangnhap/create/', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
@@ -109,7 +109,7 @@ export default function PhieuMuonHang({ navigation }) {
                             })
                         })
                             .then(() => {
-                                fetch('http://192.168.0.112:4000' + '/api/muonhangnhap/' + taikhoan)
+                                fetch('http://192.168.1.165:4000' + '/api/muonhangnhap/' + taikhoan)
                                     .then(res => res.json())
                                     .then(res => setSanPham(res))
                                     .catch((err) => console.log(err))
@@ -130,7 +130,7 @@ export default function PhieuMuonHang({ navigation }) {
 
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/muonhangnhap/' + taikhoan)
+        fetch('http://192.168.1.165:4000' + '/api/muonhangnhap/' + taikhoan)
             .then(res => res.json())
             .then(res => setSanPham(res))
             .catch((err) => console.log(err))
@@ -138,21 +138,21 @@ export default function PhieuMuonHang({ navigation }) {
 
 
     function handerDelete(id) {
-        fetch('http://192.168.0.112:4000' + '/api/muonhangnhap/delete/id/' + id,
+        fetch('http://192.168.1.165:4000' + '/api/muonhangnhap/delete/id/' + id,
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
             }
         )
             .then(() => {
-                fetch('http://192.168.0.112:4000' + '/api/muonhangnhap/' + taikhoan)
+                fetch('http://192.168.1.165:4000' + '/api/muonhangnhap/' + taikhoan)
                     .then(res => res.json())
                     .then(res => setSanPham(res))
                     .catch((err) => console.log(err))
             })
 
 
-        fetch('http://192.168.0.112:4000' + '/api/muonhang/delete/id/' + id,
+        fetch('http://192.168.1.165:4000' + '/api/muonhang/delete/id/' + id,
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -170,7 +170,7 @@ export default function PhieuMuonHang({ navigation }) {
             return;
         }
 
-        fetch('http://192.168.0.112:4000' + '/api/muonhang/update/soluong/' + id, {
+        fetch('http://192.168.1.165:4000' + '/api/muonhang/update/soluong/' + id, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -178,7 +178,7 @@ export default function PhieuMuonHang({ navigation }) {
             })
         })
 
-        fetch('http://192.168.0.112:4000' + '/api/muonhangnhap/update/soluong/' + id, {
+        fetch('http://192.168.1.165:4000' + '/api/muonhangnhap/update/soluong/' + id, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -186,7 +186,7 @@ export default function PhieuMuonHang({ navigation }) {
             })
         })
             .then(() => {
-                fetch('http://192.168.0.112:4000' + '/api/muonhangnhap/' + taikhoan)
+                fetch('http://192.168.1.165:4000' + '/api/muonhangnhap/' + taikhoan)
                     .then(res => res.json())
                     .then(res => setSanPham(res))
                     .catch((err) => console.log(err))
@@ -200,7 +200,7 @@ export default function PhieuMuonHang({ navigation }) {
     function handerCong(id, soluong) {
 
 
-        fetch('http://192.168.0.112:4000' + '/api/muonhang/update/soluong/' + id, {
+        fetch('http://192.168.1.165:4000' + '/api/muonhang/update/soluong/' + id, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -208,7 +208,7 @@ export default function PhieuMuonHang({ navigation }) {
             })
         })
 
-        fetch('http://192.168.0.112:4000' + '/api/muonhangnhap/update/soluong/' + id, {
+        fetch('http://192.168.1.165:4000' + '/api/muonhangnhap/update/soluong/' + id, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -216,7 +216,7 @@ export default function PhieuMuonHang({ navigation }) {
             })
         })
             .then(() => {
-                fetch('http://192.168.0.112:4000' + '/api/muonhangnhap/' + taikhoan)
+                fetch('http://192.168.1.165:4000' + '/api/muonhangnhap/' + taikhoan)
                     .then(res => res.json())
                     .then(res => setSanPham(res))
                     .catch((err) => console.log(err))
@@ -224,7 +224,7 @@ export default function PhieuMuonHang({ navigation }) {
     }
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/tokenthongbao/')
+        fetch('http://192.168.1.165:4000' + '/api/tokenthongbao/')
             .then(res => res.json())
             .then(res => res.map(re => {
                 if (re.Name == value) {
@@ -251,7 +251,7 @@ export default function PhieuMuonHang({ navigation }) {
     function handerSubmit() {
         let id = id_donhang + 1
 
-        fetch('http://192.168.0.112:4000' + '/api/muonhang/update/lichsumuonhangId/' + id,
+        fetch('http://192.168.1.165:4000' + '/api/muonhang/update/lichsumuonhangId/' + id,
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -262,14 +262,14 @@ export default function PhieuMuonHang({ navigation }) {
         )
             .then(() => {
 
-                fetch('http://192.168.0.112:4000' + '/api/muonhangnhap/delete/' + taikhoan,
+                fetch('http://192.168.1.165:4000' + '/api/muonhangnhap/delete/' + taikhoan,
                     {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                     }
                 )
                     .then(() => {
-                        fetch('http://192.168.0.112:4000' + '/api/muonhangnhap/' + taikhoan)
+                        fetch('http://192.168.1.165:4000' + '/api/muonhangnhap/' + taikhoan)
                             .then(res => res.json())
                             .then(res => setSanPham(res))
                             .catch((err) => console.log(err))
@@ -291,14 +291,14 @@ export default function PhieuMuonHang({ navigation }) {
     const [idnguoichomuon, setIdNguoiCHoMuon] = useState()
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/users/' + value)
+        fetch('http://192.168.1.165:4000' + '/api/users/' + value)
             .then(res => res.json())
             .then(res => setIdNguoiCHoMuon(res[0].id))
             .catch((err) => console.log(err))
     }, [value])
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/products/')
+        fetch('http://192.168.1.165:4000' + '/api/products/')
             .then(res => res.json())
             .then(res => res.map(api => {
                 setInventory(pre => [...pre, api.inventory])
@@ -312,7 +312,7 @@ export default function PhieuMuonHang({ navigation }) {
 
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/products/')
+        fetch('http://192.168.1.165:4000' + '/api/products/')
             .then(res => res.json())
             .then(res => setProduce(res))
             .catch((err) => console.log(err))
@@ -334,13 +334,13 @@ export default function PhieuMuonHang({ navigation }) {
 
     // useEffect(() => {
     //     if (search != "") {
-    //         fetch('http://192.168.0.112:4000' + '/api/khocanhan/sanpham/' + idnguoichomuon + '/' + search)
+    //         fetch('http://192.168.1.165:4000' + '/api/khocanhan/sanpham/' + idnguoichomuon + '/' + search)
     //             .then(res => res.json())
     //             .then(res => setApi(res))
     //             .catch((err) => console.log(err))
     //     }
     //     else {
-    //         fetch('http://192.168.0.112:4000' + '/api/users/' + value)
+    //         fetch('http://192.168.1.165:4000' + '/api/users/' + value)
     //             .then(res => res.json())
     //             .then(res => setApi(res[0].khohangcanhan))
     //             .catch((err) => console.log(err))
@@ -355,7 +355,7 @@ export default function PhieuMuonHang({ navigation }) {
         }
         setIsload(true)
 
-        fetch('http://192.168.0.112:4000' + '/api/lichsumuonhang/create/', {
+        fetch('http://192.168.1.165:4000' + '/api/lichsumuonhang/create/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -368,7 +368,7 @@ export default function PhieuMuonHang({ navigation }) {
     }
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/lichsumuonhang/')
+        fetch('http://192.168.1.165:4000' + '/api/lichsumuonhang/')
             .then((res) => res.json())
             .then(res => {
                 let max_val = res.reduce(function (accumulator, element) {

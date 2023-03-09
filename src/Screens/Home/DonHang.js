@@ -30,7 +30,10 @@ export default function DonHang({ navigation }) {
 
                             elevation: 14,
                             marginTop: 5
-                        }} >
+                        }}
+                            onPress={() => navigation.navigate('Đơn Chờ Thực Hiện')}
+
+                        >
                             <Text style={{
                                 fontSize: 22,
                                 color: 'black',
@@ -64,7 +67,10 @@ export default function DonHang({ navigation }) {
 
                             elevation: 14,
                             marginTop: 5
-                        }} >
+                        }}
+                            onPress={() => navigation.navigate('Đơn Đã Hoàn Thành')}
+
+                        >
                             <Text style={{
                                 fontSize: 22,
                                 color: 'black',
@@ -134,7 +140,10 @@ export default function DonHang({ navigation }) {
 
                             elevation: 14,
                             marginTop: 5
-                        }} >
+                        }}
+                            onPress={() => navigation.navigate('Đơn Thu Nợ')}
+
+                        >
                             <Text style={{
                                 fontSize: 22,
                                 color: 'black',
@@ -174,7 +183,10 @@ export default function DonHang({ navigation }) {
                                 color: 'black',
                                 textAlign: 'center',
 
-                            }}>
+                            }}
+                                onPress={() => navigation.navigate('Đơn Khách Nợ')}
+
+                            >
                                 Đơn Khách Nợ
                             </Text>
                         </TouchableOpacity>
@@ -208,8 +220,11 @@ export default function DonHang({ navigation }) {
                                 color: 'black',
                                 textAlign: 'center',
 
-                            }}>
-                                Đơn Chưa Bản Giao
+                            }}
+                                onPress={() => navigation.navigate('Đơn Chưa Bàn Giao')}
+
+                            >
+                                Đơn Chưa Bàn Giao
                             </Text>
                         </TouchableOpacity>
                     </View>

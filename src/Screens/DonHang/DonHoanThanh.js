@@ -6,9 +6,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons } from '@expo/vector-icons';
 import { ScrollView } from 'react-native-virtualized-view';
 
-export default function DonChoThucHien() {
+export default function DonHoanThanh() {
 
-    const [customer, setCustomer] = useState([])
+    const [orders, setOrders] = useState([])
     const [taikhoan, setTaiKhoan] = useState([])
 
 
@@ -19,16 +19,16 @@ export default function DonChoThucHien() {
 
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/customer/')
+        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan)
             .then(res => res.json())
-            .then(res => setCustomer(res))
+            .then(res => setOrders(res))
             .catch(err => console.log(err))
             .finally(() => {
 
             })
     }, [taikhoan])
 
-    console.log(customer)
+    console.log(orders)
 
     const buttons = [
 
@@ -60,7 +60,7 @@ export default function DonChoThucHien() {
             <View>
                 <LinearGradient
                     // Background Linear Gradient
-                    colors={['#ADD8E6', '#B0E0E6', '#87CEFA', '#00BFFF']}
+                    colors={['#8FBC8F', '#20B2AA', '#008B8B', '#008080']}
                     style={{
                         width: "100%",
                         height: 150,
@@ -80,7 +80,7 @@ export default function DonChoThucHien() {
                         fontSize: 25,
                         color: 'white'
                     }}>
-                        Đơn Chờ Thực Hiện
+                        Đơn Đã Hoàn Thành
                     </Text>
                 </View>
 
@@ -103,7 +103,7 @@ export default function DonChoThucHien() {
                             <Text style={{
                                 fontSize: 20
                             }}>
-                                Tổng Số Đơn Chờ
+                                Tổng Số Đơn
                             </Text>
                             <Text style={{
                                 fontSize: 20
@@ -127,14 +127,13 @@ export default function DonChoThucHien() {
                                     <View >
                                         <MaterialIcons name={button.icon} style={{
                                             fontSize: 40,
-                                            color: 'blue',
+                                            color: '#33CC33l',
                                             marginLeft: 20,
                                             marginTop: 20,
                                             borderColor: 'gray',
                                             borderWidth: 0.6,
                                             padding: 10,
-                                            opacity: 0.5
-
+                                            // opacity: 0.8
                                         }} />
                                     </View>
                                 </ScrollView>
@@ -148,7 +147,7 @@ export default function DonChoThucHien() {
                     alignItems: 'center',
                     marginTop: 20
                 }}>
-                    {customer.map(cu => (
+                    {orders.map(cu => (
                         <View style={{
                             flexDirection: 'row',
                             justifyContent: 'space-around',
@@ -158,27 +157,39 @@ export default function DonChoThucHien() {
                             marginTop: 10,
                             borderRadius: 10
                         }}>
-                            <View>
+                            <View style={{
+                                padding: 10
+                            }}>
                                 <Text style={{
-                                    fontSize: 20,
+                                    fontSize: 18,
                                     lineHeight: 30
                                 }}>
-                                    Mã Kh: {cu.customer_code}
+                                    Mã HD: {cu.code_bill}
                                 </Text>
                                 <Text style={{
-                                    fontSize: 20
+                                    fontSize: 18
                                 }}>
-                                    Tên: {cu.customer_name}
+                                    Người Làm: {cu.nguoithuchien}
+                                </Text>
+                                <Text style={{
+                                    fontSize: 18
+                                }}>
+                                    Ngày : {cu.order_date}
+                                </Text>
+                                <Text style={{
+                                    fontSize: 18
+                                }}>
+                                    Trạng Thái: {cu.status}
                                 </Text>
                             </View>
                             <View>
                                 <Text style={{
-                                    fontSize: 20
+                                    fontSize: 18
                                 }}>
                                     {cu.Address}
                                 </Text>
                                 <Text style={{
-                                    fontSize: 20
+                                    fontSize: 18
                                 }}>
                                     {cu.phone_number}
                                 </Text>

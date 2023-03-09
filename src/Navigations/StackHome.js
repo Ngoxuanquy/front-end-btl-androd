@@ -2,8 +2,8 @@ import * as React from 'react'
 import { View, Text } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-
-import Home from '../Screens/Home/Home'
+import LinearGradient from 'react-native-linear-gradient';
+import Home from '../Screens/Home/HomeScrem'
 import QRCode from '../Screens/Home/QRCode'
 import DonDangThucHien from '../Screens/DonHang/DonDangThucHien'
 import KhoHang from './../Screens/Home/KhoHang'
@@ -33,11 +33,12 @@ import PhieuThuDo from '../Screens/NhapXuatKho/PhieuThuHoiDo'
 import SuaThanhToan from '../Screens/Cart/SuaThanhToan'
 import DonVeSinh from '../Screens/DonHang/DonViSinh'
 import ChiTietThongBao from '../Screens/ThongBao/ChiTietThongBao'
-// import DonThuNo from '../Screens/DonHang/DonThuNo'
-// import DonKhachNo from '../Screens/DonHang/DonKhachNo'
-// import DonChoThucHien from '../Screens/DonHang/DonChoThucHien'
-// import DonHoanThanh from '../Screens/DonHang/DonHoanThanh'
-// import DonChuaBanGiao from '../Screens/DonHang/DonChuaBanGiao'
+import DonChoThucHien from '../Screens/DonHang/DonChoThucHien'
+import DonDaHoanThanh from '../Screens/DonHang/DonHoanThanh'
+import DonThuNo from '../Screens/DonHang/DonThuNo'
+import DonKhachNo from '../Screens/DonHang/DonKhachNo'
+import DonHoanThanh from '../Screens/DonHang/DonHoanThanh'
+import DonChuaBanGiao from '../Screens/DonHang/DonChuaBanGiao'
 
 const Stack = createNativeStackNavigator()
 
@@ -46,7 +47,7 @@ function StackHomes() {
         <Stack.Navigator
             options={{
                 headerStyle: {
-                    backgroundColor: '#789BF6',
+                    backgroundColor: '#262626',
                     height: 150,
                     // title: 'My home',
                     borderBottomLeftRadius: 40,
@@ -68,7 +69,7 @@ function StackHomes() {
                 options={{
                     headerShown: true,
                     headerStyle: {
-                        backgroundColor: '#789BF6',
+                        backgroundColor: '#262626',
                         height: 150,
                         // title: 'My home',
                         borderBottomLeftRadius: 40,
@@ -97,7 +98,7 @@ function StackHomes() {
                 options={{
                     headerShown: true,
                     headerStyle: {
-                        backgroundColor: '#789BF6',
+                        backgroundColor: '#262626',
                         height: 150,
                         // title: 'My home',
                         borderBottomLeftRadius: 40,
@@ -112,7 +113,7 @@ function StackHomes() {
                 options={{
                     headerShown: true,
                     headerStyle: {
-                        backgroundColor: '#789BF6',
+                        backgroundColor: '#262626',
                         height: 150,
                         // title: 'My home',
                         borderBottomLeftRadius: 40,
@@ -127,7 +128,7 @@ function StackHomes() {
                 options={{
                     headerShown: true,
                     headerStyle: {
-                        backgroundColor: '#789BF6',
+                        backgroundColor: '#262626',
                         height: 150,
                         // title: 'My home',
                         borderBottomLeftRadius: 40,
@@ -149,7 +150,7 @@ function StackHomes() {
                 options={{
                     headerShown: true,
                     headerStyle: {
-                        backgroundColor: '#789BF6',
+                        backgroundColor: '#262626',
                         height: 150,
                         // title: 'My home',
                         borderBottomLeftRadius: 40,
@@ -164,7 +165,7 @@ function StackHomes() {
                 options={{
                     headerShown: true,
                     headerStyle: {
-                        backgroundColor: '#789BF6',
+                        backgroundColor: '#262626',
                         height: 150,
                         // title: 'My home',
                         borderBottomLeftRadius: 40,
@@ -179,7 +180,7 @@ function StackHomes() {
                 options={{
                     headerShown: true,
                     headerStyle: {
-                        backgroundColor: '#789BF6',
+                        backgroundColor: '#262626',
                         height: 150,
                         // title: 'My home',
                         borderBottomLeftRadius: 40,
@@ -194,7 +195,7 @@ function StackHomes() {
                 options={{
                     headerShown: true,
                     headerStyle: {
-                        backgroundColor: '#789BF6',
+                        backgroundColor: '#262626',
                         height: 150,
                         // title: 'My home',
                         borderBottomLeftRadius: 40,
@@ -209,7 +210,7 @@ function StackHomes() {
                 options={{
                     headerShown: true,
                     headerStyle: {
-                        backgroundColor: '#789BF6',
+                        backgroundColor: '#262626',
                         height: 150,
                         // title: 'My home',
                         borderBottomLeftRadius: 40,
@@ -224,7 +225,7 @@ function StackHomes() {
                 options={{
                     headerShown: true,
                     headerStyle: {
-                        backgroundColor: '#789BF6',
+                        backgroundColor: '#262626',
                         height: 150,
                         // title: 'My home',
                         borderBottomLeftRadius: 40,
@@ -239,7 +240,7 @@ function StackHomes() {
                 options={{
                     headerShown: true,
                     headerStyle: {
-                        backgroundColor: '#789BF6',
+                        backgroundColor: '#262626',
                         height: 150,
                         // title: 'My home',
                         borderBottomLeftRadius: 40,
@@ -255,7 +256,7 @@ function StackHomes() {
                 options={{
                     headerShown: true,
                     headerStyle: {
-                        backgroundColor: '#789BF6',
+                        backgroundColor: '#262626',
                         height: 150,
                         // title: 'My home',
                         borderBottomLeftRadius: 40,
@@ -270,7 +271,7 @@ function StackHomes() {
                 options={{
                     headerShown: true,
                     headerStyle: {
-                        backgroundColor: '#789BF6',
+                        backgroundColor: '#262626',
                         height: 150,
                         // title: 'My home',
                         borderBottomLeftRadius: 40,
@@ -292,7 +293,7 @@ function StackHomes() {
                 options={{
                     headerShown: true,
                     headerStyle: {
-                        backgroundColor: '#789BF6',
+                        backgroundColor: '#262626',
                         height: 150,
                         // title: 'My home',
                         borderBottomLeftRadius: 40,
@@ -307,7 +308,7 @@ function StackHomes() {
                 options={{
                     headerShown: true,
                     headerStyle: {
-                        backgroundColor: '#789BF6',
+                        backgroundColor: '#262626',
                         height: 150,
                         // title: 'My home',
                         borderBottomLeftRadius: 40,
@@ -322,7 +323,7 @@ function StackHomes() {
                 options={{
                     headerShown: true,
                     headerStyle: {
-                        backgroundColor: '#789BF6',
+                        backgroundColor: '#262626',
                         height: 150,
                         // title: 'My home',
                         borderBottomLeftRadius: 40,
@@ -337,7 +338,7 @@ function StackHomes() {
                 options={{
                     headerShown: true,
                     headerStyle: {
-                        backgroundColor: '#789BF6',
+                        backgroundColor: '#262626',
                         height: 150,
                         // title: 'My home',
                         borderBottomLeftRadius: 40,
@@ -352,7 +353,7 @@ function StackHomes() {
                 options={{
                     headerShown: true,
                     headerStyle: {
-                        backgroundColor: '#789BF6',
+                        backgroundColor: '#262626',
                         height: 150,
                         // title: 'My home',
                         borderBottomLeftRadius: 40,
@@ -367,7 +368,7 @@ function StackHomes() {
                 options={{
                     headerShown: true,
                     headerStyle: {
-                        backgroundColor: '#789BF6',
+                        backgroundColor: '#262626',
                         height: 150,
                         // title: 'My home',
                         borderBottomLeftRadius: 40,
@@ -410,7 +411,7 @@ function StackHomes() {
                 options={{
                     headerShown: true,
                     headerStyle: {
-                        backgroundColor: '#789BF6',
+                        backgroundColor: '#262626',
                         height: 150,
                         // title: 'My home',
                         borderBottomLeftRadius: 40,
@@ -426,7 +427,7 @@ function StackHomes() {
                 options={{
                     headerShown: true,
                     headerStyle: {
-                        backgroundColor: '#789BF6',
+                        backgroundColor: '#262626',
                         height: 150,
                         // title: 'My home',
                         borderBottomLeftRadius: 40,
@@ -435,14 +436,14 @@ function StackHomes() {
                     headerTintColor: '#fff',
                 }}
             />
-            {/*             
+
             <Stack.Screen
-                name="Đơn thu nợ"
+                name="Đơn Thu Nợ"
                 component={DonThuNo}
                 options={{
-                    headerShown: true,
+                    headerShown: false,
                     headerStyle: {
-                        backgroundColor: '#789BF6',
+                        backgroundColor: '#262626',
                         height: 150,
                         // title: 'My home',
                         borderBottomLeftRadius: 40,
@@ -452,12 +453,27 @@ function StackHomes() {
                 }}
             />
             <Stack.Screen
-                name="đơn khách nợ"
+                name="Đơn Đã Hoàn Thành"
+                component={DonDaHoanThanh}
+                options={{
+                    headerShown: false,
+                    headerStyle: {
+                        backgroundColor: '#262626',
+                        height: 150,
+                        // title: 'My home',
+                        borderBottomLeftRadius: 40,
+                        borderBottomRightRadius: 40,
+                    },
+                    headerTintColor: '#fff',
+                }}
+            />
+            <Stack.Screen
+                name="Đơn Khách Nợ"
                 component={DonKhachNo}
                 options={{
                     headerShown: true,
                     headerStyle: {
-                        backgroundColor: '#789BF6',
+                        backgroundColor: '#262626',
                         height: 150,
                         // title: 'My home',
                         borderBottomLeftRadius: 40,
@@ -467,12 +483,13 @@ function StackHomes() {
                 }}
             />
             <Stack.Screen
-                name="Đơn chờ thực hiện"
+                name="Đơn Chờ Thực Hiện"
                 component={DonChoThucHien}
                 options={{
-                    headerShown: true,
+                    headerShown: false,
                     headerStyle: {
-                        backgroundColor: '#789BF6',
+                        backgroundColor: '#262626',
+                        backgroundColor: "linear-gradient(-90deg, purple, pink)",
                         height: 150,
                         // title: 'My home',
                         borderBottomLeftRadius: 40,
@@ -485,9 +502,9 @@ function StackHomes() {
                 name="Đơn Hoàn Thành"
                 component={DonHoanThanh}
                 options={{
-                    headerShown: true,
+                    headerShown: false,
                     headerStyle: {
-                        backgroundColor: '#789BF6',
+                        backgroundColor: '#262626',
                         height: 150,
                         // title: 'My home',
                         borderBottomLeftRadius: 40,
@@ -497,12 +514,12 @@ function StackHomes() {
                 }}
             />
             <Stack.Screen
-                name="Đơn chưa bàn giao"
+                name="Đơn Chưa Bàn Giao"
                 component={DonChuaBanGiao}
                 options={{
                     headerShown: true,
                     headerStyle: {
-                        backgroundColor: '#789BF6',
+                        backgroundColor: '#262626',
                         height: 150,
                         // title: 'My home',
                         borderBottomLeftRadius: 40,
@@ -510,7 +527,7 @@ function StackHomes() {
                     },
                     headerTintColor: '#fff',
                 }}
-            />  */}
+            />
         </Stack.Navigator>
     )
 }

@@ -1,34 +1,128 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
 // import ThuTucHanhChinh from './ThuTucHanhChinh';
+import { AntDesign } from '@expo/vector-icons';
+import React, { useContext } from 'react';
+import ThemeConText from '../../../config/themeConText';
 
 export default function ThuTucHanhChinh({ navigation }) {
+
+    const theme = useContext(ThemeConText)
+
     return (
-        <ScrollView>
-            <View>
-                <View >
-                    <View style={{
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                    }}>
-                        <TouchableOpacity style={{
-                            backgroundColor: '#dddddd',
-                            marginTop: 20,
-                            borderRadius: 10,
-                            width: '90%'
+        <View
+            style={
+                [
+                    {
+                        flex: 1
+                    }
+                    , {
+                        backgroundColor: theme.maunen
+                    }]}
+        >
+            <View style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+            }}>
+                <View
+                    style={[
+                        {
+                            width: '90%',
+                            borderRadius: 20,
+                            backgroundColor: 'white',
+                            marginTop: 40,
+                            zIndex: 1,
+                            opacity: 1
+                        }
+                        , {
+                            backgroundColor: theme.background
+                        }]}
 
-                        }}
+                >
+                    <View style={{
+                        borderRadius: 20
+
+                    }}>
+                        <Text
+                            style={[
+                                {
+                                    textAlign: 'justify',
+                                    padding: 10,
+                                    fontSize: 20
+                                }
+                                , {
+                                    color: theme.color
+                                }]}
+                        >
+                            Thủ Tục Hành Chính
+                        </Text>
+                        <TouchableOpacity
+                            style={[
+                                {
+                                    backgroundColor: '#fff',
+                                    width: '100%',
+                                    paddingHorizontal: 20,
+                                    marginTop: 10
+                                }
+                                , {
+                                    backgroundColor: theme.background
+                                }]}
+
                             onPress={() => navigation.navigate('Phiếu Đề Nghị')}
-
                         >
-                            <Text style={{
-                                fontSize: 20,
-                                opacity: 0.7,
-                                textAlign: 'center',
-                                paddingVertical: 17
+                            <View style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-between'
                             }}>
-                                Phiếu Đề Nghị
-                            </Text>
+                                <View style={{
+                                    flexDirection: 'row'
+                                }}>
+                                    <AntDesign name="closecircleo" size={30} color="green" style={{
+                                        borderRadius: 100,
+                                        marginRight: 20,
+                                        marginTop: 10
+                                    }} />
+                                    <Text
+                                        style={[
+                                            {
+                                                fontSize: 21,
+                                                opacity: 0.7,
+                                                marginTop: 4,
+                                                lineHeight: 40
+                                            }
+                                            , {
+                                                color: theme.color
+                                            }]}
+                                    >
+                                        Phiếu Đề Nghị
+                                    </Text>
+                                </View>
+
+                                <AntDesign name="right" size={14}
+
+                                    style={[
+                                        {
+                                            marginTop: 13,
+                                            opacity: 0.4
+                                        }
+                                        , {
+                                            color: theme.color
+                                        }]}
+                                />
+                            </View>
+                            <View
+                                style={[
+                                    {
+                                        padding: 7,
+                                        borderBottomWidth: 0.4,
+                                        opacity: 0.5,
+                                    }
+                                    , {
+                                        borderBottomColor: theme.color
+                                    }]}
+                            >
+
+                            </View>
                         </TouchableOpacity>
                     </View>
 
@@ -36,23 +130,68 @@ export default function ThuTucHanhChinh({ navigation }) {
                         justifyContent: 'center',
                         alignItems: 'center'
                     }}>
-                        <TouchableOpacity style={{
-                            backgroundColor: '#dddddd',
-                            marginTop: 20,
-                            width: '90%',
-                            borderRadius: 10
-                        }}
+                        <TouchableOpacity style={[
+                            {
+                                backgroundColor: '#fff',
+                                width: '100%',
+                                paddingHorizontal: 20,
+                                marginTop: 10
+                            }
+                            , {
+                                backgroundColor: theme.background
+                            }]}
                             onPress={() => navigation.navigate('Phiếu Giải Trình')}
-
                         >
-                            <Text style={{
-                                fontSize: 20,
-                                opacity: 0.7,
-                                textAlign: 'center',
-                                paddingVertical: 17
+                            <View style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-between'
                             }}>
-                                Phiếu Giải Trình
-                            </Text>
+                                <View style={{
+                                    flexDirection: 'row'
+                                }}>
+                                    <AntDesign name="closecircleo" size={30} color="green" style={{
+                                        borderRadius: 100,
+                                        marginRight: 20,
+                                        marginTop: 10
+                                    }} />
+                                    <Text
+                                        style={[
+                                            {
+                                                fontSize: 21,
+                                                opacity: 0.7,
+                                                marginTop: 4,
+                                                lineHeight: 40
+
+                                            }
+                                            , {
+                                                color: theme.color
+                                            }]}
+                                    >
+                                        Phiếu Giải Trình
+                                    </Text>
+                                </View>
+
+                                <AntDesign name="right" size={14}
+                                    style={[
+                                        {
+                                            marginTop: 13,
+                                            opacity: 0.4
+                                        }
+                                        , {
+                                            color: theme.color
+                                        }]} />
+                            </View>
+                            <View style={[
+                                {
+                                    padding: 7,
+                                    borderBottomWidth: 0.4,
+                                    opacity: 0.5,
+                                }
+                                , {
+                                    borderBottomColor: theme.color
+                                }]}>
+
+                            </View>
                         </TouchableOpacity>
                     </View>
 
@@ -60,24 +199,69 @@ export default function ThuTucHanhChinh({ navigation }) {
                         justifyContent: 'center',
                         alignItems: 'center'
                     }}>
-                        <TouchableOpacity style={{
-                            backgroundColor: '#dddddd',
-                            marginTop: 20,
-                            borderRadius: 10,
-                            width: '90%'
 
-                        }}
-                            onPress={() => navigation.navigate('Đơn Xin Nghỉ Phép')}
-
+                        <TouchableOpacity style={[
+                            {
+                                backgroundColor: '#fff',
+                                width: '100%',
+                                paddingHorizontal: 20,
+                                marginTop: 10
+                            }
+                            , {
+                                backgroundColor: theme.background
+                            }]}
+                            onPress={() => navigation.navigate('Đơn Xin nghỉ phép')}
                         >
-                            <Text style={{
-                                fontSize: 20,
-                                opacity: 0.7,
-                                textAlign: 'center',
-                                paddingVertical: 17
+                            <View style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-between'
                             }}>
-                                Đơn Xin nghỉ phép
-                            </Text>
+                                <View style={{
+                                    flexDirection: 'row'
+                                }}>
+                                    <AntDesign name="closecircleo" size={30} color="green" style={{
+                                        borderRadius: 100,
+                                        marginRight: 20,
+                                        marginTop: 10
+                                    }} />
+                                    <Text
+                                        style={[
+                                            {
+                                                fontSize: 21,
+                                                opacity: 0.7,
+                                                marginTop: 4,
+                                                lineHeight: 40
+
+                                            }
+                                            , {
+                                                color: theme.color
+                                            }]}
+                                    >
+                                        Đơn Xin nghỉ phép
+                                    </Text>
+                                </View>
+
+                                <AntDesign name="right" size={14}
+                                    style={[
+                                        {
+                                            marginTop: 13,
+                                            opacity: 0.4
+                                        }
+                                        , {
+                                            color: theme.color
+                                        }]} />
+                            </View>
+                            <View style={[
+                                {
+                                    padding: 7,
+                                    borderBottomWidth: 0.4,
+                                    opacity: 0.5,
+                                }
+                                , {
+                                    borderBottomColor: theme.color
+                                }]}>
+
+                            </View>
                         </TouchableOpacity>
                     </View>
 
@@ -86,23 +270,68 @@ export default function ThuTucHanhChinh({ navigation }) {
                         justifyContent: 'center',
                         alignItems: 'center'
                     }}>
-                        <TouchableOpacity style={{
-                            backgroundColor: '#dddddd',
-                            marginTop: 20,
-                            width: '90%',
-                            borderRadius: 10
-                        }}
+                        <TouchableOpacity style={[
+                            {
+                                backgroundColor: '#fff',
+                                width: '100%',
+                                paddingHorizontal: 20,
+                                marginTop: 10
+                            }
+                            , {
+                                backgroundColor: theme.background
+                            }]}
                             onPress={() => navigation.navigate('Đơn Xin Nghỉ Việc')}
-
                         >
-                            <Text style={{
-                                fontSize: 20,
-                                opacity: 0.7,
-                                textAlign: 'center',
-                                paddingVertical: 17
+                            <View style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-between'
                             }}>
-                                Đơn Xin Nghỉ Việc
-                            </Text>
+                                <View style={{
+                                    flexDirection: 'row'
+                                }}>
+                                    <AntDesign name="closecircleo" size={30} color="green" style={{
+                                        borderRadius: 100,
+                                        marginRight: 20,
+                                        marginTop: 10
+                                    }} />
+                                    <Text
+                                        style={[
+                                            {
+                                                fontSize: 21,
+                                                opacity: 0.7,
+                                                marginTop: 4,
+                                                lineHeight: 40
+
+                                            }
+                                            , {
+                                                color: theme.color
+                                            }]}
+                                    >
+                                        Đơn Xin Nghỉ Việc
+                                    </Text>
+                                </View>
+
+                                <AntDesign name="right" size={14}
+                                    style={[
+                                        {
+                                            marginTop: 13,
+                                            opacity: 0.4
+                                        }
+                                        , {
+                                            color: theme.color
+                                        }]} />
+                            </View>
+                            <View style={[
+                                {
+                                    padding: 7,
+                                    borderBottomWidth: 0.4,
+                                    opacity: 0.5,
+                                }
+                                , {
+                                    borderBottomColor: theme.color
+                                }]}>
+
+                            </View>
                         </TouchableOpacity>
                     </View>
 
@@ -110,24 +339,68 @@ export default function ThuTucHanhChinh({ navigation }) {
                         justifyContent: 'center',
                         alignItems: 'center'
                     }}>
-                        <TouchableOpacity style={{
-                            backgroundColor: '#dddddd',
-                            marginTop: 20,
-                            borderRadius: 10,
-                            width: '90%'
-
-                        }}
+                        <TouchableOpacity style={[
+                            {
+                                backgroundColor: '#fff',
+                                width: '100%',
+                                paddingHorizontal: 20,
+                                marginTop: 10
+                            }
+                            , {
+                                backgroundColor: theme.background
+                            }]}
                             onPress={() => navigation.navigate('Đơn Xin Đi Muộn')}
-
                         >
-                            <Text style={{
-                                fontSize: 20,
-                                opacity: 0.7,
-                                textAlign: 'center',
-                                paddingVertical: 17
+                            <View style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-between'
                             }}>
-                                Đơn Xin đi muộn - về sớm
-                            </Text>
+                                <View style={{
+                                    flexDirection: 'row'
+                                }}>
+                                    <AntDesign name="closecircleo" size={30} color="green" style={{
+                                        borderRadius: 100,
+                                        marginRight: 20,
+                                        marginTop: 10
+                                    }} />
+                                    <Text
+                                        style={[
+                                            {
+                                                fontSize: 21,
+                                                opacity: 0.7,
+                                                marginTop: 4,
+                                                lineHeight: 40
+
+                                            }
+                                            , {
+                                                color: theme.color
+                                            }]}
+                                    >
+                                        Đơn Xin đi muộn - về sớm
+                                    </Text>
+                                </View>
+
+                                <AntDesign name="right" size={14}
+                                    style={[
+                                        {
+                                            marginTop: 13,
+                                            opacity: 0.4
+                                        }
+                                        , {
+                                            color: theme.color
+                                        }]} />
+                            </View>
+                            <View style={[
+                                {
+                                    padding: 7,
+                                    borderBottomWidth: 0.4,
+                                    opacity: 0.5,
+                                }
+                                , {
+                                    borderBottomColor: theme.color
+                                }]}>
+
+                            </View>
                         </TouchableOpacity>
                     </View>
 
@@ -135,48 +408,148 @@ export default function ThuTucHanhChinh({ navigation }) {
                         justifyContent: 'center',
                         alignItems: 'center'
                     }}>
-                        <TouchableOpacity style={{
-                            backgroundColor: '#dddddd',
-                            marginTop: 20,
-                            width: '90%',
-                            borderRadius: 10
-                        }}>
-                            <Text style={{
-                                fontSize: 20,
-                                opacity: 0.7,
-                                textAlign: 'center',
-                                paddingVertical: 17
+
+
+                        <TouchableOpacity style={[
+                            {
+                                backgroundColor: '#fff',
+                                width: '100%',
+                                paddingHorizontal: 20,
+                                marginTop: 10
+                            }
+                            , {
+                                backgroundColor: theme.background
+                            }]}
+                            onPress={() => navigation.navigate('Đơn Xin Đi Muộn')}
+                        >
+                            <View style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-between'
                             }}>
-                                Đơn Xin đăng ký parttime
-                            </Text>
+                                <View style={{
+                                    flexDirection: 'row'
+                                }}>
+                                    <AntDesign name="closecircleo" size={30} color="green" style={{
+                                        borderRadius: 100,
+                                        marginRight: 20,
+                                        marginTop: 10
+                                    }} />
+                                    <Text
+                                        style={[
+                                            {
+                                                fontSize: 21,
+                                                opacity: 0.7,
+                                                marginTop: 4,
+                                                lineHeight: 40
+
+                                            }
+                                            , {
+                                                color: theme.color
+                                            }]}
+                                    >
+                                        Đơn Xin đăng ký parttime
+                                    </Text>
+                                </View>
+
+                                <AntDesign name="right" size={14}
+                                    style={[
+                                        {
+                                            marginTop: 13,
+                                            opacity: 0.4
+                                        }
+                                        , {
+                                            color: theme.color
+                                        }]} />
+                            </View>
+                            <View style={[
+                                {
+                                    padding: 7,
+                                    borderBottomWidth: 0.4,
+                                    opacity: 0.5,
+                                }
+                                , {
+                                    borderBottomColor: theme.color
+                                }]}>
+
+                            </View>
                         </TouchableOpacity>
                     </View>
 
                     <View style={{
                         justifyContent: 'center',
-                        alignItems: 'center'
+                        alignItems: 'center',
+                        marginBottom: 30
                     }}>
-                        <TouchableOpacity style={{
-                            backgroundColor: '#dddddd',
-                            marginTop: 20,
-                            borderRadius: 10,
-                            width: '90%'
 
-                        }}>
-                            <Text style={{
-                                fontSize: 20,
-                                opacity: 0.7,
-                                textAlign: 'center',
-                                paddingVertical: 17
+
+                        <TouchableOpacity style={[
+                            {
+                                backgroundColor: '#fff',
+                                width: '100%',
+                                paddingHorizontal: 20,
+                                marginTop: 10
+                            }
+                            , {
+                                backgroundColor: theme.background
+                            }]}
+                            onPress={() => navigation.navigate('Đơn Xin Đi Muộn')}
+                        >
+                            <View style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-between'
                             }}>
-                                Phiếu Đề Nghị
-                            </Text>
+                                <View style={{
+                                    flexDirection: 'row'
+                                }}>
+                                    <AntDesign name="closecircleo" size={30} color="green" style={{
+                                        borderRadius: 100,
+                                        marginRight: 20,
+                                        marginTop: 10
+                                    }} />
+                                    <Text
+                                        style={[
+                                            {
+                                                fontSize: 21,
+                                                opacity: 0.7,
+                                                marginTop: 4,
+                                                lineHeight: 40
+
+                                            }
+                                            , {
+                                                color: theme.color
+                                            }]}
+                                    >
+                                        Phiếu Đề Nghị
+                                    </Text>
+                                </View>
+
+                                <AntDesign name="right" size={14}
+                                    style={[
+                                        {
+                                            marginTop: 13,
+                                            opacity: 0.4
+                                        }
+                                        , {
+                                            color: theme.color
+                                        }]} />
+                            </View>
+                            <View style={[
+                                {
+                                    padding: 7,
+                                    borderBottomWidth: 0.4,
+                                    opacity: 0.5,
+                                }
+                                , {
+                                    borderBottomColor: theme.color
+                                }]}>
+
+                            </View>
                         </TouchableOpacity>
                     </View>
                 </View>
 
             </View>
-        </ScrollView>
+        </View >
     );
 }
 

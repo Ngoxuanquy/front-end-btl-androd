@@ -22,7 +22,7 @@ const QRCode = ({ navigation }) => {
 
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/chisocanhan/email/' + taikhoan)
+        fetch('http://192.168.1.165:4000' + '/api/chisocanhan/email/' + taikhoan)
             .then(res => res.json())
             .then(res => setNgayCong(res[0].ngay_cong))
             .catch((err) => console.log(err))
@@ -39,7 +39,7 @@ const QRCode = ({ navigation }) => {
     }, [])
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/users')
+        fetch('http://192.168.1.165:4000' + '/api/users')
             .then(res => res.json())
             .then(res => res.map(re => {
                 if (re.email == taikhoan) {
@@ -50,7 +50,7 @@ const QRCode = ({ navigation }) => {
 
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/chamcong/' + taikhoan)
+        fetch('http://192.168.1.165:4000' + '/api/chamcong/' + taikhoan)
             .then(res => res.json())
             .then(res =>
                 setDate(res)
@@ -59,7 +59,7 @@ const QRCode = ({ navigation }) => {
 
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/chamcong/')
+        fetch('http://192.168.1.165:4000' + '/api/chamcong/')
             .then(res => res.json())
             .then(res => {
                 res.map(re => {
@@ -85,7 +85,7 @@ const QRCode = ({ navigation }) => {
             alert("Hôm Nay Đã Chấm Công!!!")
         }
         else {
-            fetch('http://192.168.0.112:4000' + '/api/chamcong/create/', {
+            fetch('http://192.168.1.165:4000' + '/api/chamcong/create/', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -96,7 +96,7 @@ const QRCode = ({ navigation }) => {
                 })
             })
                 .then(() => {
-                    alert('Chấm Vào!!!')
+                    alert('Chấm Công Vào Thành Công')
                     navigation.replace('BottomTab')
 
                 })
@@ -104,21 +104,60 @@ const QRCode = ({ navigation }) => {
 
 
         date.map(da => {
-            if (da.GioRa == "") {
-                fetch('http://192.168.0.112:4000' + '/api/chamcong/update/' + da.id, {
+            if (da.sang_GioRa == "") {
+                fetch('http://192.168.1.165:4000' + '/api/chamcong/update/' + da.id, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                 })
                     .then(() => {
 
-                        fetch('http://192.168.0.112:4000' + '/api/chisocanhan/update/ngaycong/' + taikhoan, {
+                        alert('Chấm Công Ra Thành Công')
+                        navigation.replace('BottomTab')
+
+                    })
+            }
+        })
+
+        date.map(da => {
+            if (da.chieu_GioVao == "" && da.sang_GioRa != '') {
+                fetch('http://192.168.1.165:4000' + '/api/chamcong/update/chieuvao/' + da.id, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                })
+                    .then(() => {
+
+                        fetch('http://192.168.1.165:4000' + '/api/chisocanhan/update/ngaycong/' + taikhoan, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
                                 chamcong: ngaycongs + 1
                             })
                         })
-                        alert('Chấm Công Ra')
+                        alert('Chấm Công Vào Thành Công')
+                        navigation.replace('BottomTab')
+
+                    })
+            }
+        })
+
+        date.map(da => {
+            if (da.chieu_GioRa == "" && da.chieu_GioVao != '') {
+                fetch('http://192.168.1.165:4000' + '/api/chamcong/update/chieura/' + da.id, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                })
+                    .then(() => {
+
+                        fetch('http://192.168.1.165:4000' + '/api/chisocanhan/update/ngaycong/' + taikhoan, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                chamcong: ngaycongs + 1
+                            })
+                        })
+
+
+                        alert('Chấm Công Ra Thành Công')
                         navigation.replace('BottomTab')
 
                     })

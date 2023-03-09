@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 
 // import all the components we are going to use
 import {
@@ -16,13 +16,17 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import ThemeConText from '../../../config/themeConText';
+import { LinearGradient } from 'expo-linear-gradient';
 
 // import Call API
 import call from 'react-native-phone-call';
 import { useEffect } from 'react';
 
 const Phone = ({ navigation }) => {
+
+    const theme = useContext(ThemeConText)
+
     const [inputValue, setInputValue] = useState('0589401978');
     const [isLoading, setIsLoading] = useState(true)
 
@@ -51,7 +55,7 @@ const Phone = ({ navigation }) => {
     };
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/customer_re/' + taikhoan)
+        fetch('http://192.168.1.165:4000' + '/api/customer_re/' + taikhoan)
             .then(res => res.json())
             .then(res => setOrders(res))
             .catch(err => console.log(err))
@@ -70,7 +74,7 @@ const Phone = ({ navigation }) => {
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         setTimeout(() => {
-            fetch('http://192.168.0.112:4000' + '/api/customer_re/' + taikhoan)
+            fetch('http://192.168.1.165:4000' + '/api/customer_re/' + taikhoan)
                 .then(res => res.json())
                 .then(res => setOrders(res))
                 .catch(err => console.log(err))
@@ -82,62 +86,72 @@ const Phone = ({ navigation }) => {
     return (
 
 
-        <ScrollView style={styles.container}
+        <ScrollView
             refreshControl={
                 <RefreshControl refreshing={refreshing} onRefresh={onRefresh} style={{
                     tintColor: 'black',
-                    backgroundColor: '#0066FF',
+                    backgroundColor: '#bf57f4',
                     size: 10,
                     marginBottom: 0,
                 }} />
             }
         >
-            <View style={styles.container}>
-                <View style={{
-                    height: 100,
-                    backgroundColor: '#0066FF',
-                    justifyContent: 'center',
-                    marginBottom: 10,
-                    borderBottomRightRadius: 10,
-                    borderBottomLeftRadius: 10
-                }}>
-                    <Text style={{
-                        fontSize: 30,
-                        color: 'white',
-                        textAlign: 'center'
+            <View >
+                <LinearGradient
+                    // Background Linear Gradient
+                    start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 1 }}
+                    colors={['#bf57f4', '#997af4', '#878bf5', '#7a84f3']}
+                    style={{
+                        width: "100%",
+                        height: 120,
+                        flex: -1,
+                        borderBottomLeftRadius: 20,
+                        borderBottomRightRadius: 20
+                    }}
+                >
+                    <View style={{
+                        height: 100,
+                        justifyContent: 'center',
+                        // marginBottom: 10,
+                        borderBottomRightRadius: 10,
+                        borderBottomLeftRadius: 10
                     }}>
-                        Gọi Điện
-                    </Text>
-                </View>
+                        <Text style={{
+                            fontSize: 30,
+                            color: 'white',
+                            textAlign: 'center',
+                            marginTop: 40
+                        }}>
+                            Gọi Điện
+                        </Text>
+                    </View>
+                </LinearGradient>
                 <KeyboardAvoidingView
                     behavior={Platform.OS === "ios" ? "padding" : "height"}
                     style={styles.container}
                 >
                     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                        <View style={{
-                            flex: 1,
-
-                        }}>
-                            <View>
+                        <View style={[styles.container, { backgroundColor: theme.maunen }]}>
+                            <View  >
                                 <Text style={{
                                     fontSize: 25,
                                     padding: 20,
-                                    color: 'blue',
-                                    fontWeight: 'bold'
+                                    color: theme.color,
+                                    fontWeight: 'bold',
+                                    marginTop: 10
                                 }}>
                                     Thông Tin Khách Hàng
                                 </Text>
                                 {orders.map(order => (
 
                                     <View key={order.id}>
-                                        <View style={{
+                                        <View style={[{
                                             marginLeft: 10,
                                             marginRight: 10,
                                             borderColor: 'gray',
                                             borderWidth: 1,
                                             marginBottom: 10,
                                             padding: 15,
-                                            backgroundColor: '#eeeeee',
                                             shadowColor: "#000",
                                             shadowOffset: {
                                                 width: 0,
@@ -147,7 +161,7 @@ const Phone = ({ navigation }) => {
                                             shadowRadius: 9.51,
 
                                             elevation: 15,
-                                        }}>
+                                        }, { backgroundColor: theme.background }]}>
                                             <View style={{
                                                 marginBottom: 30
                                             }}>
@@ -156,17 +170,26 @@ const Phone = ({ navigation }) => {
                                                     marginTop: 10,
                                                     marginBottom: 15,
                                                 }}>
-                                                    <Text style={{
-                                                        // marginTop: 20,
-                                                        fontSize: 20,
-                                                        fontWeight: 'bold'
-                                                    }}>
+                                                    <Text
+                                                        style={[
+                                                            {
+                                                                fontSize: 20,
+                                                                fontWeight: 'bold'
+                                                            }
+                                                            , {
+                                                                color: theme.color
+                                                            }]}
+                                                    >
                                                         Đơn Hàng:
                                                     </Text>
-                                                    <Text style={{
-                                                        fontSize: 20,
-                                                        marginLeft: 10
-                                                    }}>
+                                                    <Text style={[
+                                                        {
+                                                            fontSize: 20,
+                                                            fontWeight: 'bold'
+                                                        }
+                                                        , {
+                                                            color: theme.color
+                                                        }]}>
                                                         BD12
                                                     </Text>
                                                 </View>
@@ -175,17 +198,24 @@ const Phone = ({ navigation }) => {
                                                     flexDirection: 'row',
                                                     marginBottom: 15
                                                 }}>
-                                                    <Text style={{
-                                                        fontSize: 20,
-                                                        fontWeight: 'bold'
-                                                    }}>
+                                                    <Text style={[
+                                                        {
+                                                            fontSize: 20,
+                                                            fontWeight: 'bold'
+                                                        }
+                                                        , {
+                                                            color: theme.color
+                                                        }]}>
                                                         Tên Khách Hàng:
                                                     </Text>
-                                                    <Text style={{
-                                                        fontSize: 20,
-                                                        marginLeft: 10
-
-                                                    }}>
+                                                    <Text style={[
+                                                        {
+                                                            fontSize: 20,
+                                                            fontWeight: 'bold'
+                                                        }
+                                                        , {
+                                                            color: theme.color
+                                                        }]}>
                                                         {order.name}
                                                     </Text>
                                                 </View>
@@ -195,10 +225,14 @@ const Phone = ({ navigation }) => {
                                                     marginBottom: 15
                                                 }}>
 
-                                                    <Text style={{
-                                                        fontSize: 20,
-                                                        fontWeight: 'bold'
-                                                    }}>
+                                                    <Text style={[
+                                                        {
+                                                            fontSize: 20,
+                                                            fontWeight: 'bold'
+                                                        }
+                                                        , {
+                                                            color: theme.color
+                                                        }]}>
                                                         Số Điện Thoại:
                                                     </Text>
                                                     <Text style={{
@@ -213,17 +247,24 @@ const Phone = ({ navigation }) => {
                                                 <View style={{
                                                     flexDirection: 'row'
                                                 }}>
-                                                    <Text style={{
-                                                        fontWeight: 'bold',
-                                                        fontSize: 20
-                                                    }}>
+                                                    <Text style={[
+                                                        {
+                                                            fontSize: 20,
+                                                            fontWeight: 'bold'
+                                                        }
+                                                        , {
+                                                            color: theme.color
+                                                        }]}>
                                                         Địa Chỉ:
                                                     </Text>
-                                                    <Text style={{
-                                                        fontSize: 20,
-                                                        marginLeft: 10
-
-                                                    }}>
+                                                    <Text style={[
+                                                        {
+                                                            fontSize: 20,
+                                                            fontWeight: 'bold'
+                                                        }
+                                                        , {
+                                                            color: theme.color
+                                                        }]}>
                                                         {order.Address}
                                                     </Text>
                                                 </View>
@@ -232,17 +273,24 @@ const Phone = ({ navigation }) => {
                                                     marginTop: 15,
                                                     marginBottom: 20
                                                 }}>
-                                                    <Text style={{
-                                                        fontSize: 20,
-                                                        fontWeight: 'bold'
-                                                    }}>
+                                                    <Text style={[
+                                                        {
+                                                            fontSize: 20,
+                                                            fontWeight: 'bold'
+                                                        }
+                                                        , {
+                                                            color: theme.color
+                                                        }]}>
                                                         Giờ Hẹn Khách:
                                                     </Text>
-                                                    <Text style={{
-                                                        fontSize: 20,
-                                                        marginLeft: 10
-
-                                                    }}>
+                                                    <Text style={[
+                                                        {
+                                                            fontSize: 20,
+                                                            fontWeight: 'bold'
+                                                        }
+                                                        , {
+                                                            color: theme.color
+                                                        }]}>
                                                         09:15 - 14/02/2023
                                                     </Text>
                                                 </View>
@@ -286,6 +334,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         // padding: 10,
         textAlign: 'center',
+        marginTop: -10,
+        zIndex: -1
     },
     titleText: {
         fontSize: 22,

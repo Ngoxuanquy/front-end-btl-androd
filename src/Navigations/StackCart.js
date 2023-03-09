@@ -30,7 +30,7 @@ function StackCart() {
                 options={{
                     headerShown: true,
                     headerStyle: {
-                        backgroundColor: '#789BF6',
+                        backgroundColor: '#262626',
                         height: 150,
                         // title: 'My home',
                         borderBottomLeftRadius: 40,
@@ -59,7 +59,7 @@ function StackCart() {
                 options={{
                     headerShown: true,
                     headerStyle: {
-                        backgroundColor: '#789BF6',
+                        backgroundColor: '#262626',
                         height: 150,
                         // title: 'My home',
                         borderBottomLeftRadius: 40,
@@ -74,7 +74,7 @@ function StackCart() {
                 options={{
                     headerShown: true,
                     headerStyle: {
-                        backgroundColor: '#789BF6',
+                        backgroundColor: '#262626',
                         height: 150,
                         // title: 'My home',
                         borderBottomLeftRadius: 40,
@@ -89,7 +89,7 @@ function StackCart() {
                 options={{
                     headerShown: true,
                     headerStyle: {
-                        backgroundColor: '#789BF6',
+                        backgroundColor: '#262626',
                         height: 150,
                         // title: 'My home',
                         borderBottomLeftRadius: 40,

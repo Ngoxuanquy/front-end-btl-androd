@@ -1,10 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, TouchableOpacity, View, Image, ScrollView, TextInput, ActivityIndicator, Alert, RefreshControl } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SearchBar } from '@rneui/themed';
+import ThemeConText from '../../../config/themeConText';
+
 
 export default function ThanhToan({ route, navigation }) {
+
+    const theme = useContext(ThemeConText)
 
     const { name, id_chuyen, number } = route.params;
 
@@ -62,7 +66,7 @@ export default function ThanhToan({ route, navigation }) {
     }
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/products/')
+        fetch('http://192.168.1.165:4000' + '/api/products/')
             .then(res => res.json())
             .then(res => setProducts(res))
             .catch(err => console.log(err))
@@ -95,7 +99,7 @@ export default function ThanhToan({ route, navigation }) {
     const [trungbinhs, setTrungBinh] = useState()
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/chisocanhan/email/' + taikhoan)
+        fetch('http://192.168.1.165:4000' + '/api/chisocanhan/email/' + taikhoan)
             .then(res => res.json())
             .then(res => setTrungBinh(res[0].gia_tri_TB_hien_tai))
             .catch((err) => console.log(err))
@@ -104,7 +108,7 @@ export default function ThanhToan({ route, navigation }) {
     const [soluongs, setSoLuong] = useState()
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/Đã Thanh Toán')
+        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/NguoiLam/' + taikhoan + '/Đã Thanh Toán')
             .then(res => res.json())
             .then(res => setSoLuong(res))
             .catch(err => console.log(err))
@@ -115,7 +119,7 @@ export default function ThanhToan({ route, navigation }) {
 
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/customer_re/')
+        fetch('http://192.168.1.165:4000' + '/api/customer_re/')
             .then(res => res.json())
             .then(res => setCustomer(res))
             .catch(err => console.log(err))
@@ -128,7 +132,7 @@ export default function ThanhToan({ route, navigation }) {
     }, [])
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/transaction_lines/oderhistory_id/' + id_chuyen)
+        fetch('http://192.168.1.165:4000' + '/api/transaction_lines/oderhistory_id/' + id_chuyen)
             .then(res => res.json())
             .then(res => setOrder(res))
             .catch(err => console.log(err))
@@ -143,7 +147,7 @@ export default function ThanhToan({ route, navigation }) {
 
 
     function handerCong(id1) {
-        fetch('http://192.168.0.112:4000' + '/api/orders/create/', {
+        fetch('http://192.168.1.165:4000' + '/api/orders/create/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -163,7 +167,7 @@ export default function ThanhToan({ route, navigation }) {
                 customer.map(custome => {
                     if (custome.id == id_chuyen) {
 
-                        fetch('http://192.168.0.112:4000' + '/api/transaction_lines/create/', {
+                        fetch('http://192.168.1.165:4000' + '/api/transaction_lines/create/', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
@@ -178,7 +182,7 @@ export default function ThanhToan({ route, navigation }) {
 
 
                             .then(() => {
-                                fetch('http://192.168.0.112:4000' + '/api/transaction_lines/oderhistory_id/' + id_chuyen)
+                                fetch('http://192.168.1.165:4000' + '/api/transaction_lines/oderhistory_id/' + id_chuyen)
                                     .then(res => res.json())
                                     .then(res => {
                                         getConten()
@@ -210,20 +214,20 @@ export default function ThanhToan({ route, navigation }) {
 
 
 
-        fetch('http://192.168.0.112:4000' + '/api/transaction_lines/delete/' + id,
+        fetch('http://192.168.1.165:4000' + '/api/transaction_lines/delete/' + id,
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
             }
         )
             .then(() => {
-                fetch('http://192.168.0.112:4000' + '/api/transaction_lines/oderhistory_id/' + id_chuyen)
+                fetch('http://192.168.1.165:4000' + '/api/transaction_lines/oderhistory_id/' + id_chuyen)
                     .then(res => res.json())
                     .then(res => setOrder(res))
                     .catch(err => console.log(err))
             })
             .then(() => {
-                fetch('http://192.168.0.112:4000' + '/api/orders/delete/' + id,
+                fetch('http://192.168.1.165:4000' + '/api/orders/delete/' + id,
                     {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -242,7 +246,7 @@ export default function ThanhToan({ route, navigation }) {
     })
 
     function handerSoLuong(id, soluong) {
-        fetch('http://192.168.0.112:4000' + '/api/transaction_lines/update/soluong/' + id, {
+        fetch('http://192.168.1.165:4000' + '/api/transaction_lines/update/soluong/' + id, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -250,7 +254,7 @@ export default function ThanhToan({ route, navigation }) {
             })
         })
             .then(() => {
-                fetch('http://192.168.0.112:4000' + '/api/transaction_lines/oderhistory_id/' + id_chuyen)
+                fetch('http://192.168.1.165:4000' + '/api/transaction_lines/oderhistory_id/' + id_chuyen)
                     .then(res => res.json())
                     .then(res => setOrder(res))
                     .catch(err => console.log(err))
@@ -267,7 +271,7 @@ export default function ThanhToan({ route, navigation }) {
             return;
         }
 
-        fetch('http://192.168.0.112:4000' + '/api/transaction_lines/update/soluong/' + id, {
+        fetch('http://192.168.1.165:4000' + '/api/transaction_lines/update/soluong/' + id, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -275,7 +279,7 @@ export default function ThanhToan({ route, navigation }) {
             })
         })
             .then(() => {
-                fetch('http://192.168.0.112:4000' + '/api/transaction_lines/oderhistory_id/' + id_chuyen)
+                fetch('http://192.168.1.165:4000' + '/api/transaction_lines/oderhistory_id/' + id_chuyen)
                     .then(res => res.json())
                     .then(res => setOrder(res))
                     .catch(err => console.log(err))
@@ -286,7 +290,7 @@ export default function ThanhToan({ route, navigation }) {
     const [idCaNhan, setIdCaNhan] = useState()
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/users/' + taikhoan)
+        fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
             .then(res => res.json())
             .then(res => setIdCaNhan(res[0].id))
             .finally(() => {
@@ -296,7 +300,7 @@ export default function ThanhToan({ route, navigation }) {
 
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/users/' + taikhoan)
+        fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
             .then(res => res.json())
             .then(res => setKhoCaNhan(res[0].khohangcanhan))
             .finally(() => {
@@ -326,7 +330,7 @@ export default function ThanhToan({ route, navigation }) {
                     text: "Yes",
                     onPress: () => {
 
-                        fetch('http://192.168.0.112:4000' + '/api/thanhtoan/update/' + id_chuyen, {
+                        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/update/' + id_chuyen, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
@@ -354,7 +358,7 @@ export default function ThanhToan({ route, navigation }) {
                                                     orders.map(sanpham => {
                                                         product.inventory.map(a => {
                                                             if (product.name == sanpham.name && a.usersId == 1) {
-                                                                fetch('http://192.168.0.112:4000' + '/api/inventory/update/' + 1 + '/' + product.id, {
+                                                                fetch('http://192.168.1.165:4000' + '/api/inventory/update/' + 1 + '/' + product.id, {
                                                                     method: 'POST',
                                                                     headers: { 'Content-Type': 'application/json' },
                                                                     body: JSON.stringify({
@@ -366,7 +370,7 @@ export default function ThanhToan({ route, navigation }) {
                                                     })
                                                 })
 
-                                                fetch('http://192.168.0.112:4000' + '/api/customer_re/delete/' + id_chuyen,
+                                                fetch('http://192.168.1.165:4000' + '/api/customer_re/delete/' + id_chuyen,
                                                     {
                                                         method: 'POST',
                                                         headers: { 'Content-Type': 'application/json' },
@@ -374,7 +378,7 @@ export default function ThanhToan({ route, navigation }) {
                                                 )
                                                     .then(() => {
                                                         if (tongtien > 0) {
-                                                            fetch('http://192.168.0.112:4000' + '/api/chisocanhan/update/giatritb/' + taikhoan, {
+                                                            fetch('http://192.168.1.165:4000' + '/api/chisocanhan/update/giatritb/' + taikhoan, {
                                                                 method: 'POST',
                                                                 headers: { 'Content-Type': 'application/json' },
                                                                 body: JSON.stringify({
@@ -413,7 +417,7 @@ export default function ThanhToan({ route, navigation }) {
                     text: "Yes",
                     onPress: () => {
 
-                        fetch('http://192.168.0.112:4000' + '/api/thanhtoan/update/' + id_chuyen, {
+                        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/update/' + id_chuyen, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
@@ -441,7 +445,7 @@ export default function ThanhToan({ route, navigation }) {
                                                     orders.map(sanpham => {
                                                         product.inventory.map(a => {
                                                             if (product.name == sanpham.name && a.usersId == 1) {
-                                                                fetch('http://192.168.0.112:4000' + '/api/inventory/update/' + 1 + '/' + product.id, {
+                                                                fetch('http://192.168.1.165:4000' + '/api/inventory/update/' + 1 + '/' + product.id, {
                                                                     method: 'POST',
                                                                     headers: { 'Content-Type': 'application/json' },
                                                                     body: JSON.stringify({
@@ -453,7 +457,7 @@ export default function ThanhToan({ route, navigation }) {
                                                     })
                                                 })
 
-                                                fetch('http://192.168.0.112:4000' + '/api/customer_re/delete/' + id_chuyen,
+                                                fetch('http://192.168.1.165:4000' + '/api/customer_re/delete/' + id_chuyen,
                                                     {
                                                         method: 'POST',
                                                         headers: { 'Content-Type': 'application/json' },
@@ -461,7 +465,7 @@ export default function ThanhToan({ route, navigation }) {
                                                 )
                                                     .then(() => {
                                                         if (tongtien > 0) {
-                                                            fetch('http://192.168.0.112:4000' + '/api/chisocanhan/update/giatritb/' + taikhoan, {
+                                                            fetch('http://192.168.1.165:4000' + '/api/chisocanhan/update/giatritb/' + taikhoan, {
                                                                 method: 'POST',
                                                                 headers: { 'Content-Type': 'application/json' },
                                                                 body: JSON.stringify({
@@ -500,7 +504,7 @@ export default function ThanhToan({ route, navigation }) {
                     text: "Yes",
                     onPress: () => {
 
-                        fetch('http://192.168.0.112:4000' + '/api/thanhtoan/update/' + id_chuyen, {
+                        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/update/' + id_chuyen, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
@@ -524,7 +528,7 @@ export default function ThanhToan({ route, navigation }) {
                                         {
                                             text: "Yes",
                                             onPress: () => {
-                                                fetch('http://192.168.0.112:4000' + '/api/customer_re/delete/' + id_chuyen,
+                                                fetch('http://192.168.1.165:4000' + '/api/customer_re/delete/' + id_chuyen,
                                                     {
                                                         method: 'POST',
                                                         headers: { 'Content-Type': 'application/json' },
@@ -549,7 +553,7 @@ export default function ThanhToan({ route, navigation }) {
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         setTimeout(() => {
-            fetch('http://192.168.0.112:4000' + '/api/orders/authorId/' + id_chuyen)
+            fetch('http://192.168.1.165:4000' + '/api/orders/authorId/' + id_chuyen)
                 .then(res => res.json())
                 .then(res => {
                     setOrder(res)
@@ -572,13 +576,13 @@ export default function ThanhToan({ route, navigation }) {
 
     useEffect(() => {
         if (search != "") {
-            fetch('http://192.168.0.112:4000' + '/api/products/name/' + search)
+            fetch('http://192.168.1.165:4000' + '/api/products/name/' + search)
                 .then(res => res.json())
                 .then(res => setProducts(res))
                 .catch((err) => console.log(err))
         }
         else {
-            fetch('http://192.168.0.112:4000' + '/api/products/')
+            fetch('http://192.168.1.165:4000' + '/api/products/')
                 .then(res => res.json())
                 .then(res => setProducts(res))
                 .catch((err) => console.log(err))
@@ -589,6 +593,7 @@ export default function ThanhToan({ route, navigation }) {
     return (
         <View style={{
             flex: 1,
+            backgroundColor: theme.maunen
         }}>
             <View style={{
                 position: 'absolute',
@@ -604,27 +609,35 @@ export default function ThanhToan({ route, navigation }) {
                     <TouchableOpacity style={{
                         width: '50%',
                         alignItems: 'center',
-                        borderColor: 'black',
+                        borderColor: theme.color,
                         borderWidth: 0.3,
-                        paddingVertical: 15
+                        paddingVertical: 15,
+                        backgroundColor: theme.background
+
                     }}
                         onPress={() => handerTTTienMat()}
                     >
-                        <Text>
+                        <Text style={{
+                            color: theme.color
+                        }}>
                             Tiền Mặt
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={{
                         width: '50%',
                         alignItems: 'center',
-                        borderColor: 'black',
+                        borderColor: theme.color,
                         borderWidth: 0.3,
-                        paddingVertical: 15
+                        paddingVertical: 15,
+                        backgroundColor: theme.background
+
                     }}
                         onPress={() => handerTTChuyenKhoan()}
 
                     >
-                        <Text>
+                        <Text style={{
+                            color: theme.color
+                        }}>
                             Chuyển Khoản
                         </Text>
                     </TouchableOpacity>
@@ -648,21 +661,29 @@ export default function ThanhToan({ route, navigation }) {
                         justifyContent: 'space-around',
                         alignItems: 'center',
 
-
                     }}>
                         {Arrays.map((Array, index) => (
-                            <View key={Array.id}>
+                            <View key={Array.id} style={{
+                                backgroundColor: theme.background
+
+                            }}>
                                 <TouchableOpacity
                                     onPress={() => handerProperties(Array.name, Array.id)}
                                     style={{
-                                        borderRadius: 10
+                                        borderRadius: 10,
+                                        backgroundColor: theme.background
                                     }}
                                 >
                                     <Text style={
                                         [
                                             index + 1 === cliedId ? styles.buttonAction : styles.butonUn,
+                                            {
+                                                color: theme.color
+                                            }
                                             // styles.butonUn
-                                        ]}>
+                                        ]
+
+                                    }>
                                         {Array.name}
                                     </Text>
                                 </TouchableOpacity>
@@ -687,7 +708,7 @@ export default function ThanhToan({ route, navigation }) {
                         }}
                         inputContainerStyle={{
                             borderRadius: 10,
-                            backgroundColor: '#DDDDDD',
+                            backgroundColor: theme.background,
                             height: 40,
                             width: '90%',
                             alignItems: 'center',
@@ -717,6 +738,8 @@ export default function ThanhToan({ route, navigation }) {
                         }}>
                             <View style={{
                                 backgroundColor: '#fff',
+                                backgroundColor: theme.background
+
 
                             }}>
                                 <View>
@@ -728,12 +751,13 @@ export default function ThanhToan({ route, navigation }) {
                                         borderColor: 'gray',
                                         paddingVertical: 10,
 
+
                                     }}>
                                         <Text style={{
                                             fontSize: 17,
                                             fontWeight: 'bold',
-                                            textAlign: 'center'
-
+                                            textAlign: 'center',
+                                            color: theme.color
                                         }}>
                                             Tên Sản Phẩm
                                         </Text>
@@ -746,7 +770,9 @@ export default function ThanhToan({ route, navigation }) {
 
                                         <Text style={{
                                             fontSize: 17,
-                                            fontWeight: 'bold'
+                                            fontWeight: 'bold',
+                                            color: theme.color
+
                                         }}>
                                             Trạng Thái
                                         </Text>
@@ -777,7 +803,9 @@ export default function ThanhToan({ route, navigation }) {
                                                     <Text style={{
                                                         fontSize: 16,
                                                         lineHeight: 30,
-                                                        textAlign: 'center'
+                                                        textAlign: 'center',
+                                                        color: theme.color
+
                                                     }}>
                                                         {product.name}
                                                     </Text>
@@ -796,7 +824,7 @@ export default function ThanhToan({ route, navigation }) {
                                                 }}>
                                                     <TouchableOpacity style={{
                                                         backgroundColor: 'green',
-                                                        opacity: 0.7,
+                                                        opacity: 1,
                                                         justifyContent: 'center',
                                                         alignItems: 'center',
 
@@ -846,7 +874,8 @@ export default function ThanhToan({ route, navigation }) {
                                     <Text style={{
                                         padding: 10,
                                         marginTop: 17,
-                                        fontSize: 13
+                                        fontSize: 13,
+                                        color: theme.color
                                     }} >
                                         (Chưa Thanh Toán)
                                     </Text>
@@ -889,12 +918,16 @@ export default function ThanhToan({ route, navigation }) {
 
                                                     }}>
                                                         <Text style={{
-                                                            textAlign: 'center'
+                                                            textAlign: 'center',
+                                                            color: theme.color
+
                                                         }}>
                                                             {Api.name}
                                                         </Text>
                                                         <Text style={{
-                                                            textAlign: 'center'
+                                                            textAlign: 'center',
+                                                            color: theme.color
+
                                                         }}>
                                                             {Api.price} $
                                                         </Text>
@@ -906,22 +939,28 @@ export default function ThanhToan({ route, navigation }) {
                                                     }}>
                                                         <TouchableOpacity style={{
                                                             width: 35, height: 35,
-                                                            borderColor: 'black',
+                                                            borderColor: theme.color,
                                                             borderWidth: 1,
                                                             alignItems: 'center',
-                                                            justifyContent: 'center'
+                                                            justifyContent: 'center',
+
                                                         }}
                                                             onPress={() => handerTru(Api.id, Api.number_of)}
                                                         >
-                                                            <Text>-</Text>
+                                                            <Text style={{
+                                                                color: theme.color
+
+                                                            }}>-</Text>
                                                         </TouchableOpacity>
                                                         <TextInput style={{
                                                             width: 50,
                                                             height: 35,
-                                                            borderColor: 'black',
+                                                            borderColor: theme.color,
                                                             borderWidth: 1,
                                                             alignItems: 'center',
-                                                            textAlign: 'center'
+                                                            textAlign: 'center',
+                                                            color: theme.color
+
                                                         }}
 
                                                         >
@@ -930,14 +969,16 @@ export default function ThanhToan({ route, navigation }) {
                                                         </TextInput>
                                                         <TouchableOpacity style={{
                                                             width: 35, height: 35,
-                                                            borderColor: 'black',
+                                                            borderColor: theme.color,
                                                             borderWidth: 1,
                                                             alignItems: 'center',
                                                             justifyContent: 'center'
                                                         }}
                                                             onPress={() => handerSoLuong(Api.id, Api.number_of)}
                                                         >
-                                                            <Text>+</Text>
+                                                            <Text style={{
+                                                                color: theme.color
+                                                            }}>+</Text>
                                                         </TouchableOpacity>
                                                     </View>
 
@@ -983,7 +1024,8 @@ export default function ThanhToan({ route, navigation }) {
                         marginRight: 10,
                         marginTop: 30,
                         padding: 10,
-                        borderRadius: 6
+                        borderRadius: 6,
+                        backgroundColor: theme.background
                     }}>
 
                         <TouchableOpacity >
@@ -994,14 +1036,18 @@ export default function ThanhToan({ route, navigation }) {
                                 <Text style={{
                                     width: 210,
                                     lineHeight: 23,
-                                    fontSize: 20
+                                    fontSize: 20,
+                                    color: theme.color
+
                                 }}>
                                     Tổng Tiền:
                                 </Text>
                                 <Text style={{
 
                                     lineHeight: 23,
-                                    fontSize: 20
+                                    fontSize: 20,
+                                    color: theme.color
+
                                 }}>
                                     {tongtien}
                                 </Text>
@@ -1012,13 +1058,17 @@ export default function ThanhToan({ route, navigation }) {
                                 <Text style={{
                                     width: 210,
                                     lineHeight: 23,
-                                    fontSize: 20
+                                    fontSize: 20,
+                                    color: theme.color
+
                                 }}>
                                     VAT:
                                 </Text>
                                 <Text style={{
                                     lineHeight: 23,
-                                    fontSize: 20
+                                    fontSize: 20,
+                                    color: theme.color
+
                                 }}>
                                     {(tongtien * 10) / 100}
 
@@ -1031,13 +1081,17 @@ export default function ThanhToan({ route, navigation }) {
                                 <Text style={{
                                     width: 210,
                                     lineHeight: 23,
-                                    fontSize: 20
+                                    fontSize: 20,
+                                    color: theme.color
+
                                 }}>
                                     Giảm Giá:
                                 </Text>
                                 <Text style={{
                                     lineHeight: 23,
-                                    fontSize: 20
+                                    fontSize: 20,
+                                    color: theme.color
+
                                 }}>
                                     10
                                 </Text>
@@ -1056,6 +1110,7 @@ export default function ThanhToan({ route, navigation }) {
                                     lineHeight: 23,
                                     fontSize: 20,
                                     width: 210,
+                                    color: theme.color
 
                                 }}>
                                     Tổng cần thanh toán:
@@ -1064,7 +1119,8 @@ export default function ThanhToan({ route, navigation }) {
                                     color: 'red',
                                     lineHeight: 23,
                                     fontSize: 20,
-                                    fontWeight: "bold"
+                                    fontWeight: "bold",
+
                                 }}>
                                     {tongtien == 0 ? 0 : tongtien + ((tongtien * 10) / 100) - 10}
                                 </Text>
@@ -1090,24 +1146,12 @@ const styles = StyleSheet.create({
         // backgroundColor: 'gray',
         width: 110,
         height: 50,
-        borderColor: 'black',
-        borderWidth: 0.4,
         marginTop: 10,
         padding: 10,
         alignItems: 'center',
         justifyContent: 'center',
         textAlign: 'center',
-        backgroundColor: '#DDDDDD',
-        // borderRadius: 10,
-        shadowOffset: {
-            width: 0,
-            height: 5,
-        },
-        shadowOpacity: 0.34,
-        shadowRadius: 2.27,
-        elevation: 10,
-        borderRadius: 100,
-        marginLeft: 10
+
 
     },
     buttonAction: {
@@ -1124,15 +1168,6 @@ const styles = StyleSheet.create({
         // borderRadius: 10,
         color: 'gold',
         fontWeight: 'bold',
-        shadowOffset: {
-            width: 0,
-            height: 5,
-        },
-        shadowOpacity: 0.34,
-        shadowRadius: 3.27,
-        elevation: 10,
-        borderRadius: 100,
-        marginLeft: 10
 
     }
 });

@@ -9,12 +9,15 @@ import {
     ContributionGraph,
     StackedBarChart
 } from "react-native-chart-kit";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ThemeConText from '../../../config/themeConText';
+import { AntDesign } from '@expo/vector-icons';
 
 
 export default function LuongThuong() {
 
+    const theme = useContext(ThemeConText)
     const [day, setDay] = useState(false)
     const [month, setMonth] = useState(true)
     const [week, setWeek] = useState(false)
@@ -55,7 +58,7 @@ export default function LuongThuong() {
         backgroundGradientFromOpacity: 0,
         backgroundGradientTo: "#fff",
         backgroundGradientToOpacity: 0.1,
-        color: (opacity = 1) => `rgba(65,105,225, ${opacity})`,
+        color: (opacity = 1) => theme.color,
         strokeWidth: 1, // optional, default 3
         barPercentage: 0.5,
         useShadowColorFromDataset: false,// optional
@@ -115,7 +118,7 @@ export default function LuongThuong() {
         )
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/users/' + taikhoan)
+        fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
             .then(res => res.json())
             .then(res => setLogin(res))
             .finally(() => {
@@ -126,7 +129,7 @@ export default function LuongThuong() {
     const [luongs, setLuong] = useState()
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/chisocanhan/email/' + taikhoan)
+        fetch('http://192.168.1.165:4000' + '/api/chisocanhan/email/' + taikhoan)
             .then(res => res.json())
             .then(res => setLuong(res[0].luong_tam_tinh))
             .catch((err) => console.log(err))
@@ -135,7 +138,7 @@ export default function LuongThuong() {
     const [luongtamtinhs, setLuongTamTinh] = useState()
 
     useEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/chisocanhan/email/' + taikhoan)
+        fetch('http://192.168.1.165:4000' + '/api/chisocanhan/email/' + taikhoan)
             .then(res => res.json())
             .then(res => setLuongTamTinh(res[0].gia_tri_TB_hien_tai))
             .catch((err) => console.log(err))
@@ -143,7 +146,7 @@ export default function LuongThuong() {
 
     useEffect(() => {
         if (luongtamtinhs > 2000 && luongtamtinhs < 3000) {
-            fetch('http://192.168.0.112:4000' + '/api/chisocanhan/update/luong/' + taikhoan, {
+            fetch('http://192.168.1.165:4000' + '/api/chisocanhan/update/luong/' + taikhoan, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -152,7 +155,7 @@ export default function LuongThuong() {
             })
         }
         else if (luongtamtinhs > 1000 && luongtamtinhs < 2000) {
-            fetch('http://192.168.0.112:4000' + '/api/chisocanhan/update/luong/' + taikhoan, {
+            fetch('http://192.168.1.165:4000' + '/api/chisocanhan/update/luong/' + taikhoan, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -161,7 +164,7 @@ export default function LuongThuong() {
             })
         }
         else if (luongtamtinhs >= 3000) {
-            fetch('http://192.168.0.112:4000' + '/api/chisocanhan/update/luong/' + taikhoan, {
+            fetch('http://192.168.1.165:4000' + '/api/chisocanhan/update/luong/' + taikhoan, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -176,75 +179,30 @@ export default function LuongThuong() {
         <>
             {
                 isLoading ? <ActivityIndicator style={{
-                    flex: 1,
+                    // flex: 1,
                     justifyContent: 'center',
-                    alignItems: 'center'
+                    alignItems: 'center',
+                    height: 100
+
                 }} /> :
                     <ScrollView style={{
-                        backgroundColor: '#3366FF',
-                        flex: 1
+                        // flex: 1
+                        height: 100,
+
                     }}>
-                        <View >
-                            {logins.map(login => (
-                                <View key={login.id}>
-                                    <View style={{
-                                        flexDirection: 'row',
-                                        justifyContent: 'space-around',
-                                        marginTop: 50,
-                                        height: 70,
-                                    }}>
-                                        <View>
-                                            {login.img == "" ?
-                                                <Image
-                                                    style={{
-                                                        width: 80,
-                                                        height: 80,
-                                                        borderRadius: 10,
-                                                        zIndex: 11
-                                                    }}
-                                                    source={{
-                                                        uri: "https://haycafe.vn/wp-content/uploads/2022/02/Avatar-trang.jpg"
-                                                    }}
-                                                /> :
-                                                <Image
-                                                    style={{
-                                                        width: 80,
-                                                        height: 80,
-                                                        borderRadius: 10,
-                                                    }}
-                                                    source={{
-                                                        uri: login.img
-                                                    }}
-                                                />
-                                            }
-                                        </View>
+                        <View style={{
 
-                                        <View style={{
-                                            justifyContent: 'center',
+                        }}>
+                            <View style={{
+                                height: 300,
+                                backgroundColor: '#4650c7',
+                                borderBottomLeftRadius: 50,
+                                borderBottomRightRadius: 50
+                            }} >
 
-                                        }}>
-                                            <Text style={{
-                                                textAlign: 'center',
-                                                alignItems: 'center',
-                                                fontSize: 24,
-                                                marginTop: 0,
-                                                marginLeft: -40,
-                                                color: 'white'
-                                            }}>
-                                                {login.email}
-                                            </Text>
-                                        </View>
-                                        <View style={{
-                                            textAlign: 'center',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            marginTop: 0,
+                                <View style={{
 
-                                        }}>
-                                            <FontAwesome name="search" size={24} color="white" />
-
-                                        </View>
-                                    </View>
+                                }}>
 
                                     <View style={{
                                         marginTop: 20,
@@ -254,51 +212,147 @@ export default function LuongThuong() {
                                         <Text style={{
                                             color: 'white',
                                             fontSize: 20,
-                                            opacity: 0.7
+                                            opacity: 0.7,
+                                            marginTop: 20,
+                                            color: '#de7c1b'
                                         }}>
                                             Lương Hiện Tại:
                                         </Text>
-                                        <Text style={{
-                                            color: 'white',
-                                            fontSize: 35,
-                                            lineHeight: 50
-
+                                        <View style={{
+                                            flexDirection: 'row',
+                                            justifyContent: 'center',
+                                            alignItems: 'center'
                                         }}>
-                                            $ {luongs}
-                                        </Text>
+                                            <Text style={{
+                                                fontSize: '30',
+                                                textAlign: 'center',
+                                                color: 'white'
+                                            }}>
+                                                $
+                                            </Text>
+                                            <Text style={{
+                                                color: 'white',
+                                                fontSize: 50,
+                                                lineHeight: 50,
+                                                textAlign: 'center',
+                                                marginTop: 20
+
+                                            }}>
+                                                {luongs}
+                                            </Text>
+                                        </View>
+                                        <View style={{
+                                            justifyContent: 'center',
+                                            alignItems: 'center'
+                                        }}>
+                                            <Text style={{
+                                                color: 'white',
+                                                width: '70%',
+                                                textAlign: 'center'
+                                            }}>
+                                                Đây là lương tạm tính, nếu muốn biết chính xác thì chờ cuối tháng nhé
+                                            </Text>
+                                        </View>
                                     </View>
                                 </View>
-                            ))}
+                                <View style={{
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    marginTop: 30
+                                }}>
+                                    <View style={{
+                                        width: '90%',
+                                        backgroundColor: '#eeeeee',
+                                        height: 70,
+                                        borderRadius: 20,
+                                        flexDirection: 'row'
+                                    }}>
+                                        <View style={{
+                                            width: '29%',
+                                            backgroundColor: '#dddddd',
+                                            height: 60,
+                                            borderRadius: 10,
+                                            alignItems: 'center',
+                                            marginTop: 5,
+                                            marginLeft: 10
+                                        }}>
+                                            <AntDesign name="linechart" size={44} color="#4aede8" style={{
+                                                textAlign: 'center',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                marginTop: 7
+                                            }} />
+                                        </View>
+                                        <View style={{
+                                            width: '30%',
+                                            backgroundColor: '#dddddd',
+                                            height: 60,
+                                            borderRadius: 10,
+                                            alignItems: 'center',
+                                            marginTop: 5,
+                                            marginLeft: 10
+                                        }}>
+                                            <AntDesign name="notification" size={44} color="#dc59de" style={{
+                                                textAlign: 'center',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                marginTop: 7
+                                            }} />
+                                        </View>
+                                        <View style={{
+                                            width: '30%',
+                                            backgroundColor: '#dddddd',
+                                            height: 60,
+                                            borderRadius: 10,
+                                            alignItems: 'center',
+                                            marginTop: 5,
+                                            marginLeft: 10
+                                        }}>
+                                            <AntDesign name="smileo" size={44} color="#a9e817" style={{
+                                                textAlign: 'center',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                marginTop: 7
+                                            }} />
+                                        </View>
+                                    </View>
+                                </View>
+                            </View>
 
 
 
-
-                            <View style={{
-                                backgroundColor: 'white',
-                                height: 700,
-                                borderTopLeftRadius: 50,
-                                borderTopRightRadius: 50,
-                            }}>
+                            <View style={[{
+                                // backgroundColor: 'white',
+                                height: 550,
+                                marginTop: -100,
+                                zIndex: -1
+                                // flex: 1
+                            }, {
+                                backgroundColor: theme.background
+                            }]}>
                                 <View style={{
                                     flexDirection: 'row',
                                     justifyContent: 'space-around',
-                                    marginTop: 20
+                                    marginTop: 80
                                 }}>
-                                    <Text style={{
+                                    <Text style={[{
                                         fontWeight: 'bold',
                                         fontSize: 20,
                                         marginTop: 30,
                                         marginBottom: 10
-                                    }}>
+                                    }, {
+                                        color: theme.color
+                                    }]}>
                                         Hàng Tháng
                                     </Text>
-                                    <Text style={{
+                                    <Text style={[{
                                         fontWeight: 'bold',
                                         fontSize: 20,
                                         marginTop: 30,
-                                        marginLeft: 20,
                                         marginBottom: 10
-                                    }}>
+                                    }, {
+                                        color: theme.color
+                                    }]}>
                                         Ứng Lương
                                     </Text>
                                 </View>
@@ -306,7 +360,8 @@ export default function LuongThuong() {
                                     flexDirection: 'row',
                                     justifyContent: 'space-around',
                                     marginVertical: 10,
-                                    marginBottom: 30
+                                    marginBottom: 30,
+                                    marginTop: 20
                                 }}>
                                     {buttons.map((button, index) => (
                                         <TouchableOpacity
@@ -424,7 +479,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         width: 100,
         height: 40,
-        marginTop: 10,
+        // marginTop: 10,
         padding: 10,
         alignItems: 'center',
         justifyContent: 'center',
@@ -438,7 +493,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#33CCFF',
         width: 100,
         height: 40,
-        marginTop: 10,
+        // marginTop: 10,
         padding: 10,
         alignItems: 'center',
         justifyContent: 'center',

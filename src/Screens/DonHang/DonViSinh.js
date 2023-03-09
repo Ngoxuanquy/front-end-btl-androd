@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { Button, StyleSheet, View } from 'react-native';
 import LottieView from 'lottie-react-native';
 
-export default function App() {
+export default function DonViSinh() {
     const animation = useRef(null);
     useEffect(() => {
         // You can control the ref programmatically, rather than using autoPlay

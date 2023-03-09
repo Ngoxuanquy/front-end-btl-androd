@@ -27,7 +27,7 @@ export default function DangNhap({ navigation }) {
     };
 
     useLayoutEffect(() => {
-        fetch('http://192.168.0.112:4000' + '/api/users')
+        fetch('http://192.168.1.165:4000' + '/api/users')
             .then(res => res.json())
             .then(res => setLogin(res))
     }, [])
@@ -40,7 +40,7 @@ export default function DangNhap({ navigation }) {
         const user = logins.find(user => user.email === taikhoan)
         if (!user) return alert('sai tk hoặc mk');
 
-        fetch('http://192.168.0.112:5000' + '/login', options)
+        fetch('http://192.168.1.165:5000' + '/login', options)
             .then(res => res.json())
             .then(res => {
                 // console.log(res.accessToken)
@@ -50,7 +50,7 @@ export default function DangNhap({ navigation }) {
                 AsyncStorage.setItem('taikhoan', taikhoan);
 
 
-                fetch('http://192.168.0.112:4000' + '/api/users/update/' + taikhoan, {
+                fetch('http://192.168.1.165:4000' + '/api/users/update/' + taikhoan, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({

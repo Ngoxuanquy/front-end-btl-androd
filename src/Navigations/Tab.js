@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { Text, View, TouchableOpacity, BackHandler } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
-import Home from '../Screens/Home/Home'
+import Home from '../Screens/Home/HomeScrem'
 import Cart from '../Screens/Cart/CartScrenn'
 import Phone from '../Screens/Home/Phone'
 import ThongTinTaiKhoan from './../Screens/Home/ThongTinTaiKhoanScrenn'
@@ -16,19 +16,15 @@ import { Ionicons } from '@expo/vector-icons'
 import StackHome from './StackHome'
 import StackCart from './StackCart'
 
+import ThemeConText from '../../config/themeConText'
+
 const Tab = createBottomTabNavigator()
-const HanderCart = () => {
-    return (
-        <View>
-            <TouchableOpacity onPress={() => console.log('cart')}>
-                <Cart />
-            </TouchableOpacity>
-        </View>
-    )
-}
+
 
 export default function Tag({ navigation }) {
     const [customer, setCustomer] = useState([])
+    const theme = useContext(ThemeConText)
+
     // const URL_ON = 'http://192.168.0.106:4000'
     // const URL1_ON = 'http://192.168.0.114:5000'
 
@@ -79,7 +75,10 @@ export default function Tag({ navigation }) {
                     return <Ionicons name={iconName} size={size} color={color} />
                 },
                 tabBarActiveTintColor: 'tomato',
-                tabBarInactiveTintColor: 'gray',
+                tabBarInactiveTintColor: theme.color,
+                tabBarStyle: {
+                    backgroundColor: theme.background
+                }
             })}
         >
             <Tab.Screen
