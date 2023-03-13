@@ -37,7 +37,7 @@ export default function KhoHangCaNhan({ navigation }) {
             .finally(() => {
 
             })
-    }, [])
+    }, [taikhoan])
 
 
     useEffect(() => {
@@ -61,7 +61,17 @@ export default function KhoHangCaNhan({ navigation }) {
         })
     }, [produces])
 
-    // console.log(apis)
+    console.log(apis)
+    const [tonkhos, setTonKho] = useState()
+    const [tienton, setTienTon] = useState()
+
+    useEffect(() => {
+        let TT = 0
+        apis.map(api => {
+            TT += api.exist
+        })
+        setTonKho(TT)
+    }, [apis])
 
     return (
         <View style={{
@@ -102,7 +112,7 @@ export default function KhoHangCaNhan({ navigation }) {
                             lineHeight: 35,
                             color: theme.color
                         }}>
-                            Tổng SL tồn: 100
+                            Tổng SL tồn: {tonkhos}
                         </Text>
                     </View>
                     <View style={{
@@ -160,6 +170,14 @@ export default function KhoHangCaNhan({ navigation }) {
 
                         }}>
                             SL Tồn
+                        </Text>
+                        <Text style={{
+                            fontSize: 17,
+                            fontWeight: 'bold',
+                            color: theme.color
+
+                        }}>
+                            Tiêu Chuẩn
                         </Text>
                     </View>
 
@@ -221,7 +239,8 @@ export default function KhoHangCaNhan({ navigation }) {
                                                         fontSize: 16,
                                                         lineHeight: 30,
                                                         textAlign: 'center',
-                                                        color: theme.color
+                                                        color: theme.color,
+                                                        marginLeft: -90
 
                                                     }}>
                                                         {produce.price}
@@ -235,12 +254,28 @@ export default function KhoHangCaNhan({ navigation }) {
                                     <Text style={{
                                         fontSize: 16,
                                         lineHeight: 30,
-                                        color: theme.color
+                                        color: theme.color,
+                                        marginLeft: -70
+
 
                                     }}>
 
                                         {api.exist}
                                     </Text>
+
+                                </View>
+                                <View>
+                                    <Text style={{
+                                        fontSize: 16,
+                                        lineHeight: 30,
+                                        color: theme.color,
+                                        marginLeft: 10
+
+                                    }}>
+
+                                        {api.tieu_chuan}
+                                    </Text>
+
                                 </View>
                             </View>
 

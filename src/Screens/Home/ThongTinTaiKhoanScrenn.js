@@ -75,10 +75,13 @@ export default function ThongTinTaiKhoan() {
                     flex: 1
                 }
                 , {
-                    backgroundColor: theme.maunen
+                    backgroundColor: theme.maunen,
+                    zIndex: 100
                 }]}
         >
-            <View style={{}}>
+            <View style={{
+
+            }}>
                 <View>
                     <View >
                         <LinearGradient
@@ -87,10 +90,10 @@ export default function ThongTinTaiKhoan() {
                             colors={['#fff', '#8ed4d1', '#3ddbb5', '#17e3b2']}
                             style={{
                                 width: "100%",
-                                height: 120,
-                                flex: -1,
+                                height: 220,
                                 borderBottomLeftRadius: 20,
-                                borderBottomRightRadius: 20
+                                borderBottomRightRadius: 20,
+                                position: 'absolute'
                             }}
                         >
                             <View style={{
@@ -122,11 +125,10 @@ export default function ThongTinTaiKhoan() {
                     </View>
                 </View>
                 <ScrollView
-
                     refreshControl={
                         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} style={{
                             tintColor: 'black',
-                            backgroundColor: theme.maunen,
+                            backgroundColor: '#8ed4d1',
                             size: 10,
                             marginBottom: 0,
                         }} />
@@ -135,13 +137,15 @@ export default function ThongTinTaiKhoan() {
                     <View style={{
                         justifyContent: 'center',
                         alignItems: 'center',
-                        marginTop: 20,
-                        borderRadius: 20
+                        marginTop: 140,
+                        borderRadius: 20,
+                        zIndex: 1
+
                     }}>
                         <View style={[
                             {
                                 width: '90%',
-                                borderRadius: 20
+                                borderRadius: 20,
 
                             }
                             , {
@@ -163,8 +167,8 @@ export default function ThongTinTaiKhoan() {
                                         {thong.img == "" ?
                                             <Image
                                                 style={{
-                                                    width: 200,
-                                                    height: 200,
+                                                    width: 120,
+                                                    height: 120,
                                                     borderRadius: 10,
                                                 }}
                                                 source={{
@@ -173,8 +177,8 @@ export default function ThongTinTaiKhoan() {
                                             /> :
                                             <Image
                                                 style={{
-                                                    width: 200,
-                                                    height: 200,
+                                                    width: 120,
+                                                    height: 120,
                                                     borderRadius: 10,
                                                 }}
                                                 source={{
@@ -207,7 +211,6 @@ export default function ThongTinTaiKhoan() {
                                                 {
                                                     fontSize: 18,
                                                     textAlign: 'center',
-                                                    opacity: 0.6,
                                                     lineHeight: 70
                                                 }
                                                 , {
@@ -220,8 +223,8 @@ export default function ThongTinTaiKhoan() {
                                             {
                                                 fontSize: 18,
                                                 textAlign: 'center',
-                                                opacity: 0.6,
-                                                lineHeight: 70
+                                                lineHeight: 30,
+                                                marginBottom: 30
                                             }
                                             , {
                                                 color: theme.color

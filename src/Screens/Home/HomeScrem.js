@@ -24,6 +24,10 @@ import { EventRegister } from 'react-native-event-listeners'
 // import Buttons from './Button'
 import ThemeConText from '../../../config/themeConText';
 import { BottomSheet, ListItem } from '@rneui/themed';
+import { Entypo } from '@expo/vector-icons';
+import Upload from '../../Components/Upload';
+import { firebase } from '../../../config/config'
+
 
 export default function HomeScrenn({ navigation }) {
 
@@ -180,23 +184,83 @@ export default function HomeScrenn({ navigation }) {
         // console.log("image :" + image)
 
         if (!result.canceled) {
-            setImage(result.assets[0].uri)
+            const source = { uri: result.assets[0].uri }
+            setImage(source)
         }
     }
+    const [images, setImages] = useState(null)
+    const [uploading, setUploading] = useState(false)
+    const [url, setUrl] = useState('')
+
+
+    // const pickerImage = async () => {
+    //     let result = await ImagePicker.launchImageLibraryAsync({
+    //         mediaTypes: ImagePicker.MediaTypeOptions.All,
+    //         allowsEditing: true,
+    //         quality: 1,
+    //     })
+
+    //     const source = { uri: result.assets[0].uri }
+
+    //     setImages(source)
+    // }
+
+    const uploadImage = async () => {
+        // setUploading(true)
+        const response = await fetch(image.uri)
+        const blob = await response.blob()
+        const filename = image.uri.substring(image.uri.lastIndexOf('/') + 1)
+        let refs = firebase.storage().ref().child(`image/${filename}`).put(blob)
+
+        refs.then((a) => a.ref.getDownloadURL().then((url) => {
+            fetch('http://192.168.1.165:4000' + '/api/users/update/img/' + taikhoan, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    img: url
+                })
+            })
+                .then(() => {
+                    fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
+                        .then(res => res.json())
+                        .then(res => setThongTin(res))
+                })
+        }))
+
+        try {
+            await refs
+        } catch (error) {
+            console.log(error)
+        }
+        // setUploading(false)
+        // Alert.alert('Photo uploaded')
+        setImage(null)
+    }
+
+    useEffect(() => {
+        firebase
+            .storage()
+            .ref()
+            .child('image')
+            .list()
+            .then((result) => {
+                // Loop over each item
+                result.items.forEach((pics) => {
+                    firebase
+                        .storage()
+                        .ref()
+                        .child(pics.fullPath)
+                        .getDownloadURL()
+                        .then((url) => {
+                            //these url will be used to display images
+                        })
+                })
+            })
+    }, [image])
 
     function handerXacNhan() {
-        fetch('http://192.168.1.165:4000' + '/api/users/update/img/' + taikhoan, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                img: image
-            })
-        })
-            .then(() => {
-                fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
-                    .then(res => res.json())
-                    .then(res => setThongTin(res))
-            })
+
+        uploadImage();
 
         setUpAnh(false)
 
@@ -249,7 +313,6 @@ export default function HomeScrenn({ navigation }) {
     ]
 
     function handerUpAnh() {
-        console.log('a')
         setUpAnh(true)
         setIsVisible(true)
         setImage(null)
@@ -278,6 +341,12 @@ export default function HomeScrenn({ navigation }) {
                         })
                     })
                 })
+
+            fetch('http://192.168.1.165:4000' + '/api/lichsumuonhang/khachhang/' + taikhoan + '/Chưa Xác Nhận')
+                .then(res => res.json())
+                .then(res => setThongBao(res.length))
+                .catch(err => console.log(err))
+
 
             setRefreshing(false);
         }, 1000);
@@ -308,6 +377,16 @@ export default function HomeScrenn({ navigation }) {
 
             })
     }, [taikhoan])
+
+    const [thongbaos, setThongBao] = useState()
+
+    useEffect(() => {
+        fetch('http://192.168.1.165:4000' + '/api/lichsumuonhang/khachhang/' + taikhoan + '/Chưa Xác Nhận')
+            .then(res => res.json())
+            .then(res => setThongBao(res.length))
+            .catch(err => console.log(err))
+    }, [taikhoan])
+
 
     // console.log(chamcongs)
     // console.log(taikhoan)
@@ -371,7 +450,11 @@ export default function HomeScrenn({ navigation }) {
     const [isVisible, setIsVisible] = useState(false);
     const list = [
         { title: 'Up Ảnh' },
-        { title: 'UpDate' },
+        {
+            title: 'UpDate',
+            containerStyle: { backgroundColor: 'green' },
+            titleStyle: { color: 'white' },
+        },
 
         {
             title: 'Cance',
@@ -406,7 +489,6 @@ export default function HomeScrenn({ navigation }) {
         >
             <View style={[
                 {
-
                 }
                 , {
                     backgroundColor: theme.maunen
@@ -439,8 +521,6 @@ export default function HomeScrenn({ navigation }) {
                             flex: -1,
                             transform: [{ rotate: "285deg" }],
                             borderRadius: 90,
-
-
                         }}
                     >
 
@@ -475,15 +555,55 @@ export default function HomeScrenn({ navigation }) {
                                 </TouchableOpacity>
 
                                 <View style={{
-                                    flexDirection: 'row'
+                                    flexDirection: 'row',
                                 }}>
-                                    <Switch
+                                    <View style={{
+                                        marginLeft: 20
+
+                                    }}>
+                                        {
+                                            mode == true ?
+                                                <TouchableOpacity
+                                                    style={{
+                                                        marginLeft: -40,
+                                                        marginTop: 3
+                                                    }}
+                                                    onPress={() => {
+                                                        setMode(false)
+                                                        EventRegister.emit('changeTheme', false)
+
+                                                    }}
+                                                >
+                                                    <Feather name="sun" size={24} color="black" style={{
+                                                        color: theme.color
+                                                    }} />
+                                                </TouchableOpacity>
+                                                :
+                                                <TouchableOpacity
+                                                    style={{
+                                                        marginLeft: -40,
+                                                        marginTop: 3
+                                                    }}
+                                                    onPress={() => {
+                                                        setMode(true)
+                                                        EventRegister.emit('changeTheme', true)
+                                                    }}
+
+                                                >
+                                                    <Entypo name="moon" size={24} color="black" style={{
+                                                        color: theme.color
+                                                    }} />
+                                                </TouchableOpacity>
+                                        }
+                                    </View>
+                                    {/* <Switch
                                         trackColor={{ false: '#81b0ff', true: '#767577' }}
                                         thumbColor={mode ? '#f5dd4b' : '#f4f3f4'}
                                         ios_backgroundColor="#3e3e3e"
                                         style={{
                                             width: 50,
-                                            height: 30
+                                            height: 30,
+                                            marginRight: 10
                                         }}
                                         value={mode}
                                         onValueChange={(value) => {
@@ -491,18 +611,52 @@ export default function HomeScrenn({ navigation }) {
                                             EventRegister.emit('changeTheme', value)
                                         }
                                         }
-                                    />
-                                    <MaterialIcons name='notifications'
-                                        style={[
-                                            {
-                                                fontSize: 30,
-                                                color: 'white',
-                                                marginRight: -40
-                                            }
-                                            , {
-                                                color: theme.color
-                                            }]}
-                                    />
+                                    /> */}
+                                    <View style={{
+                                        flexDirection: 'row',
+                                        position: 'relative',
+                                        marginRight: -60,
+
+                                    }}>
+                                        <TouchableOpacity
+                                            onPress={() => navigation.navigate('Thông Báo Công Ty')}
+
+                                        >
+                                            <MaterialIcons name='notifications'
+                                                style={[
+                                                    {
+                                                        fontSize: 30,
+                                                        color: 'white',
+                                                        marginRight: -60,
+                                                        position: 'relative',
+                                                    }
+                                                    , {
+                                                        color: theme.color
+                                                    }]}
+                                            >
+                                            </MaterialIcons>
+                                        </TouchableOpacity>
+
+                                        <TouchableOpacity style={{
+                                            position: 'absolute',
+                                            right: -35,
+                                            width: 15,
+                                            height: 15,
+                                            borderRadius: 100,
+                                            backgroundColor: 'red',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            zIndex: -1,
+                                        }}
+                                        >
+                                            <Text style={{
+                                                textAlign: 'center',
+                                                color: 'white'
+                                            }}>
+                                                {thongbaos}
+                                            </Text>
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
                             </View>
                             <View style={{
@@ -622,7 +776,7 @@ export default function HomeScrenn({ navigation }) {
                                     <Text
                                         style={[
                                             {
-                                                fontSize: '16',
+                                                fontSize: 16,
                                                 color: 'white',
                                                 marginRight: 70,
                                                 marginLeft: 20
@@ -636,7 +790,7 @@ export default function HomeScrenn({ navigation }) {
                                     <Text
                                         style={[
                                             {
-                                                fontSize: '16',
+                                                fontSize: 16,
                                                 color: 'white',
                                                 marginRight: 50,
                                                 marginLeft: 20
@@ -652,7 +806,7 @@ export default function HomeScrenn({ navigation }) {
                                     <Text
                                         style={[
                                             {
-                                                fontSize: '16',
+                                                fontSize: 16,
                                                 color: 'white',
                                                 marginLeft: 30
                                             }
@@ -665,7 +819,7 @@ export default function HomeScrenn({ navigation }) {
                                     <Text
                                         style={[
                                             {
-                                                fontSize: '16',
+                                                fontSize: 16,
                                                 color: 'white',
                                                 marginLeft: 30
                                             }
@@ -890,7 +1044,7 @@ export default function HomeScrenn({ navigation }) {
 
                 </View>
 
-            </View>
+            </View >
 
             {
                 isLoad &&
@@ -996,7 +1150,7 @@ export default function HomeScrenn({ navigation }) {
                                     fontSize: 18,
                                     fontWeight: 'bold'
                                 }}>
-                                    Ngô Xuân Quy
+                                    {taikhoan}
                                 </Text>
                                 <Text style={{
                                     lineHeight: 30,

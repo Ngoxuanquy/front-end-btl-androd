@@ -149,7 +149,7 @@ export default function ThuTucHanhChinh({ navigation }) {
                                 <View style={{
                                     flexDirection: 'row'
                                 }}>
-                                    <AntDesign name="closecircleo" size={30} color="green" style={{
+                                    <AntDesign name="minuscircleo" size={30} color="#41dce0" style={{
                                         borderRadius: 100,
                                         marginRight: 20,
                                         marginTop: 10
@@ -219,7 +219,7 @@ export default function ThuTucHanhChinh({ navigation }) {
                                 <View style={{
                                     flexDirection: 'row'
                                 }}>
-                                    <AntDesign name="closecircleo" size={30} color="green" style={{
+                                    <AntDesign name="exclamationcircleo" size={30} color="#b1eb2a" style={{
                                         borderRadius: 100,
                                         marginRight: 20,
                                         marginTop: 10
@@ -289,7 +289,7 @@ export default function ThuTucHanhChinh({ navigation }) {
                                 <View style={{
                                     flexDirection: 'row'
                                 }}>
-                                    <AntDesign name="closecircleo" size={30} color="green" style={{
+                                    <AntDesign name="checkcircleo" size={30} color="#e027e3" style={{
                                         borderRadius: 100,
                                         marginRight: 20,
                                         marginTop: 10
@@ -358,7 +358,7 @@ export default function ThuTucHanhChinh({ navigation }) {
                                 <View style={{
                                     flexDirection: 'row'
                                 }}>
-                                    <AntDesign name="closecircleo" size={30} color="green" style={{
+                                    <AntDesign name="clockcircleo" size={30} color="#e3a427" style={{
                                         borderRadius: 100,
                                         marginRight: 20,
                                         marginTop: 10
@@ -429,7 +429,7 @@ export default function ThuTucHanhChinh({ navigation }) {
                                 <View style={{
                                     flexDirection: 'row'
                                 }}>
-                                    <AntDesign name="closecircleo" size={30} color="green" style={{
+                                    <AntDesign name="laptop" size={30} color="#db3312" style={{
                                         borderRadius: 100,
                                         marginRight: 20,
                                         marginTop: 10
@@ -501,7 +501,7 @@ export default function ThuTucHanhChinh({ navigation }) {
                                 <View style={{
                                     flexDirection: 'row'
                                 }}>
-                                    <AntDesign name="closecircleo" size={30} color="green" style={{
+                                    <AntDesign name="meh" size={30} color="#2f41e0" style={{
                                         borderRadius: 100,
                                         marginRight: 20,
                                         marginTop: 10

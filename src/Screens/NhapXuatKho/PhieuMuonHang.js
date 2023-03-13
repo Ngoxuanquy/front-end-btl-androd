@@ -65,7 +65,7 @@ export default function PhieuMuonHang({ navigation }) {
     useEffect(() => {
         fetch('http://192.168.1.165:4000' + '/api/users/' + value)
             .then(res => res.json())
-            .then(res => setId(res[0].id))
+            .then(res => setId(res[0]?.id))
             .catch((err) => console.log(err))
     }, [value])
 
@@ -241,12 +241,13 @@ export default function PhieuMuonHang({ navigation }) {
 
         const message = {
             to: token,
-            sound: 'default',
+            sound: 'https://nhacchuong123.com/nhac-chuong/abc/Nhac-chuong-iphone-14-mac-dinh.mp3',
             title: taikhoan + " Muốn Mượn Hàng Của Bạn!!",
-            body: 'body'
+            body: 'Nhấn Vào Để Xem Chi Tiết!!'
         }
 
         await Axios.post('https://api.expo.dev/v2/push/send', message)
+            .catch(err => console.log(err))
 
     }
 
@@ -304,7 +305,7 @@ export default function PhieuMuonHang({ navigation }) {
     useEffect(() => {
         fetch('http://192.168.1.165:4000' + '/api/users/' + value)
             .then(res => res.json())
-            .then(res => setIdNguoiCHoMuon(res[0].id))
+            .then(res => setIdNguoiCHoMuon(res[0]?.id))
             .catch((err) => console.log(err))
     }, [value])
 

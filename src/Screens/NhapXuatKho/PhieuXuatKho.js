@@ -180,8 +180,10 @@ export default function PhieuXuatKho({ navigation }) {
     const [tests, setTest] = useState("")
     const [lichsuxuathangs, setLichSuXuatHang] = useState([])
 
+    console.log(taikhoan)
+
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/lichsuxuathang/name/' + taikhoan)
+        fetch('http://192.168.1.165:4000' + '/api/lichsuxuathang/email/' + taikhoan)
             .then(res => res.json())
             .then(res => setLichSuXuatHang(res))
             .catch(err => console.log(err))
@@ -189,6 +191,7 @@ export default function PhieuXuatKho({ navigation }) {
                 setLoading4(false)
             })
     }, [taikhoan])
+
 
 
     function handerSubmit() {
@@ -212,10 +215,10 @@ export default function PhieuXuatKho({ navigation }) {
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({
                                     name: taikhoan,
-                                    tenhang: sanphamthie.TenHang,
-                                    id: max_val + 1,
-                                    soluong: sanphamthie.TieuChuan - sanphamthie.SoLuong,
-                                    price: sanphamthie.price
+                                    tenhang: 'a',
+                                    id: Number(max_val + 1),
+                                    soluong: sanphamthie.tieu_chuan - sanphamthie.exist,
+                                    price: 1
                                 })
                             })
                         })
@@ -226,10 +229,10 @@ export default function PhieuXuatKho({ navigation }) {
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({
                                     name: taikhoan,
-                                    tenhang: sanphamthu.TenHang,
-                                    id: max_val + 1,
-                                    soluong: sanphamthu.TieuChuan - sanphamthu.SoLuong,
-                                    price: sanphamthu.price
+                                    tenhang: 'a',
+                                    id: Number(max_val + 1),
+                                    soluong: sanphamthu.tieu_chuan - sanphamthu.exist,
+                                    price: 1
                                 })
                             })
                         })
@@ -251,6 +254,7 @@ export default function PhieuXuatKho({ navigation }) {
 
         setVisible4(!visible4);
     };
+
 
 
 
@@ -409,7 +413,7 @@ export default function PhieuXuatKho({ navigation }) {
                                                             <Text style={{
                                                                 // color: theme.color
                                                             }}>
-                                                                Trạng Thái: {chitietkhachhang.TrangThai}
+                                                                Trạng Thái: {chitietkhachhang.status}
                                                             </Text>
                                                             <Text style={{
                                                                 // color: theme.color
@@ -558,20 +562,7 @@ export default function PhieuXuatKho({ navigation }) {
                                     Tên Sản Phẩm
                                 </Text>
                             </View>
-                            <View style={{
-                                width: '10%',
-                                justifyContent: 'center',
-                                alignItems: 'center'
-                            }}>
-                                <Text style={{
-                                    fontSize: 17,
-                                    fontWeight: 'bold',
-                                    color: theme.color
 
-                                }}>
-                                    Đơn Giá
-                                </Text>
-                            </View>
                             <View style={{
                                 width: '10%',
                                 justifyContent: 'center',
@@ -667,22 +658,6 @@ export default function PhieuXuatKho({ navigation }) {
                                         </Text>
                                     </View>
 
-                                    <View style={{
-                                        width: '10%',
-                                        justifyContent: 'center',
-                                        alignItems: 'center'
-                                    }}>
-                                        <Text style={{
-                                            fontSize: 16,
-                                            lineHeight: 30,
-                                            textAlign: 'center',
-                                            color: theme.color
-
-                                        }}>
-                                            {sanpham.SoLuong}
-
-                                        </Text>
-                                    </View>
 
                                     <View style={{
                                         width: '15%',
@@ -1147,7 +1122,8 @@ export default function PhieuXuatKho({ navigation }) {
 
                 <View style={{
                     marginLeft: 40,
-                    marginTop: 20
+                    marginTop: 20,
+                    marginBottom: 30
                 }}>
                     <TouchableOpacity style={{
                         borderWidth: 1,
@@ -1155,7 +1131,6 @@ export default function PhieuXuatKho({ navigation }) {
                         width: 100,
                         padding: 7,
                         backgroundColor: 'green',
-                        opacity: 0.7,
                         borderRadius: 4
                     }}
                         onPress={() => handerSubmit()}

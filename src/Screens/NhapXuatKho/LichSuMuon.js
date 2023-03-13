@@ -86,7 +86,7 @@ export default function PhieuMuon({ navigation }) {
                                     top: 20
                                 }}>
                                     <TouchableOpacity
-                                        onPress={() => navigation.navigate('Chi Tiết Thông Báo', { id: sanpham.id })}
+                                        onPress={() => navigation.navigate('Xem Lại Chi Tiết', { id: sanpham.id })}
                                     >
                                         <Text style={{
                                             color: theme.color

@@ -54,32 +54,32 @@ const Phone = ({ navigation }) => {
         call(args).catch(console.error);
     };
 
-    useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/customer_re/' + taikhoan)
-            .then(res => res.json())
-            .then(res => setOrders(res))
-            .catch(err => console.log(err))
-            .finally(() => {
-                setIsLoading(false)
-                // setReset(true);
-                // setTimeout(() => {
-                //     setReset(false);
-                // }, 10);
-            })
-    }, [taikhoan])
+    // useEffect(() => {
+    //     fetch('http://192.168.1.165:4000' + '/api/customer_re/' + taikhoan)
+    //         .then(res => res.json())
+    //         .then(res => setOrders(res))
+    //         .catch(err => console.log(err))
+    //         .finally(() => {
+    //             setIsLoading(false)
+    //             // setReset(true);
+    //             // setTimeout(() => {
+    //             //     setReset(false);
+    //             // }, 10);
+    //         })
+    // }, [taikhoan])
 
 
     const [refreshing, setRefreshing] = React.useState(false);
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
-        setTimeout(() => {
-            fetch('http://192.168.1.165:4000' + '/api/customer_re/' + taikhoan)
-                .then(res => res.json())
-                .then(res => setOrders(res))
-                .catch(err => console.log(err))
-            setRefreshing(false);
-        }, 1000);
+        // setTimeout(() => {
+        //     fetch('http://192.168.1.165:4000' + '/api/customer_re/' + taikhoan)
+        //         .then(res => res.json())
+        //         .then(res => setOrders(res))
+        //         .catch(err => console.log(err))
+        //     setRefreshing(false);
+        // }, 1000);
     }, [taikhoan]);
 
 
@@ -107,7 +107,7 @@ const Phone = ({ navigation }) => {
                     style={{
                         width: "100%",
                         height: 120,
-                        flex: -1,
+                        flex: 1,
                         borderBottomLeftRadius: 20,
                         borderBottomRightRadius: 20
                     }}
@@ -117,7 +117,9 @@ const Phone = ({ navigation }) => {
                         justifyContent: 'center',
                         // marginBottom: 10,
                         borderBottomRightRadius: 10,
-                        borderBottomLeftRadius: 10
+                        borderBottomLeftRadius: 10,
+                        zIndex: 100
+
                     }}>
                         <Text style={{
                             fontSize: 30,
@@ -134,11 +136,13 @@ const Phone = ({ navigation }) => {
                 // style={styles.container}
                 >
                     <TouchableWithoutFeedback onPress={Keyboard.dismiss} style={{
+
                     }}>
 
-                        <View style={[styles.container, { backgroundColor: theme.maunen, }]}>
+                        <View style={[styles.container, { backgroundColor: theme.maunen, height: 1000, marginTop: -20, zIndex: -100 }]}>
                             <View style={{
-                                flex: 1
+                                flex: 1,
+
                             }} >
                                 <Text style={{
                                     fontSize: 25,
@@ -147,180 +151,9 @@ const Phone = ({ navigation }) => {
                                     fontWeight: 'bold',
                                     marginTop: 10
                                 }}>
-                                    Thông Tin Khách Hàng
+                                    Phòng Điều Hành
                                 </Text>
-                                {orders.map(order => (
 
-                                    <View key={order.id} style={{
-                                    }}>
-                                        <View style={[{
-                                            marginLeft: 10,
-                                            marginRight: 10,
-                                            borderColor: 'gray',
-                                            borderWidth: 1,
-                                            marginBottom: 10,
-                                            padding: 15,
-                                            shadowColor: "#000",
-                                            shadowOffset: {
-                                                width: 0,
-                                                height: 7,
-                                            },
-                                            shadowOpacity: 0.43,
-                                            shadowRadius: 9.51,
-
-                                            elevation: 15,
-                                        }, { backgroundColor: theme.background }]}>
-                                            <View style={{
-                                                marginBottom: 30
-                                            }}>
-                                                <View style={{
-                                                    flexDirection: 'row',
-                                                    marginTop: 10,
-                                                    marginBottom: 15,
-                                                }}>
-                                                    <Text
-                                                        style={[
-                                                            {
-                                                                fontSize: 20,
-                                                                fontWeight: 'bold'
-                                                            }
-                                                            , {
-                                                                color: theme.color
-                                                            }]}
-                                                    >
-                                                        Đơn Hàng:
-                                                    </Text>
-                                                    <Text style={[
-                                                        {
-                                                            fontSize: 20,
-                                                            fontWeight: 'bold'
-                                                        }
-                                                        , {
-                                                            color: theme.color
-                                                        }]}>
-                                                        BD12
-                                                    </Text>
-                                                </View>
-
-                                                <View style={{
-                                                    flexDirection: 'row',
-                                                    marginBottom: 15
-                                                }}>
-                                                    <Text style={[
-                                                        {
-                                                            fontSize: 20,
-                                                            fontWeight: 'bold'
-                                                        }
-                                                        , {
-                                                            color: theme.color
-                                                        }]}>
-                                                        Tên Khách Hàng:
-                                                    </Text>
-                                                    <Text style={[
-                                                        {
-                                                            fontSize: 20,
-                                                            fontWeight: 'bold'
-                                                        }
-                                                        , {
-                                                            color: theme.color
-                                                        }]}>
-                                                        {order.name}
-                                                    </Text>
-                                                </View>
-
-                                                <View style={{
-                                                    flexDirection: 'row',
-                                                    marginBottom: 15
-                                                }}>
-
-                                                    <Text style={[
-                                                        {
-                                                            fontSize: 20,
-                                                            fontWeight: 'bold'
-                                                        }
-                                                        , {
-                                                            color: theme.color
-                                                        }]}>
-                                                        Số Điện Thoại:
-                                                    </Text>
-                                                    <Text style={{
-                                                        fontSize: 20,
-                                                        marginLeft: 10
-
-                                                    }}>
-                                                        {order.Number.slice(0, 7)}***
-                                                    </Text>
-                                                </View>
-
-                                                <View style={{
-                                                    flexDirection: 'row'
-                                                }}>
-                                                    <Text style={[
-                                                        {
-                                                            fontSize: 20,
-                                                            fontWeight: 'bold'
-                                                        }
-                                                        , {
-                                                            color: theme.color
-                                                        }]}>
-                                                        Địa Chỉ:
-                                                    </Text>
-                                                    <Text style={[
-                                                        {
-                                                            fontSize: 20,
-                                                            fontWeight: 'bold'
-                                                        }
-                                                        , {
-                                                            color: theme.color
-                                                        }]}>
-                                                        {order.Address}
-                                                    </Text>
-                                                </View>
-                                                <View style={{
-                                                    flexDirection: 'row',
-                                                    marginTop: 15,
-                                                    marginBottom: 20
-                                                }}>
-                                                    <Text style={[
-                                                        {
-                                                            fontSize: 20,
-                                                            fontWeight: 'bold'
-                                                        }
-                                                        , {
-                                                            color: theme.color
-                                                        }]}>
-                                                        Giờ Hẹn Khách:
-                                                    </Text>
-                                                    <Text style={[
-                                                        {
-                                                            fontSize: 20,
-                                                            fontWeight: 'bold'
-                                                        }
-                                                        , {
-                                                            color: theme.color
-                                                        }]}>
-                                                        09:15 - 14/02/2023
-                                                    </Text>
-                                                </View>
-
-                                                <View style={{
-                                                    justifyContent: 'center',
-                                                    alignItems: 'center',
-                                                }}>
-                                                    <TouchableOpacity
-                                                        activeOpacity={0.7}
-                                                        style={styles.buttonStyle}
-                                                        onPress={() => triggerCall(order.Number)}>
-                                                        <Ionicons name="ios-call-outline" size={24} color="white" style={{
-                                                            textAlign: 'center'
-                                                        }} />
-                                                    </TouchableOpacity>
-                                                </View>
-
-                                            </View>
-                                        </View>
-                                    </View>
-                                ))}
                             </View>
 
                         </View>

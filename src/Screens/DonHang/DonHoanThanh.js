@@ -28,7 +28,6 @@ export default function DonHoanThanh() {
             })
     }, [taikhoan])
 
-    console.log(orders)
 
     const buttons = [
 
@@ -53,7 +52,7 @@ export default function DonHoanThanh() {
     ]
 
     return (
-        <View style={{
+        <ScrollView style={{
             backgroundColor: '#eeeeee',
             flex: 1
         }} >
@@ -108,7 +107,7 @@ export default function DonHoanThanh() {
                             <Text style={{
                                 fontSize: 20
                             }}>
-                                100
+                                {orders.length}
                             </Text>
                         </View>
                     </View>
@@ -148,15 +147,17 @@ export default function DonHoanThanh() {
                     marginTop: 20
                 }}>
                     {orders.map(cu => (
-                        <View style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-around',
-                            backgroundColor: 'white',
-                            width: '90%',
-                            paddingVertical: 10,
-                            marginTop: 10,
-                            borderRadius: 10
-                        }}>
+                        <View
+                            key={cu.id}
+                            style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-around',
+                                backgroundColor: 'white',
+                                width: '90%',
+                                paddingVertical: 10,
+                                marginTop: 10,
+                                borderRadius: 10
+                            }}>
                             <View style={{
                                 padding: 10
                             }}>
@@ -199,7 +200,7 @@ export default function DonHoanThanh() {
 
                 </View>
             </View>
-        </View>
+        </ScrollView>
     );
 }
 

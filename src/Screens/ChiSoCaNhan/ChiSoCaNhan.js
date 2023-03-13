@@ -34,10 +34,17 @@ export default function ChiSoCaNhan({ navigation }) {
             setTaiKhoan(res)
         )
 
+    const [ngaycong, setNgayCong] = useState()
+    const [luongs, setLuong] = useState()
+
     useEffect(() => {
         fetch('http://192.168.1.165:4000' + '/api/chisocanhan/email/' + taikhoan)
             .then(res => res.json())
-            .then(res => setAPi(res))
+            .then(res => {
+                setAPi(res)
+                setNgayCong(res[0].ngay_cong)
+                setLuong(res[0].luong_tam_tinh)
+            })
             .catch((err) => console.log(err))
     }, [taikhoan])
 
@@ -60,7 +67,7 @@ export default function ChiSoCaNhan({ navigation }) {
 
 
     function handerSubmit() {
-        if (luongtamtinhs > 2000 && luongtamtinhs < 3000) {
+        if (luongtamtinhs > 200 && luongtamtinhs < 300) {
             fetch('http://192.168.1.165:4000' + '/api/chisocanhan/update/luong/' + taikhoan, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -90,7 +97,7 @@ export default function ChiSoCaNhan({ navigation }) {
     }
 
     useEffect(() => {
-        if (luongtamtinhs > 2000 && luongtamtinhs < 3000) {
+        if (luongtamtinhs > 200 && luongtamtinhs < 300) {
             fetch('http://192.168.1.165:4000' + '/api/chisocanhan/update/luong/' + taikhoan, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -198,14 +205,14 @@ export default function ChiSoCaNhan({ navigation }) {
 
         {
             name: "TB Hiện Tại",
-            population: luongtamtinhs,
+            population: luongtamtinhs && luongtamtinhs || 0,
             color: "#56d187",
             legendFontColor: "green",
             legendFontSize: 15,
         },
         {
             name: "TB thiếu",
-            population: 7000 - luongtamtinhs,
+            population: 7000 - (luongtamtinhs && luongtamtinhs || 0),
             color: "#f5b41d",
             legendFontColor: "#7F7F7F",
             legendFontSize: 15,
@@ -325,7 +332,7 @@ export default function ChiSoCaNhan({ navigation }) {
                                     color: theme.color
 
                                 }}>
-                                    1.000.000 đ
+                                    {luongs}
                                 </Text>
                                 <Text style={{
                                     fontSize: 17,
@@ -381,7 +388,7 @@ export default function ChiSoCaNhan({ navigation }) {
                                         color: theme.color
 
                                     }}>
-                                        1
+                                        {ngaycong}
                                     </Text>
                                 </View>
                             </View>
@@ -395,7 +402,6 @@ export default function ChiSoCaNhan({ navigation }) {
                                     fontSize: 15,
                                     fontWeight: 'bold',
                                     color: 'red',
-                                    color: theme.color
 
                                 }}>
                                     Cố Gắng Hơn Nhé
@@ -421,23 +427,22 @@ export default function ChiSoCaNhan({ navigation }) {
                         color: theme.color
 
                     }}>
-                        Giá Trị Trung Bình : 700,000đ
+                        Giá Trị Trung Bình : 700,000đ - {luongtamtinhs}
                     </Text>
 
 
                     <PieChart
                         data={data2}
-                        width={Dimensions.get('window').width - 40}
+                        width={Dimensions.get('window').width - 10}
                         height={220}
                         chartConfig={chartConfigPie}
                         accessor={'population'}
                         backgroundColor={'transparent'}
                         style={{
                             flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-                            // marginLeft: -10
                         }}
-                        // absolute
-                        outerRadius={'55%'}
+                    // absolute
+                    // outerRadius={'55%'}
                     />
                 </View>
 

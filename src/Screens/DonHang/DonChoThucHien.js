@@ -28,7 +28,6 @@ export default function DonChoThucHien() {
             })
     }, [taikhoan])
 
-    console.log(customer)
 
     const buttons = [
 
@@ -108,7 +107,7 @@ export default function DonChoThucHien() {
                             <Text style={{
                                 fontSize: 20
                             }}>
-                                100
+                                {customer.length}
                             </Text>
                         </View>
                     </View>

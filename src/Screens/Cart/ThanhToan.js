@@ -96,6 +96,8 @@ export default function ThanhToan({ route, navigation }) {
         setProduct(data);
     }
 
+    console.log(product)
+
     const [trungbinhs, setTrungBinh] = useState()
 
     useEffect(() => {
@@ -152,7 +154,6 @@ export default function ThanhToan({ route, navigation }) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 id: id_chuyen,
-
                 idDonHang: id1
             })
         })
@@ -166,7 +167,6 @@ export default function ThanhToan({ route, navigation }) {
             if (Product.id == id1) {
                 customer.map(custome => {
                     if (custome.id == id_chuyen) {
-
                         fetch('http://192.168.1.165:4000' + '/api/transaction_lines/create/', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
@@ -782,7 +782,7 @@ export default function ThanhToan({ route, navigation }) {
 
                                         // paddingVertical: 10
                                     }}>
-                                        {products.map((product, index) => (
+                                        {product.map((product, index) => (
                                             <View
                                                 key={product.id}
                                                 style={{
@@ -1160,7 +1160,7 @@ const styles = StyleSheet.create({
         height: 50,
         borderColor: 'black',
         borderWidth: 0.3,
-        marginTop: 20,
+        marginTop: 10,
         padding: 10,
         alignItems: 'center',
         justifyContent: 'center',

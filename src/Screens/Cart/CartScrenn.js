@@ -16,6 +16,8 @@ import { Ionicon } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import ThemeConText from '../../../config/themeConText';
+import { Feather } from '@expo/vector-icons';
+import Testphone from '../../Components/Testphone'
 
 export default function Cart({ navigation }) {
 
@@ -223,8 +225,11 @@ export default function Cart({ navigation }) {
 
     }, [taikhoan]);
 
+    // function handerCall(nubmer) {
+    //     Testphone(nubmer)
+    // }
 
-
+    console.log(orders)
     return (
         <View
             style={[
@@ -242,7 +247,7 @@ export default function Cart({ navigation }) {
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} style={{
                         tintColor: 'black',
-                        backgroundColor: '#E6E6FA',
+                        backgroundColor: theme.maunen,
                         size: 10,
                         marginBottom: 0,
                     }} />
@@ -294,7 +299,7 @@ export default function Cart({ navigation }) {
                             flexDirection: 'row',
                             justifyContent: 'space-around',
                             alignItems: 'center',
-                            borderColor: 'black',
+                            borderColor: theme.color,
                             borderWidth: 0.4,
                             paddingVertical: 10,
                             marginLeft: 10,
@@ -464,7 +469,7 @@ export default function Cart({ navigation }) {
                         }}>
 
                         <View style={{
-                            borderColor: 'black',
+                            borderColor: theme.color,
                             borderWidth: 1,
                             marginTop: 10,
                             marginLeft: 10,
@@ -495,7 +500,9 @@ export default function Cart({ navigation }) {
                                     <View style={{
                                         flexDirection: 'row'
                                     }}>
-                                        <AntDesign name="key" size={24} color="black" />
+                                        <AntDesign name="key" size={24} color="black" style={{
+                                            color: theme.color
+                                        }} />
                                         <Text
                                             style={[
                                                 {
@@ -513,7 +520,9 @@ export default function Cart({ navigation }) {
                                     <View style={{
                                         flexDirection: 'row'
                                     }}>
-                                        <Ionicons name="people" size={24} color="black" />
+                                        <Ionicons name="people" size={24} color="black" style={{
+                                            color: theme.color
+                                        }} />
                                         <Text
                                             style={[
                                                 {
@@ -531,7 +540,9 @@ export default function Cart({ navigation }) {
                                     <View style={{
                                         flexDirection: 'row'
                                     }}>
-                                        <Entypo name="address" size={24} color="black" />
+                                        <Entypo name="address" size={24} color="black" style={{
+                                            color: theme.color
+                                        }} />
                                         <Text style={[
                                             {
                                                 lineHeight: 30,
@@ -548,7 +559,9 @@ export default function Cart({ navigation }) {
                                     <View style={{
                                         flexDirection: 'row'
                                     }}>
-                                        <Entypo name="address" size={24} color="black" />
+                                        <Entypo name="address" size={24} color="black" style={{
+                                            color: theme.color
+                                        }} />
                                         <Text
                                             style={[
                                                 {
@@ -578,7 +591,7 @@ export default function Cart({ navigation }) {
                                         marginBottom: 10,
                                     }}>
                                         <TouchableOpacity style={{
-                                            borderColor: 'black',
+                                            borderColor: theme.color,
                                             borderWidth: 1,
                                             padding: 10,
                                             backgroundColor: 'coral',
@@ -595,7 +608,7 @@ export default function Cart({ navigation }) {
                                             </Text>
                                         </TouchableOpacity>
                                         <TouchableOpacity style={{
-                                            borderColor: 'black',
+                                            borderColor: theme.color,
                                             borderWidth: 1,
                                             padding: 10,
                                             backgroundColor: '#FF9999',
@@ -646,7 +659,7 @@ export default function Cart({ navigation }) {
                         <View
                             style={[
                                 {
-                                    borderColor: 'black',
+                                    borderColor: theme.color,
                                     borderWidth: 0.4,
                                     marginLeft: 10,
                                     marginRight: 10,
@@ -656,16 +669,29 @@ export default function Cart({ navigation }) {
                                     backgroundColor: theme.background
                                 }]}
                         >
-                            <Text style={{
-                                fontSize: 18,
-                                color: 'gray',
-                                padding: 10,
-                                color: 'green',
-                                color: theme.color
-
+                            <View style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-between'
                             }}>
-                                Đơn Đang Thực Hiện
-                            </Text>
+                                <Text style={{
+                                    fontSize: 18,
+                                    color: 'gray',
+                                    padding: 10,
+                                    color: 'green',
+                                    color: theme.color
+
+                                }}>
+                                    Đơn Đang Thực Hiện
+                                </Text>
+                                <TouchableOpacity
+                                    onPress={() => Testphone(order.Number)}
+                                >
+                                    <Feather name="phone" size={30} color="green" style={{
+                                        padding: 10,
+                                        marginRight: 20
+                                    }} />
+                                </TouchableOpacity>
+                            </View>
 
                             <View style={{
                                 justifyContent: 'center',
@@ -715,7 +741,7 @@ export default function Cart({ navigation }) {
                                     marginBottom: 10
                                 }}>
                                     <TouchableOpacity style={{
-                                        borderColor: 'black',
+                                        borderColor: theme.color,
                                         borderWidth: 1,
                                         padding: 10,
                                         backgroundColor: '#DCDCDC',
@@ -736,7 +762,7 @@ export default function Cart({ navigation }) {
                                         </Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={{
-                                        borderColor: 'black',
+                                        borderColor: theme.color,
                                         borderWidth: 1,
                                         padding: 10,
                                         backgroundColor: '#DCDCDC',
@@ -752,7 +778,7 @@ export default function Cart({ navigation }) {
                                         </Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={{
-                                        borderColor: 'black',
+                                        borderColor: theme.color,
                                         borderWidth: 1,
                                         padding: 10,
                                         backgroundColor: '#DCDCDC',

@@ -82,7 +82,7 @@ const QRCode = ({ navigation }) => {
 
 
         if (check.slice(0, 2) == a.getDate() && check.slice(3, 5) == (a.getMonth() + 1) && check.slice(6, 10) == a.getFullYear()) {
-            alert("Hôm Nay Đã Chấm Công!!!")
+            // alert("Hôm Nay Đã Chấm Công!!!")
         }
         else {
             fetch('http://192.168.1.165:4000' + '/api/chamcong/create/', {
@@ -110,7 +110,13 @@ const QRCode = ({ navigation }) => {
                     headers: { 'Content-Type': 'application/json' },
                 })
                     .then(() => {
-
+                        fetch('http://192.168.1.165:4000' + '/api/chisocanhan/update/ngaycong/' + taikhoan, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                chamcong: ngaycongs + 0.5
+                            })
+                        })
                         alert('Chấm Công Ra Thành Công')
                         navigation.replace('BottomTab')
 
@@ -125,14 +131,6 @@ const QRCode = ({ navigation }) => {
                     headers: { 'Content-Type': 'application/json' },
                 })
                     .then(() => {
-
-                        fetch('http://192.168.1.165:4000' + '/api/chisocanhan/update/ngaycong/' + taikhoan, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                chamcong: ngaycongs + 1
-                            })
-                        })
                         alert('Chấm Công Vào Thành Công')
                         navigation.replace('BottomTab')
 
@@ -152,10 +150,9 @@ const QRCode = ({ navigation }) => {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
-                                chamcong: ngaycongs + 1
+                                chamcong: ngaycongs + 0.5
                             })
                         })
-
 
                         alert('Chấm Công Ra Thành Công')
                         navigation.replace('BottomTab')
