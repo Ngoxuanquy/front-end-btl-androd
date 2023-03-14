@@ -9,6 +9,7 @@ import * as ImagePicker from 'expo-image-picker'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ThemeConText from '../../../config/themeConText';
 import { LinearGradient } from 'expo-linear-gradient';
+import Upload from '../../Components/Upload';
 
 export default function ThongTinTaiKhoan() {
 

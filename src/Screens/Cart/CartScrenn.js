@@ -62,10 +62,6 @@ export default function Cart({ navigation }) {
             .catch(err => console.log(err))
             .finally(() => {
                 setIsLoading(false)
-                // setReset(true);
-                // setTimeout(() => {
-                //     setReset(false);
-                // }, 10);
             })
     }, [taikhoan])
 
@@ -229,7 +225,6 @@ export default function Cart({ navigation }) {
     //     Testphone(nubmer)
     // }
 
-    console.log(orders)
     return (
         <View
             style={[
@@ -769,7 +764,10 @@ export default function Cart({ navigation }) {
                                         borderRadius: 6
 
                                     }}
-                                        onPress={() => navigation.navigate('Chup')}
+                                        onPress={() => navigation.navigate('Chup', {
+                                            name: order.name,
+                                            id: order.id
+                                        })}
                                     >
                                         <Text style={{
                                             color: 'black'

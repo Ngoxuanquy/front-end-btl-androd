@@ -260,7 +260,6 @@ export default function PhieuMuonHang({ navigation }) {
             id = id_donhang + 1
         }
 
-        console.log(id_donhang)
 
         fetch('http://192.168.1.165:4000' + '/api/muonhang/update/lichsumuonhangId/' + id,
             {

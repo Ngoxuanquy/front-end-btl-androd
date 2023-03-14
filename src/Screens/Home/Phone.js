@@ -18,7 +18,12 @@ import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ThemeConText from '../../../config/themeConText';
 import { LinearGradient } from 'expo-linear-gradient';
-
+import {
+    ListItem, Button,
+    Dialog,
+    CheckBox,
+    Avatar,
+} from '@rneui/themed';
 // import Call API
 import call from 'react-native-phone-call';
 import { useEffect } from 'react';
@@ -82,88 +87,252 @@ const Phone = ({ navigation }) => {
         // }, 1000);
     }, [taikhoan]);
 
+    const handerPhone = () => {
+        triggerCall("0589401978")
+    }
+
+    const [visible1, setVisible1] = useState(false);
+
+    const toggleDialog1 = () => {
+        setVisible1(!visible1);
+    };
+
+    const handerChiTiet = () => {
+        setVisible1(true)
+    }
 
     return (
 
 
-        <ScrollView
+        <View
             style={{
+                flex: 1,
+
             }}
-            refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} style={{
-                    tintColor: 'black',
-                    backgroundColor: '#bf57f4',
-                    size: 10,
-                    marginBottom: 0,
-                }} />
-            }
         >
-            <View style={{
-            }}>
-                <LinearGradient
-                    // Background Linear Gradient
-                    start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 1 }}
-                    colors={['#bf57f4', '#997af4', '#878bf5', '#7a84f3']}
-                    style={{
-                        width: "100%",
-                        height: 120,
-                        flex: 1,
-                        borderBottomLeftRadius: 20,
-                        borderBottomRightRadius: 20
-                    }}
-                >
+            <LinearGradient
+                // Background Linear Gradient
+                start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 1 }}
+                colors={['#bf57f4', '#997af4', '#878bf5', '#7a84f3']}
+                style={{
+                    width: "100%",
+                    height: 120,
+                    borderBottomLeftRadius: 20,
+                    borderBottomRightRadius: 20
+                }}
+            >
+                <View style={{
+                    height: 100,
+                    justifyContent: 'center',
+                    // marginBottom: 10,
+                    borderBottomRightRadius: 10,
+                    borderBottomLeftRadius: 10,
+                    zIndex: 100
+
+                }}>
+                    <Text style={{
+                        fontSize: 30,
+                        color: 'white',
+                        textAlign: 'center',
+                        marginTop: 40
+                    }}>
+                        Gọi Điện
+                    </Text>
+                </View>
+            </LinearGradient>
+
+            <View style={[styles.container, { backgroundColor: theme.maunen, height: 1000, marginTop: -20, zIndex: -100 }]}>
+                <View style={{
+                    flex: 1,
+                }} >
+                    <Text style={{
+                        fontSize: 25,
+                        padding: 20,
+                        color: theme.color,
+                        fontWeight: 'bold',
+                        marginTop: 10
+                    }}>
+                        Phòng Điều Hành
+                    </Text>
                     <View style={{
-                        height: 100,
-                        justifyContent: 'center',
-                        // marginBottom: 10,
-                        borderBottomRightRadius: 10,
-                        borderBottomLeftRadius: 10,
-                        zIndex: 100
 
                     }}>
-                        <Text style={{
-                            fontSize: 30,
-                            color: 'white',
-                            textAlign: 'center',
-                            marginTop: 40
-                        }}>
-                            Gọi Điện
-                        </Text>
+                        <ListItem.Swipeable
+
+                            style={{
+                                backgroundColor: theme.background
+                            }}
+                            leftWidth={80}
+                            rightWidth={90}
+                            minSlideWidth={40}
+                            leftContent={(action) => (
+                                <Button
+                                    containerStyle={{
+                                        flex: 1,
+                                        justifyContent: 'center',
+                                        backgroundColor: '#499ceb',
+
+                                    }}
+                                    type="clear"
+                                    icon={{
+                                        name: 'archive-outline',
+                                        type: 'material-community',
+                                        color: theme.color,
+
+                                    }}
+                                    // onPress={action}
+                                    onPress={handerChiTiet}
+                                />
+                            )}
+                            rightContent={(action) => (
+                                <Button
+                                    containerStyle={{
+                                        justifyContent: 'center',
+                                        backgroundColor: '#35e84d',
+                                        flex: 1
+
+                                    }}
+                                    type="clear"
+
+                                    icon={{ name: 'phone', color: theme.color }}
+                                    onPress={handerPhone}
+
+                                />
+                            )}
+                        >
+                            {/* <Icon name="label-important-outline" type="material" /> */}
+                            <ListItem.Content style={{
+
+
+                            }}>
+                                <ListItem.Title style={{
+                                }}>Phòng Điều Hành 1</ListItem.Title>
+                                <ListItem.Subtitle style={{
+                                }}>Hey, I'm John Doe</ListItem.Subtitle>
+                            </ListItem.Content>
+                            <ListItem.Chevron />
+                        </ListItem.Swipeable>
+
+                        <Dialog
+                            isVisible={visible1}
+                            onBackdropPress={toggleDialog1}
+                        >
+                            <Dialog.Title title="Phòng Điều Hành 1" />
+                            <Text style={{
+                                fontSize: 20,
+                                marginTop: 4,
+                                lineHeight: 40
+                            }}>
+                                Phòng Điều Hành 1
+
+                            </Text>
+                            <Text>
+                                Hey, I'm John Doe
+                            </Text>
+                            <Text>
+                                Số điện thoại: 0589401978
+                            </Text>
+                        </Dialog>
                     </View>
-                </LinearGradient>
-                <KeyboardAvoidingView
-                    behavior={Platform.OS === "ios" ? "padding" : "height"}
-                // style={styles.container}
-                >
-                    <TouchableWithoutFeedback onPress={Keyboard.dismiss} style={{
 
-                    }}>
+                    <ListItem.Swipeable
+                        style={{
+                            marginTop: 20
+                        }}
+                        leftWidth={80}
+                        rightWidth={90}
+                        minSlideWidth={40}
+                        leftContent={(action) => (
+                            <Button
+                                containerStyle={{
+                                    justifyContent: 'center',
+                                    backgroundColor: '#499ceb',
+                                    height: 70,
+                                    marginTop: 20
 
-                        <View style={[styles.container, { backgroundColor: theme.maunen, height: 1000, marginTop: -20, zIndex: -100 }]}>
-                            <View style={{
-                                flex: 1,
 
-                            }} >
-                                <Text style={{
-                                    fontSize: 25,
-                                    padding: 20,
-                                    color: theme.color,
-                                    fontWeight: 'bold',
-                                    marginTop: 10
-                                }}>
-                                    Phòng Điều Hành
-                                </Text>
+                                }}
+                                type="clear"
+                                icon={{
+                                    name: 'archive-outline',
+                                    type: 'material-community',
+                                    color: theme.color
+                                }}
+                                onPress={action}
+                            />
+                        )}
+                        rightContent={(action) => (
+                            <Button
+                                containerStyle={{
+                                    justifyContent: 'center',
+                                    backgroundColor: '#35e84d',
+                                    height: 70,
+                                    marginTop: 20
+                                }}
+                                type="clear"
+                                icon={{ name: 'phone', color: theme.color }}
+                                onPress={action}
+                            />
+                        )}
+                    >
+                        {/* <Icon name="label-important-outline" type="material" /> */}
+                        <ListItem.Content>
+                            <ListItem.Title>Phòng Điều Hành 2</ListItem.Title>
+                            <ListItem.Subtitle>Hey, I'm Quy</ListItem.Subtitle>
+                        </ListItem.Content>
+                        <ListItem.Chevron />
+                    </ListItem.Swipeable>
 
-                            </View>
+                    <ListItem.Swipeable
+                        style={{
+                            marginTop: 20
+                        }}
+                        leftWidth={80}
+                        rightWidth={90}
+                        minSlideWidth={40}
+                        leftContent={(action) => (
+                            <Button
+                                containerStyle={{
+                                    justifyContent: 'center',
+                                    backgroundColor: '#499ceb',
+                                    height: 70,
+                                    marginTop: 20
 
-                        </View>
+                                }}
+                                type="clear"
+                                icon={{
+                                    name: 'archive-outline',
+                                    type: 'material-community',
+                                    color: theme.color
+                                }}
+                                onPress={action}
+                            />
+                        )}
+                        rightContent={(action) => (
+                            <Button
+                                containerStyle={{
+                                    justifyContent: 'center',
+                                    backgroundColor: '#35e84d',
+                                    height: 70,
+                                    marginTop: 20
+                                }}
+                                type="clear"
+                                icon={{ name: 'phone', color: theme.color }}
+                                onPress={action}
+                            />
+                        )}
+                    >
+                        {/* <Icon name="label-important-outline" type="material" /> */}
+                        <ListItem.Content>
+                            <ListItem.Title>Phòng Điều Hành 3</ListItem.Title>
+                            <ListItem.Subtitle>Hey, I'm Cường</ListItem.Subtitle>
+                        </ListItem.Content>
+                        <ListItem.Chevron />
+                    </ListItem.Swipeable>
 
-                    </TouchableWithoutFeedback>
-
-                </KeyboardAvoidingView>
+                </View>
             </View>
-
-        </ScrollView>
+        </View>
     );
 };
 
@@ -172,11 +341,11 @@ export default Phone;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white',
         // padding: 10,
         textAlign: 'center',
         marginTop: -10,
-        zIndex: -1
+        zIndex: -1,
+        backgroundColor: '#eeee'
     },
     titleText: {
         fontSize: 22,
@@ -191,7 +360,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginTop: -15,
         padding: 10,
-        backgroundColor: '#8ad24e',
         width: 60,
         height: 60,
         borderRadius: 100

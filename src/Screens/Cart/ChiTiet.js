@@ -6,6 +6,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import ThemeConText from '../../../config/themeConText';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ChiTiet({ route, navigation }) {
 
@@ -15,17 +16,70 @@ export default function ChiTiet({ route, navigation }) {
 
     const [isLoad, setIsLoad] = useState(false)
     const [apis, setApi] = useState([])
-
+    const [taikhoan, setTaiKhoan] = useState([])
+    const [token, setToken] = useState([])
+    AsyncStorage.getItem('taikhoan')
+        .then(res =>
+            setTaiKhoan(res)
+        )
+    const [customer_historys, setCustomer_history] = useState([])
 
     useEffect(() => {
         fetch('http://192.168.1.165:4000' + '/api/thanhtoan/id/' + id)
             .then(res => res.json())
-            .then(res => setApi(res))
+            .then(res => {
+                setApi(res)
+                setCustomer_history(res[0].customer_history)
+            })
             .catch(err => console.log(err))
             .finally(() => {
             })
     }, [id])
 
+    const [conten, setConten] = useState('')
+
+
+    const handerSubmit = () => {
+        fetch('http://192.168.1.165:4000' + '/api/order_comment/create/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                id: id,
+                conten: conten,
+                email: taikhoan,
+            })
+        })
+            .then(() => {
+                fetch('http://192.168.1.165:4000' + '/api/order_comment/id/' + id)
+                    .then(res => res.json())
+                    .then(res => setComment(res))
+                    .catch(err => console.log(err))
+                    .finally(() => {
+                    })
+            })
+    }
+
+    const [commens, setComment] = useState([])
+    const [order_imgs, setOrder_img] = useState([])
+
+    useEffect(() => {
+        fetch('http://192.168.1.165:4000' + '/api/order_img/id/' + id)
+            .then(res => res.json())
+            .then(res => setOrder_img(res))
+            .catch(err => console.log(err))
+            .finally(() => {
+            })
+    }, [id])
+
+
+    useEffect(() => {
+        fetch('http://192.168.1.165:4000' + '/api/order_comment/id/' + id)
+            .then(res => res.json())
+            .then(res => setComment(res))
+            .catch(err => console.log(err))
+            .finally(() => {
+            })
+    }, [id])
 
 
     return (
@@ -151,7 +205,7 @@ export default function ChiTiet({ route, navigation }) {
                                         color: theme.color
 
                                     }}>
-                                        Tên Khách Hàng: {api.KhachHang}
+                                        Người Làm Đơn: {api.nguoithuchien}
                                     </Text>
                                 </View>
                                 <View style={{
@@ -202,9 +256,9 @@ export default function ChiTiet({ route, navigation }) {
                         </View>
 
                     </View>
-                    {apis.map(api => (
+                    {customer_historys.map(api => (
                         <View
-                            key={api.id}
+                            key={customer_historys.id}
                         >
                             <View style={{
                                 marginLeft: 10,
@@ -257,7 +311,7 @@ export default function ChiTiet({ route, navigation }) {
 
 
                                     }}>
-                                        Tên Khách Hàng: {api.KhachHang}
+                                        Tên Khách Hàng: {api.name}
                                     </Text>
                                     <Text style={{
                                         fontSize: 18,
@@ -266,7 +320,7 @@ export default function ChiTiet({ route, navigation }) {
                                         color: theme.color
 
                                     }}>
-                                        Số Điện Thoại: {api.Phone_Number}
+                                        Số Điện Thoại: {api.Number}
                                     </Text>
                                     <Text style={{
                                         fontSize: 18,
@@ -388,6 +442,8 @@ export default function ChiTiet({ route, navigation }) {
 
                                 }}
                                 placeholder="Viết Bình Luận..."
+                                onChangeText={(e) => setConten(e)
+                                }
                             />
                         </View>
                         <View>
@@ -401,7 +457,9 @@ export default function ChiTiet({ route, navigation }) {
                                 borderRadius: 6,
                                 backgroundColor: '#589c0b',
 
-                            }}>
+                            }}
+                                onPress={() => handerSubmit()}
+                            >
 
                                 <Text style={{
                                     textAlign: 'center',
@@ -417,83 +475,70 @@ export default function ChiTiet({ route, navigation }) {
 
                     </View>
                     <View>
-                        <View style={{
-                            flexDirection: 'row',
-                            // justifyContent: 'space-between',
-                            padding: 10
-                        }}>
-                            <Ionicons name="ios-people-circle-outline" size={34} color="black" style={{
-                                color: theme.color
-
-                            }} />
-
-                            <View style={{
-                                marginLeft: 20
-                            }}>
-                                <Text style={{
+                        {commens.map(commen => (
+                            <View
+                                key={commen.id}
+                                style={{
+                                    flexDirection: 'row',
+                                    // justifyContent: 'space-between',
+                                    padding: 10
+                                }}>
+                                <Ionicons name="ios-people-circle-outline" size={34} color="black" style={{
                                     color: theme.color
 
-                                }}>
-                                    Ngô Xuân Quy
+                                }} />
+                                <View style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-around',
+                                    position: 'relative',
 
-                                </Text>
-                                <Text style={{
-                                    color: theme.color
-
                                 }}>
-                                    Sản Phẩm Tốt Quá
-                                </Text>
+                                    <View style={{
+                                        marginLeft: 20,
+                                        width: 220
+
+                                    }}>
+                                        <Text style={{
+                                            color: theme.color,
+                                            fontSize: 20,
+                                        }}>
+                                            {commen.email}
+
+                                        </Text>
+                                        <Text style={{
+                                            color: theme.color,
+                                            opacity: 0.5,
+
+                                        }}>
+                                            {commen.conten}
+                                        </Text>
+                                    </View>
+                                    <View style={{
+                                        marginTop: 10
+                                    }}>
+                                        <Text style={{
+                                            fontSize: 12,
+                                            opacity: 0.5,
+                                            color: theme.color,
+
+                                        }}>
+                                            {commen.time}
+                                        </Text>
+                                        <Text style={{
+                                            fontSize: 12,
+                                            opacity: 0.5,
+                                            color: theme.color,
+
+                                        }}>
+                                            {commen.date}
+                                        </Text>
+
+                                    </View>
+                                </View>
+
                             </View>
-                            <View>
-                                <Text style={{
-                                    fontSize: 12,
-                                    opacity: 0.5,
-                                    color: theme.color
+                        ))}
 
-                                }}>
-                                    15h20
-                                </Text>
-                            </View>
-                        </View>
-                        <View style={{
-                            flexDirection: 'row',
-                            // justifyContent: 'space-between',
-                            padding: 10
-                        }}>
-                            <Ionicons name="ios-people-circle-outline" size={34} color="black" style={{
-                                color: theme.color
-
-                            }} />
-
-                            <View style={{
-                                marginLeft: 20,
-
-                            }}>
-                                <Text style={{
-                                    color: theme.color
-
-                                }}>
-                                    Ngô Xuân Quy
-
-                                </Text>
-                                <Text style={{
-                                    color: theme.color
-
-                                }}>
-                                    Sản Phẩm Tốt Quá
-                                </Text>
-                            </View>
-                            <View>
-                                <Text style={{
-                                    fontSize: 12,
-                                    opacity: 0.5,
-                                    color: theme.color
-
-                                }}>
-                                    15h20
-                                </Text>
-                            </View>
-                        </View>
                     </View>
 
                 </View>
@@ -506,85 +551,49 @@ export default function ChiTiet({ route, navigation }) {
                     justifyContent: 'space-around',
                     flexWrap: 'wrap',
                     marginTop: 10,
-
+                    marginBottom: 30
                 }}>
-                    <TouchableOpacity
-                        onPress={() => setIsLoad(true)}
-                        style={{
-                            shadowOffset: {
-                                width: 0,
-                                height: 5,
-                            },
-                            shadowOpacity: 0.34,
-                            shadowRadius: 7.27,
-
-                            elevation: 10,
-                        }}
-                    >
-                        <Image
+                    {order_imgs && order_imgs.map(order_img => (
+                        <TouchableOpacity
+                            key={order_img.id}
+                            onPress={() => setIsLoad(true)}
                             style={{
-                                width: 170,
-                                height: 200,
-                                borderRadius: 6
-                            }}
-                            source={{
-                                uri: 'https://giadinh.mediacdn.vn/296230595582509056/2022/2/17/27212817110061775266623491256080737665900375n-16450863187391857196552.jpg'
-                            }}
-                        />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => setIsLoad(true)}
-                        style={{
-                            shadowOffset: {
-                                width: 0,
-                                height: 5,
-                            },
-                            shadowOpacity: 0.34,
-                            shadowRadius: 7.27,
+                                shadowOffset: {
+                                    width: 0,
+                                    height: 5,
+                                },
+                                shadowOpacity: 0.34,
+                                shadowRadius: 7.27,
 
-                            elevation: 10,
-                        }}
-                    >
-                        <Image
-                            style={{
-                                width: 170,
-                                height: 200,
-                                borderRadius: 6,
-
-
+                                elevation: 10,
+                                marginTop: 10
                             }}
-                            source={{
-                                uri: 'https://giadinh.mediacdn.vn/296230595582509056/2022/2/17/27212817110061775266623491256080737665900375n-16450863187391857196552.jpg'
-                            }}
-                        />
-                    </TouchableOpacity>
+                        >
+                            <View style={{
+                                width: '100%',
+                                flexDirection: 'row',
+                                justifyContent: 'space-around',
+                                alignItems: 'center'
+                            }}>
+                                <Image
+                                    style={{
+                                        width: 120,
+                                        height: 120,
+                                        borderRadius: 6
+                                    }}
+                                    source={{
+                                        uri: order_img.img
+                                    }}
+                                />
+                                <Text style={{
+                                    textAlign: 'center'
+                                }}>
+                                    {order_img.time}
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    ))}
 
-                    <TouchableOpacity
-                        onPress={() => setIsLoad(true)}
-                        style={{
-                            shadowOffset: {
-                                width: 0,
-                                height: 5,
-                            },
-                            shadowOpacity: 0.34,
-                            shadowRadius: 7.27,
-
-                            elevation: 10,
-                        }}
-                    >
-                        <Image
-                            style={{
-                                width: 170,
-                                height: 200,
-                                marginTop: 10,
-                                borderRadius: 6
-
-                            }}
-                            source={{
-                                uri: 'https://giadinh.mediacdn.vn/296230595582509056/2022/2/17/27212817110061775266623491256080737665900375n-16450863187391857196552.jpg'
-                            }}
-                        />
-                    </TouchableOpacity>
                 </View>
 
             </ScrollView>

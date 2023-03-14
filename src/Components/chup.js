@@ -1,15 +1,20 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, SafeAreaView, Button, Image, TouchableOpacity } from 'react-native';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Camera, CameraType } from 'expo-camera';
 import { shareAsync } from 'expo-sharing';
 import * as MediaLibrary from 'expo-media-library';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { firebase } from '../.././config/config'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 // laays duwx ảnh từ bộ sưu tập
 
-export default function ChupAnh() {
+export default function ChupAnh({ route }) {
+    const { name, id } = route.params;
+
     let cameraRef = useRef();
     const [hasCameraPermission, setHasCameraPermission] = useState();
     const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState();
@@ -17,6 +22,12 @@ export default function ChupAnh() {
     const [type, setType] = useState(CameraType.back);
 
     const [permission, requestPermission] = Camera.useCameraPermissions();
+    const [taikhoan, setTaiKhoan] = useState([])
+    const [token, setToken] = useState([])
+    AsyncStorage.getItem('taikhoan')
+        .then(res =>
+            setTaiKhoan(res)
+        )
 
 
 
@@ -36,8 +47,6 @@ export default function ChupAnh() {
     }
 
 
-
-
     let takePic = async () => {
         let options = {
             quality: 1,
@@ -48,6 +57,39 @@ export default function ChupAnh() {
         let newPhoto = await cameraRef.current.takePictureAsync(options);
         setPhoto(newPhoto);
     };
+
+    const uploadImage = async () => {
+        // setUploading(true)
+        const response = await fetch(photo.uri)
+        const blob = await response.blob()
+        const filename = photo.uri.substring(photo.uri.lastIndexOf('/') + 1)
+        let refs = firebase.storage().ref().child(`photo/${filename}`).put(blob)
+
+        refs.then((a) => a.ref.getDownloadURL().then((url) => {
+            console.log(url)
+            fetch('http://192.168.1.165:4000' + '/api/order_img/create/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id: id,
+                    img: url,
+                    email: taikhoan,
+
+                })
+            })
+        }))
+
+        try {
+            await refs
+        } catch (error) {
+            console.log(error)
+        }
+        // setUploading(false)
+        // Alert.alert('Photo uploaded')
+        setPhoto(null)
+    }
+
+
     function toggleCameraType() {
         setType(current => (current === CameraType.back ? CameraType.front : CameraType.back));
         // console.log('a')
@@ -60,6 +102,8 @@ export default function ChupAnh() {
         };
 
         let savePhoto = () => {
+            uploadImage();
+
             MediaLibrary.saveToLibraryAsync(photo.uri).then(() => {
                 setPhoto(undefined);
             });
@@ -77,6 +121,8 @@ export default function ChupAnh() {
             </SafeAreaView>
         );
     }
+
+
 
     return (
 

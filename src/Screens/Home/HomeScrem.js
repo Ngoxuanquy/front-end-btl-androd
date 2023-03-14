@@ -213,18 +213,9 @@ export default function HomeScrenn({ navigation }) {
         let refs = firebase.storage().ref().child(`image/${filename}`).put(blob)
 
         refs.then((a) => a.ref.getDownloadURL().then((url) => {
-            fetch('http://192.168.1.165:4000' + '/api/users/update/img/' + taikhoan, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    img: url
-                })
-            })
-                .then(() => {
-                    fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
-                        .then(res => res.json())
-                        .then(res => setThongTin(res))
-                })
+            console.log('out')
+            update_img(url)
+
         }))
 
         try {
@@ -235,34 +226,33 @@ export default function HomeScrenn({ navigation }) {
         // setUploading(false)
         // Alert.alert('Photo uploaded')
         setImage(null)
+
     }
 
-    useEffect(() => {
-        firebase
-            .storage()
-            .ref()
-            .child('image')
-            .list()
-            .then((result) => {
-                // Loop over each item
-                result.items.forEach((pics) => {
-                    firebase
-                        .storage()
-                        .ref()
-                        .child(pics.fullPath)
-                        .getDownloadURL()
-                        .then((url) => {
-                            //these url will be used to display images
-                        })
-                })
+    const update_img = async (url) => {
+        await fetch('http://192.168.1.165:4000' + '/api/users/update/img/' + taikhoan, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                img: url
             })
-    }, [image])
+        })
+            .then(() => {
+                fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
+                    .then(res => res.json())
+                    .then(res => setThongTin(res))
+            })
+            .then(() => {
+            })
+    }
+
 
     function handerXacNhan() {
-
-        uploadImage();
-
         setUpAnh(false)
+        setIsVisible(false)
+        uploadImage();
+        alert('Thay Ảnh Thành Công!!!')
+        setImage(null)
 
     }
 
@@ -454,6 +444,8 @@ export default function HomeScrenn({ navigation }) {
             title: 'UpDate',
             containerStyle: { backgroundColor: 'green' },
             titleStyle: { color: 'white' },
+            onPress: () => setIsVisible(false),
+
         },
 
         {

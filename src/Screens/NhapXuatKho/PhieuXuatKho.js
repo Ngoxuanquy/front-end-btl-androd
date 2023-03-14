@@ -180,7 +180,6 @@ export default function PhieuXuatKho({ navigation }) {
     const [tests, setTest] = useState("")
     const [lichsuxuathangs, setLichSuXuatHang] = useState([])
 
-    console.log(taikhoan)
 
     useEffect(() => {
         fetch('http://192.168.1.165:4000' + '/api/lichsuxuathang/email/' + taikhoan)
@@ -195,6 +194,11 @@ export default function PhieuXuatKho({ navigation }) {
 
 
     function handerSubmit() {
+
+        const test = lichsuxuathangs.find(lichsuxuathang => lichsuxuathang.TrangThai === "Chưa Xác Nhận")
+
+        if (test) return alert('Đơn Xuất Hàng Và Chưa Được Xác Nhận!!');
+
         fetch('http://192.168.1.165:4000' + '/api/lichsuxuathang/create/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -215,32 +219,69 @@ export default function PhieuXuatKho({ navigation }) {
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({
                                     name: taikhoan,
-                                    tenhang: 'a',
+                                    tenhang: String(sanphamthie.productsId),
                                     id: Number(max_val + 1),
                                     soluong: sanphamthie.tieu_chuan - sanphamthie.exist,
                                     price: 1
                                 })
                             })
+                                .then(() => {
+                                    sanphamthua.map(sanphamthu => {
+                                        fetch('http://192.168.1.165:4000' + '/api/xuathang/create/', {
+                                            method: 'POST',
+                                            headers: { 'Content-Type': 'application/json' },
+                                            body: JSON.stringify({
+                                                name: taikhoan,
+                                                tenhang: String(sanphamthie.productsId),
+                                                id: Number(max_val + 1),
+                                                soluong: sanphamthu.tieu_chuan - sanphamthu.exist,
+                                                price: 1
+                                            })
+                                        })
+                                            .catch(err => {
+                                                console.log(err)
+                                            })
+                                    })
+                                })
+                                .then(() => {
+                                    fetch('http://192.168.1.165:4000' + '/api/lichsuxuathang/email/' + taikhoan)
+                                        .then(res => res.json())
+                                        .then(res => setLichSuXuatHang(res))
+                                        .catch(err => console.log(err))
+                                        .finally(() => {
+                                            setLoading4(false)
+                                        })
+                                })
+
                         })
 
-                        sanphamthua.map(sanphamthu => {
-                            fetch('http://192.168.1.165:4000' + '/api/xuathang/create/', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({
-                                    name: taikhoan,
-                                    tenhang: 'a',
-                                    id: Number(max_val + 1),
-                                    soluong: sanphamthu.tieu_chuan - sanphamthu.exist,
-                                    price: 1
-                                })
+
+
+                    })
+                    .then(() => {
+                        fetch('http://192.168.1.165:4000' + '/api/lichsuxuathang/email/' + taikhoan)
+                            .then(res => res.json())
+                            .then(res => setLichSuXuatHang(res))
+                            .catch(err => console.log(err))
+                            .finally(() => {
+                                setLoading4(false)
                             })
-                        })
                     })
             ))
+            .then(() => {
+                fetch('http://192.168.1.165:4000' + '/api/lichsuxuathang/email/' + taikhoan)
+                    .then(res => res.json())
+                    .then(res => setLichSuXuatHang(res))
+                    .catch(err => console.log(err))
+                    .finally(() => {
+                        setLoading4(false)
+                    })
+            })
+
     }
 
     const [xuathangs, setXuatHang] = useState([])
+    const [visible5, setVisible5] = useState(false);
 
 
     const toggleDialog5 = (id) => {
@@ -249,10 +290,7 @@ export default function PhieuXuatKho({ navigation }) {
                 setXuatHang(lichsuxuathang.xuathang)
             }
         })
-
-
-
-        setVisible4(!visible4);
+        setVisible5(!visible5);
     };
 
 
@@ -457,7 +495,7 @@ export default function PhieuXuatKho({ navigation }) {
                                                             // color: theme.color
 
                                                         }}>
-                                                            SL Tồn
+                                                            SL
                                                         </Text>
                                                     </View>
                                                     {chitietsanphams.map(chitietsanpham => (
@@ -990,14 +1028,20 @@ export default function PhieuXuatKho({ navigation }) {
                                     borderBottomWidth: 0.4,
                                     paddingVertical: 10
                                 }}>
-                                    <Text>
+                                    <Text style={{
+                                        color: theme.color
+
+                                    }}>
                                         {lichsuxuathang.Name}
                                     </Text>
-                                    <Text>
+                                    <Text style={{
+                                        color: theme.color
+
+                                    }}>
                                         {lichsuxuathang.date}
                                     </Text>
                                     {
-                                        lichsuxuathang.TrangThai == "Chưa Duyệt" ?
+                                        lichsuxuathang.TrangThai == "Chưa Xác Nhận" ?
                                             <Text style={{
                                                 color: 'red',
                                                 opacity: 0.7
@@ -1018,7 +1062,7 @@ export default function PhieuXuatKho({ navigation }) {
                                         buttonStyle={styles.button}
                                     />
                                     <Dialog
-                                        isVisible={visible4}
+                                        isVisible={visible5}
                                         onBackdropPress={toggleDialog5}
                                     >
                                         <Dialog.Title title="Chi Tiết Sản Phẩm" />
@@ -1063,7 +1107,7 @@ export default function PhieuXuatKho({ navigation }) {
                                                         fontSize: 17,
                                                         fontWeight: 'bold'
                                                     }}>
-                                                        SL Tồn
+                                                        SL Cấp - Thu
                                                     </Text>
                                                 </View>
                                                 {xuathangs.map(xuathang => (
