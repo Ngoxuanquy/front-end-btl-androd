@@ -32,9 +32,18 @@ export default function DangNhap({ navigation }) {
             .then(res => setLogin(res))
     }, [])
 
-    useEffect(() => {
+    const [month_chisocanhans, setChiSo] = useState()
 
-    }, [])
+    useEffect(() => {
+        fetch('http://192.168.1.165:4000' + '/api/chisocanhan')
+            .then(res => res.json())
+            .then(res => res.map(re => {
+                if (re.email == taikhoan) {
+                    setChiSo(re.month)
+                }
+            }))
+            .catch(err => console.log(err))
+    }, [taikhoan])
 
     function handerSubmit() {
         const user = logins.find(user => user.email === taikhoan)
@@ -60,11 +69,22 @@ export default function DangNhap({ navigation }) {
                 })
             })
             .then(() => {
+                const a = new Date();
+                const month = a.getMonth() + 1
                 logins.map(login => {
                     if (login.email !== taikhoan) {
                         return;
                     }
-                    console.log(login.id)
+
+                    if (String(month) != month_chisocanhans)
+                        fetch('http://192.168.1.165:4000' + '/api/chisocanhan/create/', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                taikhoan: taikhoan,
+                                id: login.id
+                            })
+                        })
                     AsyncStorage.setItem('id_users', JSON.stringify(login.id));
                 })
             })

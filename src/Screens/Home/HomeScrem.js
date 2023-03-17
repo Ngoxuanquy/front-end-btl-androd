@@ -486,29 +486,12 @@ export default function HomeScrenn({ navigation }) {
             .catch(err => console.log(err))
     }, [taikhoan])
 
-    console.log(month_chisocanhans)
 
     useEffect(() => {
 
-        const a = new Date();
-        const month = a.getMonth() + 1
 
-        if (taikhoan != "" && id_users != "" && String(month) != month_chisocanhans) {
-            fetch('http://192.168.1.165:4000' + '/api/chisocanhan/create/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    taikhoan: taikhoan,
-                    id: id_users
-                })
-            })
-            return;
-        }
-        else {
-            return;
 
-        }
-    })
+    }, [id_users])
 
     return (
         <ScrollView

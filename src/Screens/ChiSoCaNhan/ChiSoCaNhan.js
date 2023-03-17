@@ -36,6 +36,8 @@ export default function ChiSoCaNhan({ navigation }) {
 
     const [ngaycong, setNgayCong] = useState()
     const [luongs, setLuong] = useState()
+    const [chietkhauloi, setChietKhauLoi] = useState([])
+    const [chietkhaudonthem, setChietKhauDonThem] = useState([])
 
     useEffect(() => {
         fetch('http://192.168.1.165:4000' + '/api/chisocanhan/email/' + taikhoan)
@@ -44,6 +46,8 @@ export default function ChiSoCaNhan({ navigation }) {
                 setAPi(res)
                 setNgayCong(res[0].ngay_cong)
                 setLuong(res[0].luong_tam_tinh)
+                setChietKhauLoi(res[0].chiet_khau_thay_loi)
+                setChietKhauDonThem(res[0].chiet_khau_don_them)
             })
             .catch((err) => console.log(err))
     }, [taikhoan])
@@ -174,18 +178,6 @@ export default function ChiSoCaNhan({ navigation }) {
     }, [sodonvesinhs])
 
 
-    useEffect(() => {
-        // let sum1 = data_sodon.reduce((accumulator, currentValue) => {
-        //     return accumulator + currentValue;
-        // });
-        // console.log(data_sodon_vesinh)
-
-        // let sum2 = data_sodon_vesinh.reduce((a, b) => {
-        //     return a + b;
-        // });
-
-        // console.log(sum1)
-    }, [data_sodon])
 
     function handerSubmit() {
         if (luongtamtinhs > 200 && luongtamtinhs < 300) {
@@ -252,7 +244,6 @@ export default function ChiSoCaNhan({ navigation }) {
         data: [0.4]
     };
 
-    console.log(tuans)
 
     const data1 = {
 
@@ -569,6 +560,27 @@ export default function ChiSoCaNhan({ navigation }) {
 
                         </View>
 
+                    </View>
+                </View>
+
+                <View>
+                    <View style={{
+                        paddingHorizontal: 20
+                    }}>
+                        <Text style={{
+                            fontSize: 20,
+                            lineHeight: 30,
+                            marginBottom: 10
+                        }}>
+                            Chiết Khấu Thay Lõi : {chietkhauloi}
+                        </Text>
+                        <Text style={{
+                            fontSize: 20,
+                            lineHeight: 30
+
+                        }}>
+                            Chiết Khấu Đơn Thêm : {chietkhaudonthem}
+                        </Text>
                     </View>
                 </View>
 
