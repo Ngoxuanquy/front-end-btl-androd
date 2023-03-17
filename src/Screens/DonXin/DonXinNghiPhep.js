@@ -33,7 +33,7 @@ export default function DonXinNghiPhep({ navigation }) {
 
     useEffect(() => {
         const fetchData = async () => {
-            const respon = await fetch('http://192.168.1.156:1000/api/donxin/quy')
+            const respon = await fetch('http://192.168.1.165:4000/api/donxin/quy')
             const list = await respon.json()
             setDonXin(list)
         }
@@ -90,7 +90,7 @@ export default function DonXinNghiPhep({ navigation }) {
             status: 'Chờ duyệt',
             banGiaoCho,
         }
-        fetch('http://192.168.1.156:1000/api/donxin', {
+        fetch('http://192.168.1.165:4000/api/donxin', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -131,8 +131,8 @@ export default function DonXinNghiPhep({ navigation }) {
                             data.status === 'Chờ duyệt'
                                 ? 'orange'
                                 : data.status === 'Đã duyệt'
-                                ? 'blue'
-                                : 'red',
+                                    ? 'blue'
+                                    : 'red',
                         width: '68%',
                         paddingVertical: 4,
                         borderRadius: 8,

@@ -96,7 +96,6 @@ export default function ThanhToan({ route, navigation }) {
         setProduct(data);
     }
 
-    console.log(product)
 
     const [trungbinhs, setTrungBinh] = useState()
 
@@ -147,8 +146,16 @@ export default function ThanhToan({ route, navigation }) {
         setApi(products)
     }, [])
 
+    const [id_users, setId_users] = useState('')
+
+    AsyncStorage.getItem('id_users')
+        .then(res =>
+            setId_users(res)
+        )
+
 
     function handerCong(id1) {
+
         fetch('http://192.168.1.165:4000' + '/api/orders/create/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -265,7 +272,6 @@ export default function ThanhToan({ route, navigation }) {
 
 
     function handerTru(id, soluong) {
-        console.log(soluong)
         if (soluong <= 1) {
             alert('Số Lượng Phải Lớn Hơn 1')
             return;
@@ -312,8 +318,111 @@ export default function ThanhToan({ route, navigation }) {
 
     }, [taikhoan])
 
+    const [days, setDay] = useState('');
+    const [day_ve_sinh, setDayVeSinh] = useState('');
+
+    const [id_day, setIDDay] = useState('')
+    const [sodons, setSoDon] = useState()
+
+    const [id_day_ve_sinh, setIDDayVeSinh] = useState('')
+    const [sodon_ve_sinh, setSoDonVeSinh] = useState()
+
+    useEffect(() => {
+        const a = new Date()
+
+        fetch('http://192.168.1.165:4000' + '/api/sodonphatsinh/' + taikhoan)
+            .then(res => res.json())
+            .then(res => res.map(re => {
+                if (re.email == taikhoan) {
+                    setDay(re.date)
+                }
+                if (re.date.slice(0, 2) == a.getDate() && re.date.slice(3, 5) == (a.getMonth() + 1) && re.date.slice(6, 10) == a.getFullYear()) {
+                    setIDDay(re.id)
+                    setSoDon(re.sodon)
+                }
+            }))
+            .finally(() => {
+
+            })
+    }, [taikhoan])
+
+
+    useEffect(() => {
+        const a = new Date()
+
+        fetch('http://192.168.1.165:4000' + '/api/sodonvesinh/' + taikhoan)
+            .then(res => res.json())
+            .then(res => res.map(re => {
+                if (re.email == taikhoan) {
+                    setDayVeSinh(re.date)
+                }
+                if (re.date.slice(0, 2) == a.getDate() && re.date.slice(3, 5) == (a.getMonth() + 1) && re.date.slice(6, 10) == a.getFullYear()) {
+                    setIDDayVeSinh(re.id)
+                    setSoDonVeSinh(re.sodon)
+                }
+            }))
+            .finally(() => {
+
+            })
+    }, [taikhoan])
+
+
+    // useEffect(() => {
+    //     const a = new Date()
+    //     fetch('http://192.168.1.165:4000' + '/api/sodonphatsinh/update/' + id_day, {
+    //         method: 'POST',
+    //         headers: { 'Content-Type': 'application/json' },
+    //         body: JSON.stringify({
+    //             sodon: 5
+    //         })
+    //     })
+
+    //     if (days.slice(0, 2) == a.getDate() && days.slice(3, 5) == (a.getMonth() + 1) && days.slice(6, 10) == a.getFullYear()) {
+    //         console.log('b')
+    //         console.log(days)
+    //         fetch('http://192.168.1.165:4000' + '/api/sodonphatsinh/update/' + id_day, {
+    //             method: 'POST',
+    //             headers: { 'Content-Type': 'application/json' },
+    //             body: JSON.stringify({
+    //                 sodon: 5
+    //             })
+    //         })
+    //     }
+    // }, [days])
+
+
+    const [tonkhos, setTonKho] = useState([])
+
+    useEffect(() => {
+        fetch('http://192.168.1.165:4000' + '/api/inventory/userID/' + id_users)
+            .then(res => res.json())
+            .then(res => setTonKho(res))
+            .catch(err => console.log(err))
+
+    }, [id_users])
+
+
+    // console.log(products)
+
+    const [results, setResult] = useState([])
+
+    useEffect(() => {
+        const result = products.filter(item1 => tonkhos.some(item2 => item2.productsId === item1.id)).map(item1 => {
+            const item2 = tonkhos.find(item2 => item2.productsId === item1.id);
+            return {
+                id: item1.id,
+                name: item1.name,
+                exist: item2.exist,
+                ton_kho: item2.tieu_chuan
+            }
+        });
+
+        setResult(result);
+    }, [tonkhos])
+
 
     function handerTTTienMat() {
+        const a = new Date()
         return Alert.alert(
             "Are your sure?",
             "Đơn Này Đã Thanh Toán Bằng Tiền Mặt?",
@@ -357,8 +466,8 @@ export default function ThanhToan({ route, navigation }) {
                                                 products.map((product, index) => {
                                                     orders.map(sanpham => {
                                                         product.inventory.map(a => {
-                                                            if (product.name == sanpham.name && a.usersId == 1) {
-                                                                fetch('http://192.168.1.165:4000' + '/api/inventory/update/' + 1 + '/' + product.id, {
+                                                            if (product.name == sanpham.name && a.usersId == id_users) {
+                                                                fetch('http://192.168.1.165:4000' + '/api/inventory/update/' + id_users + '/' + product.id, {
                                                                     method: 'POST',
                                                                     headers: { 'Content-Type': 'application/json' },
                                                                     body: JSON.stringify({
@@ -385,6 +494,57 @@ export default function ThanhToan({ route, navigation }) {
                                                                     giatrittb: ((trungbinhs + tongtien) / (soluongs.length + 1)).toFixed(2)
                                                                 })
                                                             })
+                                                                .then(() => {
+                                                                    // const user = .find(user => user.email === taikhoan)
+                                                                    // if (!user) return alert('sai tk hoặc mk');
+
+                                                                    if (days.slice(0, 2) == a.getDate() && days.slice(3, 5) == (a.getMonth() + 1) && days.slice(6, 10) == a.getFullYear()) {
+                                                                        fetch('http://192.168.1.165:4000' + '/api/sodonphatsinh/update/' + id_day, {
+                                                                            method: 'POST',
+                                                                            headers: { 'Content-Type': 'application/json' },
+                                                                            body: JSON.stringify({
+                                                                                sodon: Number(sodons + 1),
+                                                                            })
+                                                                        })
+                                                                    }
+                                                                    else {
+                                                                        fetch('http://192.168.1.165:4000' + '/api/sodonphatsinh/create/', {
+                                                                            method: 'POST',
+                                                                            headers: { 'Content-Type': 'application/json' },
+                                                                            body: JSON.stringify({
+                                                                                email: taikhoan,
+                                                                                sodon: 1,
+                                                                                id: id_users
+
+                                                                            })
+                                                                        })
+                                                                    }
+                                                                })
+                                                        }
+                                                        else if (tongtien == 0) {
+                                                            if (day_ve_sinh.slice(0, 2) == a.getDate() && day_ve_sinh.slice(3, 5) == (a.getMonth() + 1) && day_ve_sinh.slice(6, 10) == a.getFullYear()) {
+                                                                console.log('b')
+                                                                fetch('http://192.168.1.165:4000' + '/api/sodonvesinh/update/' + id_day_ve_sinh, {
+                                                                    method: 'POST',
+                                                                    headers: { 'Content-Type': 'application/json' },
+                                                                    body: JSON.stringify({
+                                                                        sodon: Number(sodon_ve_sinh + 1),
+                                                                    })
+                                                                })
+                                                            }
+                                                            else {
+                                                                console.log('a')
+                                                                fetch('http://192.168.1.165:4000' + '/api/sodonvesinh/create/', {
+                                                                    method: 'POST',
+                                                                    headers: { 'Content-Type': 'application/json' },
+                                                                    body: JSON.stringify({
+                                                                        email: taikhoan,
+                                                                        sodon: 1,
+                                                                        id: id_users
+
+                                                                    })
+                                                                })
+                                                            }
                                                         }
                                                         navigation.replace('Cart_home');
                                                     })
@@ -444,8 +604,8 @@ export default function ThanhToan({ route, navigation }) {
                                                 products.map((product, index) => {
                                                     orders.map(sanpham => {
                                                         product.inventory.map(a => {
-                                                            if (product.name == sanpham.name && a.usersId == 1) {
-                                                                fetch('http://192.168.1.165:4000' + '/api/inventory/update/' + 1 + '/' + product.id, {
+                                                            if (product.name == sanpham.name && a.usersId == id_users) {
+                                                                fetch('http://192.168.1.165:4000' + '/api/inventory/update/' + id_users + '/' + product.id, {
                                                                     method: 'POST',
                                                                     headers: { 'Content-Type': 'application/json' },
                                                                     body: JSON.stringify({
@@ -472,6 +632,55 @@ export default function ThanhToan({ route, navigation }) {
                                                                     giatrittb: ((trungbinhs + tongtien) / (soluongs.length + 1)).toFixed(2)
                                                                 })
                                                             })
+                                                                .then(() => {
+                                                                    if (days.slice(0, 2) == a.getDate() && days.slice(3, 5) == (a.getMonth() + 1) && days.slice(6, 10) == a.getFullYear()) {
+                                                                        console.log('b')
+                                                                        fetch('http://192.168.1.165:4000' + '/api/sodonphatsinh/update/' + id_day, {
+                                                                            method: 'POST',
+                                                                            headers: { 'Content-Type': 'application/json' },
+                                                                            body: JSON.stringify({
+                                                                                sodon: Number(sodons + 1),
+
+                                                                            })
+                                                                        })
+                                                                    }
+                                                                    else {
+                                                                        fetch('http://192.168.1.165:4000' + '/api/sodonphatsinh/create/', {
+                                                                            method: 'POST',
+                                                                            headers: { 'Content-Type': 'application/json' },
+                                                                            body: JSON.stringify({
+                                                                                email: taikhoan,
+                                                                                sodon: 1,
+                                                                                id: id_users
+
+                                                                            })
+                                                                        })
+                                                                    }
+                                                                })
+                                                        }
+                                                        else if (tongtien == 0) {
+                                                            if (day_ve_sinh.slice(0, 2) == a.getDate() && day_ve_sinh.slice(3, 5) == (a.getMonth() + 1) && day_ve_sinh.slice(6, 10) == a.getFullYear()) {
+                                                                console.log('b')
+                                                                fetch('http://192.168.1.165:4000' + '/api/sodonvesinh/update/' + id_day_ve_sinh, {
+                                                                    method: 'POST',
+                                                                    headers: { 'Content-Type': 'application/json' },
+                                                                    body: JSON.stringify({
+                                                                        sodon: Number(sodon_ve_sinh + 1),
+                                                                    })
+                                                                })
+                                                            }
+                                                            else {
+                                                                fetch('http://192.168.1.165:4000' + '/api/sodonvesinh/create/', {
+                                                                    method: 'POST',
+                                                                    headers: { 'Content-Type': 'application/json' },
+                                                                    body: JSON.stringify({
+                                                                        email: taikhoan,
+                                                                        sodon: 1,
+                                                                        id: id_users
+
+                                                                    })
+                                                                })
+                                                            }
                                                         }
                                                         navigation.replace('Cart_home');
                                                     })
@@ -782,7 +991,7 @@ export default function ThanhToan({ route, navigation }) {
 
                                         // paddingVertical: 10
                                     }}>
-                                        {product.map((product, index) => (
+                                        {results.map((product, index) => (
                                             <View
                                                 key={product.id}
                                                 style={{
@@ -822,25 +1031,46 @@ export default function ThanhToan({ route, navigation }) {
                                                     justifyContent: 'center',
                                                     alignItems: 'center'
                                                 }}>
-                                                    <TouchableOpacity style={{
-                                                        backgroundColor: 'green',
-                                                        opacity: 1,
-                                                        justifyContent: 'center',
-                                                        alignItems: 'center',
 
-                                                    }}
-                                                        onPress={() => handerCong(product.id)}
-                                                    >
-                                                        <Text style={{
-                                                            padding: 5,
-                                                            color: 'white',
-                                                            textAlign: 'center'
-                                                        }}>
-                                                            Mượn
-                                                        </Text>
-                                                    </TouchableOpacity>
+                                                    {
+                                                        product.exist > 0 ?
+                                                            <TouchableOpacity style={{
+                                                                backgroundColor: 'green',
+                                                                opacity: 1,
+                                                                justifyContent: 'center',
+                                                                alignItems: 'center',
+
+                                                            }}
+                                                                onPress={() => handerCong(product.id)}
+                                                            >
+                                                                <Text style={{
+                                                                    padding: 5,
+                                                                    color: 'white',
+                                                                    textAlign: 'center'
+                                                                }}>
+                                                                    Chọn
+                                                                </Text>
+                                                            </TouchableOpacity>
+                                                            :
+                                                            <TouchableOpacity style={{
+                                                                backgroundColor: 'red',
+                                                                opacity: 1,
+                                                                justifyContent: 'center',
+                                                                alignItems: 'center',
+
+                                                            }}
+                                                                onPress={() => alert('Hàng Trong Kho Đã Hết!!!')}
+                                                            >
+                                                                <Text style={{
+                                                                    padding: 5,
+                                                                    color: 'white',
+                                                                    textAlign: 'center'
+                                                                }}>
+                                                                    Hết Hàng
+                                                                </Text>
+                                                            </TouchableOpacity>
+                                                    }
                                                 </View>
-
                                             </View>
                                         ))}
 

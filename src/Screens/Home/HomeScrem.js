@@ -468,6 +468,48 @@ export default function HomeScrenn({ navigation }) {
         }
     }
 
+    const [id_users, setId_users] = useState('')
+    const [month_chisocanhans, setChiSo] = useState()
+    AsyncStorage.getItem('id_users')
+        .then(res =>
+            setId_users(res)
+        )
+
+    useEffect(() => {
+        fetch('http://192.168.1.165:4000' + '/api/chisocanhan')
+            .then(res => res.json())
+            .then(res => res.map(re => {
+                if (re.email == taikhoan) {
+                    setChiSo(re.month)
+                }
+            }))
+            .catch(err => console.log(err))
+    }, [taikhoan])
+
+    console.log(month_chisocanhans)
+
+    useEffect(() => {
+
+        const a = new Date();
+        const month = a.getMonth() + 1
+
+        if (taikhoan != "" && id_users != "" && String(month) != month_chisocanhans) {
+            fetch('http://192.168.1.165:4000' + '/api/chisocanhan/create/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    taikhoan: taikhoan,
+                    id: id_users
+                })
+            })
+            return;
+        }
+        else {
+            return;
+
+        }
+    })
+
     return (
         <ScrollView
             refreshControl={

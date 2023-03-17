@@ -61,6 +61,37 @@ export default function DonHang({ navigation }) {
                         height: 60,
                         backgroundColor: theme.background,
                         width: '90%',
+
+
+                        borderBottomColor: theme.color,
+                        borderBottomWidth: 0.6,
+
+                        marginTop: 5
+                    }}
+                        onPress={() => navigation.navigate('Đơn Đang Thực Hiện')}
+                    >
+                        <Text style={{
+                            fontSize: 22,
+                            color: 'black',
+                            marginTop: 20,
+                            marginLeft: 20,
+                            color: theme.color
+
+
+                        }}>
+                            Đơn Đang Thực Hiện
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+
+                <View style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}>
+                    <TouchableOpacity style={{
+                        height: 60,
+                        backgroundColor: theme.background,
+                        width: '90%',
                         borderBottomColor: theme.color,
                         borderBottomWidth: 0.6,
 

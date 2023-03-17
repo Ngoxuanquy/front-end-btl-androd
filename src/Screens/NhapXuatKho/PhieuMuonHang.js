@@ -178,6 +178,8 @@ export default function PhieuMuonHang({ navigation }) {
                 soluong: soluong - 1
             })
         })
+            .catch((err) => console.log(err))
+
 
         fetch('http://192.168.1.165:4000' + '/api/muonhangnhap/update/soluong/' + id, {
             method: 'POST',
@@ -192,6 +194,8 @@ export default function PhieuMuonHang({ navigation }) {
                     .then(res => setSanPham(res))
                     .catch((err) => console.log(err))
             })
+            .catch((err) => console.log(err))
+
 
     }
 
@@ -375,6 +379,8 @@ export default function PhieuMuonHang({ navigation }) {
                 nguoimuon: value
             })
         })
+            .catch((err) => console.log(err))
+
 
     }
 
@@ -388,6 +394,8 @@ export default function PhieuMuonHang({ navigation }) {
 
                 setID_DonHang(max_val)
             })
+            .catch((err) => console.log(err))
+
     }, [taikhoan])
 
 

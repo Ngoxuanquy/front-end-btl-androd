@@ -1,12 +1,12 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Button, StyleSheet, View, Text } from 'react-native';
+import { Button, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import LottieView from 'lottie-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons } from '@expo/vector-icons';
 import { ScrollView } from 'react-native-virtualized-view';
 
-export default function DonChoThucHien() {
+export default function DonChoThucHien({ navigation }) {
 
     const [customer, setCustomer] = useState([])
     const [taikhoan, setTaiKhoan] = useState([])
@@ -19,7 +19,7 @@ export default function DonChoThucHien() {
 
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/customer/')
+        fetch('http://192.168.1.165:4000' + '/api/customer/email/' + taikhoan)
             .then(res => res.json())
             .then(res => setCustomer(res))
             .catch(err => console.log(err))
@@ -147,47 +147,57 @@ export default function DonChoThucHien() {
                     alignItems: 'center',
                     marginTop: 20
                 }}>
+
                     {customer.map(cu => (
-                        <View style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-around',
-                            backgroundColor: 'white',
-                            width: '90%',
-                            paddingVertical: 10,
-                            marginTop: 10,
-                            borderRadius: 10
-                        }}>
-                            <View>
-                                <Text style={{
-                                    fontSize: 20,
-                                    lineHeight: 30
-                                }}>
-                                    Mã Kh: {cu.customer_code}
-                                </Text>
-                                <Text style={{
-                                    fontSize: 20
-                                }}>
-                                    Tên: {cu.customer_name}
-                                </Text>
+                        <TouchableOpacity
+                            key={cu.id}
+                            onPress={() => navigation.navigate('Chi Tiết Đơn Đang Thực Hiện', {
+                                id_donhang: cu.id
+                            })}
+
+                        >
+                            <View style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-around',
+                                backgroundColor: 'white',
+                                width: '90%',
+                                paddingVertical: 10,
+                                marginTop: 10,
+                                borderRadius: 10
+                            }}>
+
+                                <View>
+                                    <Text style={{
+                                        fontSize: 20,
+                                        lineHeight: 30
+                                    }}>
+                                        Mã Kh: {cu.customer_code}
+                                    </Text>
+                                    <Text style={{
+                                        fontSize: 20
+                                    }}>
+                                        Tên: {cu.customer_name}
+                                    </Text>
+                                </View>
+                                <View>
+                                    <Text style={{
+                                        fontSize: 20
+                                    }}>
+                                        {cu.Address}
+                                    </Text>
+                                    <Text style={{
+                                        fontSize: 20
+                                    }}>
+                                        {cu.phone_number}
+                                    </Text>
+                                </View>
                             </View>
-                            <View>
-                                <Text style={{
-                                    fontSize: 20
-                                }}>
-                                    {cu.Address}
-                                </Text>
-                                <Text style={{
-                                    fontSize: 20
-                                }}>
-                                    {cu.phone_number}
-                                </Text>
-                            </View>
-                        </View>
+                        </TouchableOpacity>
                     ))}
 
                 </View>
             </View>
-        </View>
+        </View >
     );
 }
 

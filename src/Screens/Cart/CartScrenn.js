@@ -42,9 +42,9 @@ export default function Cart({ navigation }) {
 
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/customer/')
+        fetch('http://192.168.1.165:4000' + '/api/customer/email/' + taikhoan)
             .then(res => res.json())
-            .then(res => setCustomer(res))
+            .then(res => setCustomer(res.reverse()))
             .catch(err => console.log(err))
             .finally(() => {
                 // setReset(true);
@@ -58,7 +58,7 @@ export default function Cart({ navigation }) {
     useEffect(() => {
         fetch('http://192.168.1.165:4000' + '/api/customer_re/' + taikhoan)
             .then(res => res.json())
-            .then(res => setOrders(res))
+            .then(res => setOrders(res.reverse()))
             .catch(err => console.log(err))
             .finally(() => {
                 setIsLoading(false)
@@ -105,9 +105,9 @@ export default function Cart({ navigation }) {
                                             }
                                         )
                                             .then(() => {
-                                                fetch('http://192.168.1.165:4000' + '/api/customer/')
+                                                fetch('http://192.168.1.165:4000' + '/api/customer/email' + taikhoan)
                                                     .then(res => res.json())
-                                                    .then(res => setCustomer(res))
+                                                    .then(res => setCustomer(res.reverse()))
                                                     .finally(() => {
                                                         alert('Nhận Đơn Thành Công!!!')
 
@@ -126,7 +126,7 @@ export default function Cart({ navigation }) {
                                             .then(() => {
                                                 fetch('http://192.168.1.165:4000' + '/api/customer_re/' + taikhoan)
                                                     .then(res => res.json())
-                                                    .then(res => setOrders(res))
+                                                    .then(res => setOrders(res.reverse()))
                                                     .catch(err => console.log(err))
                                             })
                                             .catch(err => console.log(err))
@@ -162,10 +162,10 @@ export default function Cart({ navigation }) {
 
     function handerLamMoi() {
         setIsLoading(true)
-        fetch('http://192.168.1.165:4000' + '/api/customer/')
+        fetch('http://192.168.1.165:4000' + '/api/customer/email/' + taikhoan)
             .then(res => res.json())
             .then(res => {
-                setCustomer(res)
+                setCustomer(res.reverse())
             })
             .then(() => {
                 setIsLoading(false)
@@ -177,7 +177,7 @@ export default function Cart({ navigation }) {
 
         fetch('http://192.168.1.165:4000' + '/api/customer_re/' + taikhoan)
             .then(res => res.json())
-            .then(res => setOrders(res))
+            .then(res => setOrders(res.reverse()))
             .catch(err => console.log(err))
     }
 
@@ -198,10 +198,10 @@ export default function Cart({ navigation }) {
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         const timeout = setTimeout(() => {
-            fetch('http://192.168.1.165:4000' + '/api/customer/')
+            fetch('http://192.168.1.165:4000' + '/api/customer/email/' + taikhoan)
                 .then(res => res.json())
                 .then(res => {
-                    setCustomer(res)
+                    setCustomer(res.reverse())
                 })
                 .then(() => {
                     setIsLoading(false)
@@ -213,7 +213,7 @@ export default function Cart({ navigation }) {
 
             fetch('http://192.168.1.165:4000' + '/api/customer_re/' + taikhoan)
                 .then(res => res.json())
-                .then(res => setOrders(res))
+                .then(res => setOrders(res.reverse()))
                 .catch(err => console.log(err))
             setRefreshing(false);
         }, 1000);

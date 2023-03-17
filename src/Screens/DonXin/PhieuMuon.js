@@ -14,10 +14,7 @@ export default function PhieuMuon({ navigation }) {
 
     useEffect(() => {
         fetch(
-            'http://192.168.1.156:1000' +
-                '/api/lichsumuonhang/khachhang/' +
-                taikhoan +
-                '/Đã Xác Nhận'
+            'http://192.168.1.165:4000' + '/api/lichsumuonhang/khachhang/' + taikhoan + '/Đã Xác Nhận'
         )
             .then((res) => res.json())
             .then((res) => setApi(res))

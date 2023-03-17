@@ -13,7 +13,7 @@ export default function PhieuDeNghi({ navigation }) {
 
     useEffect(() => {
         const fetchData = async () => {
-            const respon = await fetch('http://192.168.1.156:1000/api/donxin/quy')
+            const respon = await fetch('http://192.168.1.165:4000/api/donxin/quy')
             const list = await respon.json()
             setList(list)
         }
@@ -34,7 +34,7 @@ export default function PhieuDeNghi({ navigation }) {
             Date: date.getDate() + '/' + date.getMonth() + 1 + '/' + date.getFullYear(),
             status: 'Chờ duyệt',
         }
-        fetch('http://192.168.1.156:1000/api/donxin', {
+        fetch('http://192.168.1.165:4000/api/donxin', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -71,8 +71,8 @@ export default function PhieuDeNghi({ navigation }) {
                             data.status === 'Chờ duyệt'
                                 ? 'orange'
                                 : data.status === 'Đã duyệt'
-                                ? 'blue'
-                                : 'red',
+                                    ? 'blue'
+                                    : 'red',
                         width: '80%',
                         paddingHorizontal: 8,
                         paddingVertical: 4,

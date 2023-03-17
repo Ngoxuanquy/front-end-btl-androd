@@ -2,7 +2,6 @@ import { View, Text, Button, Modal, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { DataTable } from 'react-native-paper'
 import { TouchableOpacity } from 'react-native'
-import { useHeaderHeight } from '@react-navigation/elements'
 import Checkbox from 'expo-checkbox'
 
 import { TextInput } from 'react-native-gesture-handler'
@@ -21,13 +20,15 @@ const DonXinPartTime = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const res = await fetch('http://192.168.1.156:1000/api/dangkylichparttime')
+            const res = await fetch('http://192.168.1.165:4000/api/dangkylichparttime')
             const data = await res.json()
             setLichDangKy(data.reverse())
         }
 
         fetchData()
     }, [])
+
+
 
     const showStartDatePicker = () => {
         setStartDatePickerVisibility(true)
@@ -75,7 +76,7 @@ const DonXinPartTime = () => {
             dangky_id: dangKyId,
             dates: ngayDangKy,
         }
-        fetch('http://192.168.1.156:1000/api/LichDangKyParttime', {
+        fetch('http://192.168.1.165:4000/api/LichDangKyParttime', {
             method: 'PUT',
             headers: {
                 Accept: 'application/json',
@@ -86,6 +87,13 @@ const DonXinPartTime = () => {
             .then((response) => response.json())
             .then((data) => {
                 console.log('Success:')
+                const fetchData = async () => {
+                    const res = await fetch('http://192.168.1.165:4000/api/dangkylichparttime')
+                    const data = await res.json()
+                    setLichDangKy(data.reverse())
+                }
+
+                fetchData()
                 setIsOpen(false)
             })
             .catch((error) => {
@@ -101,7 +109,7 @@ const DonXinPartTime = () => {
             user_id: 1,
         }
 
-        fetch('http://192.168.1.156:1000/api/dangkylichparttime', {
+        fetch('http://192.168.1.165:4000/api/dangkylichparttime', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -122,10 +130,11 @@ const DonXinPartTime = () => {
     const handleClick = (id) => {
         setDangKyId(id)
         setIsOpen(true)
-        console.log(isOpen)
-        fetch("http://192.168.1.156:1000/api/lichdangkyparttime/${id}")
+        fetch(`http://192.168.1.165:4000/api/lichdangkyparttime/${id}`)
             .then((res) => res.json())
-            .then((data) => setNgayDangKy(data))
+            .then((data) => {
+                setNgayDangKy(data)
+            })
     }
 
     return (
@@ -294,7 +303,7 @@ const DonXinPartTime = () => {
                         <View>
                             <DataTable>
                                 <DataTable.Header>
-                                    <DataTable.Title>Ngày</DataTable.Title>
+                                    <DataTable.Title style={{ flex: 2 }}>Ngày</DataTable.Title>
                                     <DataTable.Title>Sáng</DataTable.Title>
                                     <DataTable.Title>Chiều</DataTable.Title>
                                     <DataTable.Title>Tối</DataTable.Title>
@@ -302,7 +311,7 @@ const DonXinPartTime = () => {
                             </DataTable>
                             {ngayDangKy.map((item) => (
                                 <DataTable.Row key={item.id}>
-                                    <DataTable.Cell>{item.date}</DataTable.Cell>
+                                    <DataTable.Cell style={{ flex: 2 }}>{item.date}</DataTable.Cell>
                                     <DataTable.Cell>
                                         <Checkbox
                                             value={item.sang}
@@ -324,35 +333,36 @@ const DonXinPartTime = () => {
                                 </DataTable.Row>
                             ))}
                         </View>
-                        {ngayDangKy.length > 0 && (
-                            <View
+
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                marginTop: 32,
+                                marginBottom: 60,
+                                justifyContent: 'flex-end',
+                            }}
+                        >
+                            <TouchableOpacity
                                 style={{
-                                    flexDirection: 'row',
-                                    marginTop: 32,
-                                    marginBottom: 60,
-                                    justifyContent: 'flex-end',
+                                    paddingHorizontal: 16,
+                                    paddingVertical: 8,
+                                    marginRight: 20,
+                                    borderRadius: 4,
+                                    backgroundColor: '#d63232',
                                 }}
+                                onPress={() => setIsOpen(false)}
                             >
-                                <TouchableOpacity
+                                <Text
                                     style={{
-                                        paddingHorizontal: 16,
-                                        paddingVertical: 8,
-                                        marginRight: 20,
-                                        borderRadius: 4,
-                                        backgroundColor: '#d63232',
+                                        fontSize: 16,
+                                        color: 'white',
+                                        fontWeight: 'bold',
                                     }}
-                                    onPress={() => setIsOpen(false)}
                                 >
-                                    <Text
-                                        style={{
-                                            fontSize: 16,
-                                            color: 'white',
-                                            fontWeight: 'bold',
-                                        }}
-                                    >
-                                        Đóng
-                                    </Text>
-                                </TouchableOpacity>
+                                    Đóng
+                                </Text>
+                            </TouchableOpacity>
+                            {ngayDangKy.length > 0 && (
                                 <TouchableOpacity
                                     style={{
                                         paddingHorizontal: 16,
@@ -373,8 +383,8 @@ const DonXinPartTime = () => {
                                         Lưu
                                     </Text>
                                 </TouchableOpacity>
-                            </View>
-                        )}
+                            )}
+                        </View>
                     </ScrollView>
                 </Modal>
             </View>

@@ -1,10 +1,11 @@
 import { StatusBar } from 'expo-status-bar'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import DateTimePickerModal from 'react-native-modal-datetime-picker'
-import { useEffect } from 'react'
+
+import { TimePicker, ValueMap } from 'react-native-simple-time-picker'
 
 export default function DonXinDiMuon({ navigation }) {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false)
@@ -15,9 +16,28 @@ export default function DonXinDiMuon({ navigation }) {
     const [type, setType] = useState('đi muộn')
     const [donXin, setDonXin] = useState([])
 
+    const [value1, setValue1] = useState({
+        hours: 1,
+        minutes: 0,
+        seconds: 0,
+    })
+
+    const [value2, setValue2] = useState({
+        hours: 1,
+        minutes: 0,
+        seconds: 0,
+    })
+
+    const handleChange1 = (newValue) => {
+        setValue1(newValue)
+    }
+    const handleChange2 = (newValue) => {
+        setValue2(newValue)
+    }
+
     useEffect(() => {
         const fetchData = async () => {
-            const respon = await fetch('http://192.168.1.156:1000/api/donxin/quy')
+            const respon = await fetch('http://192.168.1.156:4000/api/donxin/quy')
             const list = await respon.json()
             setDonXin(list)
         }
@@ -48,10 +68,11 @@ export default function DonXinDiMuon({ navigation }) {
             CongViecBanGiao,
             CamKet,
             name: 'quy',
+            endDate: `${value1.hours}:${value1.minutes} - ${value2.hours}:${value2.minutes}`,
             type,
             status: 'Chờ duyệt',
         }
-        fetch('http://192.168.1.156:1000/api/donxin', {
+        fetch('http://192.168.1.156:4000/api/donxin', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -68,7 +89,7 @@ export default function DonXinDiMuon({ navigation }) {
     }
 
     const renderRow = (data) => (
-        <View key={data.id} style={{ flex: 1, alignSelf: 'stretch', flexDirection: 'row' }}>
+        <View key={data.id} style={{ flex: 1, alignSelf: 'stretch', flexDirection: 'row', marginTop: 20 }}>
             <View style={{ flex: 1, alignSelf: 'stretch' }}>
                 <Text>{data.id}</Text>
             </View>
@@ -77,22 +98,27 @@ export default function DonXinDiMuon({ navigation }) {
             </View>
             <View style={{ flex: 2, alignSelf: 'stretch' }}>
                 <Text>{data.Date}</Text>
+                <Text style={{ fontSize: 12, color: 'red' }}>{data.endDate}</Text>
             </View>
-            <View style={{ flex: 2, alignSelf: 'stretch' }}>
+
+            <View style={{
+                flex: 1.5, alignSelf: 'stretch', backgroundColor:
+                    data.status === 'Chờ duyệt'
+                        ? 'orange'
+                        : data.status === 'Đã duyệt'
+                            ? 'blue'
+                            : 'red',
+                width: '60%',
+                paddingHorizontal: 8,
+                paddingVertical: 9,
+                borderRadius: 8,
+                color: 'white',
+            }}>
                 <Text
                     style={{
-                        backgroundColor:
-                            data.status === 'Chờ duyệt'
-                                ? 'orange'
-                                : data.status === 'Đã duyệt'
-                                ? 'blue'
-                                : 'red',
-                        width: '80%',
-                        paddingHorizontal: 8,
-                        paddingVertical: 4,
-                        borderRadius: 8,
                         color: 'white',
-                        textAlign: 'center',
+                        fontSize: 14,
+                        textAlign: 'center'
                     }}
                 >
                     {data.status}
@@ -232,6 +258,39 @@ export default function DonXinDiMuon({ navigation }) {
                                     </View>
                                 </View>
 
+
+
+                                <View style={{
+
+                                }}>
+                                    <Text
+                                        style={{
+                                            fontSize: 23,
+                                            fontWeight: '600',
+                                        }}
+                                    >
+                                        Thời gian từ
+                                    </Text>
+                                    <TimePicker value={value1} onChange={handleChange1} style={{
+
+                                    }} />
+                                </View>
+
+                                <View style={{
+
+                                }}>
+                                    <Text
+                                        style={{
+                                            fontSize: 23,
+                                            fontWeight: '600',
+                                        }}
+                                    >
+                                        Đến
+                                    </Text>
+
+                                    <TimePicker value={value2} onChange={handleChange2} />
+                                </View>
+
                                 <View>
                                     <Text
                                         style={{
@@ -266,7 +325,6 @@ export default function DonXinDiMuon({ navigation }) {
                                         />
                                     </View>
                                 </View>
-
                                 <View
                                     style={{
                                         marginTop: 10,
@@ -305,7 +363,6 @@ export default function DonXinDiMuon({ navigation }) {
                                         />
                                     </View>
                                 </View>
-
                                 <View
                                     style={{
                                         marginTop: 10,
@@ -343,7 +400,6 @@ export default function DonXinDiMuon({ navigation }) {
                                         />
                                     </View>
                                 </View>
-
                                 <TouchableOpacity
                                     style={{
                                         backgroundColor: 'green',

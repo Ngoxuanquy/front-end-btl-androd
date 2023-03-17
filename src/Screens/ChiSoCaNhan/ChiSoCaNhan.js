@@ -64,7 +64,128 @@ export default function ChiSoCaNhan({ navigation }) {
     // console.log(luongtamtinhs)
 
     const textRef = useRef(null);
+    const [tuans, setTuan] = useState([])
 
+    function getFormattedDate(date) {
+        let year = date.getFullYear();
+        let month = (1 + date.getMonth()).toString().padStart(2, '0');
+        let day = date.getDate().toString().padStart(2, '0');
+
+        return day + '/' + month + '/' + year;
+    }
+
+    useEffect(() => {
+        var today = new Date();
+
+        // Tính toán ngày đầu tiên trong tuần
+        var firstDayOfWeek = new Date(today.setDate(today.getDate() - today.getDay() + 1));
+
+        // console.log(getFormattedDate(firstDayOfWeek))
+
+
+        // Khai báo một mảng để lưu trữ các ngày trong tuần
+        var daysOfWeek = [];
+
+        // Thêm các ngày trong tuần vào mảng
+        for (var i = 0; i < 6; i++) {
+            var day = new Date(firstDayOfWeek);
+            day.setDate(firstDayOfWeek.getDate() + i);
+            daysOfWeek.push(getFormattedDate(day));
+        }
+
+        // Hiển thị các ngày trong tuần
+        setTuan(daysOfWeek)
+    }, [])
+
+    const [sodonphatsinhs, setSoDonPhatSinh] = useState([])
+    const [sodonvesinhs, setSoDonVeSinh] = useState([])
+
+
+    useEffect(() => {
+        fetch('http://192.168.1.165:4000' + '/api/sodonphatsinh/' + taikhoan)
+            .then(res => res.json())
+            .then(res => {
+                setSoDonPhatSinh(res)
+            })
+            .finally(() => {
+
+            })
+    }, [taikhoan])
+
+    useEffect(() => {
+        fetch('http://192.168.1.165:4000' + '/api/sodonvesinh/' + taikhoan)
+            .then(res => res.json())
+            .then(res => {
+                setSoDonVeSinh(res)
+            })
+            .finally(() => {
+
+            })
+    }, [taikhoan])
+
+    const [data_sodon, setDatSoDon] = useState([])
+    const [data_sodon_vesinh, setDatSoDonVeSinh] = useState([])
+    const [soluongdonphatsinh, setSoLuongPhatSinh] = useState()
+    const [soluongdonvesinh, setSoLuongVeSinh] = useState()
+
+
+    useEffect(() => {
+
+        const arr = []
+
+        tuans.forEach(obj1 => {
+            const obj2 = sodonphatsinhs.find(item => item.date === obj1);
+            const age = obj2 ? obj2.sodon : 0; // sử dụng biểu thức ba ngôi
+
+            arr.push(age)
+
+        });
+
+        let sum = 0;
+
+        for (let i = 0; i < arr.length; i++) {
+            sum += arr[i];
+        }
+
+        setSoLuongPhatSinh(sum)
+
+        setDatSoDon(arr)
+    }, [sodonphatsinhs])
+
+
+
+    useEffect(() => {
+        const arr = []
+        tuans.forEach(obj1 => {
+            const obj2 = sodonvesinhs.find(item => item.date === obj1);
+            const age = obj2 ? obj2.sodon : 0; // sử dụng biểu thức ba ngôi
+            arr.push(age)
+        });
+
+        let sum = 0;
+
+        for (let i = 0; i < arr.length; i++) {
+            sum += arr[i];
+        }
+
+        setSoLuongVeSinh(sum)
+
+        setDatSoDonVeSinh(arr)
+    }, [sodonvesinhs])
+
+
+    useEffect(() => {
+        // let sum1 = data_sodon.reduce((accumulator, currentValue) => {
+        //     return accumulator + currentValue;
+        // });
+        // console.log(data_sodon_vesinh)
+
+        // let sum2 = data_sodon_vesinh.reduce((a, b) => {
+        //     return a + b;
+        // });
+
+        // console.log(sum1)
+    }, [data_sodon])
 
     function handerSubmit() {
         if (luongtamtinhs > 200 && luongtamtinhs < 300) {
@@ -124,18 +245,31 @@ export default function ChiSoCaNhan({ navigation }) {
                 })
             })
         }
-    }, [luongtamtinhs])
+    }, [taikhoan])
 
     const data = {
         labels: ["Swim"], // optional
         data: [0.4]
     };
 
+    console.log(tuans)
+
     const data1 = {
-        labels: ["Thứ 2", "Thứ 3", "Thứ 4 ", "Thứ 5", "Thứ 6", "Thứ 7"],
+
+        labels: tuans,
         datasets: [
             {
-                data: [2, 1, 3, 0, 2, 3]
+                data: data_sodon
+            }
+        ]
+    };
+
+    const data_vesinh = {
+
+        labels: tuans,
+        datasets: [
+            {
+                data: data_sodon_vesinh
             }
         ]
     };
@@ -213,6 +347,26 @@ export default function ChiSoCaNhan({ navigation }) {
         {
             name: "TB thiếu",
             population: 7000 - (luongtamtinhs && luongtamtinhs || 0),
+            color: "#f5b41d",
+            legendFontColor: "#7F7F7F",
+            legendFontSize: 15,
+        },
+
+    ];
+
+
+    const tilevesinh = [
+
+        {
+            name: "Số đơn vệ sinh",
+            population: soluongdonvesinh && soluongdonvesinh || 0,
+            color: "#56d187",
+            legendFontColor: "green",
+            legendFontSize: 15,
+        },
+        {
+            name: "Số Đơn Phát Sinh",
+            population: soluongdonphatsinh && soluongdonphatsinh || 0,
             color: "#f5b41d",
             legendFontColor: "#7F7F7F",
             legendFontSize: 15,
@@ -377,7 +531,7 @@ export default function ChiSoCaNhan({ navigation }) {
                                     justifyContent: 'center',
                                     alignItems: 'center',
                                     position: 'absolute',
-                                    left: '35%',
+                                    left: '30%',
                                     top: '35%'
                                 }}>
                                     <Text style={{
@@ -474,15 +628,14 @@ export default function ChiSoCaNhan({ navigation }) {
                             // style={graphStyle}
                             data={data1}
                             width={Dimensions.get('window').width - 40}
-                            height={220}
+                            height={330}
                             yAxisLabel="Đơn"
                             chartConfig={chartConfig}
                             verticalLabelRotation={30}
                             bezier
                             style={{
-                                marginVertical: 8,
-                                borderRadius: 16,
-
+                                // marginVertical: 8,
+                                // borderRadius: 16,
                             }}
                             backgroundColor={theme.background}
 
@@ -518,9 +671,9 @@ export default function ChiSoCaNhan({ navigation }) {
                     }}>
                         <BarChart
                             // style={graphStyle}
-                            data={data1}
+                            data={data_vesinh}
                             width={Dimensions.get('window').width - 40}
-                            height={220}
+                            height={320}
                             yAxisLabel="Đơn"
                             chartConfig={chartConfig}
                             verticalLabelRotation={30}
@@ -551,7 +704,7 @@ export default function ChiSoCaNhan({ navigation }) {
 
 
                         <PieChart
-                            data={data2}
+                            data={tilevesinh}
                             width={Dimensions.get('window').width - 40}
                             height={220}
                             chartConfig={chartConfigPie}

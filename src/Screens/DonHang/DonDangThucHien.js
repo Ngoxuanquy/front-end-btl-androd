@@ -2,355 +2,222 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, TouchableOpacity, View, ScrollView, Image, Dimensions } from 'react-native';
 
 import React, {
-    useEffect, useState
+    useEffect, useState,
+    useContext
 } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import ThemeConText from '../../../config/themeConText';
+import { Feather } from '@expo/vector-icons';
 
 
 export default function DonDangThucHien({ navigation }) {
 
+    let theme = useContext(ThemeConText)
+
     const [isload, setIsLoad] = useState(false)
 
-    function handerNhanDon() {
-        alert('Nhán Đơn Thành Công');
-        setIsLoad(true)
-    }
+    const [taikhoan, setTaiKhoan] = useState([])
+    const [customer, setCustomer] = useState([])
+
+
+    AsyncStorage.getItem('taikhoan')
+        .then(res =>
+            setTaiKhoan(res)
+        )
+
+
+    const [orders, setOrders] = useState([])
+
+
+    useEffect(() => {
+        fetch('http://192.168.1.165:4000' + '/api/customer_re/' + taikhoan)
+            .then(res => res.json())
+            .then(res => setOrders(res.reverse()))
+            .catch(err => console.log(err))
+            .finally(() => {
+                // setIsLoading(false)
+            })
+    }, [taikhoan])
 
     return (
         <ScrollView >
-
             <View style={{
-                flexDirection: 'row',
-                justifyContent: 'space-around',
-                alignItems: 'center',
-                borderColor: 'black',
-                borderWidth: 1,
-                paddingVertical: 10,
-                marginLeft: 10,
-                marginRight: 10,
-                borderRadius: 10,
-                backgroundColor: '#CCCCCC',
-                shadowOffset: {
-                    width: 0,
-                    height: 5,
-                },
-                shadowOpacity: 0.34,
-                shadowRadius: 2.27,
-
-                elevation: 10,
-                marginTop: 20
+                marginBottom: 10,
+                marginTop: 10,
+                padding: 10
             }}>
-                <View style={{
-                    alignItems: 'center',
-                    justifyContent: 'center',
-
-
-                }}>
-                    <TouchableOpacity style={{
-                        borderColor: 'black',
-
-                    }}>
-                        <Text style={{
-                            color: 'black'
-                        }} >
-                            Tổng Đơn
-                        </Text>
-                        <Text style={{
-                            textAlign: 'center'
-                        }}>
-                            10
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-
-                <View>
-                    <TouchableOpacity>
-                        <Text>
-                            Đi Được
-                        </Text>
-                        <Text style={{
-                            textAlign: 'center'
-                        }}>
-                            10
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-
-                <View>
-                    <TouchableOpacity>
-                        <Text>
-                            Hủy
-                        </Text>
-                        <Text style={{
-                            textAlign: 'center'
-                        }}>
-                            10
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-
-                <View>
-                    <TouchableOpacity>
-                        <Text>
-                            Sai Máy
-                        </Text>
-                        <Text style={{
-                            textAlign: 'center'
-                        }}>
-                            10
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-            <View>
                 <Text style={{
-                    fontSize: 18,
-                    color: 'gray',
-                    padding: 10
+                    fontSize: 22,
+                    fontWeight: 'bold',
+                    color: 'green',
+                    opacity: 0.8,
+                    // color: theme.color
                 }}>
                     Đơn Đang Thực Hiện
                 </Text>
             </View>
-            <View style={{
-                borderColor: 'black',
-                borderWidth: 0.4,
-                marginTop: 10,
-                marginLeft: 10,
-                marginRight: 10,
-                borderRadius: 10,
-                shadowOffset: {
-                    width: 0,
-                    height: 5,
-                },
-                shadowOpacity: 0.34,
-                shadowRadius: 6.27,
-                elevation: 10,
 
-            }}>
-                <View style={{
-                    justifyContent: 'center',
-                    // alignItems: 'center',
-                    paddingHorizontal: 20,
-                    marginBottom: 20,
-
-
-                }}>
-                    <TouchableOpacity style={{
-
-                    }}>
-                        <Text style={{
-                            lineHeight: 30
-                        }}>
-                            Mã Đơn: abc
-                        </Text>
-                        <Text style={{
-                            lineHeight: 30
-                        }}>
-                            Tên Khóa: Ngô Xuân Quy
-                        </Text>
-                        <Text style={{
-                            lineHeight: 30
-                        }}>
-                            Địa Chỉ: Hà Nội
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-                <View>
-                    <View style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-around',
-                        marginBottom: 10
-                    }}>
-                        <TouchableOpacity style={{
-                            borderColor: 'black',
-                            borderWidth: 1,
-                            padding: 10,
-                            backgroundColor: '#DCDCDC',
-                            borderRadius: 6
-
-                        }}
-                        // onPress={() => navigation.navigate('ThanhToan')}
-
-                        >
-                            <Text style={{
-                                color: 'black'
-                            }}>
-                                Tính Tiền
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={{
-                            borderColor: 'black',
-                            borderWidth: 1,
-                            padding: 10,
-                            backgroundColor: '#DCDCDC',
-                            borderRadius: 6
-
-                        }}
-                            onPress={() => navigation.navigate('chup')}
-                        >
-                            <Text style={{
-                                color: 'black'
-                            }}>
-                                Chụp Ảnh
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={{
-                            borderColor: 'black',
-                            borderWidth: 1,
-                            padding: 10,
-                            backgroundColor: '#DCDCDC',
-                            borderRadius: 6
-
-
-                        }}
-                            onPress={() => navigation.navigate("ChiTiet")}
-                        >
-                            <Text style={{
-                                color: 'black'
-                            }}>
-                                Chi Tiết
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </View>
-
-            {/* Đơn Chưa Xác Thực */}
-            <View>
-                <Text style={{
-                    fontSize: 18,
-                    padding: 10,
-                    color: 'coral'
-                }}>
-                    Đơn Chưa Xác Thực
-                </Text>
-            </View>
-            <View style={{
-                borderColor: 'black',
-                borderWidth: 1,
-                marginTop: 10,
-                marginLeft: 10,
-                marginRight: 10
-            }}>
-                <View style={{
-                    justifyContent: 'center',
-                    // alignItems: 'center',
-                    paddingHorizontal: 20,
-                    marginBottom: 20
-
-                }}>
-                    <TouchableOpacity style={{
-
-                    }}>
-                        <Text style={{
-                            lineHeight: 30
-                        }}>
-                            Mã Đơn: abc
-                        </Text>
-                        <Text style={{
-                            lineHeight: 30
-                        }}>
-                            Tên Khóa: Ngô Xuân Quy
-                        </Text>
-                        <Text style={{
-                            lineHeight: 30
-                        }}>
-                            Địa Chỉ: Hà Nội
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-                {isload == false ?
-                    <View>
+            {orders && orders.map(order => (
+                <View key={order.id
+                }
+                    style={{
+                        marginBottom: 20
+                    }}
+                >
+                    <View
+                        style={[
+                            {
+                                borderColor: theme.color,
+                                borderWidth: 0.4,
+                                marginLeft: 10,
+                                marginRight: 10,
+                                borderRadius: 10,
+                            }
+                            , {
+                                backgroundColor: theme.background
+                            }]}
+                    >
                         <View style={{
                             flexDirection: 'row',
-                            justifyContent: 'space-around',
-                            marginBottom: 10
+                            justifyContent: 'space-between'
                         }}>
-                            <TouchableOpacity style={{
-                                borderColor: 'black',
-                                borderWidth: 1,
+                            <Text style={{
+                                fontSize: 18,
+                                color: 'gray',
                                 padding: 10,
-                                backgroundColor: 'coral',
-                                borderRadius: 6
-                            }}
-                                onPress={() => handerNhanDon()}
-                            >
-                                <Text style={{
-                                    color: 'white'
-                                }}>
-                                    Nhận Đơn
-                                </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={{
-                                borderColor: 'black',
-                                borderWidth: 1,
-                                padding: 10,
-                                backgroundColor: '#FF9999',
-                                borderRadius: 6
+                                color: 'green',
+                                color: theme.color
 
                             }}>
-                                <Text style={{
-                                    color: 'white'
-                                }}>
-                                    Từ Chối
-                                </Text>
+                                Đơn Đang Thực Hiện
+                            </Text>
+                            <TouchableOpacity
+                                onPress={() => Testphone(order.Number)}
+                            >
+                                <Feather name="phone" size={30} color="green" style={{
+                                    padding: 10,
+                                    marginRight: 20
+                                }} />
                             </TouchableOpacity>
+                        </View>
 
+                        <View style={{
+                            justifyContent: 'center',
+                            // alignItems: 'center',
+                            paddingHorizontal: 20,
+                            marginBottom: 20,
+                        }}>
+                            <View style={{
+
+                            }}>
+                                <Text style={[
+                                    {
+                                        lineHeight: 30,
+
+                                    }
+                                    , {
+                                        color: theme.color
+                                    }]}>
+                                    Mã Đơn: abc
+                                </Text>
+                                <Text style={[
+                                    {
+                                        lineHeight: 30,
+
+                                    }
+                                    , {
+                                        color: theme.color
+                                    }]}>
+                                    Tên Khóa: {order.name}
+                                </Text>
+                                <Text style={[
+                                    {
+                                        lineHeight: 30,
+
+                                    }
+                                    , {
+                                        color: theme.color
+                                    }]}>
+                                    Địa Chỉ: {order.Address}
+                                </Text>
+                            </View>
+                        </View>
+                        <View>
+                            <View style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-around',
+                                marginBottom: 10
+                            }}>
+                                <TouchableOpacity style={{
+                                    borderColor: theme.color,
+                                    borderWidth: 1,
+                                    padding: 10,
+                                    backgroundColor: '#DCDCDC',
+                                    borderRadius: 6
+
+                                }}
+                                    onPress={() => navigation.navigate('ThanhToan', {
+                                        name: order.name,
+                                        id_chuyen: order.id,
+                                        number: order.Number
+                                    })}
+
+                                >
+                                    <Text style={{
+                                        color: 'black'
+                                    }}>
+                                        Thanh Toán
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={{
+                                    borderColor: theme.color,
+                                    borderWidth: 1,
+                                    padding: 10,
+                                    backgroundColor: '#DCDCDC',
+                                    borderRadius: 6
+
+                                }}
+                                    onPress={() => navigation.navigate('Chup', {
+                                        name: order.name,
+                                        id: order.id
+                                    })}
+                                >
+                                    <Text style={{
+                                        color: 'black'
+                                    }}>
+                                        Chụp Ảnh
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={{
+                                    borderColor: theme.color,
+                                    borderWidth: 1,
+                                    padding: 10,
+                                    backgroundColor: '#DCDCDC',
+                                    borderRadius: 6
+
+
+                                }}
+                                    onPress={() => navigation.navigate("ChiTiet", {
+                                        name: order.name,
+                                        id: order.id
+                                    })}
+                                >
+                                    <Text style={{
+                                        color: 'black'
+                                    }}>
+                                        Chi Tiết
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </View>
-                    : null}
-                {isload == true ? <View>
-                    <View style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-around',
-                        marginBottom: 10
-                    }}>
-                        <TouchableOpacity style={{
-                            borderColor: 'black',
-                            borderWidth: 1,
-                            padding: 10,
-                            backgroundColor: 'gray'
-
-                        }}>
-                            <Text style={{
-                                color: 'white'
-                            }}>
-                                Thanh Toán
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={{
-                            borderColor: 'black',
-                            borderWidth: 1,
-                            padding: 10,
-                            backgroundColor: 'gray'
-
-                        }}>
-                            <Text style={{
-                                color: 'white'
-                            }}>
-                                Chụp Ảnh
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={{
-                            borderColor: 'black',
-                            borderWidth: 1,
-                            padding: 10,
-                            backgroundColor: 'gray'
-
-                        }}>
-                            <Text style={{
-                                color: 'white'
-                            }}>
-                                Chi Tiết
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-                </View> : null}
-            </View>
+                </View>
+            ))}
 
 
-        </ScrollView>
+        </ScrollView >
     );
 }
 

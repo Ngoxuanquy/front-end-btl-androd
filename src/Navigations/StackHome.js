@@ -41,6 +41,9 @@ import DonChuaBanGiao from '../Screens/DonHang/DonChuaBanGiao'
 import DonXinNghiPhep from '../Screens/DonXin/DonXinNghiPhep';
 import DonXinPartTime from '../Screens/DonXin/DonXinPartTime';
 import XemLaiChiTiet from './../Screens/ThongBao/XemLaiChiTiet';
+import ChiTietDonDangThucHien from './../Screens/DonHang/ChiTietDonDangThucHien';
+
+
 
 
 const Stack = createNativeStackNavigator()
@@ -600,6 +603,38 @@ function StackHomes() {
             <Stack.Screen
                 name="Xem Lại Chi Tiết"
                 component={XemLaiChiTiet}
+                options={{
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: '#262626',
+                        height: 150,
+                        // title: 'My home',
+                        borderBottomLeftRadius: 40,
+                        borderBottomRightRadius: 40,
+                    },
+                    headerTintColor: '#fff',
+                }}
+            />
+
+            <Stack.Screen
+                name="Chi Tiết Đơn Đang Thực Hiện"
+                component={ChiTietDonDangThucHien}
+                options={{
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: '#262626',
+                        height: 150,
+                        // title: 'My home',
+                        borderBottomLeftRadius: 40,
+                        borderBottomRightRadius: 40,
+                    },
+                    headerTintColor: '#fff',
+                }}
+            />
+
+            <Stack.Screen
+                name="Đơn Đang Thực Hiện"
+                component={DonDangThucHien}
                 options={{
                     headerShown: true,
                     headerStyle: {
