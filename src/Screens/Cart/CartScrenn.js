@@ -68,6 +68,8 @@ export default function Cart({ navigation }) {
 
     function handerNhanDon(id) {
 
+        console.log(id)
+
         return Alert.alert(
             "Are your sure?",
             "Bạn Nhận Đơn Này?",

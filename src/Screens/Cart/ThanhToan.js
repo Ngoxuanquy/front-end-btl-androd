@@ -98,13 +98,23 @@ export default function ThanhToan({ route, navigation }) {
 
 
     const [trungbinhs, setTrungBinh] = useState()
+    const [chietkhaudonthem_sql, setChietKhauDonThemSQL] = useState()
+    const [chietkhauthayloi_sql, setChietKhauThayLoiSQL] = useState()
+    const [id_chiso, setIDChiSo] = useState()
+
 
     useEffect(() => {
         fetch('http://192.168.1.165:4000' + '/api/chisocanhan/email/' + taikhoan)
             .then(res => res.json())
-            .then(res => setTrungBinh(res[0].gia_tri_TB_hien_tai))
+            .then(res => {
+                setTrungBinh(res[0].gia_tri_TB_hien_tai)
+                setChietKhauDonThemSQL(res[0].chiet_khau_don_them)
+                setChietKhauThayLoiSQL(res[0].chiet_khau_thay_loi)
+                setIDChiSo(res[0].id)
+            })
             .catch((err) => console.log(err))
     }, [taikhoan])
+
 
     const [soluongs, setSoLuong] = useState()
 
@@ -153,6 +163,8 @@ export default function ThanhToan({ route, navigation }) {
             setId_users(res)
         )
 
+
+    console.log(id_chuyen)
 
     function handerCong(id1) {
 
@@ -418,7 +430,9 @@ export default function ThanhToan({ route, navigation }) {
         });
 
         setResult(result);
+
     }, [tonkhos])
+
 
 
     function handerTTTienMat() {
@@ -476,6 +490,15 @@ export default function ThanhToan({ route, navigation }) {
                                                                 })
                                                             }
                                                         })
+
+
+                                                        fetch('http://192.168.1.165:4000' + '/api/chisocanhan/update/chietkhauthayloi/' + taikhoan, {
+                                                            method: 'POST',
+                                                            headers: { 'Content-Type': 'application/json' },
+                                                            body: JSON.stringify({
+                                                                chietkhauthayloi: (chietkhauthayloi_sql + ((sanpham.price * sanpham.number_of / 100) * 5)).toFixed(2)
+                                                            })
+                                                        })
                                                     })
                                                 })
 
@@ -487,6 +510,16 @@ export default function ThanhToan({ route, navigation }) {
                                                 )
                                                     .then(() => {
                                                         if (tongtien > 0) {
+
+                                                            fetch('http://192.168.1.165:4000' + '/api/chisocanhan/update/chietkhaudonthem/' + taikhoan, {
+                                                                method: 'POST',
+                                                                headers: { 'Content-Type': 'application/json' },
+                                                                body: JSON.stringify({
+                                                                    chietkhaudonthem: (chietkhaudonthem_sql + ((tongtien / 100) * 20)).toFixed(2)
+                                                                })
+                                                            })
+
+
                                                             fetch('http://192.168.1.165:4000' + '/api/chisocanhan/update/giatritb/' + taikhoan, {
                                                                 method: 'POST',
                                                                 headers: { 'Content-Type': 'application/json' },
@@ -614,6 +647,14 @@ export default function ThanhToan({ route, navigation }) {
                                                                 })
                                                             }
                                                         })
+
+                                                        fetch('http://192.168.1.165:4000' + '/api/chisocanhan/update/chietkhauthayloi/' + taikhoan, {
+                                                            method: 'POST',
+                                                            headers: { 'Content-Type': 'application/json' },
+                                                            body: JSON.stringify({
+                                                                chietkhauthayloi: (chietkhauthayloi_sql + ((sanpham.price * sanpham.number_of / 100) * 5)).toFixed(2)
+                                                            })
+                                                        })
                                                     })
                                                 })
 
@@ -625,6 +666,16 @@ export default function ThanhToan({ route, navigation }) {
                                                 )
                                                     .then(() => {
                                                         if (tongtien > 0) {
+
+                                                            fetch('http://192.168.1.165:4000' + '/api/chisocanhan/update/chietkhaudonthem/' + taikhoan, {
+                                                                method: 'POST',
+                                                                headers: { 'Content-Type': 'application/json' },
+                                                                body: JSON.stringify({
+                                                                    chietkhaudonthem: (chietkhaudonthem_sql + ((tongtien / 100) * 20)).toFixed(2)
+
+                                                                })
+                                                            })
+
                                                             fetch('http://192.168.1.165:4000' + '/api/chisocanhan/update/giatritb/' + taikhoan, {
                                                                 method: 'POST',
                                                                 headers: { 'Content-Type': 'application/json' },

@@ -127,11 +127,18 @@ export default function LuongThuong() {
     }, [taikhoan])
 
     const [luongs, setLuong] = useState()
+    const [chietkhauloi, setChietKhauLoi] = useState([])
+    const [chietkhaudonthem, setChietKhauDonThem] = useState([])
+
 
     useEffect(() => {
         fetch('http://192.168.1.165:4000' + '/api/chisocanhan/email/' + taikhoan)
             .then(res => res.json())
-            .then(res => setLuong(res[0].luong_tam_tinh))
+            .then(res => {
+                setLuong(res[0].luong_tam_tinh);
+                setChietKhauLoi(res[0].chiet_khau_thay_loi)
+                setChietKhauDonThem(res[0].chiet_khau_don_them)
+            })
             .catch((err) => console.log(err))
     }, [taikhoan])
 
@@ -238,7 +245,7 @@ export default function LuongThuong() {
                                                 marginTop: 20
 
                                             }}>
-                                                {luongs}
+                                                {luongs + chietkhaudonthem + chietkhauloi}
                                             </Text>
                                         </View>
                                         <View style={{
