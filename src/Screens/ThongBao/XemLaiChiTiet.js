@@ -33,7 +33,7 @@ function XemLaiChiTiet({ route, navigation }) {
     const [products, setProduce] = useState([]);
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/products/')
+        fetch('http://192.168.0.113:4000' + '/api/products/')
             .then(res => res.json())
             .then(res => res.map(api => {
                 setInventory(pre => [...pre, api.inventory])
@@ -45,7 +45,7 @@ function XemLaiChiTiet({ route, navigation }) {
 
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/products/')
+        fetch('http://192.168.0.113:4000' + '/api/products/')
             .then(res => res.json())
             .then(res => setProduce(res))
 
@@ -70,7 +70,7 @@ function XemLaiChiTiet({ route, navigation }) {
 
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/users/' + nguoimuon)
+        fetch('http://192.168.0.113:4000' + '/api/users/' + nguoimuon)
             .then(res => res.json())
             .then(res => setID(res[0].id))
             .finally(() => {
@@ -81,7 +81,7 @@ function XemLaiChiTiet({ route, navigation }) {
     const [orders, setOrder] = useState([]);
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/lichsumuonhang/id/' + id)
+        fetch('http://192.168.0.113:4000' + '/api/lichsumuonhang/id/' + id)
             .then(res => res.json())
             .then(res => res.map(re => {
                 setOrder(re.MuonHang)
@@ -93,7 +93,7 @@ function XemLaiChiTiet({ route, navigation }) {
 
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/lichsumuonhang/id/' + id)
+        fetch('http://192.168.0.113:4000' + '/api/lichsumuonhang/id/' + id)
             .then(res => res.json())
             .then(res => setApi(res))
             .catch((err) => console.log(err))
@@ -101,7 +101,7 @@ function XemLaiChiTiet({ route, navigation }) {
     }, [])
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/lichsumuonhang/id/' + id)
+        fetch('http://192.168.0.113:4000' + '/api/lichsumuonhang/id/' + id)
             .then(res => res.json())
             .then(res => setNguoiMuon(res[0].NguoiMuon))
             .catch((err) => console.log(err))
@@ -110,7 +110,7 @@ function XemLaiChiTiet({ route, navigation }) {
 
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/lichsumuonhang/id/' + id)
+        fetch('http://192.168.0.113:4000' + '/api/lichsumuonhang/id/' + id)
             .then(res => res.json())
             .then(res => setSanPham(res[0].MuonHang))
             .catch((err) => console.log(err))
@@ -131,7 +131,7 @@ function XemLaiChiTiet({ route, navigation }) {
     //                 product.inventory.map(a => {
     //                     if (product.name == sanpham.TenHang && a.usersId == id_users) {
     //                         console.log(id_users)
-    //                         fetch('http://192.168.1.165:4000' + '/api/inventory/update/' + id_users + '/' + product.id, {
+    //                         fetch('http://192.168.0.113:4000' + '/api/inventory/update/' + id_users + '/' + product.id, {
     //                             method: 'POST',
     //                             headers: { 'Content-Type': 'application/json' },
     //                             body: JSON.stringify({
@@ -145,7 +145,7 @@ function XemLaiChiTiet({ route, navigation }) {
     //                                         product.inventory.map(a => {
     //                                             if (product.name == sanpham.TenHang && a.usersId == ids) {
     //                                                 console.log('aaa')
-    //                                                 fetch('http://192.168.1.165:4000' + '/api/inventory/update/' + ids + '/' + product.id, {
+    //                                                 fetch('http://192.168.0.113:4000' + '/api/inventory/update/' + ids + '/' + product.id, {
     //                                                     method: 'POST',
     //                                                     headers: { 'Content-Type': 'application/json' },
     //                                                     body: JSON.stringify({
@@ -171,7 +171,7 @@ function XemLaiChiTiet({ route, navigation }) {
 
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/MuonHang/id/' + id)
+        fetch('http://192.168.0.113:4000' + '/api/MuonHang/id/' + id)
             .then(res => res.json())
             .then(res => setHangMuon(res))
             .catch((err) => console.log(err))
@@ -179,7 +179,7 @@ function XemLaiChiTiet({ route, navigation }) {
     }, [])
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/inventory')
+        fetch('http://192.168.0.113:4000' + '/api/inventory')
             .then(res => res.json())
             .then(res => setTonKho(res))
             .catch((err) => console.log(err))
@@ -195,7 +195,7 @@ function XemLaiChiTiet({ route, navigation }) {
     //         tonkhos.map(tonkho => {
     //             if (tonkho.productsId == hangmuon.produce && tonkho.usersId == id_users) {
     //                 console.log('aaa1')
-    //                 fetch('http://192.168.1.165:4000' + '/api/inventory/update/' + id_users + '/' + tonkho.productsId, {
+    //                 fetch('http://192.168.0.113:4000' + '/api/inventory/update/' + id_users + '/' + tonkho.productsId, {
     //                     method: 'POST',
     //                     headers: { 'Content-Type': 'application/json' },
     //                     body: JSON.stringify({
@@ -205,7 +205,7 @@ function XemLaiChiTiet({ route, navigation }) {
     //                 })
     //             }
     //             else if (tonkho.productsId == hangmuon.produce && tonkho.usersId == ids) {
-    //                 fetch('http://192.168.1.165:4000' + '/api/inventory/update/' + ids + '/' + tonkho.productsId, {
+    //                 fetch('http://192.168.0.113:4000' + '/api/inventory/update/' + ids + '/' + tonkho.productsId, {
     //                     method: 'POST',
     //                     headers: { 'Content-Type': 'application/json' },
     //                     body: JSON.stringify({
@@ -232,7 +232,7 @@ function XemLaiChiTiet({ route, navigation }) {
         hangmuons.map(hangmuon => {
             tonkhos.map(tonkho => {
                 if (tonkho.productsId == hangmuon.produce && tonkho.usersId == id_users) {
-                    fetch('http://192.168.1.165:4000' + '/api/inventory/update/' + id_users + '/' + tonkho.productsId, {
+                    fetch('http://192.168.0.113:4000' + '/api/inventory/update/' + id_users + '/' + tonkho.productsId, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -244,7 +244,7 @@ function XemLaiChiTiet({ route, navigation }) {
                 else if (tonkho.productsId == hangmuon.produce && tonkho.usersId == ids) {
                     console.log('aaa1')
 
-                    fetch('http://192.168.1.165:4000' + '/api/inventory/update/' + ids + '/' + tonkho.productsId, {
+                    fetch('http://192.168.0.113:4000' + '/api/inventory/update/' + ids + '/' + tonkho.productsId, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -257,7 +257,7 @@ function XemLaiChiTiet({ route, navigation }) {
         })
 
 
-        fetch('http://192.168.1.165:4000' + '/api/lichsumuonhang/update/trangthai/' + id, {
+        fetch('http://192.168.0.113:4000' + '/api/lichsumuonhang/update/trangthai/' + id, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
 

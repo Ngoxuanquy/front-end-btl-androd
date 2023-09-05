@@ -1,4 +1,8 @@
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Image, Dimensions } from 'react-native';
+import {
+    StyleSheet, Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView,
+    ActivityIndicator,
+    TouchableWithoutFeedback, Keyboard, Image, Dimensions
+} from 'react-native';
 import React, { useEffect, useState, useLayoutEffect } from 'react';
 import Checkbox from 'expo-checkbox';
 
@@ -6,96 +10,67 @@ import { MaterialIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Keychain from 'react-native-keychain';
 import { Entypo } from '@expo/vector-icons';
+import { API_KEY, URL_KEY } from "@env"
+import { Call_Post_Api } from '../../Call_post_api/Call_Post_Api';
+import Modal from 'react-native-modal';
 
 export default function DangNhap({ navigation }) {
 
+    const [isChecked, setChecked] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+    const [isModalVisible, setIsModalVisible] = useState(true)
 
-    const [toggleCheckBox, setToggleCheckBox] = useState(false)
-    const [isChecked, setChecked] = useState(false);
-
-    const [token, setToKen] = useState("");
-    const [logins, setLogin] = useState([]);
-    const [taikhoan, setTaiKhoan] = useState([]);
-    const [matkhau, setMatKhau] = useState([]);
-
-    const options = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            email: taikhoan
-        })
-    };
-
-    useLayoutEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/users')
-            .then(res => res.json())
-            .then(res => setLogin(res))
-    }, [])
-
-    const [month_chisocanhans, setChiSo] = useState()
-
-    useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/chisocanhan')
-            .then(res => res.json())
-            .then(res => res.map(re => {
-                if (re.email == taikhoan) {
-                    setChiSo(re.month)
-                }
-            }))
-            .catch(err => console.log(err))
-    }, [taikhoan])
 
     function handerSubmit() {
-        const user = logins.find(user => user.email === taikhoan)
-        if (!user) return alert('sai tk hoặc mk');
 
-        fetch('http://192.168.1.165:5000' + '/login', options)
-            .then(res => res.json())
-            .then(res => {
-                // console.log(res.accessToken)
-                // Keychain.setGenericPassword(taikhoan, matkhau, CONFIG);
+        setIsLoading(true)
 
-                AsyncStorage.setItem('token', res.accessToken);
-                AsyncStorage.setItem('taikhoan', taikhoan);
+        if (asy_matkhau == '' || asy_taikhoan == '') {
+            setIsLoading(false)
+            alert('Nhập đầy đủ thông tin!!')
+        }
+        else {
+            Call_Post_Api(
+                {
+                    email: asy_taikhoan,
+                    password: asy_matkhau
+                },
+                null, null,
+                "/shop/login"
+            )
+                .then((responseData) => {
+                    // Handle the fetched data here
+                    if (responseData.metadata.status == "Đăng Nhập Thành Công1") {
+                        setIsLoading(false)
+                        AsyncStorage.setItem('token', responseData.metadata.tokens.accessToken);
+                        AsyncStorage.setItem('taikhoan', asy_taikhoan);
+                        AsyncStorage.setItem('id', responseData.metadata.shop._id);
 
 
-                fetch('http://192.168.1.165:4000' + '/api/users/update/' + taikhoan, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        Token: res.accessToken,
-                        refreshToken: res.refreshToken
-                    })
-                })
-            })
-            .then(() => {
-                const a = new Date();
-                const month = a.getMonth() + 1
-                logins.map(login => {
-                    if (login.email !== taikhoan) {
-                        return;
+                        if (responseData.metadata.shop.roles[0] == "SHOP") {
+                            return navigation.replace('BottomTab')
+                        }
+                        else if (responseData.metadata.shop.roles[0] == "ADMIN") {
+                            return navigation.replace('Admin_Home')
+                        }
+
+                    }
+                    else if (responseData.metadata.status == "error") {
+                        setIsLoading(false)
+
+                        alert("Sai maatk khẩu haowjc tài khoản !!")
                     }
 
-                    if (String(month) != month_chisocanhans)
-                        fetch('http://192.168.1.165:4000' + '/api/chisocanhan/create/', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                taikhoan: taikhoan,
-                                id: login.id
-                            })
-                        })
-                    AsyncStorage.setItem('id_users', JSON.stringify(login.id));
                 })
-            })
-            .catch((err) => console.log(err))
-            .finally(() => {
+                .catch((error) => {
+                    // Handle any errors that occurred during the fetch
+                    console.error(error);
+                });
+        }
 
-                navigation.replace('BottomTab')
-                return;
-            }
-            )
-        // .catch(err => console.log(err))
+
+        // navigation.replace('BottomTab')
+
     }
 
     const [asy_taikhoan, setAsyTaiKhoan] = useState('');
@@ -104,6 +79,13 @@ export default function DangNhap({ navigation }) {
     return (
         <View style={styles.container}>
 
+            {isLoading && (
+                <Modal isVisible={isModalVisible} backdropOpacity={0.5}>
+                    <View style={styles.modal}>
+                        <ActivityIndicator />
+                    </View>
+                </Modal>
+            )}
             <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? "padding" : "height"}
 
@@ -261,7 +243,7 @@ export default function DangNhap({ navigation }) {
                                                 paddingLeft: 20,
                                                 fontSize: 20
                                             }}
-                                                onChangeText={e => setTaiKhoan(e)}
+                                                onChangeText={e => setAsyTaiKhoan(e)}
                                             />
 
                                             <MaterialIcons
@@ -301,7 +283,7 @@ export default function DangNhap({ navigation }) {
                                                     paddingLeft: 20,
                                                     fontSize: 20
                                                 }}
-                                                    onChangeText={e => setMatKhau(e)}
+                                                    onChangeText={e => setAsyMatKhau(e)}
                                                 />
                                                 <Entypo name="eye-with-line" size={24} color="black" style={{
                                                     position: 'absolute',
@@ -352,9 +334,28 @@ export default function DangNhap({ navigation }) {
                                         </View>
 
                                         <View style={{
+                                            display: 'flex',
+                                            flexDirection: 'row',
+                                            marginTop: 10
+                                        }}>
+                                            <Text>
+                                                Bạn chưa có tài khoản
+                                            </Text>
+                                            <TouchableOpacity onPress={() => navigation.navigate('DangKy')}>
+                                                <Text style={{
+                                                    marginLeft: 5,
+                                                    color: 'blue'
+                                                }}>
+                                                    Đăng ký
+
+                                                </Text>
+                                            </TouchableOpacity>
+
+                                        </View>
+                                        <View style={{
                                             alignItems: 'center',
                                             justifyContent: 'center',
-                                            marginTop: 50
+                                            marginTop: 40
                                         }}>
                                             <TouchableOpacity style={{
                                                 width: 200,
@@ -388,7 +389,7 @@ export default function DangNhap({ navigation }) {
                             // zIndex: 0,
                             textAlign: 'center',
                             alignItems: 'center',
-                            top: 40,
+                            top: 100,
                             // zIndex: 1
                         }}>
                             <Image
@@ -399,10 +400,12 @@ export default function DangNhap({ navigation }) {
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                     textAlign: 'center',
-                                    zIndex: -1,
+                                    zIndex: -100,
                                 }}
                                 source={
-                                    require('../../../assets/logo.jpg')
+                                    {
+                                        uri: "https://scontent.fsgn2-4.fna.fbcdn.net/v/t39.30808-6/275549265_119316327349050_7133039339301134607_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=Ao4SUEFu0fUAX__KvG7&_nc_ht=scontent.fsgn2-4.fna&oh=00_AfBYEG5xu-FEJVTZzNF6tlO6hCYUk-igLzyeiE6Pg7sLbQ&oe=64F04414"
+                                    }
                                 }
                             />
 
@@ -414,7 +417,7 @@ export default function DangNhap({ navigation }) {
                                 letterSpacing: 4,
                                 zIndex: -1
                             }}>
-                                LỌC NƯỚC 365
+                                Stantio Shop
                             </Text>
                         </View>
 
@@ -422,11 +425,24 @@ export default function DangNhap({ navigation }) {
                 </TouchableWithoutFeedback>
             </KeyboardAvoidingView>
 
-
-
         </View>
     )
 
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    overlay: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+})

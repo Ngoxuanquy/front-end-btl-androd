@@ -3,10 +3,10 @@ import { Text, View, TouchableOpacity, BackHandler } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
-import Home from '../Screens/Home/HomeScrem'
 import Cart from '../Screens/Cart/CartScrenn'
 import Phone from '../Screens/Home/Phone'
 import ThongTinTaiKhoan from './../Screens/Home/ThongTinTaiKhoanScrenn'
+import ShopPage from './../Screens/ShopPages/index'
 
 import { MaterialIcons } from '@expo/vector-icons'
 import { EvilIcons } from '@expo/vector-icons'
@@ -23,37 +23,12 @@ const Tab = createBottomTabNavigator()
 
 export default function Tag({ navigation }) {
     const [customer, setCustomer] = useState([])
-    const theme = useContext(ThemeConText)
+    // const theme = useContext(ThemeConText)
+    const [theme, ordersLength] = useContext(ThemeConText);
 
-    // const URL_ON = 'http://192.168.0.106:4000'
-    // const URL1_ON = 'http://192.168.0.114:5000'
+    const [refresh, setRefresh] = useState(0);
 
-    // const URL_CT = 'http://192.168.1.121:4000'
-    // const URL1_CT = 'http://192.168.1.121:5000'
-
-    // const URL_FPT = 'http://192.168.0.145:4000'
-    // const URL1_FPT = 'http://192.168.0.145:5000'
-
-    // useEffect(() => {
-    //     fetch(URL_FPT + '/api/customer/')
-    //         .then((res) => res.json())
-    //         .then((res) => setCustomer(res))
-    //         .catch((err) => console.log(err))
-    //         .finally(() => { })
-    // }, [])
-
-    // function handleBackButton() {
-    //     fetch(URL_FPT + '/api/customer/')
-    //         .then((res) => res.json())
-    //         .then((res) => setCustomer(res))
-    //         .catch((err) => console.log(err))
-
-    //     console.log(customer)
-    //     BackHandler.exitApp()
-    //     return true
-    // }
-
-
+    console.log({ ordersLength })
     return (
         <Tab.Navigator
             initialRouteName="HomeTab"
@@ -63,14 +38,13 @@ export default function Tag({ navigation }) {
 
                     if (route.name === 'HomeTab') {
                         iconName = focused ? 'home' : 'home'
-                    } else if (route.name === 'Phone') {
-                        iconName = focused ? 'call' : 'call'
+                    } else if (route.name === 'ShopPage') {
+                        iconName = focused ? 'browsers-sharp' : 'browsers-sharp'
                     } else if (route.name === 'ThongTinTaiKhoan') {
                         iconName = focused ? 'people' : 'people'
                     } else if (route.name === 'Cart') {
                         iconName = focused ? 'cart' : 'cart'
                     }
-
                     // You can return any component that you like here!
                     return <Ionicons name={iconName} size={size} color={color} />
                 },
@@ -89,8 +63,8 @@ export default function Tag({ navigation }) {
                 }}
             />
             <Tab.Screen
-                name="Phone"
-                component={Phone}
+                name="ShopPage"
+                component={ShopPage}
                 options={{
                     headerShown: false,
                 }}
@@ -101,9 +75,14 @@ export default function Tag({ navigation }) {
                 component={StackCart}
                 options={{
                     headerShown: false,
-                    tabBarBadge: customer.length,
+                    tabBarBadge: ordersLength,
                 }}
-
+                listeners={({ navigation, route }) => ({
+                    tabPress: (e) => {
+                        // Tăng giá trị refresh khi tab Cart được nhấn
+                        setRefresh((prevRefresh) => prevRefresh + 1);
+                    },
+                })}
             />
 
             <Tab.Screen

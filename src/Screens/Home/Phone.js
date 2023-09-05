@@ -60,7 +60,7 @@ const Phone = ({ navigation }) => {
     };
 
     // useEffect(() => {
-    //     fetch('http://192.168.1.165:4000' + '/api/customer_re/' + taikhoan)
+    //     fetch('http://192.168.0.113:4000' + '/api/customer_re/' + taikhoan)
     //         .then(res => res.json())
     //         .then(res => setOrders(res))
     //         .catch(err => console.log(err))
@@ -79,7 +79,7 @@ const Phone = ({ navigation }) => {
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         // setTimeout(() => {
-        //     fetch('http://192.168.1.165:4000' + '/api/customer_re/' + taikhoan)
+        //     fetch('http://192.168.0.113:4000' + '/api/customer_re/' + taikhoan)
         //         .then(res => res.json())
         //         .then(res => setOrders(res))
         //         .catch(err => console.log(err))

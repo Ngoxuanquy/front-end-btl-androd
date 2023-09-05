@@ -39,30 +39,9 @@ export default function ChiSoCaNhan({ navigation }) {
     const [chietkhauloi, setChietKhauLoi] = useState([])
     const [chietkhaudonthem, setChietKhauDonThem] = useState([])
 
-    useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/chisocanhan/email/' + taikhoan)
-            .then(res => res.json())
-            .then(res => {
-                setAPi(res)
-                setNgayCong(res[0].ngay_cong)
-                setLuong(res[0].luong_tam_tinh)
-                setChietKhauLoi(res[0].chiet_khau_thay_loi)
-                setChietKhauDonThem(res[0].chiet_khau_don_them)
-            })
-            .catch((err) => console.log(err))
-    }, [taikhoan])
 
     const [luongtamtinhs, setLuongTamTinh] = useState()
 
-    useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/chisocanhan/email/' + taikhoan)
-            .then(res => res.json())
-            .then(res =>
-                setLuongTamTinh(res[0].gia_tri_TB_hien_tai)
-            )
-            .catch((err) => console.log(err))
-
-    }, [taikhoan])
 
 
     // console.log(luongtamtinhs)
@@ -105,139 +84,12 @@ export default function ChiSoCaNhan({ navigation }) {
     const [sodonvesinhs, setSoDonVeSinh] = useState([])
 
 
-    useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/sodonphatsinh/' + taikhoan)
-            .then(res => res.json())
-            .then(res => {
-                setSoDonPhatSinh(res)
-            })
-            .finally(() => {
-
-            })
-    }, [taikhoan])
-
-    useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/sodonvesinh/' + taikhoan)
-            .then(res => res.json())
-            .then(res => {
-                setSoDonVeSinh(res)
-            })
-            .finally(() => {
-
-            })
-    }, [taikhoan])
-
     const [data_sodon, setDatSoDon] = useState([])
     const [data_sodon_vesinh, setDatSoDonVeSinh] = useState([])
     const [soluongdonphatsinh, setSoLuongPhatSinh] = useState()
     const [soluongdonvesinh, setSoLuongVeSinh] = useState()
 
 
-    useEffect(() => {
-
-        const arr = []
-
-        tuans.forEach(obj1 => {
-            const obj2 = sodonphatsinhs.find(item => item.date === obj1);
-            const age = obj2 ? obj2.sodon : 0; // sử dụng biểu thức ba ngôi
-
-            arr.push(age)
-
-        });
-
-        let sum = 0;
-
-        for (let i = 0; i < arr.length; i++) {
-            sum += arr[i];
-        }
-
-        setSoLuongPhatSinh(sum)
-
-        setDatSoDon(arr)
-    }, [sodonphatsinhs])
-
-
-
-    useEffect(() => {
-        const arr = []
-        tuans.forEach(obj1 => {
-            const obj2 = sodonvesinhs.find(item => item.date === obj1);
-            const age = obj2 ? obj2.sodon : 0; // sử dụng biểu thức ba ngôi
-            arr.push(age)
-        });
-
-        let sum = 0;
-
-        for (let i = 0; i < arr.length; i++) {
-            sum += arr[i];
-        }
-
-        setSoLuongVeSinh(sum)
-
-        setDatSoDonVeSinh(arr)
-    }, [sodonvesinhs])
-
-
-
-    function handerSubmit() {
-        if (luongtamtinhs > 200 && luongtamtinhs < 300) {
-            fetch('http://192.168.1.165:4000' + '/api/chisocanhan/update/luong/' + taikhoan, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    luong: 20000
-                })
-            })
-        }
-        else if (luongtamtinhs > 1000 && luongtamtinhs < 2000) {
-            fetch('http://192.168.1.165:4000' + '/api/chisocanhan/update/luong/' + taikhoan, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    luong: 10000
-                })
-            })
-        }
-        else if (luongtamtinhs >= 3000) {
-            fetch('http://192.168.1.165:4000' + '/api/chisocanhan/update/luong/' + taikhoan, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    luong: 30000
-                })
-            })
-        }
-    }
-
-    useEffect(() => {
-        if (luongtamtinhs > 200 && luongtamtinhs < 300) {
-            fetch('http://192.168.1.165:4000' + '/api/chisocanhan/update/luong/' + taikhoan, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    luong: 20000
-                })
-            })
-        }
-        else if (luongtamtinhs > 1000 && luongtamtinhs < 2000) {
-            fetch('http://192.168.1.165:4000' + '/api/chisocanhan/update/luong/' + taikhoan, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    luong: 10000
-                })
-            })
-        }
-        else if (luongtamtinhs >= 3000) {
-            fetch('http://192.168.1.165:4000' + '/api/chisocanhan/update/luong/' + taikhoan, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    luong: 30000
-                })
-            })
-        }
-    }, [taikhoan])
 
     const data = {
         labels: ["Swim"], // optional

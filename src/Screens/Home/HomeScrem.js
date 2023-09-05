@@ -27,11 +27,13 @@ import { BottomSheet, ListItem } from '@rneui/themed';
 import { Entypo } from '@expo/vector-icons';
 import Upload from '../../Components/Upload';
 import { firebase } from '../../../config/config'
+import Axios from 'axios';
 
 
 export default function HomeScrenn({ navigation }) {
 
-    const theme = useContext(ThemeConText)
+    // const theme = useContext(ThemeConText)
+    const [theme, ordersLength] = useContext(ThemeConText);
 
     Notifications.setNotificationHandler({
         handleNotification: async () => ({
@@ -40,6 +42,8 @@ export default function HomeScrenn({ navigation }) {
             shouldSetBadge: false,
         }),
     });
+
+
 
     const [taikhoan, setTaiKhoan] = useState([])
     const [token, setToken] = useState([])
@@ -69,19 +73,28 @@ export default function HomeScrenn({ navigation }) {
 
         const tokenData = await Notifications.getExpoPushTokenAsync()
         const token = tokenData.data
+        console.log({ token })
         setTokenTest(token);
     }
 
-    useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/tokenthongbao/update/token/' + taikhoan, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                // taikhoan: taikhoan,
-                token: token_test,
-            })
-        })
-    }, [token_test])
+
+    const Gui = async () => {
+        console.log({ token_test })
+        const message = {
+            to: token_test,
+            title: "Đơn hàng của bạn đã được gửi đi!!",
+            body: 'Nhấn Vào Để Xem Chi Tiết!!'
+        }
+
+        try {
+            const response = await Axios.post('https://api.expo.dev/v2/push/send', message);
+            console.log('Push notification sent successfully:', response.data);
+        } catch (err) {
+            console.error('Error sending push notification:', err);
+        }
+
+    }
+
 
 
     getToken()
@@ -121,11 +134,6 @@ export default function HomeScrenn({ navigation }) {
 
     // console.log(taikhoan)
 
-    useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
-            .then(res => res.json())
-            .then(res => setThongTin(res))
-    }, [taikhoan])
 
     const options = {
         method: 'get',
@@ -134,36 +142,9 @@ export default function HomeScrenn({ navigation }) {
         },
     }
 
-    useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/posts', options)
-            .then(res => res.json())
-            .then(res => setApi(res))
-            .catch((err) => console.log(err))
-    }, [token])
-
     function handerLogout() {
         navigation.replace('Login')
-        fetch('http://192.168.1.165:4000' + '/api/users/update/token/' + taikhoan, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-        })
-            .then(() => {
-                // navigation.replace('Login');
-                setReset(true);
-                setTimeout(() => {
-                    setReset(false);
-                }, 100);
 
-                AsyncStorage.clear().then(() => {
-                    setToken('')
-                    setTaiKhoan('')
-                    // console.log("taikhoan : " + taikhoan)
-
-                }).catch((error) => {
-                    console.log('AsyncStorage clear error: ', error);
-                });
-
-            })
     }
 
     if (reset) {
@@ -229,24 +210,6 @@ export default function HomeScrenn({ navigation }) {
 
     }
 
-    const update_img = async (url) => {
-        await fetch('http://192.168.1.165:4000' + '/api/users/update/img/' + taikhoan, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                img: url
-            })
-        })
-            .then(() => {
-                fetch('http://192.168.1.165:4000' + '/api/users/' + taikhoan)
-                    .then(res => res.json())
-                    .then(res => setThongTin(res))
-            })
-            .then(() => {
-            })
-    }
-
-
     function handerXacNhan() {
         setUpAnh(false)
         setIsVisible(false)
@@ -274,16 +237,16 @@ export default function HomeScrenn({ navigation }) {
 
     const buttons = [
         {
-            id: 1, button: 'Thủ Tục Hành Chính', icon: 'receipt', color: '#d3af92'
+            id: 1, button: 'Các mẫu hot', icon: 'receipt', color: '#d3af92'
         },
         {
-            id: 2, button: 'Chỉ Số Cá Nhân', icon: 'add-task', color: '#c7ade2'
+            id: 2, button: 'Đơn hàng bán chạy', icon: 'add-task', color: '#c7ade2'
         },
         {
-            id: 3, button: 'Thông Báo Công Ty', icon: 'notifications', color: '#bcece0'
+            id: 3, button: 'Thông báo ', icon: 'notifications', color: '#bcece0'
         },
         {
-            id: 4, button: 'Lương Thưởng', icon: 'aspect-ratio', color: '#97eaa1'
+            id: 4, button: 'Voucher', icon: 'aspect-ratio', color: '#97eaa1'
         },
         {
             id: 5, button: 'Lịch Sử Đơn Hàng', icon: 'history', color: '#afe073'
@@ -319,23 +282,6 @@ export default function HomeScrenn({ navigation }) {
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         setTimeout(() => {
-            fetch('http://192.168.1.165:4000' + '/api/users/')
-                .then(res => res.json())
-                .then(res => {
-                    res.map(re => {
-                        re.ChamCong.map(r => {
-                            if (r.Email === taikhoan) {
-                                setChamCong(re.ChamCong)
-                            }
-                            return;
-                        })
-                    })
-                })
-
-            fetch('http://192.168.1.165:4000' + '/api/lichsumuonhang/khachhang/' + taikhoan + '/Chưa Xác Nhận')
-                .then(res => res.json())
-                .then(res => setThongBao(res.length))
-                .catch(err => console.log(err))
 
 
             setRefreshing(false);
@@ -350,90 +296,22 @@ export default function HomeScrenn({ navigation }) {
     const [giora, setGioRa] = useState('')
 
 
-    useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/users/')
-            .then(res => res.json())
-            .then(res => {
-                res.map(re => {
-                    re.ChamCong.map(r => {
-                        if (r.Email === taikhoan) {
-                            setChamCong(re.ChamCong)
-                        }
-                        return;
-                    })
-                })
-            })
-            .finally(() => {
 
-            })
-    }, [taikhoan])
 
     const [thongbaos, setThongBao] = useState()
 
-    useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/lichsumuonhang/khachhang/' + taikhoan + '/Chưa Xác Nhận')
-            .then(res => res.json())
-            .then(res => setThongBao(res.length))
-            .catch(err => console.log(err))
-    }, [taikhoan])
+
 
 
     // console.log(chamcongs)
     // console.log(taikhoan)
 
-    useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/chamcong/')
-            .then(res => res.json())
-            .then(res => {
-                res.map(re => {
-                    if (re.Email === taikhoan) {
-                        setCheck(re.date)
-                    }
-                    else {
-                        setCheck('')
-                        return;
-                    }
-                })
-            }
-            )
-    }, [chamcongs])
 
     const [chieuvao, setChieuVao] = useState()
     const [chieura, setChieuRa] = useState()
 
 
 
-    useEffect(() => {
-        const a = new Date()
-        chamcongs.map(chamcong => {
-            if (check.slice(0, 2) == a.getDate() && check.slice(3, 5) == (a.getMonth() + 1) && check.slice(6, 10) == a.getFullYear()) {
-                setGioVao(chamcong.sang_GioVao)
-                return;
-            }
-        })
-
-        chamcongs.map(chamcong => {
-            if (check.slice(0, 2) == a.getDate() && check.slice(3, 5) == (a.getMonth() + 1) && check.slice(6, 10) == a.getFullYear()) {
-                setGioRa(chamcong.sang_GioRa)
-                return;
-
-            }
-        })
-        chamcongs.map(chamcong => {
-            if (check.slice(0, 2) == a.getDate() && check.slice(3, 5) == (a.getMonth() + 1) && check.slice(6, 10) == a.getFullYear()) {
-                setChieuVao(chamcong.chieu_GioVao)
-                return;
-
-            }
-        })
-        chamcongs.map(chamcong => {
-            if (check.slice(0, 2) == a.getDate() && check.slice(3, 5) == (a.getMonth() + 1) && check.slice(6, 10) == a.getFullYear()) {
-                setChieuRa(chamcong.chieu_GioRa)
-                return;
-
-            }
-        })
-    })
 
     const [mode, setMode] = useState(false)
 
@@ -470,28 +348,7 @@ export default function HomeScrenn({ navigation }) {
 
     const [id_users, setId_users] = useState('')
     const [month_chisocanhans, setChiSo] = useState()
-    AsyncStorage.getItem('id_users')
-        .then(res =>
-            setId_users(res)
-        )
 
-    useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/chisocanhan')
-            .then(res => res.json())
-            .then(res => res.map(re => {
-                if (re.email == taikhoan) {
-                    setChiSo(re.month)
-                }
-            }))
-            .catch(err => console.log(err))
-    }, [taikhoan])
-
-
-    useEffect(() => {
-
-
-
-    }, [id_users])
 
     return (
         <ScrollView
@@ -547,7 +404,7 @@ export default function HomeScrenn({ navigation }) {
                             backgroundGradientBottom: "blue",
                             width: '100%',
                             paddingTop: 120,
-                            paddingLeft: 90,
+                            paddingLeft: 55,
                             paddingHorizontal: 30,
                             transform: [{ rotate: "-285deg" }],
 
@@ -575,7 +432,7 @@ export default function HomeScrenn({ navigation }) {
                                     flexDirection: 'row',
                                 }}>
                                     <View style={{
-                                        marginLeft: 20
+                                        marginLeft: -10
 
                                     }}>
                                         {
@@ -682,36 +539,22 @@ export default function HomeScrenn({ navigation }) {
                                 marginLeft: -10
                             }}>
 
-                                {thongtin.map(thong => (
-                                    <TouchableOpacity
-                                        key={thong.id}
-                                        onPress={() => handerUpAnh()}
-                                    >
-                                        {thong.img == "" ?
-                                            <Image
-                                                style={{
-                                                    width: 80,
-                                                    height: 80,
-                                                    borderRadius: 200,
-                                                }}
-                                                source={{
-                                                    uri: "https://haycafe.vn/wp-content/uploads/2022/02/Avatar-trang.jpg"
-                                                }}
-                                            /> :
-                                            <Image
-                                                style={{
-                                                    width: 80,
-                                                    height: 80,
-                                                    borderRadius: 200,
-                                                }}
-                                                source={{
-                                                    uri: thong.img
-                                                }}
-                                            />
-                                        }
+                                <TouchableOpacity
+                                    onPress={() => handerUpAnh()}
+                                >
+                                    <Image
+                                        style={{
+                                            width: 80,
+                                            height: 80,
+                                            borderRadius: 200,
+                                        }}
+                                        source={{
+                                            uri: "https://antimatter.vn/wp-content/uploads/2022/11/anh-avatar-trang-fb-mac-dinh.jpg"
+                                        }}
+                                    />
 
-                                    </TouchableOpacity>
-                                ))}
+
+                                </TouchableOpacity>
                                 <View>
                                     <Text style={[
                                         {
@@ -739,7 +582,7 @@ export default function HomeScrenn({ navigation }) {
                                                 color: theme.color
                                             }]}
                                     >
-                                        Nhân Viên KT
+                                        Ngô Xuân Quy
                                     </Text>
                                 </View>
 
@@ -758,6 +601,7 @@ export default function HomeScrenn({ navigation }) {
                                             , {
                                                 backgroundColor: theme.background
                                             }]}
+                                        onPress={() => Gui()}
                                     >
                                         <Text style={[
                                             , {
@@ -784,71 +628,48 @@ export default function HomeScrenn({ navigation }) {
                             </BottomSheet>
 
                             <View style={{
+                                display: 'flex',
                                 flexDirection: 'row',
-                                justifyContent: 'space-around',
-                                marginTop: 20
+                                justifyContent: 'center',
+                                marginTop: 20,
+                                alignItems: 'center',
+
                             }}>
-                                <View style={{
-                                }}>
-                                    <Text
-                                        style={[
-                                            {
-                                                fontSize: 16,
-                                                color: 'white',
-                                                marginRight: 70,
-                                                marginLeft: 20
-                                            }
-                                            , {
-                                                color: theme.color
-                                            }]}
-                                    >
-                                        Sáng Vào: {giovao}
+                                <View>
+                                    <Text style={{
+                                        textAlign: 'center',
+                                        fontSize: 20,
+                                        color: theme.color,
+                                        opacity: 0.6
+                                    }}>
+                                        Chào mừng bạn tới
                                     </Text>
-                                    <Text
-                                        style={[
-                                            {
-                                                fontSize: 16,
-                                                color: 'white',
-                                                marginRight: 50,
-                                                marginLeft: 20
-                                            }
-                                            , {
-                                                color: theme.color
-                                            }]}
-                                    >
-                                        Sáng Ra: {giora}
+                                    <Text style={{
+                                        textAlign: 'center',
+                                        fontSize: 22,
+                                        marginTop: 10,
+                                        color: theme.color,
+                                        opacity: 0.6
+
+                                    }}>
+                                        Station Shop
                                     </Text>
                                 </View>
-                                <View >
-                                    <Text
-                                        style={[
-                                            {
-                                                fontSize: 16,
-                                                color: 'white',
-                                                marginLeft: 30
-                                            }
-                                            , {
-                                                color: theme.color
-                                            }]}
-                                    >
-                                        Chiều Vào: {chieuvao}
-                                    </Text>
-                                    <Text
-                                        style={[
-                                            {
-                                                fontSize: 16,
-                                                color: 'white',
-                                                marginLeft: 30
-                                            }
-                                            , {
-                                                color: theme.color
-                                            }]}
-                                    >
-                                        Chiều Ra: {chieura}
-                                    </Text>
+                                <View>
+                                    <LottieView
+                                        source={require('../../../assets/animation_lm53qj22.json')}
+                                        autoPlay
+                                        loop
+                                        style={{
+                                            height: 100,
+                                            width: 100,
+
+                                        }}
+                                    />
                                 </View>
                             </View>
                         </View>
+
                     </LinearGradient>
                     {/* 
                     <View style={{

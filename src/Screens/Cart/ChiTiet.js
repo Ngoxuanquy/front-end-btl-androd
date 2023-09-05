@@ -25,7 +25,7 @@ export default function ChiTiet({ route, navigation }) {
     const [customer_historys, setCustomer_history] = useState([])
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/thanhtoan/id/' + id)
+        fetch('http://192.168.0.113:4000' + '/api/thanhtoan/id/' + id)
             .then(res => res.json())
             .then(res => {
                 setApi(res)
@@ -40,7 +40,7 @@ export default function ChiTiet({ route, navigation }) {
 
 
     const handerSubmit = () => {
-        fetch('http://192.168.1.165:4000' + '/api/order_comment/create/', {
+        fetch('http://192.168.0.113:4000' + '/api/order_comment/create/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -50,7 +50,7 @@ export default function ChiTiet({ route, navigation }) {
             })
         })
             .then(() => {
-                fetch('http://192.168.1.165:4000' + '/api/order_comment/id/' + id)
+                fetch('http://192.168.0.113:4000' + '/api/order_comment/id/' + id)
                     .then(res => res.json())
                     .then(res => setComment(res))
                     .catch(err => console.log(err))
@@ -63,7 +63,7 @@ export default function ChiTiet({ route, navigation }) {
     const [order_imgs, setOrder_img] = useState([])
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/order_img/id/' + id)
+        fetch('http://192.168.0.113:4000' + '/api/order_img/id/' + id)
             .then(res => res.json())
             .then(res => setOrder_img(res))
             .catch(err => console.log(err))
@@ -73,7 +73,7 @@ export default function ChiTiet({ route, navigation }) {
 
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/order_comment/id/' + id)
+        fetch('http://192.168.0.113:4000' + '/api/order_comment/id/' + id)
             .then(res => res.json())
             .then(res => setComment(res))
             .catch(err => console.log(err))

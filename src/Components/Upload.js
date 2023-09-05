@@ -4,7 +4,7 @@ import { getStorage, ref, listAll } from 'firebase/storage'
 
 import * as ImagePicker from 'expo-image-picker'
 
-import { firebase } from '../../config/config'
+// import { firebase } from '../../config/config'
 
 function Upload() {
 
@@ -25,24 +25,24 @@ function Upload() {
         setImage(source)
     }
 
-    const uploadImage = async () => {
-        setUploading(true)
-        const response = await fetch(image.uri)
-        const blob = await response.blob()
-        const filename = image.uri.substring(image.uri.lastIndexOf('/') + 1)
-        let refs = firebase.storage().ref().child(`images/${filename}`).put(blob)
+    // const uploadImage = async () => {
+    //     setUploading(true)
+    //     const response = await fetch(image.uri)
+    //     const blob = await response.blob()
+    //     const filename = image.uri.substring(image.uri.lastIndexOf('/') + 1)
+    //     let refs = firebase.storage().ref().child(`images/${filename}`).put(blob)
 
-        refs.then((a) => a.ref.getDownloadURL().then((url) => console.log(url)))
+    //     refs.then((a) => a.ref.getDownloadURL().then((url) => console.log(url)))
 
-        try {
-            await refs
-        } catch (error) {
-            console.log(error)
-        }
-        setUploading(false)
-        Alert.alert('Photo uploaded')
-        setImage(null)
-    }
+    //     try {
+    //         await refs
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    //     setUploading(false)
+    //     Alert.alert('Photo uploaded')
+    //     setImage(null)
+    // }
 
     useEffect(() => {
         firebase

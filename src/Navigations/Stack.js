@@ -6,6 +6,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Logins from '../Screens/DangNhap/DangNhap'
 import Tab from './Tab'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import DangKy from '../Screens/DangKy/Index'
+import Home_Admin from '../Screens/Admin/Home_Admin/Home_Admin'
+import Drawer from './Drawer'
 
 const Stack = createNativeStackNavigator()
 
@@ -22,25 +25,6 @@ function Stacks() {
 
     AsyncStorage.getItem('taikhoan').then((res) => setTaiKhoan(res))
 
-    // useEffect(() => {
-    //     fetch(URL_CT + '/api/users/' + taikhoan)
-    //         .then(res => res.json())
-    //         .then(res => res.map(re => {
-    //             setToken(re.token)
-    //         }))
-    //         .finally(() => {
-    //             // console.log('a')
-    //             // setReset(true);
-    //             // setTimeout(() => {
-    //             //     setReset(false);
-    //             // }, 10);
-    //         })
-    // }, [])
-
-    // if (reset) {
-    //     return null;
-    // }
-
     return (
         <NavigationContainer independent={true}>
             <Stack.Navigator>
@@ -54,8 +38,23 @@ function Stacks() {
                     }}
                 />
                 <Stack.Screen
+                    name="DangKy"
+                    component={DangKy}
+                    options={{
+                        headerShown: false,
+                    }}
+                />
+                <Stack.Screen
                     name="BottomTab"
                     component={Tab}
+                    options={{
+                        headerShown: false,
+                    }}
+                />
+
+                <Stack.Screen
+                    name="Admin_Home"
+                    component={Drawer}
                     options={{
                         headerShown: false,
                     }}

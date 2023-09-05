@@ -3,7 +3,6 @@ import { View, Text } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
-import Home from '../Screens/Home/Home'
 import Cart from '../Screens/Cart/CartScrenn'
 import ChiTiet from '../Screens/Cart/ChiTiet'
 import Map from '../Screens/Cart/Map'
@@ -46,13 +45,13 @@ function StackCart() {
                     headerShown: true,
                 }}
             />
-            <Stack.Screen
+            {/* <Stack.Screen
                 name="Chup"
                 component={ChupAnh}
                 options={{
                     headerShown: false,
                 }}
-            />
+            /> */}
             <Stack.Screen
                 name="ThanhToan"
                 component={ThanhToan}

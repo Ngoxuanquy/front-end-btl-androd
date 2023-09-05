@@ -28,38 +28,7 @@ export default function KhoHang({ navigation }) {
     const [inventorys, setInventory] = useState([])
     const [produces, setProduce] = useState([]);
 
-    useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/products/')
-            .then(res => res.json())
-            .then(res => res.map(api => {
-                setInventory(pre => [...pre, api.inventory])
-            }))
-            .finally(() => {
 
-            })
-    }, [])
-
-
-    useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/products/')
-            .then(res => res.json())
-            .then(res => setProduce(res))
-
-    }, [])
-
-
-    useEffect(() => {
-
-        inventorys.map(inventory => {
-            inventory.map(api => {
-                if (api.usersId == id_users) {
-                    // return;
-                    setApi(pre => [...pre, api])
-                }
-
-            })
-        })
-    }, [produces])
 
     // console.log(apis)
 

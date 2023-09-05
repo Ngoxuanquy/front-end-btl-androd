@@ -67,7 +67,7 @@ export default function ChupAnh({ route }) {
 
         refs.then((a) => a.ref.getDownloadURL().then((url) => {
             console.log(url)
-            fetch('http://192.168.1.165:4000' + '/api/order_img/create/', {
+            fetch('http://192.168.0.113:4000' + '/api/order_img/create/', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

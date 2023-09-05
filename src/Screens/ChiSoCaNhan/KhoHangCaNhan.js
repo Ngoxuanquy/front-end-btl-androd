@@ -25,54 +25,6 @@ export default function KhoHangCaNhan({ navigation }) {
         )
 
 
-    const [inventorys, setInventory] = useState([])
-    const [produces, setProduce] = useState([]);
-
-    useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/products/')
-            .then(res => res.json())
-            .then(res => res.map(api => {
-                setInventory(pre => [...pre, api.inventory])
-            }))
-            .finally(() => {
-
-            })
-    }, [taikhoan])
-
-
-    useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/products/')
-            .then(res => res.json())
-            .then(res => setProduce(res))
-
-    }, [])
-
-
-    useEffect(() => {
-
-        inventorys.map(inventory => {
-            inventory.map(api => {
-                if (api.usersId == id_users) {
-                    // return;
-                    setApi(pre => [...pre, api])
-                }
-
-            })
-        })
-    }, [produces])
-
-    console.log(apis)
-    const [tonkhos, setTonKho] = useState()
-    const [tienton, setTienTon] = useState()
-
-    useEffect(() => {
-        let TT = 0
-        apis.map(api => {
-            TT += api.exist
-        })
-        setTonKho(TT)
-    }, [apis])
-
     return (
         <View style={{
             flex: 1,
@@ -112,7 +64,7 @@ export default function KhoHangCaNhan({ navigation }) {
                             lineHeight: 35,
                             color: theme.color
                         }}>
-                            Tổng SL tồn: {tonkhos}
+                            Tổng SL tồn:
                         </Text>
                     </View>
                     <View style={{
@@ -185,102 +137,7 @@ export default function KhoHangCaNhan({ navigation }) {
 
                         // paddingVertical: 10
                     }}>
-                        {apis.map(api => (
-                            <View
-                                key={api.id}
-                                style={{
-                                    flexDirection: 'row',
-                                    justifyContent: 'center',
-                                    // borderWidth: 0.4,
-                                    // borderColor: 'gray',
-                                    borderBottomColor: 'gray',
-                                    borderBottomWidth: 1,
-                                    paddingVertical: 6
 
-                                }}>
-                                {produces.map(produce => (
-                                    <View
-                                        key={produce.id}
-                                        style={{
-                                            flexDirection: 'row',
-                                            justifyContent: 'center',
-
-                                        }}>
-                                        {api.productsId == produce.id ?
-
-                                            <View
-                                                key={produce.id}
-                                                style={{
-                                                    flexDirection: 'row',
-                                                    justifyContent: 'space-around'
-                                                }}>
-                                                <View style={{
-                                                    width: '40%',
-                                                    justifyContent: 'center',
-                                                    justifyContent: 'center'
-                                                }}>
-                                                    <Text style={{
-                                                        fontSize: 16,
-                                                        lineHeight: 30,
-                                                        textAlign: 'left',
-                                                        marginLeft: -40,
-                                                        color: theme.color
-
-                                                    }}>
-                                                        {produce.name}
-                                                    </Text>
-                                                </View>
-                                                <View style={{
-                                                    width: '30%',
-                                                    justifyContent: 'center',
-                                                    justifyContent: 'center'
-                                                }}>
-                                                    <Text style={{
-                                                        fontSize: 16,
-                                                        lineHeight: 30,
-                                                        textAlign: 'center',
-                                                        color: theme.color,
-                                                        marginLeft: -90
-
-                                                    }}>
-                                                        {produce.price}
-                                                    </Text>
-                                                </View>
-                                            </View>
-                                            : null}
-                                    </View>
-                                ))}
-                                <View>
-                                    <Text style={{
-                                        fontSize: 16,
-                                        lineHeight: 30,
-                                        color: theme.color,
-                                        marginLeft: -70
-
-
-                                    }}>
-
-                                        {api.exist}
-                                    </Text>
-
-                                </View>
-                                <View>
-                                    <Text style={{
-                                        fontSize: 16,
-                                        lineHeight: 30,
-                                        color: theme.color,
-                                        marginLeft: 10
-
-                                    }}>
-
-                                        {api.tieu_chuan}
-                                    </Text>
-
-                                </View>
-                            </View>
-
-
-                        ))}
                     </View>
 
                 </View>

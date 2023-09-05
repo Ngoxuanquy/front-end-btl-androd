@@ -10,7 +10,7 @@ function QuenMatKhau() {
     const [pass, setPass] = useState('')
 
     useEffect(() => {
-        fetch('http://192.168.1.165:4000' + '/api/users')
+        fetch('http://192.168.0.113:4000' + '/api/users')
             .then(res => res.json())
             .then(res => setLogin(res))
     }, [])
