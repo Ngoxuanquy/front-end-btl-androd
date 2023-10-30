@@ -1,29 +1,28 @@
-import React, { useState, useEffect } from 'react'
-import { View, Text } from 'react-native'
-import { NavigationContainer } from '@react-navigation/native'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import React, { useState, useEffect } from 'react';
+import { View, Text } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import Logins from '../Screens/DangNhap/DangNhap'
-import Tab from './Tab'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import DangKy from '../Screens/DangKy/Index'
-import Home_Admin from '../Screens/Admin/Home_Admin/Home_Admin'
-import Drawer from './Drawer'
+import Logins from '../Screens/DangNhap/DangNhap';
+import Tab from './Tab';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import DangKy from '../Screens/DangKy/Index';
+import Home_Admin from '../Screens/Admin/Home_Admin/Home_Admin';
+import Drawer from './Drawer';
 
-const Stack = createNativeStackNavigator()
+const Stack = createNativeStackNavigator();
 
 function Stacks() {
-
-    const [token, setToken] = useState([])
-    const [taikhoan, setTaiKhoan] = useState([])
-    const [thongtin, setThongTin] = useState([])
-    const [reset, setReset] = useState(false)
+    const [token, setToken] = useState([]);
+    const [taikhoan, setTaiKhoan] = useState([]);
+    const [thongtin, setThongTin] = useState([]);
+    const [reset, setReset] = useState(false);
     // AsyncStorage.getItem('token')
     //     .then(res =>
     //         setToken(res)
     //     )
 
-    AsyncStorage.getItem('taikhoan').then((res) => setTaiKhoan(res))
+    AsyncStorage.getItem('taikhoan').then((res) => setTaiKhoan(res));
 
     return (
         <NavigationContainer independent={true}>
@@ -67,7 +66,7 @@ function Stacks() {
                 } */}
             </Stack.Navigator>
         </NavigationContainer>
-    )
+    );
 }
 
-export default Stacks
+export default Stacks;

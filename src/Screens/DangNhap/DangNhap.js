@@ -1,7 +1,15 @@
 import {
-    StyleSheet, Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView,
+    StyleSheet,
+    Text,
+    View,
+    TouchableOpacity,
+    TextInput,
+    KeyboardAvoidingView,
     ActivityIndicator,
-    TouchableWithoutFeedback, Keyboard, Image, Dimensions
+    TouchableWithoutFeedback,
+    Keyboard,
+    Image,
+    Dimensions,
 } from 'react-native';
 import React, { useEffect, useState, useLayoutEffect } from 'react';
 import Checkbox from 'expo-checkbox';
@@ -10,57 +18,58 @@ import { MaterialIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Keychain from 'react-native-keychain';
 import { Entypo } from '@expo/vector-icons';
-import { API_KEY, URL_KEY } from "@env"
 import { Call_Post_Api } from '../../Call_post_api/Call_Post_Api';
 import Modal from 'react-native-modal';
 
 export default function DangNhap({ navigation }) {
-
-    const [isChecked, setChecked] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
-    const [isModalVisible, setIsModalVisible] = useState(true)
-
+    const [isChecked, setChecked] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isModalVisible, setIsModalVisible] = useState(true);
 
     function handerSubmit() {
-
-        setIsLoading(true)
+        setIsLoading(true);
 
         if (asy_matkhau == '' || asy_taikhoan == '') {
-            setIsLoading(false)
-            alert('Nhập đầy đủ thông tin!!')
-        }
-        else {
+            setIsLoading(false);
+            alert('Nhập đầy đủ thông tin!!');
+        } else {
             Call_Post_Api(
                 {
                     email: asy_taikhoan,
-                    password: asy_matkhau
+                    password: asy_matkhau,
                 },
-                null, null,
-                "/shop/login"
+                null,
+                null,
+                '/shop/login',
             )
                 .then((responseData) => {
                     // Handle the fetched data here
-                    if (responseData.metadata.status == "Đăng Nhập Thành Công1") {
-                        setIsLoading(false)
-                        AsyncStorage.setItem('token', responseData.metadata.tokens.accessToken);
+                    if (
+                        responseData.metadata.status == 'Đăng Nhập Thành Công1'
+                    ) {
+                        setIsLoading(false);
+                        AsyncStorage.setItem(
+                            'token',
+                            responseData.metadata.tokens.accessToken,
+                        );
                         AsyncStorage.setItem('taikhoan', asy_taikhoan);
-                        AsyncStorage.setItem('id', responseData.metadata.shop._id);
+                        AsyncStorage.setItem(
+                            'id',
+                            responseData.metadata.shop._id,
+                        );
 
-
-                        if (responseData.metadata.shop.roles[0] == "SHOP") {
-                            return navigation.replace('BottomTab')
+                        if (responseData.metadata.shop.roles[0] == 'SHOP') {
+                            return navigation.replace('BottomTab');
+                        } else if (
+                            responseData.metadata.shop.roles[0] == 'ADMIN'
+                        ) {
+                            return navigation.replace('Admin_Home');
                         }
-                        else if (responseData.metadata.shop.roles[0] == "ADMIN") {
-                            return navigation.replace('Admin_Home')
-                        }
+                    } else if (responseData.metadata.status == 'error') {
+                        setIsLoading(false);
 
+                        alert('Sai maatk khẩu haowjc tài khoản !!');
                     }
-                    else if (responseData.metadata.status == "error") {
-                        setIsLoading(false)
-
-                        alert("Sai maatk khẩu haowjc tài khoản !!")
-                    }
-
                 })
                 .catch((error) => {
                     // Handle any errors that occurred during the fetch
@@ -68,9 +77,7 @@ export default function DangNhap({ navigation }) {
                 });
         }
 
-
         // navigation.replace('BottomTab')
-
     }
 
     const [asy_taikhoan, setAsyTaiKhoan] = useState('');
@@ -78,7 +85,6 @@ export default function DangNhap({ navigation }) {
 
     return (
         <View style={styles.container}>
-
             {isLoading && (
                 <Modal isVisible={isModalVisible} backdropOpacity={0.5}>
                     <View style={styles.modal}>
@@ -87,144 +93,144 @@ export default function DangNhap({ navigation }) {
                 </Modal>
             )}
             <KeyboardAvoidingView
-                behavior={Platform.OS === "ios" ? "padding" : "height"}
-
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             >
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <View style={{
-                        // position: 'absolute',
-                        zIndex: 100,
-                        textAlign: 'center',
-                        alignItems: 'center'
-                    }}>
-
+                    <View
+                        style={{
+                            // position: 'absolute',
+                            zIndex: 100,
+                            textAlign: 'center',
+                            alignItems: 'center',
+                        }}
+                    >
                         <View>
-                            <View style={{
-                                backgroundColor: '#2869db',
-                                flex: 1,
-                                width: Dimensions.get('window').width,
-
-                            }}>
-
-                            </View>
-                            <View style={{
-                                width: 350,
-                                height: 350,
-                                backgroundColor: '#2869bd',
-                                position: 'absolute',
-                                borderRadius: 100,
-                                right: -210,
-                                top: -130,
-                                transform: [{ rotate: "110deg" }],
-                                opacity: 25,
-                                shadowColor: "#111",
-                                shadowOffset: {
-                                    width: 0,
-                                    height: 4,
-                                },
-                                shadowOpacity: 0.38,
-                                shadowRadius: 16.00,
-
-                                elevation: 24,
-                            }}>
-
-                            </View>
-                            <View style={{
-                                width: 300,
-                                height: 300,
-                                backgroundColor: '#5d92f5',
-                                position: 'absolute',
-                                borderRadius: 100,
-                                right: -200,
-                                top: -110,
-                                transform: [{ rotate: "110deg" }],
-                                shadowColor: "#000",
-                                shadowOffset: {
-                                    width: 0,
-                                    height: 12,
-                                },
-                                shadowOpacity: 0.58,
-                                shadowRadius: 16.00,
-
-                                elevation: 24,
-
-                            }}>
-
-                            </View>
-
-                            <View style={{
-                                width: 300,
-                                height: 300,
-                                backgroundColor: '#5d92f5',
-                                position: 'absolute',
-                                borderRadius: 100,
-                                left: -260,
-                                top: 10,
-                                transform: [{ rotate: "300deg" }],
-                                shadowColor: "#333",
-                                shadowOffset: {
-                                    width: 0,
-                                    height: 4,
-                                },
-                                shadowOpacity: 0.88,
-                                shadowRadius: 16.00,
-
-                                elevation: 24,
-
-                            }}>
-
-                            </View>
-                            <View style={{
-                                zIndex: 3,
-                                position: 'absolute',
-                                bottom: 0
-                            }}>
-                                <View style={{
+                            <View
+                                style={{
+                                    backgroundColor: '#2869db',
+                                    flex: 1,
                                     width: Dimensions.get('window').width,
-                                    // height: Dimensions.get('window').height,
-                                    height: 300,
-                                    backgroundColor: '#fff',
+                                }}
+                            ></View>
+                            <View
+                                style={{
+                                    width: 350,
+                                    height: 350,
+                                    backgroundColor: '#2869bd',
                                     position: 'absolute',
-                                    borderRadius: 90,
-                                    left: 0,
-                                    bottom: 125,
-                                    transform: [{ rotate: "205deg" }],
-                                    shadowColor: "#000",
+                                    borderRadius: 100,
+                                    right: -210,
+                                    top: -130,
+                                    transform: [{ rotate: '110deg' }],
+                                    opacity: 25,
+                                    shadowColor: '#111',
                                     shadowOffset: {
                                         width: 0,
-                                        height: 10,
+                                        height: 4,
                                     },
                                     shadowOpacity: 0.38,
-                                    shadowRadius: 16.00,
+                                    shadowRadius: 16.0,
 
-                                    elevation: 10,
-                                    zIndex: 2
-
-                                }}>
-
-                                </View>
-
-                                <View style={{
-                                    width: Dimensions.get('window').width,
-                                    // height: Dimensions.get('window').height,
-                                    height: 250,
-                                    backgroundColor: '#fff',
+                                    elevation: 24,
+                                }}
+                            ></View>
+                            <View
+                                style={{
+                                    width: 300,
+                                    height: 300,
+                                    backgroundColor: '#5d92f5',
                                     position: 'absolute',
-                                    // borderRadius: 100,
-                                    // left: -260,
+                                    borderRadius: 100,
+                                    right: -200,
+                                    top: -110,
+                                    transform: [{ rotate: '110deg' }],
+                                    shadowColor: '#000',
+                                    shadowOffset: {
+                                        width: 0,
+                                        height: 12,
+                                    },
+                                    shadowOpacity: 0.58,
+                                    shadowRadius: 16.0,
+
+                                    elevation: 24,
+                                }}
+                            ></View>
+
+                            <View
+                                style={{
+                                    width: 300,
+                                    height: 300,
+                                    backgroundColor: '#5d92f5',
+                                    position: 'absolute',
+                                    borderRadius: 100,
+                                    left: -260,
+                                    top: 10,
+                                    transform: [{ rotate: '300deg' }],
+                                    shadowColor: '#333',
+                                    shadowOffset: {
+                                        width: 0,
+                                        height: 4,
+                                    },
+                                    shadowOpacity: 0.88,
+                                    shadowRadius: 16.0,
+
+                                    elevation: 24,
+                                }}
+                            ></View>
+                            <View
+                                style={{
+                                    zIndex: 3,
+                                    position: 'absolute',
                                     bottom: 0,
-                                    zIndex: 2
+                                }}
+                            >
+                                <View
+                                    style={{
+                                        width: Dimensions.get('window').width,
+                                        // height: Dimensions.get('window').height,
+                                        height: 300,
+                                        backgroundColor: '#fff',
+                                        position: 'absolute',
+                                        borderRadius: 90,
+                                        left: 0,
+                                        bottom: 125,
+                                        transform: [{ rotate: '205deg' }],
+                                        shadowColor: '#000',
+                                        shadowOffset: {
+                                            width: 0,
+                                            height: 10,
+                                        },
+                                        shadowOpacity: 0.38,
+                                        shadowRadius: 16.0,
 
-                                    // transform: [{ rotate: "140deg" }],
-                                }}>
-                                    <View style={{
-                                        marginTop: -50,
-                                        marginRight: 50,
-                                        marginLeft: 50
-                                    }}>
-                                        <View style={{
+                                        elevation: 10,
+                                        zIndex: 2,
+                                    }}
+                                ></View>
 
-                                        }}>
+                                <View
+                                    style={{
+                                        width: Dimensions.get('window').width,
+                                        // height: Dimensions.get('window').height,
+                                        height: 250,
+                                        backgroundColor: '#fff',
+                                        position: 'absolute',
+                                        // borderRadius: 100,
+                                        // left: -260,
+                                        bottom: 0,
+                                        zIndex: 2,
+
+                                        // transform: [{ rotate: "140deg" }],
+                                    }}
+                                >
+                                    <View
+                                        style={{
+                                            marginTop: -50,
+                                            marginRight: 50,
+                                            marginLeft: 50,
+                                        }}
+                                    >
+                                        <View style={{}}>
                                             <MaterialIcons
                                                 name="people"
                                                 size={28}
@@ -233,17 +239,20 @@ export default function DangNhap({ navigation }) {
                                                     position: 'absolute',
                                                     left: -20,
                                                     top: -5,
-                                                    opacity: 0.3
+                                                    opacity: 0.3,
                                                 }}
                                             />
 
-                                            <TextInput style={{
-                                                borderBottomColor: 'black',
-                                                borderBottomWidth: 1,
-                                                paddingLeft: 20,
-                                                fontSize: 20
-                                            }}
-                                                onChangeText={e => setAsyTaiKhoan(e)}
+                                            <TextInput
+                                                style={{
+                                                    borderBottomColor: 'black',
+                                                    borderBottomWidth: 1,
+                                                    paddingLeft: 20,
+                                                    fontSize: 20,
+                                                }}
+                                                onChangeText={(e) =>
+                                                    setAsyTaiKhoan(e)
+                                                }
                                             />
 
                                             <MaterialIcons
@@ -254,17 +263,21 @@ export default function DangNhap({ navigation }) {
                                                     position: 'absolute',
                                                     right: -10,
                                                     top: 0,
-                                                    opacity: 0.3
+                                                    opacity: 0.3,
                                                 }}
                                             />
                                         </View>
 
-                                        <View style={{
-                                            marginTop: 60,
-                                        }}>
-                                            <View style={{
-                                                zIndex: 100
-                                            }}>
+                                        <View
+                                            style={{
+                                                marginTop: 60,
+                                            }}
+                                        >
+                                            <View
+                                                style={{
+                                                    zIndex: 100,
+                                                }}
+                                            >
                                                 <MaterialIcons
                                                     name="lock"
                                                     size={28}
@@ -277,104 +290,139 @@ export default function DangNhap({ navigation }) {
                                                     }}
                                                 />
 
-                                                <TextInput style={{
-                                                    borderBottomColor: 'black',
-                                                    borderBottomWidth: 1,
-                                                    paddingLeft: 20,
-                                                    fontSize: 20
-                                                }}
-                                                    onChangeText={e => setAsyMatKhau(e)}
+                                                <TextInput
+                                                    style={{
+                                                        borderBottomColor:
+                                                            'black',
+                                                        borderBottomWidth: 1,
+                                                        paddingLeft: 20,
+                                                        fontSize: 20,
+                                                    }}
+                                                    onChangeText={(e) =>
+                                                        setAsyMatKhau(e)
+                                                    }
                                                 />
-                                                <Entypo name="eye-with-line" size={24} color="black" style={{
-                                                    position: 'absolute',
-                                                    right: -10,
-                                                    top: -5,
-                                                    opacity: 0.3
-                                                }} />
+                                                <Entypo
+                                                    name="eye-with-line"
+                                                    size={24}
+                                                    color="black"
+                                                    style={{
+                                                        position: 'absolute',
+                                                        right: -10,
+                                                        top: -5,
+                                                        opacity: 0.3,
+                                                    }}
+                                                />
                                             </View>
                                         </View>
-                                        <View style={{
-                                            flexDirection: 'row',
-                                            justifyContent: 'space-between',
-                                            marginTop: 20,
-
-                                        }}>
-                                            <View style={{
-                                                flexDirection: 'row'
-                                            }}>
+                                        <View
+                                            style={{
+                                                flexDirection: 'row',
+                                                justifyContent: 'space-between',
+                                                marginTop: 20,
+                                            }}
+                                        >
+                                            <View
+                                                style={{
+                                                    flexDirection: 'row',
+                                                }}
+                                            >
                                                 <Checkbox
                                                     value={isChecked}
                                                     onValueChange={setChecked}
-                                                    color={isChecked ? '#4630EB' : undefined}
+                                                    color={
+                                                        isChecked
+                                                            ? '#4630EB'
+                                                            : undefined
+                                                    }
                                                 />
                                                 <TouchableOpacity
-                                                    onPress={() => setChecked(!isChecked)}
+                                                    onPress={() =>
+                                                        setChecked(!isChecked)
+                                                    }
                                                 >
-                                                    <Text style={{
-                                                        color: '#5d92f5',
-                                                        marginLeft: 5,
-                                                        marginTop: 3,
-                                                        fontWeight: 'bold'
-
-                                                    }}>
+                                                    <Text
+                                                        style={{
+                                                            color: '#5d92f5',
+                                                            marginLeft: 5,
+                                                            marginTop: 3,
+                                                            fontWeight: 'bold',
+                                                        }}
+                                                    >
                                                         Ghi Nhớ
                                                     </Text>
                                                 </TouchableOpacity>
                                             </View>
                                             <TouchableOpacity
-                                                onPress={() => navigation.navigate('QuenMatKhau')}
+                                                onPress={() =>
+                                                    navigation.navigate(
+                                                        'QuenMatKhau',
+                                                    )
+                                                }
                                             >
-                                                <Text style={{
-                                                    color: '#5d92f5',
-                                                    fontWeight: 'bold'
-                                                }}>
+                                                <Text
+                                                    style={{
+                                                        color: '#5d92f5',
+                                                        fontWeight: 'bold',
+                                                    }}
+                                                >
                                                     Quên Mật Khẩu
                                                 </Text>
                                             </TouchableOpacity>
                                         </View>
 
-                                        <View style={{
-                                            display: 'flex',
-                                            flexDirection: 'row',
-                                            marginTop: 10
-                                        }}>
-                                            <Text>
-                                                Bạn chưa có tài khoản
-                                            </Text>
-                                            <TouchableOpacity onPress={() => navigation.navigate('DangKy')}>
-                                                <Text style={{
-                                                    marginLeft: 5,
-                                                    color: 'blue'
-                                                }}>
+                                        <View
+                                            style={{
+                                                display: 'flex',
+                                                flexDirection: 'row',
+                                                marginTop: 10,
+                                            }}
+                                        >
+                                            <Text>Bạn chưa có tài khoản</Text>
+                                            <TouchableOpacity
+                                                onPress={() =>
+                                                    navigation.navigate(
+                                                        'DangKy',
+                                                    )
+                                                }
+                                            >
+                                                <Text
+                                                    style={{
+                                                        marginLeft: 5,
+                                                        color: 'blue',
+                                                    }}
+                                                >
                                                     Đăng ký
-
                                                 </Text>
                                             </TouchableOpacity>
-
                                         </View>
-                                        <View style={{
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            marginTop: 40
-                                        }}>
-                                            <TouchableOpacity style={{
-                                                width: 200,
-                                                height: 40,
-                                                backgroundColor: '#2869bd',
-                                                textAlign: 'center',
+                                        <View
+                                            style={{
+                                                alignItems: 'center',
                                                 justifyContent: 'center',
-                                                borderRadius: 20
+                                                marginTop: 40,
                                             }}
-                                                onPress={() => handerSubmit()}
-
-                                            >
-                                                <Text style={{
+                                        >
+                                            <TouchableOpacity
+                                                style={{
+                                                    width: 200,
+                                                    height: 40,
+                                                    backgroundColor: '#2869bd',
                                                     textAlign: 'center',
                                                     justifyContent: 'center',
-                                                    color: '#fff',
-                                                    fontSize: 20,
-
-                                                }}>
+                                                    borderRadius: 20,
+                                                }}
+                                                onPress={() => handerSubmit()}
+                                            >
+                                                <Text
+                                                    style={{
+                                                        textAlign: 'center',
+                                                        justifyContent:
+                                                            'center',
+                                                        color: '#fff',
+                                                        fontSize: 20,
+                                                    }}
+                                                >
                                                     Đăng Nhập
                                                 </Text>
                                             </TouchableOpacity>
@@ -384,14 +432,16 @@ export default function DangNhap({ navigation }) {
                             </View>
                         </View>
 
-                        <View style={{
-                            position: 'absolute',
-                            // zIndex: 0,
-                            textAlign: 'center',
-                            alignItems: 'center',
-                            top: 100,
-                            // zIndex: 1
-                        }}>
+                        <View
+                            style={{
+                                position: 'absolute',
+                                // zIndex: 0,
+                                textAlign: 'center',
+                                alignItems: 'center',
+                                top: 100,
+                                // zIndex: 1
+                            }}
+                        >
                             <Image
                                 style={{
                                     height: 100,
@@ -402,32 +452,29 @@ export default function DangNhap({ navigation }) {
                                     textAlign: 'center',
                                     zIndex: -100,
                                 }}
-                                source={
-                                    {
-                                        uri: "https://scontent.fsgn2-4.fna.fbcdn.net/v/t39.30808-6/275549265_119316327349050_7133039339301134607_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=Ao4SUEFu0fUAX__KvG7&_nc_ht=scontent.fsgn2-4.fna&oh=00_AfBYEG5xu-FEJVTZzNF6tlO6hCYUk-igLzyeiE6Pg7sLbQ&oe=64F04414"
-                                    }
-                                }
+                                source={{
+                                    uri: 'https://scontent.fsgn2-4.fna.fbcdn.net/v/t39.30808-6/275549265_119316327349050_7133039339301134607_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=Ao4SUEFu0fUAX__KvG7&_nc_ht=scontent.fsgn2-4.fna&oh=00_AfBYEG5xu-FEJVTZzNF6tlO6hCYUk-igLzyeiE6Pg7sLbQ&oe=64F04414',
+                                }}
                             />
 
-                            <Text style={{
-                                fontSize: 30,
-                                color: '#fff',
-                                fontWeight: 'bold',
-                                marginTop: 10,
-                                letterSpacing: 4,
-                                zIndex: -1
-                            }}>
+                            <Text
+                                style={{
+                                    fontSize: 30,
+                                    color: '#fff',
+                                    fontWeight: 'bold',
+                                    marginTop: 10,
+                                    letterSpacing: 4,
+                                    zIndex: -1,
+                                }}
+                            >
                                 Stantio Shop
                             </Text>
                         </View>
-
                     </View>
                 </TouchableWithoutFeedback>
             </KeyboardAvoidingView>
-
         </View>
-    )
-
+    );
 }
 
 const styles = StyleSheet.create({
@@ -445,4 +492,4 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-})
+});
