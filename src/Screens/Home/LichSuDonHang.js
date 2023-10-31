@@ -3,7 +3,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Call_Post_Api } from '../../Call_post_api/Call_Post_Api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ThemeConText from '../../../config/themeConText';
-import { ListItem, Button, Icon } from 'react-native-elements';
+import { ListItem, Button, Icon, Dialog } from 'react-native-elements';
 import { AntDesign } from '@expo/vector-icons';
 
 const LichSuDonHang = () => {
@@ -12,6 +12,10 @@ const LichSuDonHang = () => {
     const [taikhoan, setTaiKhoan] = useState();
     const [token, setToken] = useState();
     const [id, setId] = useState();
+    const [visible2, setVisible2] = useState(false);
+    const toggleDialog2 = () => {
+        setVisible2(!visible2);
+    };
 
     //Lấy dữ liệu từ asystore
     AsyncStorage.getItem('taikhoan').then((res) => setTaiKhoan(res));
@@ -35,52 +39,51 @@ const LichSuDonHang = () => {
         );
     }, [ordersLength]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const data = await Call_Post_Api(
-                    null,
-                    token,
-                    id,
-                    '/transaction/getFullUseId/' + id,
+    const fetchData = async () => {
+        try {
+            const data = await Call_Post_Api(
+                null,
+                token,
+                id,
+                '/transaction/getFullUseId/' + id,
+            );
+            if (data && data.metadata) {
+                // console.log(data.metadata);
+                // const transactionProducts = data.metadata.flatMap(
+                //     (transaction) => transaction.transaction_products,
+                // );
+
+                const resultArray = data?.metadata.map((item) => {
+                    const transactionProducts = item.transaction_products;
+                    const createdOn = item.createdOn;
+
+                    // Kiểm tra xem transactionProducts có giá trị hay không, nếu không thì trả về một mảng rỗng
+                    const mergedArray = transactionProducts
+                        ? transactionProducts.map((product) => ({
+                              ...product,
+                              createdOnTran: createdOn,
+                          }))
+                        : [];
+
+                    return mergedArray;
+                });
+
+                // Nếu bạn muốn gộp tất cả các giá trị thành một mảng duy nhất, bạn có thể sử dụng phương thức reduce
+                const flattenedArray = resultArray.reduce(
+                    (acc, val) => acc.concat(val),
+                    [],
                 );
-                if (data && data.metadata) {
-                    // console.log(data.metadata);
-                    // const transactionProducts = data.metadata.flatMap(
-                    //     (transaction) => transaction.transaction_products,
-                    // );
 
-                    const resultArray = data?.metadata.map((item) => {
-                        const transactionProducts = item.transaction_products;
-                        const createdOn = item.createdOn;
-
-                        // Kiểm tra xem transactionProducts có giá trị hay không, nếu không thì trả về một mảng rỗng
-                        const mergedArray = transactionProducts
-                            ? transactionProducts.map((product) => ({
-                                  ...product,
-                                  createdOnTran: createdOn,
-                              }))
-                            : [];
-
-                        return mergedArray;
-                    });
-
-                    // Nếu bạn muốn gộp tất cả các giá trị thành một mảng duy nhất, bạn có thể sử dụng phương thức reduce
-                    const flattenedArray = resultArray.reduce(
-                        (acc, val) => acc.concat(val),
-                        [],
-                    );
-
-                    setApiTransaction(flattenedArray);
-                } else {
-                    setApiTransaction([]);
-                }
-            } catch (error) {
-                console.error('Error fetching data:', error);
-                setApiTransaction([]); // Xử lý lỗi bằng cách đặt mảng rỗng
+                setApiTransaction(flattenedArray);
+            } else {
+                setApiTransaction([]);
             }
-        };
-
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            setApiTransaction([]); // Xử lý lỗi bằng cách đặt mảng rỗng
+        }
+    };
+    useEffect(() => {
         fetchData();
     }, [token]);
 
@@ -127,8 +130,11 @@ const LichSuDonHang = () => {
     // console.log(apisTransaction);
 
     //Xử lý hủy đơn
-    const handlerHuyDon = (api) => {
-        console.log(api.createdOnTran);
+    const handlerHuyDon = () => {
+        toggleDialog2();
+    };
+
+    const hanlderCoHuyDon = (api) => {
         const { createdOnTran, ...newProduct } = api;
 
         Call_Post_Api(
@@ -140,56 +146,14 @@ const LichSuDonHang = () => {
             token,
             id,
             '/transaction/deleteProduct',
-        );
+        ).then(() => {
+            fetchData();
+        });
     };
 
     return (
         <ScrollView>
             <View>
-                {/* <ListItem.Swipeable
-                    leftWidth={80}
-                    rightWidth={90}
-                    minSlideWidth={40}
-                    onSwipeBegin={() => {
-                        console.log('Left swipe event');
-                    }}
-                    onSwipeableRightOpen={() => {
-                        console.log('Right swipe event');
-                    }}
-                    leftContent={(action, progress) => (
-                        <Button
-                            containerStyle={{
-                                flex: 1,
-                                justifyContent: 'center',
-                                backgroundColor: '#f4f4f4',
-                            }}
-                            // type="clear"
-                            title=" abc"
-                            icon={
-                                <AntDesign
-                                    name="menu"
-                                    size={23}
-                                    color={theme.color}
-                                />
-                            }
-                            onPress={() => {
-                                console.log('abc');
-                                action();
-                                handleLeftSwipe();
-                            }}
-                        />
-                    )}
-                    rightContent={() => {
-                        return <Text>right</Text>;
-                    }}
-                >
-                    <Icon name="label-important-outline" type="material" />
-                    <ListItem.Content>
-                        <ListItem.Title>Email from John Doe</ListItem.Title>
-                        <ListItem.Subtitle>Hey, I'm John Doe</ListItem.Subtitle>
-                    </ListItem.Content>
-                    <ListItem.Chevron />
-                </ListItem.Swipeable> */}
                 <Text
                     style={{
                         padding: 10,
@@ -207,6 +171,31 @@ const LichSuDonHang = () => {
                                 width: '100%',
                             }}
                         >
+                            <Dialog
+                                isVisible={visible2}
+                                onBackdropPress={toggleDialog2}
+                            >
+                                <Dialog.Title title="Thông báo!!!" />
+                                <Text>Bạn có muốn hủy đơn hàng không ?</Text>
+                                <Dialog.Actions>
+                                    <Dialog.Button
+                                        title="Không"
+                                        style={{
+                                            marginLeft: 20,
+                                            marginTop: 10,
+                                        }}
+                                        onPress={() => setVisible2(false)}
+                                    />
+                                    <Dialog.Button
+                                        title="Có"
+                                        style={{
+                                            marginLeft: 20,
+                                            marginTop: 10,
+                                        }}
+                                        onPress={() => hanlderCoHuyDon(api)}
+                                    />
+                                </Dialog.Actions>
+                            </Dialog>
                             <View
                                 style={{
                                     display: 'flex',

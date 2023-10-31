@@ -8,6 +8,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import List_Product from '../Screens/Admin/LIst_Product/List_Product';
 import Create_Product from '../Screens/Admin/Create_Product/Create_Product';
 import Login from '../Screens/DangNhap/DangNhap';
+import Order_done from '../Screens/Admin/Order_Done/Order_done';
 
 const Drawer = () => {
     const Drawer = createDrawerNavigator();
@@ -54,6 +55,18 @@ const Drawer = () => {
             <Drawer.Screen
                 name="Danh sách đơn hàng"
                 component={List_Order}
+                options={{
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: '#262626',
+                        height: 110,
+                    },
+                    headerTintColor: '#fff',
+                }}
+            />
+            <Drawer.Screen
+                name="Đơn đã hoành thành"
+                component={Order_done}
                 options={{
                     headerShown: true,
                     headerStyle: {

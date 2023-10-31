@@ -201,6 +201,7 @@ const Create_Product = () => {
                                         marginBottom: 30,
                                     }}
                                     onPress={() => handerUpAnh()}
+                                    title="Up Ảnh"
                                 >
                                     <Text>Up Ảnh</Text>
                                 </Button>
@@ -249,7 +250,7 @@ const Create_Product = () => {
             </KeyboardAvoidingView>
 
             <View style={{}}>
-                <Button onPress={() => handelSubmit()}>
+                <Button onPress={() => handelSubmit()} title="Xác nhận">
                     <Text>Xác nhận</Text>
                 </Button>
             </View>

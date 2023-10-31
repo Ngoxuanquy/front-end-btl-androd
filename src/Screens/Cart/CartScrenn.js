@@ -13,11 +13,12 @@ import {
     Alert,
     RefreshControl,
     SafeAreaView,
+    Linking,
 } from 'react-native';
 
 import React, { useEffect, useState, useContext } from 'react';
 import { AntDesign } from '@expo/vector-icons';
-
+import { CheckBox } from 'react-native-elements';
 import { LinearGradient } from 'expo-linear-gradient';
 import ThemeConText from '../../../config/themeConText';
 import { Call_Post_Api } from '../../Call_post_api/Call_Post_Api';
@@ -37,7 +38,7 @@ export default function Cart({ navigation }) {
     const [customer, setCustomer] = useState([]);
     const [taikhoan, setTaiKhoan] = useState([]);
     const [reset, setReset] = useState(false);
-
+    const [selectedIndex, setIndex] = useState(0);
     const getConten = () => {
         if (isLoading) {
             return <ActivityIndicator />;
@@ -218,30 +219,48 @@ export default function Cart({ navigation }) {
                 ],
             );
         } else {
-            Call_Post_Api(
-                {
-                    user: result,
-                    product: newOrder.length > 0 ? newOrder : orders,
-                    notifications: tokenTest,
-                },
-                token,
-                id,
-                '/transaction',
-            ).then((data) => {
+            if (selectedIndex == 0) {
                 Call_Post_Api(
                     {
-                        userId: id,
-                        newCartData: newOrder.length > 0 ? newOrder : orders,
+                        user: result,
+                        product: newOrder.length > 0 ? newOrder : orders,
+                        notifications: tokenTest,
                     },
                     token,
                     id,
-                    '/cart/updateTransaciton/',
-                ).then(() => {
-                    getApi();
-                    EventRegister.emit('chaneLength', 0);
-                    alert('Đặt hành thành công!!!');
+                    '/transaction',
+                ).then((data) => {
+                    Call_Post_Api(
+                        {
+                            userId: id,
+                            newCartData:
+                                newOrder.length > 0 ? newOrder : orders,
+                        },
+                        token,
+                        id,
+                        '/cart/updateTransaciton/',
+                    ).then(() => {
+                        getApi();
+                        EventRegister.emit('chaneLength', 0);
+                        alert('Đặt hành thành công!!!');
+                    });
                 });
-            });
+            } else {
+                Call_Post_Api(
+                    {
+                        amount: tong,
+                        language: 'vn',
+                        bankCode: '',
+                    },
+                    token,
+                    id,
+                    '/vnpay/create_payment_url',
+                ).then((data) => {
+                    Linking.openURL(data.data);
+                    console.log(data.data);
+                    // alert('Đặt hành thành công!!!');
+                });
+            }
         }
     };
 
@@ -268,9 +287,6 @@ export default function Cart({ navigation }) {
             setNewOrder((prevNewOrder) => [...prevNewOrder, selectedOrder]);
         }
     };
-
-    console.log(newOrder.length);
-    console.log(orders);
 
     return (
         <View
@@ -811,6 +827,20 @@ export default function Cart({ navigation }) {
                         marginTop: 60,
                     }}
                 >
+                    <CheckBox
+                        title="Thanh toán khi nhận hàng"
+                        checked={selectedIndex === 0}
+                        onPress={() => setIndex(0)}
+                        checkedIcon="dot-circle-o"
+                        uncheckedIcon="circle-o"
+                    />
+                    <CheckBox
+                        title="Thanh toán qua VnPay"
+                        checked={selectedIndex === 1}
+                        onPress={() => setIndex(1)}
+                        checkedIcon="dot-circle-o"
+                        uncheckedIcon="circle-o"
+                    />
                     <TouchableOpacity
                         style={{
                             display: 'flex',

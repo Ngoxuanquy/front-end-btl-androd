@@ -8,6 +8,7 @@ import Modal from 'react-native-modal';
 // import { Button } from '@rneui/themed';
 import Axios from 'axios';
 import { Button } from 'react-native-elements';
+import * as Notifications from 'expo-notifications';
 
 const List_Order = () => {
     const [taikhoan, setTaiKhoan] = useState();
@@ -31,7 +32,7 @@ const List_Order = () => {
                 const transactionUserIds = data.metadata.flatMap(
                     (item) => item.transaction_userId,
                 );
-                setApiModal(data.metadata);
+                setApiModal(data?.metadata);
                 setApi(transactionUserIds);
             } else {
                 setApi([]);
@@ -77,28 +78,51 @@ const List_Order = () => {
         ).then((data) => {
             setIsModalVisible(false);
             getApi();
-            Gui();
             alert('Bạn đã hoàn thành đơn!!!');
         });
     };
 
-    const Gui = async () => {
-        const message = {
-            to: productApi.notifications,
-            title: 'Đơn hàng của bạn đã được gửi đi!!',
-            body: 'Nhấn Vào Để Xem Chi Tiết!!',
-        };
+    Notifications.setNotificationHandler({
+        handleNotification: async () => ({
+            shouldShowAlert: true,
+            shouldPlaySound: false,
+            shouldSetBadge: false,
+        }),
+    });
 
-        try {
-            const response = await Axios.post(
-                'https://api.expo.dev/v2/push/send',
-                message,
-            );
-            console.log('Push notification sent successfully:', response.data);
-        } catch (err) {
-            console.error('Error sending push notification:', err);
+    const getNotification = async () => {
+        const { status } = await Notifications.getPermissionsAsync();
+        console.log({ status });
+        if (status !== 'granted') {
+            const { status } = await Notifications.requestPermissionsAsync();
+            if (status !== 'granted') {
+                alert('Looix');
+                return;
+            }
         }
+        console.log('abc');
+        try {
+            const tokenData = await Notifications.getExpoPushTokenAsync();
+            console.log({ tokenData });
+            const token = tokenData.data;
+            console.log(token);
+        } catch (error) {
+            console.error('Lỗi khi lấy mã thông báo Expo:', error);
+        }
+        // const message = {
+        //     to: token,
+        //     title: 'Bạn đã đăng nhập !!',
+        //     body: 'Nhấn Vào Để Xem Chi Tiết!!',
+        // };
+
+        // await Axios.post('https://api.expo.dev/v2/push/send', message).catch(
+        //     (err) => console.log(err),
+        // );
     };
+
+    useEffect(() => {
+        getNotification();
+    }, []);
 
     return (
         <View>
@@ -212,7 +236,10 @@ const List_Order = () => {
                             marginTop: 20,
                         }}
                     >
-                        <Button onPress={() => handelDongDon()}>
+                        <Button
+                            onPress={() => handelDongDon()}
+                            title="Đóng đơn"
+                        >
                             <Text>Đóng đơn</Text>
                         </Button>
                     </View>
@@ -228,7 +255,7 @@ const List_Order = () => {
                     Thông tin các đơn hàng
                 </Text>
                 <View>
-                    {apis.map((api, index) => (
+                    {apis?.map((api, index) => (
                         <TouchableOpacity
                             key={index}
                             style={{
