@@ -1,9 +1,9 @@
 import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { Input } from '@rneui/themed';
 import { AntDesign } from '@expo/vector-icons';
 import { Call_Post_Api } from '../../Call_post_api/Call_Post_Api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Input } from 'react-native-elements';
 
 const Search = ({ navigation }) => {
     //khai báo value
@@ -23,7 +23,6 @@ const Search = ({ navigation }) => {
     const [apiSearch, setApiSearch] = useState([]);
 
     useEffect(() => {
-        console.log({ value });
         if (value) {
             Call_Post_Api(null, token, id, '/product/search/' + value).then(
                 (data) => setApiSearch(data.metadata),

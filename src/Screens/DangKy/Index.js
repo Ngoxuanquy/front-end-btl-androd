@@ -44,7 +44,6 @@ export default function DangKY({ navigation }) {
             )
                 .then((responseData) => {
                     // Handle the fetched data here
-                    console.log(responseData);
                     if (responseData.metadata.status === 'success') {
                         setIsLoading(false);
                         alert('Đăng ký thành công !!!');
@@ -58,7 +57,6 @@ export default function DangKY({ navigation }) {
                     // Handle any errors that occurred during the fetch
                     console.error(error);
                 });
-            console.log('alc');
         } else {
             return alert('Mật khẩu không trùng nhau');
         }

@@ -138,7 +138,9 @@ export default function HomeScrenn({ navigation }) {
     }, []);
 
     const [mode, setMode] = useState(false);
-
+    function handerLogout() {
+        navigation.replace('Login');
+    }
     return (
         <ScrollView
             refreshControl={
@@ -723,7 +725,7 @@ export default function HomeScrenn({ navigation }) {
                                 justifyContent: 'space-between',
                             }}
                         >
-                            {thongtin.map((thong) => (
+                            {/* {thongtin.map((thong) => (
                                 <TouchableOpacity
                                     key={thong.id}
                                     onPress={() => handerUpAnh()}
@@ -752,7 +754,7 @@ export default function HomeScrenn({ navigation }) {
                                         />
                                     )}
                                 </TouchableOpacity>
-                            ))}
+                            ))} */}
                             <View
                                 style={{
                                     paddingHorizontal: 10,

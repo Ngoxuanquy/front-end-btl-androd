@@ -22,7 +22,6 @@ export default function Tag({ navigation }) {
 
     const [refresh, setRefresh] = useState(0);
 
-    console.log({ ordersLength });
     return (
         <Tab.Navigator
             initialRouteName="HomeTab"

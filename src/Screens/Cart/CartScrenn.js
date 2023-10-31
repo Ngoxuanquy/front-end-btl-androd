@@ -20,15 +20,17 @@ import { AntDesign } from '@expo/vector-icons';
 
 import { LinearGradient } from 'expo-linear-gradient';
 import ThemeConText from '../../../config/themeConText';
-import { Button } from '@rneui/themed';
 import { Call_Post_Api } from '../../Call_post_api/Call_Post_Api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { EventRegister } from 'react-native-event-listeners';
-import * as Notifications from 'expo-notifications';
+// import * as Notifications from 'expo-notifications';
+import Checkbox from 'expo-checkbox';
+import { Button } from 'react-native-elements';
 
 export default function Cart({ navigation }) {
     // const theme = useContext(ThemeConText)
     const [theme, ordersLength] = useContext(ThemeConText);
+    const [isChecked, setChecked] = useState(false);
 
     const [isload, setIsLoad] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
@@ -41,8 +43,6 @@ export default function Cart({ navigation }) {
             return <ActivityIndicator />;
         }
     };
-
-    console.log({ ordersLength });
 
     const [token, setToken] = useState();
     const [id, setId] = useState();
@@ -78,32 +78,6 @@ export default function Cart({ navigation }) {
         getTokenFromStorage();
     }, []);
 
-    // function handerNhanDon(id) {
-
-    //     return Alert.alert(
-    //         "Are your sure?",
-    //         "Bạn Nhận Đơn Này?",
-    //         [
-
-    //             // The "No" button
-    //             // Does nothing but dismiss the dialog when tapped
-    //             {
-    //                 text: "No",
-    //             },
-
-    //             // The "Yes" button
-    //             {
-    //                 text: "Yes",
-    //                 onPress: () => {
-
-    //                 },
-    //             },
-
-    //         ]
-    //     );
-
-    // }
-
     const checkContact = async () => {
         try {
             const data = await Call_Post_Api(
@@ -134,6 +108,7 @@ export default function Cart({ navigation }) {
 
     //khai báo api cart
     const [orders, setOrder] = useState([]);
+    const [tong, setTong] = useState(0);
 
     const getApi = () => {
         Call_Post_Api(
@@ -148,10 +123,16 @@ export default function Cart({ navigation }) {
                 setIsLoading(false);
                 if (data && data.metadata && data.metadata.cart_products) {
                     setOrder(data.metadata.cart_products);
-                    EventRegister.emit(
-                        'chaneLength',
-                        data.metadata.cart_products.length,
+                    // EventRegister.emit(
+                    //     'chaneLength',
+                    //     data.metadata.cart_products.length,
+                    // );
+                    let total = data.metadata.cart_products?.reduce(
+                        (acc, current) =>
+                            acc + current.product_price * current.quantity,
+                        0, // Giá trị khởi tạo
                     );
+                    setTong(total);
                 } else {
                     setOrder([]);
                 }
@@ -181,41 +162,39 @@ export default function Cart({ navigation }) {
             setOrder([]);
             getApi();
         });
-
-        console.log('abc');
     };
-
-    console.log({ orders });
 
     const [tokenTest, setTokenTest] = useState([]);
 
-    async function getToken() {
-        const { status } = await Notifications.getPermissionsAsync();
-        if (status !== 'granted') {
-            const { status } = await Notifications.requestPermissionsAsync();
-            if (status !== 'granted') {
-                alert('Looix');
-                return;
-            }
-        }
+    // async function getToken() {
+    //     const { status } = await Notifications.getPermissionsAsync();
+    //     if (status !== 'granted') {
+    //         const { status } = await Notifications.requestPermissionsAsync();
+    //         if (status !== 'granted') {
+    //             alert('Looix');
+    //             return;
+    //         }
+    //     }
 
-        const tokenData = await Notifications.getExpoPushTokenAsync();
-        const token = tokenData.data;
-        console.log({ token });
-        setTokenTest(token);
-    }
+    //     const tokenData = await Notifications.getExpoPushTokenAsync();
+    //     const token = tokenData.data;
+    //     console.log({ token });
+    //     setTokenTest(token);
+    // }
 
-    useEffect(() => {
-        getToken();
-    }, []);
+    // useEffect(() => {
+    //     getToken();
+    // }, []);
 
     //xử lý khi nhân thanh toán
     //+ Kiểm tra có thông tin tài khoản
     //+ cho đặt hàng
     //+ chuyển thành đơn đã đăth
+
+    //Tính tổng tiền
+
     const handelSubmit = async () => {
         const result = await checkContact();
-        console.log({ result });
         if (result === null) {
             // alert('')
 
@@ -242,20 +221,21 @@ export default function Cart({ navigation }) {
             Call_Post_Api(
                 {
                     user: result,
-                    product: orders,
+                    product: newOrder.length > 0 ? newOrder : orders,
                     notifications: tokenTest,
                 },
                 token,
                 id,
                 '/transaction',
             ).then((data) => {
-                console.log({ data });
-
                 Call_Post_Api(
-                    null,
+                    {
+                        userId: id,
+                        newCartData: newOrder.length > 0 ? newOrder : orders,
+                    },
                     token,
                     id,
-                    '/cart/updateTransaciton/' + id,
+                    '/cart/updateTransaciton/',
                 ).then(() => {
                     getApi();
                     EventRegister.emit('chaneLength', 0);
@@ -264,6 +244,33 @@ export default function Cart({ navigation }) {
             });
         }
     };
+
+    const [checkedOrders, setCheckedOrders] = useState({});
+    const [newOrder, setNewOrder] = useState([]);
+
+    const handleCheckboxChange = (selectedOrder) => {
+        // Check if the order is in checkedOrders
+        if (checkedOrders[selectedOrder._id]) {
+            // If it's checked, uncheck it and remove it from newOrder
+            setCheckedOrders((prevCheckedOrders) => ({
+                ...prevCheckedOrders,
+                [selectedOrder._id]: false,
+            }));
+            setNewOrder((prevNewOrder) =>
+                prevNewOrder.filter((order) => order._id !== selectedOrder._id),
+            );
+        } else {
+            // If it's unchecked, check it and add it to newOrder
+            setCheckedOrders((prevCheckedOrders) => ({
+                ...prevCheckedOrders,
+                [selectedOrder._id]: true,
+            }));
+            setNewOrder((prevNewOrder) => [...prevNewOrder, selectedOrder]);
+        }
+    };
+
+    console.log(newOrder.length);
+    console.log(orders);
 
     return (
         <View
@@ -540,6 +547,25 @@ export default function Cart({ navigation }) {
                                 color: theme.color,
                             }}
                         >
+                            #
+                        </Text>
+                    </View>
+                    <View
+                        style={{
+                            borderRightWidth: 1,
+                            borderRightColor: 'gray',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flex: 1, // Thêm flex để các ô có cùng chiều rộng
+                        }}
+                    >
+                        <Text
+                            style={{
+                                fontSize: 18,
+                                textAlign: 'center',
+                                color: theme.color,
+                            }}
+                        >
                             Name
                         </Text>
                     </View>
@@ -562,25 +588,7 @@ export default function Cart({ navigation }) {
                             Ảnh
                         </Text>
                     </View>
-                    <View
-                        style={{
-                            borderRightWidth: 1,
-                            borderRightColor: 'gray',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            flex: 1, // Thêm flex để các ô có cùng chiều rộng
-                        }}
-                    >
-                        <Text
-                            style={{
-                                fontSize: 18,
-                                textAlign: 'center',
-                                color: theme.color,
-                            }}
-                        >
-                            Giá
-                        </Text>
-                    </View>
+
                     <View
                         style={{
                             borderRightWidth: 1,
@@ -665,6 +673,27 @@ export default function Cart({ navigation }) {
                                     flex: 1, // Thêm flex để các ô có cùng chiều rộng
                                 }}
                             >
+                                <Checkbox
+                                    value={checkedOrders[order._id] || false}
+                                    onValueChange={() =>
+                                        handleCheckboxChange(order)
+                                    }
+                                    color={
+                                        checkedOrders[order._id]
+                                            ? '#4630EB'
+                                            : undefined
+                                    }
+                                />
+                            </View>
+                            <View
+                                style={{
+                                    borderRightWidth: 1,
+                                    borderRightColor: 'gray',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    flex: 1, // Thêm flex để các ô có cùng chiều rộng
+                                }}
+                            >
                                 <Text
                                     style={{
                                         fontSize: 18,
@@ -694,25 +723,7 @@ export default function Cart({ navigation }) {
                                     }}
                                 />
                             </View>
-                            <View
-                                style={{
-                                    borderRightWidth: 1,
-                                    borderRightColor: 'gray',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    flex: 1, // Thêm flex để các ô có cùng chiều rộng
-                                }}
-                            >
-                                <Text
-                                    style={{
-                                        fontSize: 18,
-                                        textAlign: 'center',
-                                        color: theme.color,
-                                    }}
-                                >
-                                    {order.product_price}
-                                </Text>
-                            </View>
+
                             <View
                                 style={{
                                     borderRightWidth: 1,
@@ -765,13 +776,14 @@ export default function Cart({ navigation }) {
                                         backgroundColor: 'white',
                                     }}
                                     onPress={() => handleDelete(order._id)}
-                                >
-                                    <AntDesign
-                                        name="delete"
-                                        size={23}
-                                        color={theme.color}
-                                    />
-                                </Button>
+                                    title={
+                                        <AntDesign
+                                            name="delete"
+                                            size={23}
+                                            color={theme.color}
+                                        />
+                                    }
+                                ></Button>
                             </View>
                         </View>
                     ))}
@@ -788,7 +800,7 @@ export default function Cart({ navigation }) {
                                 color: theme.color,
                             }}
                         >
-                            Tổng tiền: 300
+                            Tổng tiền: {tong}
                         </Text>
                     </View>
                 </View>

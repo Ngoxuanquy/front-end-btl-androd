@@ -41,7 +41,6 @@ const Index = ({ navigation }) => {
         )
             .then((responseData) => {
                 // Handle the fetched data here
-                console.log(responseData);
                 setProduct(responseData.metadata);
             })
             .catch((error) => {
@@ -59,7 +58,6 @@ const Index = ({ navigation }) => {
         )
             .then((responseData) => {
                 // Handle the fetched data here
-                console.log(responseData);
                 setProduct(responseData.metadata);
             })
             .catch((error) => {

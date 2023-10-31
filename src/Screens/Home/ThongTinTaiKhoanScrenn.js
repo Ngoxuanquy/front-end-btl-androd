@@ -23,11 +23,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ThemeConText from '../../../config/themeConText';
 import { LinearGradient } from 'expo-linear-gradient';
 import Modal from 'react-native-modal';
-import { Input } from '@rneui/themed';
+// import { Input } from '@rneui/themed';
+
 import { Call_Post_Api } from '../../Call_post_api/Call_Post_Api';
 import LottieView from 'lottie-react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
+import { Input } from 'react-native-elements';
 
 export default function ThongTinTaiKhoan() {
     // const theme = useContext(ThemeConText)
@@ -46,8 +48,6 @@ export default function ThongTinTaiKhoan() {
     AsyncStorage.getItem('taikhoan').then((res) => setTaiKhoan(res));
 
     const [isModalVisible, setIsModalVisible] = useState(false);
-
-    console.log({ isModalVisible });
 
     useEffect(() => {
         const getIdFromStorage = async () => {
