@@ -1,4 +1,11 @@
-import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
+import {
+    View,
+    Text,
+    TouchableOpacity,
+    Image,
+    ScrollView,
+    RefreshControl,
+} from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Call_Post_Api } from '../../../Call_post_api/Call_Post_Api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -69,8 +76,31 @@ const Order_done = () => {
         }
     };
 
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => {
+            getApi();
+
+            setRefreshing(false);
+        }, 1000);
+    }, []);
+
     return (
-        <View>
+        <ScrollView
+            refreshControl={
+                <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                    style={{
+                        tintColor: 'black',
+                        size: 10,
+                        marginBottom: 0,
+                    }}
+                />
+            }
+        >
             <Modal isVisible={isModalVisible} backdropOpacity={0.5}>
                 <View
                     style={{
@@ -278,7 +308,7 @@ const Order_done = () => {
                     </View>
                 </ScrollView>
             </View>
-        </View>
+        </ScrollView>
     );
 };
 

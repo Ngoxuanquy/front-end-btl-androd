@@ -14,6 +14,8 @@ import {
     RefreshControl,
     SafeAreaView,
     Linking,
+    Pressable
+    
 } from 'react-native';
 
 import React, { useEffect, useState, useContext } from 'react';
@@ -27,6 +29,7 @@ import { EventRegister } from 'react-native-event-listeners';
 // import * as Notifications from 'expo-notifications';
 import Checkbox from 'expo-checkbox';
 import { Button } from 'react-native-elements';
+import Modal from 'react-native-modal';
 
 export default function Cart({ navigation }) {
     // const theme = useContext(ThemeConText)
@@ -34,11 +37,16 @@ export default function Cart({ navigation }) {
     const [isChecked, setChecked] = useState(false);
 
     const [isload, setIsLoad] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
+    // const [isLoading, setIsLoading] = useState(true);
     const [customer, setCustomer] = useState([]);
     const [taikhoan, setTaiKhoan] = useState([]);
     const [reset, setReset] = useState(false);
     const [selectedIndex, setIndex] = useState(0);
+    const [selectedIndexVouche, setIndexVouche] = useState(0);
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [isModalVisible, setIsModalVisible] = useState(true);
+ const [modalVisible, setModalVisible] = useState(false);
     const getConten = () => {
         if (isLoading) {
             return <ActivityIndicator />;
@@ -51,19 +59,7 @@ export default function Cart({ navigation }) {
     //Lấy dữ liệu từ asystore
     AsyncStorage.getItem('taikhoan').then((res) => setTaiKhoan(res));
 
-    useEffect(() => {
-        const getIdFromStorage = async () => {
-            try {
-                const res = await AsyncStorage.getItem('id');
-                setId(res);
-            } catch (error) {
-                // Handle errors here
-                console.error(error);
-            }
-        };
-
-        getIdFromStorage();
-    }, []);
+    AsyncStorage.getItem('id').then((res) => setId(res));
 
     useEffect(() => {
         const getTokenFromStorage = async () => {
@@ -99,13 +95,7 @@ export default function Cart({ navigation }) {
 
     const [refreshing, setRefreshing] = React.useState(false);
 
-    const onRefresh = React.useCallback(() => {
-        setRefreshing(true);
-        const timeout = setTimeout(() => {
-            getApi();
-            setRefreshing(false);
-        }, 1000);
-    }, [taikhoan]);
+   
 
     //khai báo api cart
     const [orders, setOrder] = useState([]);
@@ -128,12 +118,12 @@ export default function Cart({ navigation }) {
                     //     'chaneLength',
                     //     data.metadata.cart_products.length,
                     // );
-                    let total = data.metadata.cart_products?.reduce(
-                        (acc, current) =>
-                            acc + current.product_price * current.quantity,
-                        0, // Giá trị khởi tạo
-                    );
-                    setTong(total);
+                    // let total = data.metadata.cart_products?.reduce(
+                    //     (acc, current) =>
+                    //         acc + current.product_price * current.quantity,
+                    //     0, // Giá trị khởi tạo
+                    // );
+                    // setTong(total);
                 } else {
                     setOrder([]);
                 }
@@ -159,9 +149,9 @@ export default function Cart({ navigation }) {
             id,
             '/cart/delete',
         ).then(() => {
-            EventRegister.emit('chaneLength', false);
             setOrder([]);
             getApi();
+            EventRegister.emit('chaneLength', ordersLength - 1);
         });
     };
 
@@ -196,6 +186,8 @@ export default function Cart({ navigation }) {
 
     const handelSubmit = async () => {
         const result = await checkContact();
+        setIsLoading(true);
+
         if (result === null) {
             // alert('')
 
@@ -220,11 +212,13 @@ export default function Cart({ navigation }) {
             );
         } else {
             if (selectedIndex == 0) {
+              //  newOrder = newOrder.map(order => ({ ...order, voucher: 10 }));
                 Call_Post_Api(
                     {
                         user: result,
                         product: newOrder.length > 0 ? newOrder : orders,
                         notifications: tokenTest,
+                        voucher: 10 
                     },
                     token,
                     id,
@@ -238,10 +232,33 @@ export default function Cart({ navigation }) {
                         },
                         token,
                         id,
-                        '/cart/updateTransaciton/',
+                        '/cart/updateTransaciton',
                     ).then(() => {
-                        getApi();
-                        EventRegister.emit('chaneLength', 0);
+                        setIsLoading(false);
+                        // setOrder([]);
+                        setNewOrder([]);
+                       Call_Post_Api(
+            {
+                userId: id,
+            },
+            token,
+            id,
+            '/cart/getlist',
+        )
+            .then((data) => {
+                setIsLoading(false);
+                if (data && data.metadata && data.metadata.cart_products) {
+                    setOrder(data.metadata.cart_products);
+                    EventRegister.emit(
+                        'chaneLength',
+                        data.metadata.cart_products.length,
+                    );
+                
+                } else {
+                    setOrder([]);
+                }
+            })
+            .catch((err) => console.log({ err }));
                         alert('Đặt hành thành công!!!');
                     });
                 });
@@ -288,6 +305,48 @@ export default function Cart({ navigation }) {
         }
     };
 
+    useEffect(() => {
+        let total = newOrder?.reduce(
+            (acc, current) => acc + current.product_price * current.quantity,
+            0, // Giá trị khởi tạo
+        );
+        if(selectedIndexVouche == 3) {
+            setTong((total * 90)/100);
+        }
+        else {
+            setTong(total);
+        }
+    }, [newOrder, selectedIndexVouche]);
+
+     const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        const timeout = setTimeout(() => {
+            Call_Post_Api(
+            {
+                userId: id,
+            },
+            token,
+            id,
+            '/cart/getlist',
+        )
+            .then((data) => {
+                setIsLoading(false);
+                if (data && data.metadata && data.metadata.cart_products) {
+                    setOrder(data.metadata.cart_products);
+                    EventRegister.emit(
+                        'chaneLength',
+                        data.metadata.cart_products.length,
+                    );
+                   
+                } else {
+                    setOrder([]);
+                }
+            })
+            .catch((err) => console.log({ err }));
+            setRefreshing(false);
+        }, 1000);
+    }, [taikhoan]);
+
     return (
         <View
             style={[
@@ -299,6 +358,13 @@ export default function Cart({ navigation }) {
                 },
             ]}
         >
+            {isLoading && (
+                <Modal isVisible={isModalVisible} backdropOpacity={0.5}>
+                    <View>
+                        <ActivityIndicator />
+                    </View>
+                </Modal>
+            )}
             <ScrollView
                 contentContainerStyle={{
                     color: 'black',
@@ -506,20 +572,17 @@ export default function Cart({ navigation }) {
                                 padding: 7,
                                 borderRadius: 8,
                             }}
-                            onPress={() => handerLamMoi()}
                         >
-                            <Text
-                                style={{
-                                    fontSize: 17,
-                                    color: theme.color,
-                                }}
-                            >
-                                Làm Mới
-                            </Text>
+                              <Pressable
+                            style={[styles.button, styles.buttonOpen]}
+                            onPress={() => setModalVisible(true)}>
+                            <Text style={styles.textStyle}>  Voucher</Text>
+                        </Pressable>
+                          
                         </TouchableOpacity>
                     </View>
                 </View>
-
+                
                 <View>
                     <Text
                         style={{
@@ -828,6 +891,13 @@ export default function Cart({ navigation }) {
                     }}
                 >
                     <CheckBox
+                        title="Vousche 10%"
+                        checked={selectedIndexVouche === 3}
+                        onPress={() => setIndexVouche(3)}
+                        checkedIcon="dot-circle-o"
+                        uncheckedIcon="circle-o"
+                    />
+                    <CheckBox
                         title="Thanh toán khi nhận hàng"
                         checked={selectedIndex === 0}
                         onPress={() => setIndex(0)}
@@ -836,8 +906,8 @@ export default function Cart({ navigation }) {
                     />
                     <CheckBox
                         title="Thanh toán qua VnPay"
-                        checked={selectedIndex === 1}
-                        onPress={() => setIndex(1)}
+                        checked={selectedIndex === 2}
+                        onPress={() => setIndex(2)}
                         checkedIcon="dot-circle-o"
                         uncheckedIcon="circle-o"
                     />

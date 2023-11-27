@@ -27,42 +27,96 @@ export default function DangKY({ navigation }) {
     const [isChecked, setChecked] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
-    function handerSubmit() {
-        setIsLoading(true);
+   function handerSubmit() {
+    setIsLoading(true);
+    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        if (asy_matkhau == '' || re_matkhau == '' || asy_taikhoan == '') {
-            alert('Nhập đầy đủ thông tin!!');
-        } else if (asy_matkhau == re_matkhau) {
-            Call_Post_Api(
-                {
-                    email: asy_taikhoan,
-                    password: asy_matkhau,
-                },
-                null,
-                null,
-                '/shop/signup',
-            )
-                .then((responseData) => {
-                    // Handle the fetched data here
-                    if (responseData.metadata.status === 'success') {
-                        setIsLoading(false);
-                        alert('Đăng ký thành công !!!');
-                        navigation.replace('Login');
-                    } else if (responseData.metadata.status === 'error') {
-                        alert('Tài Khoản Đã Tồn tại !!');
-                        setIsLoading(false);
-                    }
-                })
-                .catch((error) => {
-                    // Handle any errors that occurred during the fetch
-                    console.error(error);
-                });
-        } else {
-            return alert('Mật khẩu không trùng nhau');
-        }
-
-        // navigation.replace('Login')
+    if (asy_matkhau === '' || re_matkhau === '' || asy_taikhoan === '') {
+        alert('Nhập đầy đủ thông tin!!');
+        setIsLoading(false); // Nếu có lỗi, đặt isLoading thành false
+    } else if (!emailRegex.test(asy_taikhoan)) {
+        alert('Email sai định dạng!!');
+        setIsLoading(false);
+    } 
+    else if (re_matkhau.length > 6 && re_matkhau.length > 6) {
+        alert('maatk khẩu lớn hơn 6 kí tự!!');
+        setIsLoading(false);
     }
+    else if (asy_matkhau !== re_matkhau) {
+        alert('Mật khẩu không trùng khớp');
+        setIsLoading(false);
+    } else {
+        Call_Post_Api(
+            {
+                email: asy_taikhoan,
+                password: asy_matkhau,
+            },
+            null,
+            null,
+            '/shop/signup',
+        )
+            .then((responseData) => {
+                // Xử lý dữ liệu được trả về ở đây
+                if (responseData.metadata.status === 'success') {
+                    alert('Đăng ký thành công !!!');
+                    navigation.replace('Login');
+                } else if (responseData.metadata.status === 'error') {
+                    alert('Tài Khoản Đã Tồn tại !!');
+                }
+            })
+            .catch((error) => {
+                // Xử lý lỗi nếu có
+                console.error(error);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
+    }
+}
+
+// function handerSubmit() {
+//     setIsLoading(true);
+//     var emailRegex = /^[^\s@]+@gmail\.com$/;
+
+//     if (asy_matkhau === '' || re_matkhau === '' || asy_taikhoan === '') {
+//         alert('Nhập đầy đủ thông tin!!');
+//         setIsLoading(false);
+//     } else if (!emailRegex.test(asy_taikhoan)) {
+//         alert('Email không hợp lệ hoặc không phải là địa chỉ @gmail.com');
+//         setIsLoading(false);
+//     } else if (asy_taikhoan.length <= 4) {
+//         alert('Phần trước @gmail.com phải có ít nhất 4 ký tự');
+//         setIsLoading(false);
+//     } else if (asy_matkhau !== re_matkhau) {
+//         alert('Mật khẩu không trùng khớp');
+//         setIsLoading(false);
+//     } else {
+//         Call_Post_Api(
+//             {
+//                 email: asy_taikhoan,
+//                 password: asy_matkhau,
+//             },
+//             null,
+//             null,
+//             '/shop/signup',
+//         )
+//             .then((responseData) => {
+//                 if (responseData.metadata.status === 'success') {
+//                     alert('Đăng ký thành công !!!');
+//                     navigation.replace('Login');
+//                 } else if (responseData.metadata.status === 'error') {
+//                     alert('Tài Khoản Đã Tồn tại !!');
+//                 }
+//             })
+//             .catch((error) => {
+//                 console.error(error);
+//             })
+//             .finally(() => {
+//                 setIsLoading(false);
+//             });
+//     }
+// }
+
 
     const [asy_taikhoan, setAsyTaiKhoan] = useState('');
     const [asy_matkhau, setAsyMatKhau] = useState('');

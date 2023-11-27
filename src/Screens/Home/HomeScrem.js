@@ -702,7 +702,7 @@ export default function HomeScrenn({ navigation }) {
                     <View
                         style={{
                             zIndex: 100,
-                            backgroundColor: '#0097d9',
+                            backgroundColor: '#E0E0E0',
                             justifyContent: 'center',
                             alignItems: 'center',
                             borderRadius: 2,
@@ -764,7 +764,7 @@ export default function HomeScrenn({ navigation }) {
                                 <Text
                                     style={{
                                         lineHeight: 30,
-                                        color: 'white',
+                                        color: 'black',
                                         fontSize: 18,
                                         fontWeight: 'bold',
                                     }}

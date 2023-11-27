@@ -48,24 +48,16 @@ const LichSuDonHang = () => {
                 '/transaction/getFullUseId/' + id,
             );
             if (data && data.metadata) {
-                // console.log(data.metadata);
+                console.log(data.metadata);
                 // const transactionProducts = data.metadata.flatMap(
                 //     (transaction) => transaction.transaction_products,
                 // );
 
-                const resultArray = data?.metadata.map((item) => {
-                    const transactionProducts = item.transaction_products;
-                    const createdOn = item.createdOn;
-
-                    // Kiểm tra xem transactionProducts có giá trị hay không, nếu không thì trả về một mảng rỗng
-                    const mergedArray = transactionProducts
-                        ? transactionProducts.map((product) => ({
-                              ...product,
-                              createdOnTran: createdOn,
-                          }))
-                        : [];
-
-                    return mergedArray;
+                const resultArray = (data?.metadata || []).map((item) => {
+                    return (item.transaction_products || []).map((product) => ({
+                        ...product,
+                        createdOnTran: item.createdOn,
+                    }));
                 });
 
                 // Nếu bạn muốn gộp tất cả các giá trị thành một mảng duy nhất, bạn có thể sử dụng phương thức reduce
@@ -130,13 +122,14 @@ const LichSuDonHang = () => {
     // console.log(apisTransaction);
 
     //Xử lý hủy đơn
-    const handlerHuyDon = () => {
-        toggleDialog2();
-    };
+    const handlerHuyDon = (api) => {
+        // console.log(api);
 
-    const hanlderCoHuyDon = (api) => {
+        // toggleDialog2();
+
         const { createdOnTran, ...newProduct } = api;
 
+        console.log({ createdOnTran });
         Call_Post_Api(
             {
                 userId: id,
@@ -148,6 +141,27 @@ const LichSuDonHang = () => {
             '/transaction/deleteProduct',
         ).then(() => {
             fetchData();
+            setVisible2(false);
+        });
+    };
+
+    const hanlderCoHuyDon = (api) => {
+        console.log(api);
+        const { createdOnTran, ...newProduct } = api;
+
+        console.log({ createdOnTran });
+        Call_Post_Api(
+            {
+                userId: id,
+                newCartData: [newProduct],
+                createdOn: api.createdOnTran,
+            },
+            token,
+            id,
+            '/transaction/deleteProduct',
+        ).then(() => {
+            fetchData();
+            setVisible2(false);
         });
     };
 
@@ -171,31 +185,6 @@ const LichSuDonHang = () => {
                                 width: '100%',
                             }}
                         >
-                            <Dialog
-                                isVisible={visible2}
-                                onBackdropPress={toggleDialog2}
-                            >
-                                <Dialog.Title title="Thông báo!!!" />
-                                <Text>Bạn có muốn hủy đơn hàng không ?</Text>
-                                <Dialog.Actions>
-                                    <Dialog.Button
-                                        title="Không"
-                                        style={{
-                                            marginLeft: 20,
-                                            marginTop: 10,
-                                        }}
-                                        onPress={() => setVisible2(false)}
-                                    />
-                                    <Dialog.Button
-                                        title="Có"
-                                        style={{
-                                            marginLeft: 20,
-                                            marginTop: 10,
-                                        }}
-                                        onPress={() => hanlderCoHuyDon(api)}
-                                    />
-                                </Dialog.Actions>
-                            </Dialog>
                             <View
                                 style={{
                                     display: 'flex',
@@ -267,6 +256,37 @@ const LichSuDonHang = () => {
                                         }}
                                         onPress={() => handlerHuyDon(api)}
                                     ></Button>
+                                    <Dialog
+                                        isVisible={visible2}
+                                        onBackdropPress={toggleDialog2}
+                                    >
+                                        <Dialog.Title title="Thông báo!!!" />
+                                        <Text>
+                                            Bạn có muốn hủy đơn hàng không ?
+                                        </Text>
+                                        <Dialog.Actions>
+                                            <Dialog.Button
+                                                title="Không"
+                                                style={{
+                                                    marginLeft: 20,
+                                                    marginTop: 10,
+                                                }}
+                                                onPress={() =>
+                                                    setVisible2(false)
+                                                }
+                                            />
+                                            <Dialog.Button
+                                                title="Có"
+                                                style={{
+                                                    marginLeft: 20,
+                                                    marginTop: 10,
+                                                }}
+                                                onPress={() =>
+                                                    hanlderCoHuyDon(api)
+                                                }
+                                            />
+                                        </Dialog.Actions>
+                                    </Dialog>
                                 </View>
                             </View>
                             <View
@@ -299,7 +319,7 @@ const LichSuDonHang = () => {
                                     }}
                                 >
                                     Thành Tiền :{' '}
-                                    {api.quantity * api.product_price}
+                                    {api.quantity * api.product_price * (100- api.voucher)/100 }
                                 </Text>
                             </View>
                         </View>
@@ -404,7 +424,7 @@ const LichSuDonHang = () => {
                                             }}
                                         >
                                             Thành Tiền :{' '}
-                                            {api.quantity * api.product_price}
+                                            {api.quantity * api.product_price  }
                                         </Text>
                                     </View>
                                 </View>

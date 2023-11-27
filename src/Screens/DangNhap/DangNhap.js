@@ -20,65 +20,116 @@ import * as Keychain from 'react-native-keychain';
 import { Entypo } from '@expo/vector-icons';
 import { Call_Post_Api } from '../../Call_post_api/Call_Post_Api';
 import Modal from 'react-native-modal';
+import { LogBox } from 'react-native';
 
+LogBox.ignoreLogs([
+    'ViewPropTypes will be removed',
+    'ColorPropType will be removed',
+    'Sending',
+]);
 export default function DangNhap({ navigation }) {
     const [isChecked, setChecked] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(true);
+    const [loginAttempts, setLoginAttempts] = useState(0);
 
-    function handerSubmit() {
+    async function handleSubmit() {
         setIsLoading(true);
 
-        if (asy_matkhau == '' || asy_taikhoan == '') {
-            setIsLoading(false);
-            alert('Nhập đầy đủ thông tin!!');
-        } else {
-            Call_Post_Api(
-                {
-                    email: asy_taikhoan,
-                    password: asy_matkhau,
-                },
-                null,
-                null,
-                '/shop/login',
-            )
-                .then((responseData) => {
-                    // Handle the fetched data here
-                    if (
-                        responseData.metadata.status == 'Đăng Nhập Thành Công1'
+        const maxLoginAttempts = 3;
+
+        try {
+            const storedLoginAttempts = parseInt(
+                (await AsyncStorage.getItem('loginAttempts')) || '0',
+            );
+
+            console.log({ storedLoginAttempts });
+
+            // if (isNaN(storedLoginAttempts)) {
+            //     // Handle the case where the stored value is not a valid number
+            //     console.error('Stored login attempts is not a valid number');
+            //     // You might want to set a default value or take appropriate action
+            //     // For example: storedLoginAttempts = 0;
+            // }
+
+            if (asy_matkhau === '' || asy_taikhoan === '') {
+                setIsLoading(false);
+                alert('Nhập đầy đủ thông tin!!');
+            } else {
+                const responseData = await Call_Post_Api(
+                    {
+                        email: asy_taikhoan,
+                        password: asy_matkhau,
+                    },
+                    null,
+                    null,
+                    '/shop/login',
+                );
+
+                if (responseData.metadata.status === 'Đăng Nhập Thành Công1') {
+                    setIsLoading(false);
+                    AsyncStorage.setItem(
+                        'token',
+                        responseData.metadata.tokens.accessToken,
+                    );
+                    AsyncStorage.setItem('taikhoan', asy_taikhoan);
+                    AsyncStorage.setItem('id', responseData.metadata.shop._id);
+
+                    if (responseData.metadata.shop.roles[0] === 'SHOP') {
+                        return navigation.replace('BottomTab');
+                    } else if (
+                        responseData.metadata.shop.roles[0] === 'ADMIN'
                     ) {
-                        setIsLoading(false);
-                        AsyncStorage.setItem(
-                            'token',
-                            responseData.metadata.tokens.accessToken,
-                        );
-                        AsyncStorage.setItem('taikhoan', asy_taikhoan);
-                        AsyncStorage.setItem(
-                            'id',
-                            responseData.metadata.shop._id,
-                        );
-
-                        if (responseData.metadata.shop.roles[0] == 'SHOP') {
-                            return navigation.replace('BottomTab');
-                        } else if (
-                            responseData.metadata.shop.roles[0] == 'ADMIN'
-                        ) {
-                            return navigation.replace('Admin_Home');
-                        }
-                    } else if (responseData.metadata.status == 'error') {
-                        setIsLoading(false);
-
-                        alert('Sai maatk khẩu haowjc tài khoản !!');
+                        return navigation.replace('Admin_Home');
                     }
-                })
-                .catch((error) => {
-                    // Handle any errors that occurred during the fetch
-                    console.error(error);
-                });
-        }
+                } else if (responseData.metadata.status === 'error') {
+                    setIsLoading(false);
 
-        // navigation.replace('BottomTab')
+                    // Update the login attempts
+                    const loginAttempts = isNaN(storedLoginAttempts)
+                        ? 1
+                        : storedLoginAttempts + 1;
+                    // AsyncStorage.setItem('loginAttempts', loginAttempts.toString());
+                    setItemWithAutoExpire(
+                        'loginAttempts',
+                        loginAttempts.toString(),
+                    );
+
+                    setLoginAttempts(loginAttempts);;
+
+                    if (loginAttempts >= maxLoginAttempts) {
+                        // Lock the account or take appropriate action for too many failed attempts
+                        alert(
+                            'Quá nhiều lần đăng nhập không thành công. Hãy thử lại sau.',
+                        );
+                    } else {
+                        alert('Sai mật khẩu hoặc tài khoản!!');
+                    }
+                }
+            }
+        } catch (error) {
+            // Handle AsyncStorage or API call errors
+            console.error(error);
+            setIsLoading(false);
+        }
     }
+
+    //xóa trong 1 phút
+    const setItemWithAutoExpire = async (key, value) => {
+        try {
+            // Lưu giá trị vào AsyncStorage
+            await AsyncStorage.setItem(key, value);
+
+            // Thiết lập hẹn giờ để xóa mục sau 1 phút
+            const expirationTime = 60 * 1000; // 1 phút trong mili giây
+            setTimeout(async () => {
+                // Xóa mục khỏi AsyncStorage sau khi hết thời gian
+                await AsyncStorage.removeItem(key);
+            }, expirationTime);
+        } catch (error) {
+            console.error('Error setting item in AsyncStorage:', error);
+        }
+    };
 
     const [asy_taikhoan, setAsyTaiKhoan] = useState('');
     const [asy_matkhau, setAsyMatKhau] = useState('');
@@ -407,12 +458,16 @@ export default function DangNhap({ navigation }) {
                                                 style={{
                                                     width: 200,
                                                     height: 40,
-                                                    backgroundColor: '#2869bd',
+                                                    backgroundColor:
+                                                        loginAttempts >= 3
+                                                            ? '#ccc'
+                                                            : '#2869bd',
                                                     textAlign: 'center',
                                                     justifyContent: 'center',
                                                     borderRadius: 20,
                                                 }}
-                                                onPress={() => handerSubmit()}
+                                                onPress={() => handleSubmit()}
+                                                disabled={loginAttempts >= 3}
                                             >
                                                 <Text
                                                     style={{

@@ -5,6 +5,7 @@ import {
     ScrollView,
     RefreshControl,
     TouchableOpacity,
+    ActivityIndicator,
 } from 'react-native';
 import React, { useContext, useEffect, useState } from 'react';
 import ThemeConText from '../../../config/themeConText';
@@ -13,12 +14,15 @@ import { Call_Post_Api } from '../../Call_post_api/Call_Post_Api';
 import { ButtonGroup } from 'react-native-elements';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import LottieView from 'lottie-react-native';
+import Modal from 'react-native-modal';
 
 const Index = ({ navigation }) => {
     // const theme = useContext(ThemeConText)
     const [theme, ordersLength] = useContext(ThemeConText);
 
     const [refreshing, setRefreshing] = React.useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isModalVisible, setIsModalVisible] = useState(true);
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
@@ -50,6 +54,8 @@ const Index = ({ navigation }) => {
     };
 
     useEffect(() => {
+        setIsLoading(true);
+
         Call_Post_Api(
             null,
             null,
@@ -59,6 +65,7 @@ const Index = ({ navigation }) => {
             .then((responseData) => {
                 // Handle the fetched data here
                 setProduct(responseData.metadata);
+                setIsLoading(false);
             })
             .catch((error) => {
                 // Handle any errors that occurred during the fetch
@@ -134,6 +141,13 @@ const Index = ({ navigation }) => {
 
     return (
         <View>
+            {isLoading && (
+                <Modal isVisible={isModalVisible} backdropOpacity={0.5}>
+                    <View>
+                        <ActivityIndicator />
+                    </View>
+                </Modal>
+            )}
             <ScrollView
                 refreshControl={
                     <RefreshControl

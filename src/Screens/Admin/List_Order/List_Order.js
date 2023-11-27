@@ -9,6 +9,7 @@ import Modal from 'react-native-modal';
 import Axios from 'axios';
 import { Button } from 'react-native-elements';
 import * as Notifications from 'expo-notifications';
+import { Sourc } from '../../../access/sourc.mp3';
 
 const List_Order = () => {
     const [taikhoan, setTaiKhoan] = useState();
@@ -78,6 +79,7 @@ const List_Order = () => {
         ).then((data) => {
             setIsModalVisible(false);
             getApi();
+            getNotification();
             alert('Bạn đã hoàn thành đơn!!!');
         });
     };
@@ -85,14 +87,13 @@ const List_Order = () => {
     Notifications.setNotificationHandler({
         handleNotification: async () => ({
             shouldShowAlert: true,
-            shouldPlaySound: false,
-            shouldSetBadge: false,
+            shouldPlaySound: true,
+            shouldSetBadge: true,
         }),
     });
 
     const getNotification = async () => {
         const { status } = await Notifications.getPermissionsAsync();
-        console.log({ status });
         if (status !== 'granted') {
             const { status } = await Notifications.requestPermissionsAsync();
             if (status !== 'granted') {
@@ -100,32 +101,41 @@ const List_Order = () => {
                 return;
             }
         }
-        console.log('abc');
-        try {
-            const tokenData = await Notifications.getExpoPushTokenAsync();
-            console.log({ tokenData });
-            const token = tokenData.data;
-            console.log(token);
-        } catch (error) {
-            console.error('Lỗi khi lấy mã thông báo Expo:', error);
-        }
-        // const message = {
-        //     to: token,
-        //     title: 'Bạn đã đăng nhập !!',
-        //     body: 'Nhấn Vào Để Xem Chi Tiết!!',
-        // };
+        const tokenData = await Notifications.getExpoPushTokenAsync();
+        const tokens = tokenData.data;
+        console.log(tokens);
 
-        // await Axios.post('https://api.expo.dev/v2/push/send', message).catch(
-        //     (err) => console.log(err),
-        // );
+        const message = {
+            to: tokens,
+            title: 'Đơn hàng!!',
+            body: 'Đơn của bạn đã được đóng !!',
+            sound: 'default',
+            data: { someData: 'goes here' },
+        };
+        await Axios.post('https://api.expo.dev/v2/push/send', message)
+            .then((response) => {
+                if (response.data.errors) {
+                    console.error(
+                        'Errors while sending the notification:',
+                        response.data.errors,
+                    );
+                } else {
+                    console.log('Notification sent successfully!');
+                }
+            })
+            .catch((error) => {
+                console.error('Error sending the notification:', error);
+            });
     };
 
-    useEffect(() => {
-        getNotification();
-    }, []);
+    // useEffect(() => {
+    //     getNotification();
+    // }, []);
 
     return (
         <View>
+            <Button title="Gửi" onPress={() => getNotification()}></Button>
+
             <Modal isVisible={isModalVisible} backdropOpacity={0.5}>
                 <View
                     style={{

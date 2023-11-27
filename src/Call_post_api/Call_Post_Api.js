@@ -2,7 +2,8 @@ import React from 'react';
 import { API_KEY, URL_KEY } from '@env';
 
 const Call_Post_Api = (body, token, id, link_url) => {
-    const url = 'http://192.168.0.101:3056/v1/api';
+    const url = 'http://192.168.0.104:3056/v1/api';
+
 
     if (body === null) {
         body = {}; // Gán giá trị mặc định là một đối tượng rỗng {}

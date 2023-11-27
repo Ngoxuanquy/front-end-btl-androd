@@ -10,6 +10,14 @@ import ThemeConText from './config/themeConText.js';
 import theme from './config/theme.js';
 import { Call_Post_Api } from './src/Call_post_api/Call_Post_Api.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Notifications from 'expo-notifications';
+import { LogBox } from "react-native";
+
+LogBox.ignoreLogs([
+  "ViewPropTypes will be removed",
+  "ColorPropType will be removed",
+  "Sending",
+]);
 
 export default function App() {
     const [mode, setMode] = useState(false);
